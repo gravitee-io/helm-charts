@@ -1,0 +1,64 @@
+apiVersion: apps/v1beta1
+kind: {{ .Values.gateway.type }}
+metadata:
+  name: {{ template "gravitee.gateway.fullname" . }}
+  labels:
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.gateway.name }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  {{- if eq .Values.gateway.type "StatefulSet" }}
+  serviceName: {{ template "gravitee.gateway.fullname" . }}
+  updateStrategy:
+    type: RollingUpdate
+  {{- end }}
+  {{- if eq .Values.gateway.type "Deployment" }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  {{- end }}
+  replicas: {{ .Values.gateway.replicaCount }}
+  template:
+    metadata:
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
+      labels:
+        app: {{ template "gravitee.name" . }}
+        component: "{{ .Values.gateway.name }}"
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ template "gravitee.gateway.fullname" . }}
+          image: "{{ .Values.gateway.image.repository }}:{{ .Values.gateway.image.tag }}"
+          imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.gateway.service.internalPort }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.gateway.service.internalPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.gateway.service.internalPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          resources:
+{{ toYaml .Values.gateway.resources | indent 12 }}
+    {{- if .Values.gateway.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.gateway.nodeSelector | indent 8 }}
+    {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /opt/graviteeio-gateway/config/gravitee.yml
+              subPath: gravitee.yml
+      imagePullSecrets:
+        - name: {{ .Values.gateway.image.pullSecrets }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "gravitee.gateway.fullname" . }}

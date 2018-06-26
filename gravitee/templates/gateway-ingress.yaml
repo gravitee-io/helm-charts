@@ -1,0 +1,33 @@
+{{- if .Values.gateway.ingress.enabled -}}
+{{- $serviceGWName := include "gravitee.gateway.fullname" . -}}
+{{- $serviceGWPort := .Values.gateway.service.externalPort -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "gravitee.gateway.fullname" . }}
+  labels:
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.gateway.name }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    {{- range $key, $value := .Values.gateway.ingress.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- range $host := .Values.gateway.ingress.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ $serviceGWName }}
+              servicePort: {{ $serviceGWPort }}
+    {{- end -}}
+  {{- if .Values.gateway.ingress.tls }}
+  tls:
+{{ toYaml .Values.gateway.ingress.tls | indent 4 }}
+  {{- end -}}
+{{- end -}}

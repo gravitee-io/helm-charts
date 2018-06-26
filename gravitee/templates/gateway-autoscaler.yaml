@@ -1,0 +1,24 @@
+{{- if .Values.gateway.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.gateway.name }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  name: {{ template "gravitee.gateway.fullname" . }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: {{ .Values.gateway.type }}
+    name: {{ template "gravitee.gateway.fullname" . }}
+  minReplicas: {{ .Values.gateway.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.gateway.autoscaling.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: {{ .Values.gateway.autoscaling.targetAverageUtilization }}
+{{- end }}

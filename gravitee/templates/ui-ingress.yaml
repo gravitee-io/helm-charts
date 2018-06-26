@@ -1,0 +1,33 @@
+{{- if .Values.ui.ingress.enabled -}}
+{{- $serviceAPIName := include "gravitee.ui.fullname" . -}}
+{{- $serviceAPIPort := .Values.ui.service.externalPort -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "gravitee.ui.fullname" . }}
+  labels:
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.ui.name }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    {{- range $key, $value := .Values.ui.ingress.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- range $host := .Values.ui.ingress.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ $serviceAPIName }}
+              servicePort: {{ $serviceAPIPort }}
+    {{- end -}}
+  {{- if .Values.ui.ingress.tls }}
+  tls:
+{{ toYaml .Values.ui.ingress.tls | indent 4 }}
+  {{- end -}}
+{{- end -}}

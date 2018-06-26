@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.gateway.name }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ template "gravitee.gateway.fullname" . }}
+data:
+  gravitee.yml: |
+    # Gateway HTTP server
+    http:
+      port: 8082
+      host: 0.0.0.0
+    #  idleTimeout: 0
+    #  tcpKeepAlive: true
+    #  compressionSupported: false
+    #  instances: 0
+    #  secured: false
+      alpn: true
+    #  ssl:
+    #    clientAuth: false
+    #    keystore:
+    #      path: ${gravitee.home}/security/keystore.jks
+    #      password: secret
+    #    truststore:
+    #      path: ${gravitee.home}/security/truststore.jks
+    #      password: secret
+    management:
+      type: mongodb
+      mongodb:
+        uri: mongodb://{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}{{- if .Values.mongo.rsEnabled }}?replicaSet={{ .Values.mongo.rs }}{{- end }}
+    ratelimit:
+      type: mongodb
+      mongodb:
+        uri: mongodb://{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}{{- if .Values.mongo.rsEnabled }}?replicaSet={{ .Values.mongo.rs }}{{- end }}
+    cache:
+      type: ehcache
+      enabled: true
+
+    # Reporters configuration (used to store reporting monitoring data, request metrics, healthchecks and others...
+    # All reporters are enabled by default. To stop one of them, you have to add the property 'enabled: false'
+    reporters:
+      # Reporting system configuration
+      system:
+        buffersize: 4096 # Must be a power of 2
+      # Elasticsearch reporter
+      elasticsearch:
+        enabled: true # Is the reporter enabled or not (default to true)
+        endpoints:
+          - {{ .Values.es.protocol }}://{{ .Values.es.host }}:{{ .Values.es.port }}
+        index: {{ .Values.es.index }}
+        cluster: {{ .Values.es.cluster }}
+        bulk:
+          actions: 200           # Number of requests action before flush
+          flush_interval: 5       # Flush interval in seconds
+          concurrent_requests: 5  # Concurrent requests
+    services:
+      core:
+        http:
+          port: 18082
+          host: localhost
+          authentication:
+            # authentication type to be used for the core services
+            # - none : to disable authentication
+            # - basic : to use basic authentication
+            # default is "basic"
+            type: basic
+            users:
+              admin: adminadmin
+      # Synchronization daemon used to keep the gateway state in sync with the configuration from the management repository
+      # Be aware that, by disabling it, the gateway will not be sync with the configuration done through management API
+      # and management UI
+      sync:
+        # Synchronization is done each 5 seconds
+        cron: '*/5 * * * * *'
+
+      # Service used to store and cache api-keys from the management repository to avoid direct repository communication
+      # while serving requests.
+      apikeyscache:
+        delay: 10000
+        unit: MILLISECONDS
+        threads: 3 # Threads core size used to retrieve api-keys from repository.
+
+      # Local registry service.
+      # This registry is used to load API Definition with json format from the file system. By doing so, you do not need
+      # to configure your API using the web console or the rest API (but you need to know and understand the json descriptor
+      # format to make it work....)
+      local:
+        enabled: false
+        path: ${gravitee.home}/apis # The path to API descriptors
+
+      # Gateway monitoring service.
+      # This service retrieves metrics like os / process / jvm metrics and send them to an underlying reporting service.
+      monitoring:
+        delay: 5000
+        unit: MILLISECONDS
+
+      # Endpoint healthcheck service.
+      healthcheck:
+        threads: 3 # Threads core size used to check endpoint availability
+
+    handlers:
+      request:
+        transaction:
+          header: X-Gravitee-Transaction-Id

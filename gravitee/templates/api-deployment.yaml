@@ -1,0 +1,64 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "gravitee.api.fullname" . }}
+  labels:
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.api.name }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
+      labels:
+        app: {{ template "gravitee.name" . }}
+        component: "{{ .Values.api.name }}"
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ template "gravitee.api.fullname" . }}
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.api.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /management/apis
+              port: {{ .Values.api.service.internalPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /management/apis
+              port: {{ .Values.api.service.internalPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          resources:
+{{ toYaml .Values.api.resources | indent 12 }}
+    {{- if .Values.api.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.api.nodeSelector | indent 8 }}
+    {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /opt/graviteeio-management-api/config/gravitee.yml
+              subPath: gravitee.yml
+          {{- if .Values.api.debugEnabled }}
+            - name: config
+              mountPath: /opt/graviteeio-management-api/config/logback.xml
+              subPath: logback.xml
+          {{- end }}
+      imagePullSecrets:
+        - name: {{ .Values.gateway.image.pullSecrets }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "gravitee.api.fullname" . }}
