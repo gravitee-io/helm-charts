@@ -1,0 +1,175 @@
+# Default values for gravitee.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+chaos:
+  enabled: false
+
+oauth:
+  enabled: false
+  localLoginDisabled: true
+  # OAuth2 token validation endpoint url
+  tokenEndpoint: https://auth/realms/default/protocol/openid-connect/token
+  # Authorization endpoint to ask for an authorization_code
+  authorizationEndpoint: https://auth/realms/default/protocol/openid-connect/auth
+  userInfoEndpoint: https://auth/realms/default/protocol/openid-connect/userinfo
+  userLogoutEndpoint: https://uth/realms/default/protocol/openid-connect/logout
+  # OAuth2 resource server client id
+  clientId: client
+  # OAut2 resource server client secret
+  clientSecret: secret
+  # Required scope
+  scope:
+    - profile
+    - openid
+
+inMemoryAuth:
+  enabled: true
+
+mongo:
+  rs: rs
+  rsEnabled: true
+  dbhost: mongo-rs-mongodb-replicaset
+  dbname: gravitee
+  dbport: 27017
+
+es:
+  protocol: http
+  cluster: elasticsearch
+  index: gravitee
+  host: elasticsearch-elasticsearch-client
+  port: 9200
+
+api:
+  name: api
+  debugEnabled: false
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicaCount: 1
+  image:
+    repository: graviteeio/management-api
+    tag: 1.15.0
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    externalPort: 83
+    internalPort: 8083
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 3
+    targetAverageUtilization: 50
+  ingress:
+    enabled: true
+    # Used to create an Ingress record.
+    hosts:
+      - api-manager.example.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      ingress.kubernetes.io/configuration-snippet: "gzip off;\netag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      # kubernetes.io/tls-acme: "true"
+    tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+
+
+gateway:
+  type: Deployment
+  name: gateway
+  replicaCount: 2
+  image:
+    repository: graviteeio/gateway
+    tag: 1.15.0
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    externalPort: 82
+    internalPort: 8082
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+    targetAverageUtilization: 50
+  ingress:
+    enabled: true
+    # Used to create an Ingress record.
+    hosts:
+      - api.example.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      ingress.kubernetes.io/configuration-snippet: "gzip off;\netag on;\nproxy_pass_header ETag;\n"
+      # kubernetes.io/tls-acme: "true"
+    tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+ui:
+  name: ui
+  replicaCount: 1
+  image:
+    repository: graviteeio/management-ui
+    tag: 1.15.0
+    pullPolicy: Always
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 3
+    targetAverageUtilization: 50
+  service:
+    name: nginx
+    type: ClusterIP
+    externalPort: 8002
+    internalPort: 80
+  ingress:
+    enabled: true
+    # Used to create an Ingress record.
+    hosts:
+      - developer.example.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/app-root: /management
+      kubernetes.io/rewrite-target: /management
+      ingress.kubernetes.io/configuration-snippet: "gzip off;\netag on;\nproxy_pass_header ETag;\n"
+    tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi

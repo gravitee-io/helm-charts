@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.ui.name }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ template "gravitee.ui.fullname" . }}
+data:
+  constants.json: |
+    {
+      "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}/management/",
+      "portalTitle": "Gravitee API Portal",
+      "managementTitle": "API Management",
+      "devMode": false,
+      "userCreationEnabled": false,
+      "documentation": {
+        "url": "https://docs.gravitee.io"
+      },
+      {{- if .Values.oauth.enabled }}
+      "authentication": {
+        {{- if .Values.oauth.localLoginDisabled }}
+        "localLoginDisabled": {{ .Values.oauth.localLoginDisabled }},
+        {{- end }}
+        "oauth2": {
+          "clientId": "{{ .Values.oauth.clientId }}",
+          "name": "Gravitee",
+          "color": "#0076b4",
+          "authorizationEndpoint": "{{ .Values.oauth.authorizationEndpoint }}",
+          {{- if .Values.oauth.localLoginDisabled }}
+          "userLogoutEndpoint": "{{ .Values.oauth.userLogoutEndpoint }}",
+          {{- end }}
+          "scope": [{{- range $i, $scope := .Values.oauth.scope }}{{- if $i}}, {{- end -}} "{{ $scope }}" {{- end -}}]
+        }
+      },
+      {{- end }}
+      "portal": {
+        "entrypoint": "{{ index .Values.gateway.ingress.hosts 0 }}",
+        "apikeyHeader": "X-Gravitee-Api-Key"
+      },
+      "theme": {
+        "name": "default",
+        "logo": "themes/assets/logo.png",
+        "loader": "assets/gravitee_logo_anim.gif"
+      },
+      "support": {
+        "enabled": true
+      },
+      "rating": {
+        "enabled": false
+      },
+      "analytics": {
+        "enabled": false,
+        "trackingId": ""
+      },
+      "scheduler": {
+        "tasks": 10
+      }
+    }
