@@ -67,7 +67,7 @@ api:
       - api-manager.example.com
     annotations:
       kubernetes.io/ingress.class: nginx
-      ingress.kubernetes.io/configuration-snippet: "gzip off;\netag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
       # kubernetes.io/tls-acme: "true"
     tls:
       # Secrets must be manually created in the namespace.
@@ -111,7 +111,7 @@ gateway:
       - api.example.com
     annotations:
       kubernetes.io/ingress.class: nginx
-      ingress.kubernetes.io/configuration-snippet: "gzip off;\netag on;\nproxy_pass_header ETag;\n"
+      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
       # kubernetes.io/tls-acme: "true"
     tls:
       # Secrets must be manually created in the namespace.
@@ -156,7 +156,7 @@ ui:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/app-root: /management
       kubernetes.io/rewrite-target: /management
-      ingress.kubernetes.io/configuration-snippet: "gzip off;\netag on;\nproxy_pass_header ETag;\n"
+      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
     tls:
       # Secrets must be manually created in the namespace.
       # - secretName: chart-example-tls
