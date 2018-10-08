@@ -8,7 +8,22 @@ This chart will deploy the following:
 - Gravitee API
 - Gravitee Gateway
 
+## Create a chart archive
+
+To package this chart directory into a chart archive, run:
+
+```
+$ helm package .
+```
+
 ## Installing the Chart
+
+To install the chart using the chart archive, run:
+
+```
+$ helm install gravitee-0.0.1.tgz
+```
+
 
 To install the chart with the release name `my-release`:
 

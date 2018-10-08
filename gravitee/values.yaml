@@ -7,6 +7,10 @@ chaos:
 oauth:
   enabled: false
   localLoginDisabled: true
+  # Provider name (IdP)
+  name: My Provider Name
+  # Button color
+  color: "#AA172"
   # OAuth2 token validation endpoint url
   tokenEndpoint: https://auth/realms/default/protocol/openid-connect/token
   # Authorization endpoint to ask for an authorization_code
@@ -19,8 +23,8 @@ oauth:
   clientSecret: secret
   # Required scope
   scope:
-    - profile
     - openid
+    - email
 
 inMemoryAuth:
   enabled: true
@@ -42,9 +46,9 @@ smtp:
     starttlsEnable: false
 
 mongo:
-  rs: rs
+  rs: rs0
   rsEnabled: true
-  dbhost: mongo-rs-mongodb-replicaset
+  dbhost: mongo-mongodb-replicaset
   dbname: gravitee
   dbport: 27017
 
@@ -52,7 +56,7 @@ es:
   protocol: http
   cluster: elasticsearch
   index: gravitee
-  host: elasticsearch-elasticsearch-client
+  host: elastic-elasticsearch-client.default.svc.cluster.local
   port: 9200
 
 api:
@@ -65,7 +69,7 @@ api:
   replicaCount: 1
   image:
     repository: graviteeio/management-api
-    tag: 1.15.0
+    tag: 1.19.3
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -80,16 +84,20 @@ api:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - api-manager.example.com
+      - apim.example.com
     annotations:
       kubernetes.io/ingress.class: nginx
       ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
       # kubernetes.io/tls-acme: "true"
-    tls:
+    #tls:
       # Secrets must be manually created in the namespace.
       # - secretName: chart-example-tls
       #   hosts:
       #     - chart-example.local
+    tls:
+    - hosts:
+      - apim.example.com
+      secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -108,7 +116,7 @@ gateway:
   replicaCount: 2
   image:
     repository: graviteeio/gateway
-    tag: 1.15.0
+    tag: 1.19.3
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -123,16 +131,20 @@ gateway:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - api.example.com
+      - apim.example.com
     annotations:
       kubernetes.io/ingress.class: nginx
       ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
       # kubernetes.io/tls-acme: "true"
-    tls:
+    #tls:
       # Secrets must be manually created in the namespace.
       # - secretName: chart-example-tls
       #   hosts:
       #     - chart-example.local
+    tls:
+    - hosts:
+      - apim.example.com
+      secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -147,10 +159,12 @@ gateway:
 
 ui:
   name: ui
+  title: API Portal
+  managementTitle: API Management
   replicaCount: 1
   image:
     repository: graviteeio/management-ui
-    tag: 1.15.0
+    tag: 1.19.3
     pullPolicy: Always
   autoscaling:
     enabled: true
@@ -166,17 +180,21 @@ ui:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - developer.example.com
+      - apim.example.com
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/app-root: /management
       kubernetes.io/rewrite-target: /management
       ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
-    tls:
+    #tls:
       # Secrets must be manually created in the namespace.
       # - secretName: chart-example-tls
       #   hosts:
       #     - chart-example.local
+    tls:
+    - hosts:
+      - apim.example.com
+      secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little

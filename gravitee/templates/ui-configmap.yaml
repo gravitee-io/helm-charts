@@ -12,22 +12,23 @@ data:
   constants.json: |
     {
       "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}/management/",
-      "portalTitle": "Gravitee API Portal",
-      "managementTitle": "API Management",
-      "devMode": false,
-      "userCreationEnabled": false,
+      "management": {
+        "title": "{{ .Values.ui.managementTitle }}"
+      },
       "documentation": {
-        "url": "https://docs.gravitee.io"
+        "url": "https://docs.{{ index .Values.api.ingress.hosts 0 }}"
       },
       {{- if .Values.oauth.enabled }}
       "authentication": {
         {{- if .Values.oauth.localLoginDisabled }}
-        "localLoginDisabled": {{ .Values.oauth.localLoginDisabled }},
+        "localLogin": {
+          "enabled": {{ .Values.oauth.localLoginDisabled }}
+        },
         {{- end }}
         "oauth2": {
           "clientId": "{{ .Values.oauth.clientId }}",
-          "name": "Gravitee",
-          "color": "#0076b4",
+          "name": "{{ .Values.oauth.name }}",
+          "color": "{{ .Values.oauth.color }}",
           "authorizationEndpoint": "{{ .Values.oauth.authorizationEndpoint }}",
           {{- if .Values.oauth.localLoginDisabled }}
           "userLogoutEndpoint": "{{ .Values.oauth.userLogoutEndpoint }}",
@@ -38,22 +39,29 @@ data:
       {{- end }}
       "portal": {
         "entrypoint": "{{ index .Values.gateway.ingress.hosts 0 }}",
-        "apikeyHeader": "X-Gravitee-Api-Key"
+        "apikeyHeader": "X-Gravitee-Api-Key",
+        "title": "{{ .Values.ui.title }}",
+        "devMode": {
+          "enabled": false
+        },
+        "userCreation": {
+          "enabled": false
+        },
+        "support": {
+          "enabled": true
+        },
+        "rating": {
+          "enabled": false
+        },
+        "analytics": {
+          "enabled": false,
+          "trackingId": ""
+        }
       },
       "theme": {
         "name": "default",
         "logo": "themes/assets/logo.png",
         "loader": "assets/gravitee_logo_anim.gif"
-      },
-      "support": {
-        "enabled": true
-      },
-      "rating": {
-        "enabled": false
-      },
-      "analytics": {
-        "enabled": false,
-        "trackingId": ""
       },
       "scheduler": {
         "tasks": 10
