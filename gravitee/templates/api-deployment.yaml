@@ -30,14 +30,12 @@ spec:
           ports:
             - containerPort: {{ .Values.api.service.internalPort }}
           livenessProbe:
-            httpGet:
-              path: /management/apis
+            tcpSocket:
               port: {{ .Values.api.service.internalPort }}
             initialDelaySeconds: 60
             periodSeconds: 30
           readinessProbe:
-            httpGet:
-              path: /management/apis
+            tcpSocket:
               port: {{ .Values.api.service.internalPort }}
             initialDelaySeconds: 60
             periodSeconds: 30
