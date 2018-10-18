@@ -1,8 +1,11 @@
 # Gravitee Helm Chart
+**Chart supported versions: 1.19.3 and higher**
+
 
 ## Chart Details
 
 This chart will deploy the following:
+
 
 - Gravitee UI
 - Gravitee API
@@ -21,7 +24,7 @@ $ helm package .
 To install the chart using the chart archive, run:
 
 ```
-$ helm install gravitee-0.0.1.tgz
+$ helm install gravitee-0.0.2.tgz
 ```
 
 
