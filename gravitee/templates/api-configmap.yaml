@@ -69,8 +69,7 @@ data:
               roles: MANAGEMENT:USER, PORTAL:USER
             - user:
               username: admin
-              # Password value: admin
-              password: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
+              password: {{ .Values.adminPasswordBcrypt }}
               roles: ADMIN
             - user:
               username: api1
@@ -87,16 +86,16 @@ data:
         {{- end }}
     # SMTP configuration used to send mails
     email:
-      enabled: true
-      host: smtp.example.com
+      enabled: {{ .Values.smtp.enabled }}
+      host: {{ .Values.smtp.host }}
       subject: "[gravitee] %s"
-      port: 25
-      from: info@example.com
-      username: info@example.com
-      password: example.com
+      port: {{ .Values.smtp.port }}
+      from: {{ .Values.smtp.from }}
+      username: {{ .Values.smtp.username }}
+      password: {{ .Values.smtp.password }}
       properties:
-        auth: true
-        starttls.enable: false
+        auth: {{ .Values.smtp.properties.auth }}
+        starttls.enable: {{ .Values.smtp.properties.starttlsEnable }}
 
     # Mail templates
     templates:
