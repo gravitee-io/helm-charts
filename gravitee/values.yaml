@@ -25,6 +25,20 @@ oauth:
 inMemoryAuth:
   enabled: true
 
+# Default password "admin", use bcrypt to generate a new one
+adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
+
+smtp:
+  enabled: true
+  host: smtp.example.com
+  port: 25
+  from: info@example.com
+  username: info@example.com
+  password: example.com
+  properties:
+    auth: true
+    starttlsEnable: false
+
 mongo:
   rs: rs
   rsEnabled: true
@@ -85,7 +99,6 @@ api:
     requests:
       cpu: 200m
       memory: 512Mi
-
 
 gateway:
   type: Deployment
