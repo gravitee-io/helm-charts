@@ -25,7 +25,7 @@ oauth:
 inMemoryAuth:
   enabled: true
 
-# Default password "admin", use bcrypt to generate a new one
+# Default password "admin", use bcrypt ($2a$ version) to generate a new one
 adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
 
 smtp:
