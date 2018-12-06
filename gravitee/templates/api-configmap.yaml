@@ -102,7 +102,7 @@ data:
       path: ${gravitee.home}/templates
 
     jwt:
-      secret: myJWT4Gr4v1t33_S3cr3t
+      secret: {{ .Values.jwtSecret }}
       # Allows to define the end of validity of the token in seconds (default 604800 = a week)
       #expire-after: 604800
       # Allows to define the end of validity of the token in seconds for email registration (default 86400 = a day)

@@ -28,6 +28,8 @@ inMemoryAuth:
 # Default password "admin", use bcrypt ($2a$ version) to generate a new one
 adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
 
+jwtSecret: myJWT4Gr4v1t33_S3cr3t
+
 smtp:
   enabled: true
   host: smtp.example.com
