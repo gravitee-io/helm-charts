@@ -4,7 +4,7 @@ metadata:
   labels:
     app: {{ template "gravitee.name" . }}
     component: "{{ .Values.gateway.name }}"
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
   name: {{ template "gravitee.gateway.fullname" . }}

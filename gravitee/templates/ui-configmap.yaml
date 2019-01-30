@@ -4,11 +4,14 @@ metadata:
   labels:
     app: {{ template "gravitee.name" . }}
     component: "{{ .Values.ui.name }}"
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
   name: {{ template "gravitee.ui.fullname" . }}
 data:
+  use-gzip: "true"
+  gzip-level: "5"
+  gzip-types: "*"
   constants.json: |
     {
       "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}/management/",
@@ -18,25 +21,6 @@ data:
       "documentation": {
         "url": "https://docs.{{ index .Values.api.ingress.hosts 0 }}"
       },
-      {{- if .Values.oauth.enabled }}
-      "authentication": {
-        {{- if .Values.oauth.localLoginDisabled }}
-        "localLogin": {
-          "enabled": {{ .Values.oauth.localLoginDisabled }}
-        },
-        {{- end }}
-        "oauth2": {
-          "clientId": "{{ .Values.oauth.clientId }}",
-          "name": "{{ .Values.oauth.name }}",
-          "color": "{{ .Values.oauth.color }}",
-          "authorizationEndpoint": "{{ .Values.oauth.authorizationEndpoint }}",
-          {{- if .Values.oauth.localLoginDisabled }}
-          "userLogoutEndpoint": "{{ .Values.oauth.userLogoutEndpoint }}",
-          {{- end }}
-          "scope": [{{- range $i, $scope := .Values.oauth.scope }}{{- if $i}}, {{- end -}} "{{ $scope }}" {{- end -}}]
-        }
-      },
-      {{- end }}
       "portal": {
         "entrypoint": "{{ index .Values.gateway.ingress.hosts 0 }}",
         "apikeyHeader": "X-Gravitee-Api-Key",
