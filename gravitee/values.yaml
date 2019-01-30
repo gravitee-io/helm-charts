@@ -4,28 +4,6 @@
 chaos:
   enabled: false
 
-oauth:
-  enabled: false
-  localLoginDisabled: true
-  # Provider name (IdP)
-  name: My Provider Name
-  # Button color
-  color: "#AA172"
-  # OAuth2 token validation endpoint url
-  tokenEndpoint: https://auth/realms/default/protocol/openid-connect/token
-  # Authorization endpoint to ask for an authorization_code
-  authorizationEndpoint: https://auth/realms/default/protocol/openid-connect/auth
-  userInfoEndpoint: https://auth/realms/default/protocol/openid-connect/userinfo
-  userLogoutEndpoint: https://uth/realms/default/protocol/openid-connect/logout
-  # OAuth2 resource server client id
-  clientId: client
-  # OAut2 resource server client secret
-  clientSecret: secret
-  # Required scope
-  scope:
-    - openid
-    - email
-
 inMemoryAuth:
   enabled: true
 
@@ -46,6 +24,7 @@ es:
 api:
   name: api
   debugEnabled: false
+  restartPolicy: OnFailure
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1
@@ -53,7 +32,7 @@ api:
   replicaCount: 1
   image:
     repository: graviteeio/management-api
-    tag: 1.19.3
+    tag: 1.22.0
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -72,10 +51,12 @@ api:
     annotations:
       kubernetes.io/ingress.class: nginx
       ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
-    # Secrets must be manually created in the namespace.
-    # - secretName: chart-example-tls
-    #   hosts:
-    #     - chart-example.local
+      # kubernetes.io/tls-acme: "true"
+    #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
     tls:
     - hosts:
       - apim.example.com
@@ -99,7 +80,7 @@ gateway:
   replicaCount: 2
   image:
     repository: graviteeio/gateway
-    tag: 1.19.3
+    tag: 1.22.0
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -117,11 +98,17 @@ gateway:
       - apim.example.com
     annotations:
       kubernetes.io/ingress.class: nginx
-      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
-    # Secrets must be manually created in the namespace.
-    # - secretName: chart-example-tls
-    #   hosts:
-    #     - chart-example.local
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+      kubernetes.io/app-root: /gateway
+      kubernetes.io/rewrite-target: /gateway
+      # ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      # kubernetes.io/tls-acme: "true"
+    #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
     tls:
     - hosts:
       - apim.example.com
@@ -145,7 +132,7 @@ ui:
   replicaCount: 1
   image:
     repository: graviteeio/management-ui
-    tag: 1.19.3
+    tag: 1.22.0
     pullPolicy: Always
   autoscaling:
     enabled: true
@@ -167,10 +154,11 @@ ui:
       kubernetes.io/app-root: /management
       kubernetes.io/rewrite-target: /management
       ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
-    # Secrets must be manually created in the namespace.
-    # - secretName: chart-example-tls
-    #   hosts:
-    #     - chart-example.local
+    #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
     tls:
     - hosts:
       - apim.example.com
