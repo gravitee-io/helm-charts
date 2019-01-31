@@ -82,6 +82,39 @@ To configure common functionalities such as:
 | Parameter                  | Description              | Default          |
 | -------------------------- | -------------------------| -----------------|
 | `ui.name`                  | UI service name          | `ui`             |
+| `ui.title`                 | UI title                 | `API Portal`     |
+| `ui.managementTitle`       | UI Portal title          | `API Management` |
+| `ui.replicaCount`          | How many replicas of the UI pod | `1`
+| `ui.image.repository`      | Gravitee UI image repository | `graviteeio/management-ui`
+| `ui.image.tag`             | Gravitee UI image tag | `1.22.0`
+| `ui.image.pullPolicy`      | K8s image pull policy  | `Always`     |
+| `ui.autoscaling.enabled`   | Whether auto-scaling is enabled or not  | `true`     |
+| `ui.autoscaling.minReplicas` | If `ui.autoscaling.enabled` is `true`, what's the minimum number of replicas  | `2`     |
+| `ui.autoscaling.maxReplicas` | If `ui.autoscaling.enabled` is `true`, what's the maximum number of replicas  | `3`     |
+| `ui.autoscaling.targetAverageUtilization`        | If `ui.autoscaling.enabled` what's the average target utilization (in %) before it auto-scale  | `50`
+| `ui.service.name`        | UI service name  | `nginx`     |
+| `ui.service.type`        | K8s publishing [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)  | `ClusterIP`     |
+| `ui.service.externalPort`        | K8s UI service external port  | `8082`     |
+| `ui.service.internalPort`        | K8s UI service internal port (container)  | `80`     |
+| `ui.ingress.enabled`        | Whether Ingress is enabled or not  | `true`
+| `ui.ingress.hosts`        | If `ui.ingress.enabled` is enabled, set possible ingress hosts  | `[apim.example.com]`
+| `ui.ingress.annotations`        | Supported Ingress annotations to configure ingress controller | `[kubernetes.io/ingress.class: nginx, kubernetes.io/app-root: /management, kubernetes.io/rewrite-target: /management, ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"]`
+| `ui.ingress.tls.hosts`        | [Ingress TLS termination](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) | `[apim.example.com]`
+| `ui.ingress.tls.secretName`        | Ingress TLS K8s secret name containing the TLS private key and certificate | `api-custom-cert`
+| `ui.resources.limits.cpu`        | K8s pod deployment [limits definition for CPU](https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/) | `100m`
+| `ui.resources.limits.memory`        | K8s pod deployment limits definition for memory | `128Mi`
+| `ui.resources.requests.cpu`        | K8s pod deployment [requests definition for CPU](https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/#specify-a-cpu-request-and-a-cpu-limit) | `50m`
+| `ui.resources.requests.memory`        | K8s pod deployment requests definition for memory | `64Mi`
+
+
+
+
+
+
+
+
+
+
 
 ### Gravitee API
 
@@ -111,7 +144,6 @@ To configure common functionalities such as:
 | `api.resources.limits.cpu`        | K8s pod deployment [limits definition for CPU](https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/) | `500m`
 | `api.resources.limits.memory`        | K8s pod deployment limits definition for memory | `1024Mi`
 | `api.resources.requests.cpu`        | K8s pod deployment [requests definition for CPU](https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/#specify-a-cpu-request-and-a-cpu-limit) | `200m`
-| `api.resources.requests.cpu`        | K8s pod deployment [requests definition for CPU](https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/#specify-a-cpu-request-and-a-cpu-limit) | `200m`
 | `api.resources.requests.memory`        | K8s pod deployment requests definition for memory | `512Mi`
 
 ### Gravitee Gateway
@@ -119,6 +151,27 @@ To configure common functionalities such as:
 | Parameter                    | Description                      | Default        |
 | -----------------------      | ---------------------------------| ---------------|
 | `gateway.name`               | Gateway service name             | `gateway`      |
+| `gateway.type`               | Gateway deployment type: `deployment` or `statefulSet`            | `deployment` |
+| `gateway.replicaCount`       | How many replicas of the Gateway pod | `2`
+| `gateway.image.repository`   | Gravitee Gateway image repository | `graviteeio/gateway`
+| `gateway.image.tag`   | Gravitee Gateway image tag | `1.22.0`
+| `gateway.image.pullPolicy`        | K8s image pull policy  | `Always`     |
+| `gateway.service.type`        | K8s publishing [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)  | `ClusterIP`     |
+| `gateway.service.externalPort`        | K8s Gateway service external port  | `82`     |
+| `gateway.service.internalPort`        | K8s Gateway service internal port (container)  | `8082`     |
+| `gateway.autoscaling.enabled`        | Whether auto-scaling is enabled or not  | `true`     |
+| `gateway.autoscaling.minReplicas`        | If `gateway.autoscaling.enabled` is `true`, what's the minimum number of replicas  | `2`     |
+| `gateway.autoscaling.maxReplicas`        | If `gateway.autoscaling.enabled` is `true`, what's the maximum number of replicas  | `3`     |
+| `gateway.autoscaling.targetAverageUtilization`        | If `gateway.autoscaling.enabled` what's the average target utilization (in %) before it auto-scale  | `50`
+| `gateway.ingress.enabled`        | Whether Ingress is enabled or not  | `true`
+| `gateway.ingress.hosts`        | If `gateway.ingress.enabled` is enabled, set possible ingress hosts  | `[apim.example.com]`
+| `gateway.ingress.annotations`        | Supported Ingress annotations to configure ingress controller | `[kubernetes.io/ingress.class: nginx, nginx.ingress.kubernetes.io/ssl-redirect: "false", nginx.ingress.kubernetes.io/enable-rewrite-log: "true", kubernetes.io/app-root: /gateway, kubernetes.io/rewrite-target: /gateway]`
+| `gateway.ingress.tls.hosts`        | [Ingress TLS termination](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) | `[apim.example.com]`
+| `gateway.ingress.tls.secretName`        | Ingress TLS K8s secret name containing the TLS private key and certificate | `api-custom-cert`
+| `gateway.resources.limits.cpu`        | K8s pod deployment [limits definition for CPU](https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/) | `500m`
+| `gateway.resources.limits.memory`        | K8s pod deployment limits definition for memory | `512Mi`
+| `gateway.resources.requests.cpu`        | K8s pod deployment [requests definition for CPU](https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/#specify-a-cpu-request-and-a-cpu-limit) | `200m`
+| `gateway.resources.requests.memory`        | K8s pod deployment requests definition for memory | `256Mi`
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
