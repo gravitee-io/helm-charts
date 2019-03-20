@@ -121,7 +121,7 @@ To configure common functionalities such as:
 | Parameter             | Description       | Default   |
 |-----------------------|-------------------|-----------|
 | `api.name`            | API service name  | `api`     |
-| `api.debugEnabled`    | Whether to enable API debug or not  | `false`     |
+| `api.logging.debug`    | Whether to enable API debug logging or not  | `false`     |
 | `api.restartPolicy`            | Policy to [restart K8 pod](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-and-container-status)  | `OnFailure`     |
 | `api.updateStrategy.type`            | [K8s deployment strategy type](https://kubernetes.io/zh/docs/concepts/workloads/controllers/deployment/)  | `RollingUpdate`     |
 | `api.updateStrategy.rollingUpdate.maxUnavailable`            | If api.updateStrategy.type is set to `RollingUpdate`, make sure to set a value here or your Deployment can have 100% unavailability by default.  The Deployment controller will stop the bad rollout automatically, and will stop scaling up the new ReplicaSet. This depends on the rollingUpdate parameters (maxUnavailable specifically) that you have specified. Kubernetes by default sets the value to 1 and spec.replicas to 1 so if you haven’t cared about setting those parameters, your Deployment can have 100% unavailability by default!   | `1`     |
@@ -151,6 +151,7 @@ To configure common functionalities such as:
 | Parameter                    | Description                      | Default        |
 | -----------------------      | ---------------------------------| ---------------|
 | `gateway.name`               | Gateway service name             | `gateway`      |
+| `gateway.logging.debug`    | Whether to enable Gateway debug logging or not  | `false`     |
 | `gateway.type`               | Gateway deployment type: `deployment` or `statefulSet`            | `deployment` |
 | `gateway.replicaCount`       | How many replicas of the Gateway pod | `2`
 | `gateway.image.repository`   | Gravitee Gateway image repository | `graviteeio/gateway`

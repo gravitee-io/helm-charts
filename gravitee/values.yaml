@@ -39,7 +39,8 @@ es:
 
 api:
   name: api
-  debugEnabled: false
+  logging:
+    debug: false
   restartPolicy: OnFailure
   updateStrategy:
     rollingUpdate:
@@ -92,7 +93,8 @@ api:
 gateway:
   type: Deployment
   name: gateway
-  debugEnabled: false
+  logging:
+    debug: false
   replicaCount: 2
   image:
     repository: graviteeio/gateway

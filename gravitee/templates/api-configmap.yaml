@@ -120,7 +120,7 @@ data:
     # Allows to rate an API (default value: false)
     #rating :
       #enabled: true
-  {{- if .Values.api.debugEnabled }}
+  {{- if .Values.api.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
 
