@@ -1,6 +1,7 @@
 {{- if .Values.api.ingress.enabled -}}
 {{- $serviceAPIName := include "gravitee.api.fullname" . -}}
 {{- $serviceAPIPort := .Values.api.service.externalPort -}}
+{{- $ingressPath   := .Values.api.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -21,7 +22,7 @@ spec:
     - host: {{ $host }}
       http:
         paths:
-          - path: {{ .Values.api.ingress.path }}
+          - path: {{ $ingressPath }}
             backend:
               serviceName: {{ $serviceAPIName }}
               servicePort: {{ $serviceAPIPort }}
