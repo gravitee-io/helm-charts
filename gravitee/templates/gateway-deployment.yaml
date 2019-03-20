@@ -56,7 +56,7 @@ spec:
             - name: config
               mountPath: /opt/graviteeio-gateway/config/gravitee.yml
               subPath: gravitee.yml
-          {{- if .Values.gateway.debugEnabled }}
+          {{- if .Values.gateway.logging.debug }}
             - name: config
               mountPath: /opt/graviteeio-gateway/config/logback.xml
               subPath: logback.xml

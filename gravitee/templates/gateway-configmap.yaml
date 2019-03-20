@@ -106,7 +106,7 @@ data:
       request:
         transaction:
           header: X-Gravitee-Transaction-Id
-  {{- if .Values.gateway.debugEnabled }}
+  {{- if .Values.gateway.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
 
@@ -173,4 +173,3 @@ data:
 
     </configuration>
   {{- end }}
-  
