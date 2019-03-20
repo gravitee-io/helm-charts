@@ -21,7 +21,7 @@ spec:
     - host: {{ $host }}
       http:
         paths:
-          - path: /management
+          - path: {{ .Values.api.ingress.path }}
             backend:
               serviceName: {{ $serviceAPIName }}
               servicePort: {{ $serviceAPIPort }}
