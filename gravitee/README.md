@@ -137,6 +137,7 @@ To configure common functionalities such as:
 | `api.autoscaling.maxReplicas`        | If `api.autoscaling.enabled` is `true`, what's the maximum number of replicas  | `3`     |
 | `api.autoscaling.targetAverageUtilization`        | If `api.autoscaling.enabled` what's the average target utilization (in %) before it auto-scale  | `50`
 | `api.ingress.enabled`        | Whether Ingress is enabled or not  | `true`
+| `api.ingress.path`        | The ingress path which should match for incoming requests to the management API.  | `/management`
 | `api.ingress.hosts`        | If `api.ingress.enabled` is enabled, set possible ingress hosts  | `[apim.example.com]`
 | `api.ingress.annotations`        | Supported Ingress annotations to configure ingress controller | `[kubernetes.io/ingress.class: nginx, ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"]`
 | `api.ingress.tls.hosts`        | [Ingress TLS termination](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) | `[apim.example.com]`
@@ -164,6 +165,7 @@ To configure common functionalities such as:
 | `gateway.autoscaling.maxReplicas`        | If `gateway.autoscaling.enabled` is `true`, what's the maximum number of replicas  | `3`     |
 | `gateway.autoscaling.targetAverageUtilization`        | If `gateway.autoscaling.enabled` what's the average target utilization (in %) before it auto-scale  | `50`
 | `gateway.ingress.enabled`        | Whether Ingress is enabled or not  | `true`
+| `gateway.ingress.path`        | The ingress path which should match for incoming requests to the gateway.  | `/gateway`
 | `gateway.ingress.hosts`        | If `gateway.ingress.enabled` is enabled, set possible ingress hosts  | `[apim.example.com]`
 | `gateway.ingress.annotations`        | Supported Ingress annotations to configure ingress controller | `[kubernetes.io/ingress.class: nginx, nginx.ingress.kubernetes.io/ssl-redirect: "false", nginx.ingress.kubernetes.io/enable-rewrite-log: "true", kubernetes.io/app-root: /gateway, kubernetes.io/rewrite-target: /gateway]`
 | `gateway.ingress.tls.hosts`        | [Ingress TLS termination](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) | `[apim.example.com]`

@@ -61,6 +61,7 @@ api:
     targetAverageUtilization: 50
   ingress:
     enabled: true
+    path: /management
     # Used to create an Ingress record.
     hosts:
       - apim.example.com
