@@ -92,6 +92,7 @@ api:
 gateway:
   type: Deployment
   name: gateway
+  debugEnabled: false
   replicaCount: 2
   image:
     repository: graviteeio/gateway

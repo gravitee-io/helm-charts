@@ -56,6 +56,11 @@ spec:
             - name: config
               mountPath: /opt/graviteeio-gateway/config/gravitee.yml
               subPath: gravitee.yml
+          {{- if .Values.gateway.debugEnabled }}
+            - name: config
+              mountPath: /opt/graviteeio-gateway/config/logback.xml
+              subPath: logback.xml
+          {{- end }}
       imagePullSecrets:
         - name: {{ .Values.gateway.image.pullSecrets }}
       volumes:
