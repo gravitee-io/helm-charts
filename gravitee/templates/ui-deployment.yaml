@@ -55,8 +55,10 @@ spec:
             - name: config
               mountPath: /var/www/html/constants.json
               subPath: constants.json
+      {{- if .Values.ui.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.ui.image.pullSecrets }}
+      {{- end }}
       volumes:
         - name: config
           configMap:

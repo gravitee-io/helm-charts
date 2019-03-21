@@ -61,8 +61,10 @@ spec:
               mountPath: /opt/graviteeio-gateway/config/logback.xml
               subPath: logback.xml
           {{- end }}
+      {{- if .Values.gateway.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.gateway.image.pullSecrets }}
+      {{- end }}
       volumes:
         - name: config
           configMap:
