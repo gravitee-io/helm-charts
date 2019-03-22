@@ -48,7 +48,7 @@ To configure common functionalities such as:
 - configuration database (see
     [mongodb-replicaset](https://github.com/kubernetes/charts/tree/master/stable/mongodb-replicaset)
     chart)
-- logs database (see [elastichsearch](https://github.com/kubernetes/charts/tree/master/incubator/elasticsearch)
+- logs database (see [elastichsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch)
     chart)
 
 | Parameter              | Description        | Default |
