@@ -31,11 +31,19 @@ mongo:
   dbport: 27017
 
 es:
-  protocol: http
   cluster: elasticsearch
   index: gravitee
-  host: elastic-elasticsearch-client.default.svc.cluster.local
-  port: 9200
+  # If the details for security are entered
+  # authentication will be provided for the
+  # elastic search cluster
+  # https://docs.gravitee.io/apim_installguide_repositories_elasticsearch.html#management_api_configuration
+  security:
+    enabled: false
+    username: example
+    password: example
+  endpoints:
+    - http://elastic-elasticsearch-client.default.svc.cluster.local:9200
+    - http://elastic2-elasticsearch-client.default.svc.cluster.local:9200
 
 api:
   name: api

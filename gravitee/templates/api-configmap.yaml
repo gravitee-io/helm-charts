@@ -27,8 +27,15 @@ data:
     analytics:
       type: elasticsearch
       elasticsearch:
+        {{- with .Values.es.endpoints }}
         endpoints:
-          - {{ .Values.es.protocol }}://{{ .Values.es.host }}:{{ .Values.es.port }}
+          {{ toYaml . | nindent 10 | trim -}}
+        {{- end }}
+        {{- if (eq .Values.es.security.enabled true) }}
+        security:
+          username: {{ .Values.es.security.username }}
+          password: {{ .Values.es.security.password }}
+        {{- end }}
         index: {{ .Values.es.index }}
         cluster: {{ .Values.es.cluster }}
     security:
