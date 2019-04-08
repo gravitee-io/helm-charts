@@ -16,14 +16,14 @@ data:
         uri: mongodb://{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}{{- if .Values.mongo.rsEnabled }}?replicaSet={{ .Values.mongo.rs }}{{- end }}
     services:
       core:
-      http:
-        enabled: true
-        port: 18083
-        host: localhost
-        authentication:
-          type: basic
-          users:
-            admin: adminadmin
+        http:
+          enabled: true
+          port: 18083
+          host: localhost
+          authentication:
+            type: basic
+            users:
+              admin: adminadmin
     analytics:
       type: elasticsearch
       elasticsearch:
