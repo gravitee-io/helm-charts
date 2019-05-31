@@ -29,6 +29,42 @@ mongo:
   dbhost: mongo-mongodb-replicaset
   dbname: gravitee
   dbport: 27017
+  auth:
+    enabled: false
+    username:
+    password:
+
+mongodb-replicaset:
+  enabled: true
+  replicas: 3
+  replicaSetName: rs0
+  auth:
+    enabled: false
+    adminUser: username
+    adminPassword: password
+    metricsUser: metrics
+    metricsPassword: password
+    key: keycontent
+    # existingKeySecret:
+    # existingAdminSecret:
+    # existingMetricsSecret:
+  image:
+    repository: mongo
+    tag: 3.6
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  persistentVolume:
+    enabled: true
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+  configmap: {}
 
 es:
   cluster: elasticsearch
@@ -43,6 +79,68 @@ es:
     password: example
   endpoints:
     - http://elastic-elasticsearch-client.default.svc.cluster.local:9200
+
+elasticsearch:
+  enabled: true
+  cluster:
+    name: "elasticsearch"
+    env:
+      MINIMUM_MASTER_NODES: "2"
+    plugins: []
+
+  image:
+    repository: "docker.elastic.co/elasticsearch/elasticsearch-oss"
+    tag: "6.7.0"
+  client:
+    name: client
+    replicas: 2
+    heapSize: "512m"
+    # additionalJavaOpts: "-XX:MaxRAM=512m"
+    resources:
+      limits:
+        cpu: "1"
+        memory: "1024Mi"
+      requests:
+        cpu: "25m"
+        memory: "512Mi"
+  master:
+    name: master
+    replicas: 3
+    heapSize: "512m"
+    # additionalJavaOpts: "-XX:MaxRAM=512m"
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      name: data
+      size: "4Gi"
+      # storageClass: "ssd"
+    resources:
+      limits:
+        cpu: "1"
+        memory: "1024Mi"
+      requests:
+        cpu: "25m"
+        memory: "512Mi"
+        
+  data:
+    name: data
+    exposeHttp: false
+    replicas: 2
+    heapSize: "512m"
+    # additionalJavaOpts: "-XX:MaxRAM=512m"
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      name: data
+      size: "30Gi"
+      # storageClass: "ssd"
+    resources:
+      limits:
+        cpu: "1"
+        memory: "2048Mi"
+      requests:
+        cpu: "25m"
+        memory: "1536Mi"
 
 api:
   name: api
