@@ -35,7 +35,7 @@ mongo:
     password:
 
 mongodb-replicaset:
-  enabled: true
+  enabled: false
   replicas: 3
   replicaSetName: rs0
   auth:
@@ -81,7 +81,7 @@ es:
     - http://elastic-elasticsearch-client.default.svc.cluster.local:9200
 
 elasticsearch:
-  enabled: true
+  enabled: false
   cluster:
     name: "elasticsearch"
     env:

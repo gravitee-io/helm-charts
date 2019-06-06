@@ -37,7 +37,6 @@ $ helm install --name my-release gravitee
 ## Configuration
 
 The following tables list the configurable parameters of the Gravitee chart and their default values.
-See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongodb-replicaset) and [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch) for detailed documentation on optional requiremnents helm charts.
 
 ### Shared configuration
 
@@ -70,6 +69,14 @@ To configure common functionalities such as:
 | `mongo.auth.username` | Mongo DB username                          | `null`                     |
 | `mongo.auth.password` | Mongo DB password                          | `null`                     |
 
+### Mongo ReplicaSet
+
+| Parameter                 | Description                           | Default |
+| ------------------------- | ------------------------------------- | ------- |
+| `mongo-replicaset.enable` | Enable deployment of Mongo replicaset | `false` |
+
+See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongodb-replicaset) for detailed documentation on helm chart.
+
 ### Elasticsearch
 
 | Parameter              | Description                                 | Default                                                                |
@@ -80,6 +87,14 @@ To configure common functionalities such as:
 | `es.cluster`           | Elasticsearch cluster name                  | `elasticsearch`                                                        |
 | `es.index`             | Elasticsearch index                         | `gravitee`                                                             |
 | `es.endpoints`         | Elasticsearch endpoint array                | `[http://elastic-elasticsearch-client.default.svc.cluster.local:9200]` |
+
+### Elasticsearch cluster
+
+| Parameter              | Description                                | Default |
+| ---------------------- | ------------------------------------------ | ------- |
+| `elasticsearch.enable` | Enable deployment of Elasticsearch cluster | `false` |
+
+See [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch) for detailed documentation on optional requiremnents helm chart.
 
 ### Gravitee UI
 
