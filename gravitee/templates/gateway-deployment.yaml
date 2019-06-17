@@ -30,6 +30,10 @@ spec:
         component: "{{ .Values.gateway.name }}"
         release: {{ .Release.Name }}
     spec:
+    {{- if .Values.gateway.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.gateway.nodeSelector | indent 8 }}
+    {{- end }}
       containers:
         - name: {{ template "gravitee.gateway.fullname" . }}
           image: "{{ .Values.gateway.image.repository }}:{{ .Values.gateway.image.tag }}"
@@ -48,10 +52,6 @@ spec:
             periodSeconds: 30
           resources:
 {{ toYaml .Values.gateway.resources | indent 12 }}
-    {{- if .Values.gateway.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.gateway.nodeSelector | indent 8 }}
-    {{- end }}
           volumeMounts:
             - name: config
               mountPath: /opt/graviteeio-gateway/config/gravitee.yml

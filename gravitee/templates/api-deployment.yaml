@@ -23,6 +23,10 @@ spec:
         component: "{{ .Values.api.name }}"
         release: {{ .Release.Name }}
     spec:
+    {{- if .Values.api.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.api.nodeSelector | indent 8 }}
+    {{- end }}
       containers:
         - name: {{ template "gravitee.api.fullname" . }}
           image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
@@ -41,10 +45,6 @@ spec:
             periodSeconds: 30
           resources:
 {{ toYaml .Values.api.resources | indent 12 }}
-    {{- if .Values.api.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.api.nodeSelector | indent 8 }}
-    {{- end }}
           volumeMounts:
             - name: config
               mountPath: /opt/graviteeio-management-api/config/gravitee.yml
