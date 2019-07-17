@@ -1,0 +1,69 @@
+
+
+# Use the right context
+> kubectl config get-contexts
+> kubectl config use-context docker-for-desktop
+
+# Install dashboard
+> kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
+
+# Create a user to access the dashboard
+
+https://github.com/kubernetes/dashboard/wiki/Creating-sample-user
+
+## Create Service Account
+> kubectl apply -f dashboard/dashboard-adminuser.yaml
+
+## Create ClusterRoleBinding
+> kubectl apply -f dashboard/dashboard-adminrole.yaml
+
+## Get token
+> kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+
+## Login to Dashboard
+Now copy the token and paste it into Enter token field on log in screen. 
+
+# Install a local LB
+
+## MetalLB
+https://metallb.universe.tf/installation/
+
+> kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.7.3/manifests/metallb.yaml
+
+> kubectl apply -f metallb/metallb.yaml
+
+Check the state of MetalLB pods:
+> kubectl get pods -n metallb-system
+
+## Ingress Controller
+
+Create the default backend to map default ports (443 and 80)
+> kubectl apply -f ingress/default-backend-deployment.yaml
+> kubectl apply -f ingress/nginx-service-account.yaml
+> kubectl apply -f ingress/nginx-service.yaml
+> kubectl apply -f ingress/nginx-ingress-controller.yaml
+
+View pods for ingress
+> kubectl get all -o wide -n metallb-system
+
+# Install MongoDB 
+> helm install --name mongo --set image.tag=3.6 --set persistence.enabled=false --namespace repositories stable/mongodb
+
+# Install Elasticsearch
+> helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+> helm install --name elastic incubator/elasticsearch -f elastic-values.yaml
+
+# Install Gravitee.io API Management
+> helm package graviteeio-apim
+> helm install --name apim-local --namespace graviteeio -f graviteeio-apim/values.yaml graviteeio-apim-1.25.2.tgz
+
+View Ingress for Gravitee.io Portal
+> kubectl get ingress apim-local-graviteeio-apim-ui -n graviteeio
+> kubectl describe ingress apim-local-graviteeio-apim-ui -n graviteeio
+
+
+## Uninstall Gravitee.io API Management
+> helm delete gravitee-apim-local && helm del --purge gravitee-apim-local
+
+## Delete namespaces
+> kubectl delete namespaces graviteeio metallb-system repositories

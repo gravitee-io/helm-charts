@@ -154,7 +154,7 @@ api:
   replicaCount: 1
   image:
     repository: graviteeio/management-api
-    tag: 1.23.1
+    tag: 1.25.2
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -204,7 +204,7 @@ gateway:
   replicaCount: 2
   image:
     repository: graviteeio/gateway
-    tag: 1.23.1
+    tag: 1.25.2
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -257,7 +257,7 @@ ui:
   replicaCount: 1
   image:
     repository: graviteeio/management-ui
-    tag: 1.23.1
+    tag: 1.25.2
     pullPolicy: Always
   autoscaling:
     enabled: true

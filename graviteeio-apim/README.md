@@ -25,7 +25,7 @@ $ helm package .
 To install the chart using the chart archive, run:
 
 ```
-$ helm install gravitee-1.23.2.tgz
+$ helm install graviteeio-apim-1.25.2.tgz
 ```
 
 To install the chart with the release name `my-release`:
