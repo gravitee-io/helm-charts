@@ -7,6 +7,16 @@ chaos:
 inMemoryAuth:
   enabled: true
 
+# Define extra inMemory users here, e.g.:
+# extraInMemoryUsers: |
+#   - user:
+#     username: publisher-user
+#     password: $2a$13$iXdXO4wAYdhx2LOwijsp7.PsoAZQ12zEdHxbriIYCbtyo.y32LTji
+#     roles: MANAGEMENT:API_PUBLISHER, PORTAL:API_PUBLISHER
+#   - user:
+#     username: application-test
+#     password: $2a$10$2gtKPYRB9zaVaPcn5RBx/.3T.7SeZoDGs9GKqbo9G64fKyXFR1He.
+
 # Default password "admin", use bcrypt ($2a$ version) to generate a new one
 adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
 
