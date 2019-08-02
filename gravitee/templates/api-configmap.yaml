@@ -70,6 +70,10 @@ data:
               # Password value: application1
               password: $2a$10$2gtKPYRB9zaVaPcn5RBx/.3T.7SeZoDGs9GKqbo9G64fKyXFR1He.
               roles: MANAGEMENT:USER, PORTAL:USER
+          {{- if .Values.extraInMemoryUsers -}}
+          {{ .Values.extraInMemoryUsers | nindent 12 }}
+          {{- end -}}
+
           # Enable authentication using internal repository
         {{- end }}
     # SMTP configuration used to send mails
