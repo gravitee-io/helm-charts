@@ -55,6 +55,12 @@ spec:
             - name: config
               mountPath: /var/www/html/constants.json
               subPath: constants.json
+          {{- range .Values.extraVolumeMounts }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+              subPath: {{ .subPath | default "" }}
+              readOnly: {{ .readOnly }}
+          {{- end }}
       {{- if .Values.ui.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.ui.image.pullSecrets }}

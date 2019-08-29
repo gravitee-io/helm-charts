@@ -309,3 +309,10 @@ ui:
     requests:
       cpu: 50m
       memory: 64Mi
+  ## Additional gravitee ui volume mounts
+  # Defines additional volume mounts.
+  extraVolumeMounts: []
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim
