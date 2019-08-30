@@ -55,7 +55,7 @@ spec:
             - name: config
               mountPath: /var/www/html/constants.json
               subPath: constants.json
-          {{- range .Values.extraVolumeMounts }}
+          {{- range .Values.ui.extraVolumeMounts }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
               subPath: {{ .subPath | default "" }}
@@ -69,7 +69,7 @@ spec:
         - name: config
           configMap:
             name: {{ template "gravitee.ui.fullname" . }}
-      {{- range .Values.extraVolumeMounts }}
+      {{- range .Values.ui.extraVolumeMounts }}
         - name: {{ .name }}
           persistentVolumeClaim:
             claimName: {{ .existingClaim }}
