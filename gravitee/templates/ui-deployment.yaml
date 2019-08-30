@@ -69,3 +69,8 @@ spec:
         - name: config
           configMap:
             name: {{ template "gravitee.ui.fullname" . }}
+      {{- range .Values.extraVolumeMounts }}
+        - name: {{ .name }}
+          persistentVolumeClaim:
+            claimName: {{ .existingClaim }}
+      {{- end }}
