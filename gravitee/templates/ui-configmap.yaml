@@ -19,35 +19,21 @@ data:
         "title": "{{ .Values.ui.managementTitle }}"
       },
       "documentation": {
-        "url": "https://docs.{{ index .Values.api.ingress.hosts 0 }}"
+        "url": "{{ .Values.ui.documentationLink }}"
       },
       "portal": {
         "entrypoint": "{{ index .Values.gateway.ingress.hosts 0 }}",
-        "apikeyHeader": "X-Gravitee-Api-Key",
-        "title": "{{ .Values.ui.title }}",
-        "devMode": {
-          "enabled": false
-        },
-        "userCreation": {
-          "enabled": false
-        },
-        "support": {
-          "enabled": true
-        },
-        "rating": {
-          "enabled": false
-        },
-        "analytics": {
-          "enabled": false,
-          "trackingId": ""
-        }
-      },
-      "theme": {
-        "name": "default",
-        "logo": "themes/assets/GRAVITEE_LOGO1-01.png",
-        "loader": "assets/gravitee_logo_anim.gif"
-      },
-      "scheduler": {
-        "tasks": 10
+        "title": "{{ .Values.ui.title }}"
+        {{- if .Values.ui.portal }}
+          {{- range $key, $value := .Values.ui.portal }},
+          "{{ $key }}": {{ toJson $value }}
+          {{- end -}}
+        {{- end }}
       }
+      {{- if .Values.ui.theme }},
+      "theme": {{ toJson .Values.ui.theme }}
+      {{- end }}
+      {{- if .Values.ui.scheduler }},
+      "scheduler": {{ toJson .Values.ui.scheduler }}
+      {{- end }}
     }
