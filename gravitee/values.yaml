@@ -264,6 +264,26 @@ ui:
   name: ui
   title: API Portal
   managementTitle: API Management
+  documentationLink: http://docs
+  scheduler:
+    tasks: 10
+  theme:
+    name: "default"
+    logo: "themes/assets/GRAVITEE_LOGO1-01.png"
+    loader: "assets/gravitee_logo_anim.gif"
+  portal:
+    apikeyHeader: "X-Gravitee-Api-Key"
+    devMode:
+      enabled: false
+    userCreation:
+      enabled: false
+    support:
+      enabled: true
+    rating:
+      enabled: false
+    analytics:
+      enabled: false
+      trackingId: ""
   replicaCount: 1
   image:
     repository: graviteeio/management-ui
