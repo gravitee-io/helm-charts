@@ -21,4 +21,10 @@ spec:
     resource:
       name: cpu
       targetAverageUtilization: {{ .Values.gateway.autoscaling.targetAverageUtilization }}
+{{- if .Values.gateway.autoscaling.targetMemoryAverageUtilization }}
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: {{ .Values.gateway.autoscaling.targetMemoryAverageUtilization }}
+{{- end }}
 {{- end }}
