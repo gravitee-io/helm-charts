@@ -39,6 +39,7 @@ mongo:
   dbhost: mongo-mongodb-replicaset
   dbname: gravitee
   dbport: 27017
+  connectTimeoutMS: 30000
   auth:
     enabled: false
     username:
