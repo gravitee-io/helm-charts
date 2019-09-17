@@ -175,6 +175,7 @@ api:
     minReplicas: 2
     maxReplicas: 3
     targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
   ingress:
     enabled: true
     path: /management
@@ -225,6 +226,7 @@ gateway:
     minReplicas: 2
     maxReplicas: 6
     targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
   ingress:
     enabled: true
     path: /gateway
@@ -294,6 +296,7 @@ ui:
     minReplicas: 2
     maxReplicas: 3
     targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
   service:
     name: nginx
     type: ClusterIP
