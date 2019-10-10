@@ -1,3 +1,4 @@
+{{- if .Values.gateway.enabled -}}
 {{- if .Values.gateway.ingress.enabled -}}
 {{- $serviceGWName := include "gravitee.gateway.fullname" . -}}
 {{- $serviceGWPort := .Values.gateway.service.externalPort -}}
@@ -31,4 +32,5 @@ spec:
   tls:
 {{ toYaml .Values.gateway.ingress.tls | indent 4 }}
   {{- end -}}
+{{- end -}}
 {{- end -}}

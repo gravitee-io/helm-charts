@@ -1,3 +1,4 @@
+{{- if .Values.ui.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -37,3 +38,4 @@ data:
       "scheduler": {{ toJson .Values.ui.scheduler }}
       {{- end }}
     }
+{{- end -}}

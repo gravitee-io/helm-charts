@@ -1,3 +1,4 @@
+{{- if .Values.gateway.enabled -}}
 {{- if .Values.gateway.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
@@ -26,5 +27,6 @@ spec:
     resource:
       name: memory
       targetAverageUtilization: {{ .Values.gateway.autoscaling.targetMemoryAverageUtilization }}
-{{- end }}
-{{- end }}
+{{- end -}}
+{{- end -}}
+{{- end -}}

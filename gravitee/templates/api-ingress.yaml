@@ -1,3 +1,4 @@
+{{- if .Values.api.enabled -}}
 {{- if .Values.api.ingress.enabled -}}
 {{- $serviceAPIName := include "gravitee.api.fullname" . -}}
 {{- $serviceAPIPort := .Values.api.service.externalPort -}}
@@ -31,4 +32,5 @@ spec:
   tls:
 {{ toYaml .Values.api.ingress.tls | indent 4 }}
   {{- end -}}
+{{- end -}}
 {{- end -}}

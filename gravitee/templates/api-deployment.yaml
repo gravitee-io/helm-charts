@@ -1,4 +1,5 @@
-apiVersion: apps/v1beta1
+{{- if .Values.api.enabled -}}
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "gravitee.api.fullname" . }}
@@ -14,6 +15,11 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: {{ template "gravitee.name" . }}
+      component: "{{ .Values.api.name }}"
+      release: {{ .Release.Name }}
   template:
     metadata:
       annotations:
@@ -62,3 +68,4 @@ spec:
         - name: config
           configMap:
             name: {{ template "gravitee.api.fullname" . }}
+{{- end -}}
