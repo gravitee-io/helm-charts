@@ -1,3 +1,4 @@
+{{- if .Values.gateway.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -28,6 +29,8 @@ data:
     #    truststore:
     #      path: ${gravitee.home}/security/truststore.jks
     #      password: secret
+      websocket:
+        enabled: {{ .Values.gateway.websocket }}  
     management:
       type: mongodb
       mongodb:
@@ -39,6 +42,14 @@ data:
     cache:
       type: ehcache
       enabled: true
+
+    # Sharding tags configuration
+    # Allows to define inclusion/exclusion sharding tags to only deploy a part of APIs. To exclude just prefix the tag with '!'.
+    tags: {{ .Values.gateway.sharding_tags }}  
+
+    # Multi-tenant configuration
+    # Allow only a single-value
+    tenant: {{ .Values.gateway.tenant }}  
 
     # Reporters configuration (used to store reporting monitoring data, request metrics, healthchecks and others...
     # All reporters are enabled by default. To stop one of them, you have to add the property 'enabled: false'
@@ -179,4 +190,5 @@ data:
         </root>
 
     </configuration>
-  {{- end }}
+  {{- end -}}
+  {{- end -}}

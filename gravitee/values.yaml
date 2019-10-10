@@ -78,6 +78,7 @@ mongodb-replicaset:
   configmap: {}
 
 es:
+  enabled: true
   cluster: elasticsearch
   index: gravitee
   # If the details for security are entered
@@ -154,6 +155,7 @@ elasticsearch:
         memory: "1536Mi"
 
 api:
+  enabled: true
   name: api
   logging:
     debug: false
@@ -165,7 +167,7 @@ api:
   replicaCount: 1
   image:
     repository: graviteeio/management-api
-    tag: 1.23.1
+    tag: 1.29.4
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -209,14 +211,18 @@ api:
       memory: 512Mi
 
 gateway:
+  enabled: true
   type: Deployment
   name: gateway
   logging:
     debug: false
   replicaCount: 2
+  # sharding_tags: 
+  # tenant:
+  websocket: false
   image:
     repository: graviteeio/gateway
-    tag: 1.23.1
+    tag: 1.29.4
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -264,6 +270,7 @@ gateway:
       memory: 256Mi
 
 ui:
+  enabled: true
   name: ui
   title: API Portal
   managementTitle: API Management
@@ -290,7 +297,7 @@ ui:
   replicaCount: 1
   image:
     repository: graviteeio/management-ui
-    tag: 1.23.1
+    tag: 1.29.4
     pullPolicy: Always
   autoscaling:
     enabled: true
