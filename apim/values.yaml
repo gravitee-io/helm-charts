@@ -42,6 +42,7 @@ mongo:
   connectTimeoutMS: 30000
   auth:
     enabled: false
+    source: admin
     username:
     password:
 
@@ -274,7 +275,7 @@ ui:
   name: ui
   title: API Portal
   managementTitle: API Management
-  documentationLink: http://docs
+  documentationLink: http://docs.gravitee.io/
   scheduler:
     tasks: 10
   theme:

@@ -15,7 +15,7 @@ data:
   gzip-types: "*"
   constants.json: |
     {
-      "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}/management/",
+      "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/",
       "management": {
         "title": "{{ .Values.ui.managementTitle }}"
       },
@@ -23,7 +23,7 @@ data:
         "url": "{{ .Values.ui.documentationLink }}"
       },
       "portal": {
-        "entrypoint": "{{ index .Values.gateway.ingress.hosts 0 }}",
+        "entrypoint": "https://{{ index .Values.gateway.ingress.hosts 0 }}{{ .Values.gateway.ingress.path }}",
         "title": "{{ .Values.ui.title }}"
         {{- if .Values.ui.portal }}
           {{- range $key, $value := .Values.ui.portal }},
