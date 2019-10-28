@@ -1,4 +1,4 @@
-# Gravitee Helm Chart
+# Gravitee.io APIM Helm Chart
 
 **Chart supported versions: 1.19.3 and higher**
 
@@ -25,7 +25,7 @@ $ helm package .
 To install the chart using the chart archive, run:
 
 ```
-$ helm install gravitee-1.23.2.tgz
+$ helm install apim-1.27.1.tgz
 ```
 
 To install the chart with the release name `my-release`:
