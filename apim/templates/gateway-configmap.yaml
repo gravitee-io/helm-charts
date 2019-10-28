@@ -34,11 +34,19 @@ data:
     management:
       type: mongodb
       mongodb:
-        uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}{{- if .Values.mongo.rsEnabled }}?replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource=admin{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
+        {{- if .Values.mongo.uri }}
+        uri: {{ .Values.mongo.uri }}
+        {{ else }}
+        uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
+        {{- end }}
     ratelimit:
       type: mongodb
       mongodb:
-        uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}{{- if .Values.mongo.rsEnabled }}?replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource=admin{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
+        {{- if .Values.mongo.uri }}
+        uri: {{ .Values.mongo.uri }}
+        {{ else }}
+        uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
+        {{- end }}
     cache:
       type: ehcache
       enabled: true
@@ -54,9 +62,6 @@ data:
     # Reporters configuration (used to store reporting monitoring data, request metrics, healthchecks and others...
     # All reporters are enabled by default. To stop one of them, you have to add the property 'enabled: false'
     reporters:
-      # Reporting system configuration
-      system:
-        buffersize: 4096 # Must be a power of 2
       # Elasticsearch reporter
       elasticsearch:
         enabled: true # Is the reporter enabled or not (default to true)
@@ -70,11 +75,9 @@ data:
           password: {{ .Values.es.security.password }}
         {{- end }}
         index: {{ .Values.es.index }}
-        cluster: {{ .Values.es.cluster }}
         bulk:
-          actions: 200           # Number of requests action before flush
+          actions: 1000           # Number of requests action before flush
           flush_interval: 5       # Flush interval in seconds
-          concurrent_requests: 5  # Concurrent requests
     services:
       core:
         http:

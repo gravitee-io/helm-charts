@@ -58,10 +58,22 @@ To configure common functionalities such as:
 
 ### Mongo
 
+There are two ways to configure MongoDB connections.
+
+The most simple is to provide the [MongoDB URI](https://docs.mongodb.com/manual/reference/connection-string/).
+
+
 | Parameter             | Description                                | Default                    |
 | --------------------- | ------------------------------------------ | -------------------------- |
-| `mongo.rs`            | Mongo replicaset name                      | `rs0`                      |
+| `mongo.uri`           | Mongo URI                                  | `null`                     |
+
+
+If no `mongo.uri` is provided, you have to define the following configuration options:
+
+| Parameter             | Description                                | Default                    |
+| --------------------- | ------------------------------------------ | -------------------------- |
 | `mongo.rsEnabled`     | Whether Mongo replicaset is enabled or not | `true`                     |
+| `mongo.rs`            | Mongo replicaset name                      | `rs0`                      |
 | `mongo.dbhost`        | Mongo host address                         | `mongo-mongodb-replicaset` |
 | `mongo.dbport`        | Mongo host port                            | `27017`                    |
 | `mongo.dbname`        | Mongo DB name                              | `gravitee`                 |
