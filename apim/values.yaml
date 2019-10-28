@@ -34,6 +34,7 @@ smtp:
     starttlsEnable: false
 
 mongo:
+  # uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
   rs: rs0
   rsEnabled: true
   dbhost: mongo-mongodb-replicaset
@@ -42,6 +43,7 @@ mongo:
   connectTimeoutMS: 30000
   auth:
     enabled: false
+    source: admin
     username:
     password:
 
@@ -274,7 +276,7 @@ ui:
   name: ui
   title: API Portal
   managementTitle: API Management
-  documentationLink: http://docs
+  documentationLink: http://docs.gravitee.io/
   scheduler:
     tasks: 10
   theme:
