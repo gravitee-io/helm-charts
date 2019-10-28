@@ -10,7 +10,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  type: ClusterIP
+  type: "{{ .Values.ui.service.type }}"
   ports:
     - port: {{ .Values.ui.service.externalPort }}
       targetPort: {{ .Values.ui.service.internalPort }}
