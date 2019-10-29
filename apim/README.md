@@ -1,16 +1,28 @@
-# Gravitee.io APIM Helm Chart
+# Gravitee.io API Management Helm Chart
 
 **Chart supported versions: 1.19.3 and higher**
 
-## Chart Details
+## Components
 
 This chart will deploy the following:
 
 - Gravitee UI
 - Gravitee API
 - Gravitee Gateway
-- MongoDB replicaset (optionally)
-- Elasticsearch cluster (optionally)
+- MongoDB replica-set (optional dependency)
+- Elasticsearch cluster (optional dependency)
+
+
+## Installing
+
+* Add the Gravitee.io helm charts repo
+  ```
+  $ helm repo add graviteeio https://helm.gravitee.io
+  ```
+* Install it
+  ```
+  $ helm install --name graviteeio-apim graviteeio/apim
+  ```
 
 ## Create a chart archive
 
@@ -22,16 +34,16 @@ $ helm package .
 
 ## Installing the Chart
 
+To install the chart from the Helm repository with the release name `graviteeio-apim`:
+
+```bash
+$ helm install --name graviteeio-apim graviteeio/apim
+```
+
 To install the chart using the chart archive, run:
 
 ```
 $ helm install apim-1.27.1.tgz
-```
-
-To install the chart with the release name `my-release`:
-
-```bash
-$ helm install --name my-release gravitee
 ```
 
 ## Configuration
@@ -66,7 +78,6 @@ The most simple is to provide the [MongoDB URI](https://docs.mongodb.com/manual/
 | Parameter             | Description                                | Default                    |
 | --------------------- | ------------------------------------------ | -------------------------- |
 | `mongo.uri`           | Mongo URI                                  | `null`                     |
-
 
 If no `mongo.uri` is provided, you have to define the following configuration options:
 
