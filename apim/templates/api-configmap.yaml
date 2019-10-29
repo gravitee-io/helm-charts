@@ -54,31 +54,40 @@ data:
           password-encoding-algo: bcrypt
           users:
             - user:
-              username: user
-              # Passwords are encoded using BCrypt
-              # Password value: password
-              password: $2a$10$9kjw/SH9gucCId3Lnt6EmuFreUAcXSZgpvAYuW2ISv7hSOhHRH1AO
-              roles: MANAGEMENT:USER, PORTAL:USER
-            - user:
               username: admin
               password: {{ .Values.adminPasswordBcrypt }}
               roles: ADMIN
-            - user:
-              username: api1
-              # Password value: api1
-              password: $2a$10$iXdXO4wAYdhx2LOwijsp7.PsoAZQ05zEdHxbriIYCbtyo.y32LTji
-              # You can declare multiple roles using comma separator
-              roles: MANAGEMENT:API_PUBLISHER, PORTAL:API_PUBLISHER
-            - user:
-              username: application1
-              # Password value: application1
-              password: $2a$10$2gtKPYRB9zaVaPcn5RBx/.3T.7SeZoDGs9GKqbo9G64fKyXFR1He.
-              roles: MANAGEMENT:USER, PORTAL:USER
           {{- if .Values.extraInMemoryUsers -}}
           {{ .Values.extraInMemoryUsers | nindent 12 }}
           {{- end -}}
-
-          # Enable authentication using internal repository
+        {{- end }}
+        {{- if .Values.ldap.enabled }}
+        - type: ldap
+          context:
+            username: {{ .Values.ldap.context.user | quote }}
+            password: {{ .Values.ldap.context.password | quote }}
+            url: {{ .Values.ldap.context.url | quote }}
+            base: {{ .Values.ldap.context.base | quote }}
+          authentication:
+            user: 
+              base: {{ .Values.ldap.authentication.user.base | quote }}
+              filter: {{ .Values.ldap.authentication.user.filter | quote }}
+              photo-attribute: {{ .Values.ldap.authentication.user.photo | quote }}
+            group:
+              base: {{ .Values.ldap.authentication.group.base | quote }} 
+              filter: {{ .Values.ldap.authentication.group.filter | quote }} 
+              role:
+                attribute: {{ .Values.ldap.authentication.group.role.attribute | quote }}
+                mapper: {
+                  {{ .Values.ldap.authentication.group.role.consumer }}: API_CONSUMER,
+                  {{ .Values.ldap.authentication.group.role.publisher }}: API_PUBLISHER,
+                  {{ .Values.ldap.authentication.group.role.admin }}: ADMIN,
+                  {{ .Values.ldap.authentication.group.role.user }}: USER
+                }
+          lookup:
+            user:
+              base: {{ .Values.ldap.lookup.user.base | quote }} 
+              filter: {{ .Values.ldap.lookup.user.filter | quote }} 
         {{- end }}
     # SMTP configuration used to send mails
     email:
