@@ -7,8 +7,29 @@ chaos:
 inMemoryAuth:
   enabled: true
 
-# Define extra inMemory users here, e.g.:
-# extraInMemoryUsers: |
+# Default password "admin", use bcrypt ($2a$ version) to generate a new one
+adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
+
+jwtSecret: myJWT4Gr4v1t33_S3cr3t
+
+# Define extra inMemory users here or disable the default ones here
+extraInMemoryUsers: |
+  - user:
+    username: user
+    # Password value: password
+    password: $2a$10$9kjw/SH9gucCId3Lnt6EmuFreUAcXSZgpvAYuW2ISv7hSOhHRH1AO
+    roles: MANAGEMENT:USER, PORTAL:USER
+  - user:
+    username: api1
+    # Password value: api1
+    password: $2a$10$iXdXO4wAYdhx2LOwijsp7.PsoAZQ05zEdHxbriIYCbtyo.y32LTji
+    # You can declare multiple roles using comma separator
+    roles: MANAGEMENT:API_PUBLISHER, PORTAL:API_PUBLISHER
+  - user:
+    username: application1
+    # Password value: application1
+    password: $2a$10$2gtKPYRB9zaVaPcn5RBx/.3T.7SeZoDGs9GKqbo9G64fKyXFR1He.
+    roles: MANAGEMENT:USER, PORTAL:USER
 #   - user:
 #     username: publisher-user
 #     password: $2a$13$iXdXO4wAYdhx2LOwijsp7.PsoAZQ12zEdHxbriIYCbtyo.y32LTji
@@ -17,10 +38,48 @@ inMemoryAuth:
 #     username: application-test
 #     password: $2a$10$2gtKPYRB9zaVaPcn5RBx/.3T.7SeZoDGs9GKqbo9G64fKyXFR1He.
 
-# Default password "admin", use bcrypt ($2a$ version) to generate a new one
-adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
-
-jwtSecret: myJWT4Gr4v1t33_S3cr3t
+ldap:
+  enabled: false
+  context:
+    # User to bind the LDAP
+    user: user@example.com
+    # Password to bind the LDAP
+    password: pass@12345
+    # URL to LDAP
+    url: ldap://ldap.example.com
+    # Bind base to be used in authentication and lookup sections
+    base: dc=example,dc=com
+  authentication:
+    user:
+      # Base to search users, must be relative to the context.base
+      base: ou=users
+      # Use sAMAccountName if you are in AD 
+      # Use uid if you are in a native LDAP
+      # The {0} will be replaced by user typed to authenticate
+      filter: sAMAccountName={0}
+      # If you have an attribute with the user photo, you can set it here
+      photo: "thumbnailPhoto"
+    group:
+      # Base to search groups, must be relative to the context.base
+      # There an issue here, until fixed only oneleve search is supported
+      base: ou=gravitee,ou=groups
+      # The {0} will be replaced by DN of the user
+      filter: member={0}
+      role:
+        # The attribute that define your group names on your AD/LDAP
+        # You can use sAMAccountName if you're in AD or cn if you're in native LDAP
+        attribute: sAMAccountName
+        consumer: LDAP_GROUP_CONSUMER
+        publisher: LDAP_GROUP_PUBLISHER
+        admin: LDAP_GROUP_ADMIN
+        user: LDAP_GROUP_USER
+  lookup:
+    # Note that personal information can be exposed without user consentment
+    user:
+      # Base to lookup user, must be relative to context.base
+      base: ou=users
+      # The filter can be any type of complex LDAP query
+      filter: (&(objectClass=person)(|(cn=*{0}*)(sAMAccountName={0})))
 
 smtp:
   enabled: true
@@ -169,7 +228,7 @@ api:
   replicaCount: 1
   image:
     repository: graviteeio/management-api
-    tag: 1.29.4
+    tag: 1.29.5
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -224,7 +283,7 @@ gateway:
   websocket: false
   image:
     repository: graviteeio/gateway
-    tag: 1.29.4
+    tag: 1.29.5
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -299,7 +358,7 @@ ui:
   replicaCount: 1
   image:
     repository: graviteeio/management-ui
-    tag: 1.29.4
+    tag: 1.29.5
     pullPolicy: Always
   autoscaling:
     enabled: true
