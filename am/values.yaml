@@ -1,0 +1,201 @@
+# Default values for Gravitee.io Access Management
+chaos:
+  enabled: false
+
+jwtSecret: myJWT4Gr4v1t33_S3cr3t
+
+smtp:
+  enabled: true
+  host: smtp.example.com
+  port: 25
+  from: info@example.com
+  username: info@example.com
+  password: example.com
+  properties:
+    auth: true
+    starttlsEnable: false
+
+mongo:
+  # uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
+  rs: rs0
+  rsEnabled: true
+  dbhost: mongo-mongodb-replicaset
+  dbname: gravitee
+  dbport: 27017
+  connectTimeoutMS: 30000
+  auth:
+    enabled: false
+    source: admin
+    username:
+    password:
+
+api:
+  enabled: true
+  name: am-api
+  logging:
+    debug: false
+  restartPolicy: OnFailure
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicaCount: 1
+  image:
+    repository: graviteeio/am-management-api
+    tag: 2.9.3
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    externalPort: 93
+    internalPort: 8093
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 3
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
+  ingress:
+    enabled: true
+    path: /management
+    # Used to create an Ingress record.
+    hosts:
+      - auth.example.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      # kubernetes.io/tls-acme: "true"
+    #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+    tls:
+    - hosts:
+      - apim.example.com
+      secretName: api-custom-cert
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+
+gateway:
+  enabled: true
+  type: Deployment
+  name: am-gateway
+  logging:
+    debug: false
+  replicaCount: 2
+  websocket: false
+  image:
+    repository: graviteeio/am-gateway
+    tag: 2.9.3
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    externalPort: 92
+    internalPort: 8092
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
+  ingress:
+    enabled: true
+    path: /gateway
+    # Used to create an Ingress record.
+    hosts:
+      - auth.example.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+      kubernetes.io/app-root: /gateway
+      kubernetes.io/rewrite-target: /gateway
+      # ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      # kubernetes.io/tls-acme: "true"
+    #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+    tls:
+    - hosts:
+      - apim.example.com
+      secretName: api-custom-cert
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+ui:
+  enabled: true
+  name: am-ui
+  title: Gravitee.io Access Management
+  replicaCount: 1
+  image:
+    repository: graviteeio/am-management-ui
+    tag: 2.9.3
+    pullPolicy: Always
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 3
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
+  service:
+    name: nginx
+    type: ClusterIP
+    externalPort: 80
+    internalPort: 80
+  ingress:
+    enabled: true
+    # Used to create an Ingress record.
+    hosts:
+      - auth.example.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/app-root: /management
+      kubernetes.io/rewrite-target: /management
+      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
+    #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+    tls:
+    - hosts:
+      - auth.example.com
+      secretName: api-custom-cert
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+  ## Additional gravitee ui volume mounts
+  # Defines additional volume mounts.
+  extraVolumeMounts: []
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim

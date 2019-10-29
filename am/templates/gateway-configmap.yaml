@@ -1,0 +1,175 @@
+{{- if .Values.gateway.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.gateway.name }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ template "gravitee.gateway.fullname" . }}
+data:
+  gravitee.yml: |
+    # Gateway HTTP server
+    http:
+      port: 8092
+      host: 0.0.0.0
+    #  idleTimeout: 0
+    #  tcpKeepAlive: true
+    #  compressionSupported: false
+    #  instances: 0
+    #  secured: false
+      alpn: true
+    #  ssl:
+    #    clientAuth: false
+    #    keystore:
+    #      path: ${gravitee.home}/security/keystore.jks
+    #      password: secret
+    #    truststore:
+    #      path: ${gravitee.home}/security/truststore.jks
+    #      password: secret
+
+    management:
+      type: mongodb
+      mongodb:
+        {{- if .Values.mongo.uri }}
+        uri: {{ .Values.mongo.uri }}
+        {{ else }}
+        uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
+        {{- end }}
+
+    # OAuth2 repository is used to store OAuth2 tokens: access_token, refresh_token
+    oauth2:
+      type: mongodb
+      mongodb:
+        {{- if .Values.mongo.uri }}
+        uri: {{ .Values.mongo.uri }}
+        {{ else }}
+        uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
+        {{- end }}
+
+    # Identity providers configuration (http client configuration, database pool connection, ...)
+    identities:
+      github:
+        http:
+          connectionTimeout: 10 # The time to establish the connection with the remote host (seconds)
+          connectionRequestTiemout: 10 # The time to wait for a connection from the connection manager/pool
+          socketTimeout: 10 # The time waiting for data after the connection was established; maximum time of inactivity between two data packets
+          pool:
+            maxTotalConnection: 200 # The maximum total number of connections in the pool
+            maxPerRoute: 100 # The maximum number of connections to a particular host
+      oauth2:
+        http:
+          connectionTimeout: 10 # The time to establish the connection with the remote host (seconds)
+          connectionRequestTiemout: 10 # The time to wait for a connection from the connection manager/pool
+          socketTimeout: 10 # The time waiting for data after the connection was established; maximum time of inactivity between two data packets
+          pool:
+            maxTotalConnection: 200 # The maximum total number of connections in the pool
+            maxPerRoute: 100 # The maximum number of connections to a particular host
+    
+    services:
+      core:
+        http:
+          enabled: true
+          port: 18092
+          host: localhost
+          authentication:
+            # authentication type to be used for the core services
+            # - none : to disable authentication
+            # - basic : to use basic authentication
+            # default is "basic"
+            type: basic
+            users:
+              admin: adminadmin
+
+    # SMTP configuration used to send mails
+    email:
+      enabled: {{ .Values.smtp.enabled }}
+      host: {{ .Values.smtp.host }}
+      subject: "[Gravitee.io] %s"
+      port: {{ .Values.smtp.port }}
+      from: {{ .Values.smtp.from }}
+      username: {{ .Values.smtp.username }}
+      password: {{ .Values.smtp.password }}
+      properties:
+        auth: {{ .Values.smtp.properties.auth }}
+        starttls.enable: {{ .Values.smtp.properties.starttlsEnable }}
+
+    # Mail templates
+    templates:
+      path: ${gravitee.home}/templates
+
+    jwt:
+      secret: {{ .Values.jwtSecret }}
+      #kid: default-gravitee-AM-key # kid (key ID) Header Parameter is a hint indicating which key was used to secure the JWT
+      #expire-after: 604800 # the end of validity of the token in seconds (default 604800 = a week)
+      #issuer: https://gravitee.am # the principal that issued the JWT (default https://gravitee.am)
+
+  {{- if .Values.gateway.logging.debug }}
+  logback.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+
+    <!--
+      ~ Copyright (c) 2015-2016, The Gravitee team (http://www.gravitee.io)
+      ~
+      ~  Licensed under the Apache License, Version 2.0 (the "License");
+      ~  you may not use this file except in compliance with the License.
+      ~  You may obtain a copy of the License at
+      ~
+      ~  http://www.apache.org/licenses/LICENSE-2.0
+      ~
+      ~  Unless required by applicable law or agreed to in writing, software
+      ~  distributed under the License is distributed on an "AS IS" BASIS,
+      ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      ~  See the License for the specific language governing permissions and
+      ~  limitations under the License.
+      -->
+
+    <configuration>
+
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <!-- encoders are assigned the type
+                ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+            <encoder>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${gravitee.home}/logs/gravitee.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- daily rollover -->
+                <fileNamePattern>${gravitee.home}/logs/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>
+
+                <!-- keep 30 days' worth of history -->
+                <maxHistory>30</maxHistory>
+            </rollingPolicy>
+
+            <encoder>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <appender name="async-file" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="FILE" />
+        </appender>
+
+        <appender name="async-console" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="STDOUT" />
+        </appender>
+
+        <logger name="io.gravitee" level="DEBUG" />
+        <logger name="org.reflections" level="WARN" />
+        <logger name="org.springframework" level="WARN" />
+
+        <!-- Strictly speaking, the level attribute is not necessary since -->
+        <!-- the level of the root level is set to DEBUG by default.       -->
+        <root level="INFO">
+            <appender-ref ref="async-console" />
+            <appender-ref ref="async-file" />
+        </root>
+
+    </configuration>
+  {{- end -}}
+  {{- end -}}

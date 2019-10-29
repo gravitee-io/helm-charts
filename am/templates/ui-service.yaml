@@ -1,0 +1,23 @@
+{{- if .Values.ui.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "gravitee.ui.fullname" . }}
+  labels:
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.ui.name }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: "{{ .Values.ui.service.type }}"
+  ports:
+    - port: {{ .Values.ui.service.externalPort }}
+      targetPort: {{ .Values.ui.service.internalPort }}
+      protocol: TCP
+      name: {{ .Values.ui.name }}
+  selector:
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.ui.name }}"
+    release: {{ .Release.Name }}
+{{- end -}}

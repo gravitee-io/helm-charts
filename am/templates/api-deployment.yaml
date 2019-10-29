@@ -1,0 +1,71 @@
+{{- if .Values.api.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "gravitee.api.fullname" . }}
+  labels:
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.api.name }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: {{ template "gravitee.name" . }}
+      component: "{{ .Values.api.name }}"
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
+      labels:
+        app: {{ template "gravitee.name" . }}
+        component: "{{ .Values.api.name }}"
+        release: {{ .Release.Name }}
+    spec:
+    {{- if .Values.api.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.api.nodeSelector | indent 8 }}
+    {{- end }}
+      containers:
+        - name: {{ template "gravitee.api.fullname" . }}
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.api.service.internalPort }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.api.service.internalPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.api.service.internalPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          resources:
+{{ toYaml .Values.api.resources | indent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /opt/graviteeio-management-api/config/gravitee.yml
+              subPath: gravitee.yml
+          {{- if .Values.api.logging.debug }}
+            - name: config
+              mountPath: /opt/graviteeio-management-api/config/logback.xml
+              subPath: logback.xml
+          {{- end }}
+      {{- if .Values.api.image.pullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.api.image.pullSecrets }}
+      {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "gravitee.api.fullname" . }}
+{{- end -}}
