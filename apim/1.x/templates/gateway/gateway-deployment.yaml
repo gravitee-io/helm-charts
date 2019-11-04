@@ -1,5 +1,5 @@
 {{- if .Values.gateway.enabled -}}
-apiVersion: apps/v1
+apiVersion: {{ template "deployment.apiVersion" . }}
 kind: {{ .Values.gateway.type }}
 metadata:
   name: {{ template "gravitee.gateway.fullname" . }}
