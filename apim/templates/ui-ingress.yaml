@@ -2,6 +2,7 @@
 {{- if .Values.ui.ingress.enabled -}}
 {{- $serviceAPIName := include "gravitee.ui.fullname" . -}}
 {{- $serviceAPIPort := .Values.ui.service.externalPort -}}
+{{- $awsAlbIngressController := .Values.awsAlbIngressController -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -18,11 +19,23 @@ metadata:
     {{- end }}
 spec:
   rules:
+    {{ if $awsAlbIngressController }}
+    - http:
+        paths:
+         - path: /*
+           backend:
+             serviceName: ssl-redirect
+             servicePort: use-annotation
+    {{ end }}
     {{- range $host := .Values.ui.ingress.hosts }}
     - host: {{ $host }}
       http:
         paths:
+          {{ if $awsAlbIngressController }}
+          - path: /*
+          {{ else }}
           - path: /
+          {{ end }}
             backend:
               serviceName: {{ $serviceAPIName }}
               servicePort: {{ $serviceAPIPort }}
