@@ -40,7 +40,7 @@ spec:
               serviceName: {{ $serviceAPIName }}
               servicePort: {{ $serviceAPIPort }}
     {{- end -}}
-  {{- if .Values.ui.ingress.tls }}
+  {{- if and .Values.ui.ingress.tls (not $awsAlbIngressController ) }}
   tls:
 {{ toYaml .Values.ui.ingress.tls | indent 4 }}
   {{- end -}}

@@ -41,7 +41,7 @@ spec:
               serviceName: {{ $serviceGWName }}
               servicePort: {{ $serviceGWPort }}
     {{- end -}}
-  {{- if .Values.gateway.ingress.tls }}
+  {{- if and .Values.ui.ingress.tls (not $awsAlbIngressController ) }}
   tls:
 {{ toYaml .Values.gateway.ingress.tls | indent 4 }}
   {{- end -}}
