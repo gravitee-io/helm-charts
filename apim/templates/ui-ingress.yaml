@@ -18,11 +18,12 @@ metadata:
     {{- end }}
 spec:
   rules:
+    {{ toYaml .Values.ui.ingress.rules }}
     {{- range $host := .Values.ui.ingress.hosts }}
     - host: {{ $host }}
       http:
         paths:
-          - path: /
+          - path: {{ .Values.ui.ingress.path }}
             backend:
               serviceName: {{ $serviceAPIName }}
               servicePort: {{ $serviceAPIPort }}
