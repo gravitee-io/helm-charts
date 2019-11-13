@@ -19,7 +19,9 @@ metadata:
     {{- end }}
 spec:
   rules:
-    {{ toYaml .Values.gateway.ingress.rules }}
+    {{- if .Values.gateway.ingress.rules -}}
+    {{ toYaml .Values.gateway.ingress.rules | indent 4 }}
+    {{- end -}}
     {{- range $host := .Values.gateway.ingress.hosts }}
     - host: {{ $host }}
       http:

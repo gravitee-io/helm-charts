@@ -243,6 +243,7 @@ api:
   ingress:
     enabled: true
     path: /management
+    rules: 
     # Used to create an Ingress record.
     hosts:
       - apim.example.com
@@ -298,6 +299,7 @@ gateway:
   ingress:
     enabled: true
     path: /gateway
+    rules:
     # Used to create an Ingress record.
     hosts:
       - apim.example.com
@@ -374,6 +376,8 @@ ui:
   ingress:
     enabled: true
     # Used to create an Ingress record.
+    path: /
+    rules:
     hosts:
       - apim.example.com
     annotations:
