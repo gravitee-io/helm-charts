@@ -15,5 +15,5 @@ Please look in the chart directories for the documentation for each chart. These
 
 | Chart                                      | Docker documentation                                                            |
 | ------------------------------------------ | ------------------------------------------------------------------------------- |
-| [API Management](./apim/README.md)         | https://docs.gravitee.io/apim_installguide_docker.html                          |
+| [API Management](./apim/README.md)         | https://docs.gravitee.io/apim_installguide_kubernetes.html                          |
 | [Access Management](./am/README.md)        | https://docs.gravitee.io/am/2.x/am_installguide_docker.html                     |
