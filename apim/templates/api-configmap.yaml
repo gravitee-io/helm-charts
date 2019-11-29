@@ -29,6 +29,38 @@ data:
             type: basic
             users:
               admin: adminadmin
+
+    {{- if and .Values.api.http .Values.api.http.client }}
+    httpClient:
+      {{- if .Values.api.http.client.timeout }}
+      timeout: {{ .Values.api.http.client.timeout }}
+      {{- end }}
+      {{- if .Values.api.http.client.proxy }}
+      proxy:
+        type: {{ .Values.api.http.client.proxy.type }}
+        {{- if .Values.api.http.client.proxy.http }}
+        http:
+          host: {{ .Values.api.http.client.proxy.http.host }}
+          port: {{ .Values.api.http.client.proxy.http.port }}
+          username: {{ .Values.api.http.client.proxy.http.username }}
+          password: {{ .Values.api.http.client.proxy.http.password }}
+        {{- end }}
+        {{- if .Values.api.http.client.proxy.https }}
+        https:
+          host: {{ .Values.api.http.client.proxy.https.host }}
+          port: {{ .Values.api.http.client.proxy.https.port }}
+          username: {{ .Values.api.http.client.proxy.https.username }}
+          password: {{ .Values.api.http.client.proxy.https.password }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+
+    {{- if and .Values.api.http .Values.api.http.api }}
+    http:
+      api:
+        entrypoint: {{ .Values.api.http.api.entrypoint }}
+    {{- end }}
+
     analytics:
       type: elasticsearch
       elasticsearch:
@@ -43,7 +75,7 @@ data:
         {{- end }}
         index: {{ .Values.es.index }}
     security:
-      providers:  # authentication providers
+      providers:
         - type: gravitee
         {{- if .Values.inMemoryAuth.enabled }}
         - type: memory

@@ -67,6 +67,9 @@ spec:
               mountPath: /opt/graviteeio-gateway/config/logback.xml
               subPath: logback.xml
           {{- end }}
+          {{- with .Values.gateway.extraVolumeMounts }}
+          {{- tpl . $ | nindent 12 }}
+          {{- end }}
       {{- if .Values.gateway.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.gateway.image.pullSecrets }}
@@ -75,4 +78,7 @@ spec:
         - name: config
           configMap:
             name: {{ template "gravitee.gateway.fullname" . }}
+        {{- with .Values.gateway.extraVolumes }}
+          {{- tpl . $ | nindent 8 }}
+        {{- end }}
 {{- end -}}

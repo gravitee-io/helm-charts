@@ -230,6 +230,23 @@ api:
     repository: graviteeio/management-api
     tag: 1.29.5
     pullPolicy: Always
+  http:
+    api:
+      entrypoint: /management
+    client:
+      timeout: 10000
+      proxy:
+        type: #HTTP, SOCKS4, SOCKS5
+        http:
+          host: localhost
+          port: 3128
+          username: user
+          password: secret
+        https:
+          host: localhost
+          port: 3128
+          username: user
+          password: password
   service:
     type: ClusterIP
     externalPort: 83
@@ -270,6 +287,13 @@ api:
     requests:
       cpu: 200m
       memory: 512Mi
+  ## Additional gravitee API volume mounts
+  # Defines additional volume mounts.
+  # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim
 
 gateway:
   enabled: true
@@ -329,6 +353,13 @@ gateway:
     requests:
       cpu: 200m
       memory: 256Mi
+  ## Additional gravitee gateway volume mounts
+  # Defines additional volume mounts.
+  # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim
 
 ui:
   enabled: true
@@ -403,8 +434,7 @@ ui:
       memory: 64Mi
   ## Additional gravitee ui volume mounts
   # Defines additional volume mounts.
-  extraVolumeMounts: []
+  # extraVolumeMounts: |
     # - name: extra-volume
     #   mountPath: /mnt/volume
     #   readOnly: true
-    #   existingClaim: volume-claim

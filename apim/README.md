@@ -220,3 +220,42 @@ $ helm install --name my-release -f values.yaml gravitee
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Providing a custom theme for the portal
+
+One option is certainly to provide a custom Gravitee.io Portal image that includes the theme. However, if you prefer to stick with the official Gravitee.io Portal image, you can use an init container as theme provider.
+
+Create your own portal theme and package it up into a Docker image.
+
+```docker
+FROM busybox
+COPY mytheme /mytheme
+```
+
+In combination with an `emptyDir` that is shared with the Gravitee.io Portal container, configure an init container that runs your theme image and copies the theme over to the right place where Gravitee.io will pick it up automatically.
+
+```yaml
+ui:
+  extraInitContainers: |
+    - name: theme-provider
+      image: myuser/mytheme:1
+      imagePullPolicy: IfNotPresent
+      command:
+        - sh
+      args:
+        - -c
+        - |
+          echo "Copying theme..."
+          cp -R /mytheme/* /theme
+      volumeMounts:
+        - name: theme
+          mountPath: /theme
+
+  extraVolumeMounts: |
+    - name: theme
+      mountPath: /var/www/html/themes/mytheme
+
+  extraVolumes: |
+    - name: theme
+      emptyDir: {}
+```
