@@ -373,6 +373,7 @@ ui:
     internalPort: 80
   ingress:
     enabled: true
+    path: /
     # Used to create an Ingress record.
     hosts:
       - apim.example.com
