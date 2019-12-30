@@ -15,22 +15,35 @@ data:
   gzip-types: "*"
   constants.json: |
     {
-      "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/",
+      "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/"
+      {{- if .Values.ui.managementTitle }},
       "management": {
         "title": "{{ .Values.ui.managementTitle }}"
-      },
+      }
+      {{- end }}
+      {{- if .Values.ui.documentationLink }},
       "documentation": {
         "url": "{{ .Values.ui.documentationLink }}"
-      },
+      }
+      {{- end }}
+      {{- if or .Values.gateway.enabled .Values.ui.title .Values.ui.portal }},
       "portal": {
-        "entrypoint": "https://{{ index .Values.gateway.ingress.hosts 0 }}{{ .Values.gateway.ingress.path }}",
+        {{- if .Values.gateway.enabled }}
+        "entrypoint": "https://{{ index .Values.gateway.ingress.hosts 0 }}{{ .Values.gateway.ingress.path }}"
+        {{- end }}
+        {{- if .Values.ui.title }}{{ if .Values.gateway.enabled }},{{ end }}
         "title": "{{ .Values.ui.title }}"
-        {{- if .Values.ui.portal }}
-          {{- range $key, $value := .Values.ui.portal }},
-          "{{ $key }}": {{ toJson $value }}
+        {{- end }}
+        {{- if .Values.ui.portal }}{{ if or .Values.gateway.enabled .Values.ui.title }},{{ end }}
+          {{- $local := dict "first" true -}}
+          {{- range $key, $value := .Values.ui.portal }}
+          {{- if not $local.first -}},{{- end -}}
+          {{- $key | quote | nindent 8 }}: {{ toJson $value }}
+          {{- $_ := set $local "first" false -}}
           {{- end -}}
         {{- end }}
       }
+      {{- end }}
       {{- if .Values.ui.theme }},
       "theme": {{ toJson .Values.ui.theme }}
       {{- end }}

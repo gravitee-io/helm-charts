@@ -34,6 +34,12 @@ spec:
       nodeSelector:
 {{ toYaml .Values.ui.nodeSelector | indent 8 }}
     {{- end }}
+    {{- if or .Values.ui.extraInitContainers }}
+      initContainers:
+      {{- with .Values.ui.extraInitContainers }}
+        {{- tpl . $ | nindent 8 }}
+      {{- end }}
+    {{- end }}
       containers:
         - name: {{ template "gravitee.ui.fullname" . }}
           image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag }}"
@@ -43,6 +49,19 @@ spec:
               value: "https://{{index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/"
           ports:
             - containerPort: {{ .Values.ui.service.internalPort }}
+          {{- if .Values.ui.lifecycle }}
+          lifecycle:
+            {{- if .Values.ui.lifecycle.postStart }}
+            postStart:
+              exec:
+                command: {{ .Values.ui.lifecycle.postStart }}
+            {{- end }}
+            {{- if .Values.ui.lifecycle.preStop }}
+            preStop:
+              exec:
+                command: {{ .Values.ui.lifecycle.preStop }}
+            {{- end }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /
@@ -61,12 +80,9 @@ spec:
             - name: config
               mountPath: /var/www/html/constants.json
               subPath: constants.json
-          {{- range .Values.ui.extraVolumeMounts }}
-            - name: {{ .name }}
-              mountPath: {{ .mountPath }}
-              subPath: {{ .subPath | default "" }}
-              readOnly: {{ .readOnly }}
-          {{- end }}
+            {{- with .Values.ui.extraVolumeMounts }}
+            {{- tpl . $ | nindent 12 }}
+            {{- end }}
       {{- if .Values.ui.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.ui.image.pullSecrets }}
@@ -75,9 +91,7 @@ spec:
         - name: config
           configMap:
             name: {{ template "gravitee.ui.fullname" . }}
-      {{- range .Values.ui.extraVolumeMounts }}
-        - name: {{ .name }}
-          persistentVolumeClaim:
-            claimName: {{ .existingClaim }}
+      {{- with .Values.ui.extraVolumes }}
+        {{- tpl . $ | nindent 8 }}
       {{- end }}
 {{- end -}}
