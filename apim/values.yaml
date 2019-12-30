@@ -59,7 +59,7 @@ ldap:
     user:
       # Base to search users, must be relative to the context.base
       base: ou=users
-      # Use sAMAccountName if you are in AD 
+      # Use sAMAccountName if you are in AD
       # Use uid if you are in a native LDAP
       # The {0} will be replaced by user typed to authenticate
       filter: sAMAccountName={0}
@@ -94,12 +94,20 @@ smtp:
   from: info@example.com
   username: info@example.com
   password: example.com
+  subject: "[gravitee] %s"
   properties:
     auth: true
     starttlsEnable: false
 
 mongo:
   # uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
+  # servers: |
+  #   - host: mongo1
+  #     port: 27017
+  #   - host: mongo2
+  #     port: 27017
+  sslEnabled: false
+  socketKeepAlive: false
   rs: rs0
   rsEnabled: true
   dbhost: mongo-mongodb-replicaset
@@ -200,7 +208,7 @@ elasticsearch:
       requests:
         cpu: "25m"
         memory: "512Mi"
-        
+
   data:
     name: data
     exposeHttp: false
@@ -226,6 +234,16 @@ api:
   name: api
   logging:
     debug: false
+    rollingPolicy: |
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+          <!-- daily rollover -->
+          <fileNamePattern>${gravitee.management.log.dir}/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>
+          <!-- keep 30 days' worth of history -->
+          <maxHistory>30</maxHistory>
+      </rollingPolicy>
+    encoderPattern: "[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %-5level %logger{36} - %msg%n"
+    graviteeLevel: DEBUG
+    jettyLevel: INFO
   restartPolicy: OnFailure
   updateStrategy:
     rollingUpdate:
@@ -236,6 +254,36 @@ api:
     repository: graviteeio/management-api
     tag: 1.29.5
     pullPolicy: Always
+  # pullSecrets:
+  #   - name: gravitee_secrets
+  http:
+    services:
+      core:
+        http:
+          authentication:
+            password: adminadmin
+    api:
+      entrypoint: /management
+    client:
+      timeout: 10000
+      proxy:
+        type: HTTP
+        http:
+          host: localhost
+          port: 3128
+          username:
+          password:
+        https:
+          host: localhost
+          port: 3128
+          username:
+          password:
+  user:
+    login:
+      defaultApplication: true
+    anynomizeOnDelete: false
+  supportEnabled: true
+  ratingEnabled: true
   service:
     type: ClusterIP
     externalPort: 83
@@ -262,9 +310,9 @@ api:
       #   hosts:
       #     - chart-example.local
     tls:
-    - hosts:
-      - apim.example.com
-      secretName: api-custom-cert
+      - hosts:
+          - apim.example.com
+        secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -276,6 +324,16 @@ api:
     requests:
       cpu: 200m
       memory: 512Mi
+    #  lifecycle:
+    #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee Management API" ]'
+    #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee Management API" ]'
+    ## Additional gravitee API volume mounts
+    # Defines additional volume mounts.
+    # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim
 
 gateway:
   enabled: true
@@ -284,13 +342,15 @@ gateway:
   logging:
     debug: false
   replicaCount: 2
-  # sharding_tags: 
+  # sharding_tags:
   # tenant:
   websocket: false
   image:
     repository: graviteeio/gateway
     tag: 1.29.5
     pullPolicy: Always
+  # pullSecrets:
+  #   - name: gravitee_secrets
   service:
     type: ClusterIP
     externalPort: 82
@@ -321,9 +381,9 @@ gateway:
       #   hosts:
       #     - chart-example.local
     tls:
-    - hosts:
-      - apim.example.com
-      secretName: api-custom-cert
+      - hosts:
+          - apim.example.com
+        secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -335,6 +395,16 @@ gateway:
     requests:
       cpu: 200m
       memory: 256Mi
+    #  lifecycle:
+    #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee Gateway" ]'
+    #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee Gateway" ]'
+    ## Additional gravitee gateway volume mounts
+    # Defines additional volume mounts.
+    # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim
 
 ui:
   enabled: true
@@ -366,6 +436,8 @@ ui:
     repository: graviteeio/management-ui
     tag: 1.29.5
     pullPolicy: Always
+  # pullSecrets:
+  #   - name: gravitee_secrets
   autoscaling:
     enabled: true
     minReplicas: 2
@@ -388,15 +460,15 @@ ui:
       kubernetes.io/app-root: /management
       kubernetes.io/rewrite-target: /management
       ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
-    #tls:
+      #tls:
       # Secrets must be manually created in the namespace.
       # - secretName: chart-example-tls
       #   hosts:
       #     - chart-example.local
     tls:
-    - hosts:
-      - apim.example.com
-      secretName: api-custom-cert
+      - hosts:
+          - apim.example.com
+        secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -408,10 +480,12 @@ ui:
     requests:
       cpu: 50m
       memory: 64Mi
-  ## Additional gravitee ui volume mounts
-  # Defines additional volume mounts.
-  extraVolumeMounts: []
+    #  lifecycle:
+    #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee UI" ]'
+    #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee UI" ]'
+    ## Additional gravitee ui volume mounts
+    # Defines additional volume mounts.
+    # extraVolumeMounts: |
     # - name: extra-volume
     #   mountPath: /mnt/volume
     #   readOnly: true
-    #   existingClaim: volume-claim

@@ -39,6 +39,19 @@ spec:
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.api.service.internalPort }}
+          {{- if .Values.api.lifecycle }}
+          lifecycle:
+            {{- if .Values.api.lifecycle.postStart }}
+            postStart:
+              exec:
+                command: {{ .Values.api.lifecycle.postStart }}
+            {{- end }}
+            {{- if .Values.api.lifecycle.preStop }}
+            preStop:
+              exec:
+                command: {{ .Values.api.lifecycle.preStop }}
+            {{- end }}
+          {{- end }}
           livenessProbe:
             tcpSocket:
               port: {{ .Values.api.service.internalPort }}
@@ -60,6 +73,9 @@ spec:
               mountPath: /opt/graviteeio-management-api/config/logback.xml
               subPath: logback.xml
           {{- end }}
+          {{- with .Values.api.extraVolumeMounts }}
+          {{- tpl . $ | nindent 12 }}
+          {{- end }}
       {{- if .Values.api.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.api.image.pullSecrets }}
@@ -68,4 +84,7 @@ spec:
         - name: config
           configMap:
             name: {{ template "gravitee.api.fullname" . }}
+        {{- with .Values.api.extraVolumes }}
+          {{- tpl . $ | nindent 8 }}
+        {{- end }}
 {{- end -}}

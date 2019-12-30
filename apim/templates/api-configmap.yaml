@@ -14,9 +14,19 @@ data:
     management:
       type: mongodb
       mongodb:
+        sslEnabled: {{ .Values.mongo.sslEnabled }}
+        socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
         {{- if .Values.mongo.uri }}
         uri: {{ .Values.mongo.uri }}
-        {{ else }}
+        {{- else if .Values.mongo.servers }}
+        servers:
+          {{- .Values.mongo.servers | nindent 10 }}
+        dbname: {{ .Values.mongo.dbname }}
+        {{- if (eq .Values.mongo.auth.enabled true) }}
+        username: {{ .Values.mongo.auth.username }}
+        password: {{ .Values.mongo.auth.password }}
+        {{- end }}
+        {{- else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
     services:
@@ -28,7 +38,43 @@ data:
           authentication:
             type: basic
             users:
-              admin: adminadmin
+              admin: {{ .Values.api.http.services.core.http.authentication.password }}
+
+    {{- if and .Values.api.http .Values.api.http.client }}
+    httpClient:
+      {{- if .Values.api.http.client.timeout }}
+      timeout: {{ .Values.api.http.client.timeout }}
+      {{- end }}
+      {{- if .Values.api.http.client.proxy }}
+      proxy:
+        type: {{ .Values.api.http.client.proxy.type }}
+        {{- if .Values.api.http.client.proxy.http }}
+        http:
+          host: {{ .Values.api.http.client.proxy.http.host }}
+          port: {{ .Values.api.http.client.proxy.http.port }}
+          {{- if or .Values.api.http.client.proxy.http.username .Values.api.http.client.proxy.http.password }}
+          username: {{ .Values.api.http.client.proxy.http.username }}
+          password: {{ .Values.api.http.client.proxy.http.password }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.api.http.client.proxy.https }}
+        https:
+          host: {{ .Values.api.http.client.proxy.https.host }}
+          port: {{ .Values.api.http.client.proxy.https.port }}
+          {{- if or .Values.api.http.client.proxy.https.username .Values.api.http.client.proxy.https.password }}
+          username: {{ .Values.api.http.client.proxy.https.username }}
+          password: {{ .Values.api.http.client.proxy.https.password }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+
+    {{- if and .Values.api.http .Values.api.http.api }}
+    http:
+      api:
+        entrypoint: {{ .Values.api.http.api.entrypoint }}
+    {{- end }}
+
     analytics:
       type: elasticsearch
       elasticsearch:
@@ -43,7 +89,7 @@ data:
         {{- end }}
         index: {{ .Values.es.index }}
     security:
-      providers:  # authentication providers
+      providers:
         - type: gravitee
         {{- if .Values.inMemoryAuth.enabled }}
         - type: memory
@@ -56,7 +102,7 @@ data:
             - user:
               username: admin
               password: {{ .Values.adminPasswordBcrypt }}
-              roles: ADMIN
+              roles: MANAGEMENT:ADMIN, PORTAL:ADMIN
           {{- if .Values.extraInMemoryUsers -}}
           {{ .Values.extraInMemoryUsers | nindent 12 }}
           {{- end -}}
@@ -72,7 +118,9 @@ data:
             user: 
               base: {{ .Values.ldap.authentication.user.base | quote }}
               filter: {{ .Values.ldap.authentication.user.filter | quote }}
+              {{- if .Values.ldap.authentication.user.photo }}
               photo-attribute: {{ .Values.ldap.authentication.user.photo | quote }}
+              {{- end }}
             group:
               base: {{ .Values.ldap.authentication.group.base | quote }} 
               filter: {{ .Values.ldap.authentication.group.filter | quote }} 
@@ -93,11 +141,13 @@ data:
     email:
       enabled: {{ .Values.smtp.enabled }}
       host: {{ .Values.smtp.host }}
-      subject: "[gravitee] %s"
+      subject: {{ .Values.smtp.subject | quote }}
       port: {{ .Values.smtp.port }}
       from: {{ .Values.smtp.from }}
+      {{- if or .Values.smtp.username .Values.smtp.password }}
       username: {{ .Values.smtp.username }}
       password: {{ .Values.smtp.password }}
+      {{- end }}
       properties:
         auth: {{ .Values.smtp.properties.auth }}
         starttls.enable: {{ .Values.smtp.properties.starttlsEnable }}
@@ -126,24 +176,26 @@ data:
       scheme: https
 
     user:
-       login:
-          # Create a default application when user connects to the portal for the very first time (default true)
-          #defaultApplication: true
-       creation:
-          # Allows to register new users from portal (default false)
-          #enabled: true
-          token:
-             #expire-after: 86400
+      login:
+        # Create a default application when user connects to the portal for the very first time (default true)
+        defaultApplication: {{ .Values.api.user.login.defaultApplication }}
+      creation:
+        # Allows to register new users from portal (default false)
+        #enabled: true
+        token:
+          #expire-after: 86400
+        anonymize-on-delete:
+          enabled: {{ .Values.api.user.anynomizeOnDelete }}
     # The portal URL used in emails
     portalURL: https://{{ index .Values.ui.ingress.hosts 0 }}
 
     # Allows to create support ticket (default value: false)
     support:
-      enabled: true
+      enabled: {{ .Values.api.supportEnabled }}
 
     # Allows to rate an API (default value: false)
-    #rating :
-      #enabled: true
+    rating :
+      enabled: {{ .Values.api.ratingEnabled }}
   {{- if .Values.api.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
@@ -176,21 +228,14 @@ data:
 
             <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
                 <file>${gravitee.management.log.dir}/gravitee.log</file>
-                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                    <!-- daily rollover -->
-                    <fileNamePattern>${gravitee.management.log.dir}/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>
-
-                    <!-- keep 30 days' worth of history -->
-                    <maxHistory>30</maxHistory>
-                </rollingPolicy>
-
+{{ .Values.api.logging.rollingPolicy | indent 16 }}
                 <encoder>
-                    <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                    <pattern>{{ .Values.api.logging.encoderPattern }}</pattern>
                 </encoder>
             </appender>
 
-            <logger name="io.gravitee" level="DEBUG" />
-            <logger name="org.eclipse.jetty" level="INFO" />
+            <logger name="io.gravitee" level="{{ .Values.api.logging.graviteeLevel }}" />
+            <logger name="org.eclipse.jetty" level="{{ .Values.api.logging.jettyLevel }}" />
 
             <!-- Strictly speaking, the level attribute is not necessary since -->
             <!-- the level of the root level is set to DEBUG by default.       -->
