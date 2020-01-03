@@ -31,6 +31,9 @@ spec:
     metadata:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
+        {{- if .Values.gateway.reloadOnConfigChange }}
+        checksum/config: {{ include (print $.Template.BasePath "/gateway-configmap.yaml") . | sha256sum }}
+        {{- end }}
       labels:
         app: {{ template "gravitee.name" . }}
         component: "{{ .Values.gateway.name }}"
