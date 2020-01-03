@@ -221,6 +221,7 @@ api:
   logging:
     debug: false
   restartPolicy: OnFailure
+  reloadOnConfigChange: true
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1
@@ -277,6 +278,7 @@ gateway:
   name: gateway
   logging:
     debug: false
+  reloadOnConfigChange: true
   replicaCount: 2
   # sharding_tags: 
   # tenant:
