@@ -222,17 +222,19 @@ data:
                 <!-- encoders are assigned the type
                     ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
                 <encoder>
-                    <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                    <pattern>{{ .Values.api.logging.stdout.encoderPattern }}</pattern>
                 </encoder>
             </appender>
 
+            {{- if .Values.api.logging.file.enabled }}
             <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
                 <file>${gravitee.management.log.dir}/gravitee.log</file>
-{{ .Values.api.logging.rollingPolicy | indent 16 }}
+{{ .Values.api.logging.file.rollingPolicy | indent 16 }}
                 <encoder>
-                    <pattern>{{ .Values.api.logging.encoderPattern }}</pattern>
+                    <pattern>{{ .Values.api.logging.file.encoderPattern }}</pattern>
                 </encoder>
             </appender>
+            {{- end }}
 
             <logger name="io.gravitee" level="{{ .Values.api.logging.graviteeLevel }}" />
             <logger name="org.eclipse.jetty" level="{{ .Values.api.logging.jettyLevel }}" />
@@ -241,7 +243,9 @@ data:
             <!-- the level of the root level is set to DEBUG by default.       -->
             <root level="WARN">
                 <appender-ref ref="STDOUT" />
+                {{- if .Values.api.logging.file.enabled }}
                 <appender-ref ref="FILE" />
+                {{- end }}
             </root>
 
         </configuration>
