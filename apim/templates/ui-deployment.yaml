@@ -4,11 +4,12 @@ kind: Deployment
 metadata:
   name: {{ template "gravitee.ui.fullname" . }}
   labels:
-    app: {{ template "gravitee.name" . }}
-    component: "{{ .Values.ui.name }}"
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.ui.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
   replicas: {{ .Values.ui.replicaCount }}
   strategy:
@@ -17,18 +18,18 @@ spec:
       maxUnavailable: 1
   selector:
     matchLabels:
-      app: {{ template "gravitee.name" . }}
-      component: "{{ .Values.ui.name }}"
-      release: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ template "gravitee.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "{{ .Values.ui.name }}"
   template:
     metadata:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
         checksum/config: {{ include (print $.Template.BasePath "/ui-configmap.yaml") . | sha256sum }}
       labels:
-        app: {{ template "gravitee.name" . }}
-        component: "{{ .Values.ui.name }}"
-        release: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ template "gravitee.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "{{ .Values.ui.name }}"
     spec:
     {{- if .Values.ui.nodeSelector }}
       nodeSelector:

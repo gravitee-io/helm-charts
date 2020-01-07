@@ -4,11 +4,12 @@ kind: {{ .Values.gateway.type }}
 metadata:
   name: {{ template "gravitee.gateway.fullname" . }}
   labels:
-    app: {{ template "gravitee.name" . }}
-    component: "{{ .Values.gateway.name }}"
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.gateway.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
   {{- if eq .Values.gateway.type "StatefulSet" }}
   serviceName: {{ template "gravitee.gateway.fullname" . }}
@@ -24,9 +25,9 @@ spec:
   replicas: {{ .Values.gateway.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "gravitee.name" . }}
-      component: "{{ .Values.gateway.name }}"
-      release: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ template "gravitee.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "{{ .Values.gateway.name }}"
   template:
     metadata:
       annotations:
@@ -35,9 +36,9 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/gateway-configmap.yaml") . | sha256sum }}
         {{- end }}
       labels:
-        app: {{ template "gravitee.name" . }}
-        component: "{{ .Values.gateway.name }}"
-        release: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ template "gravitee.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "{{ .Values.gateway.name }}"
     spec:
     {{- if .Values.gateway.nodeSelector }}
       nodeSelector:
