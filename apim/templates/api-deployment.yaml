@@ -4,11 +4,12 @@ kind: Deployment
 metadata:
   name: {{ template "gravitee.api.fullname" . }}
   labels:
-    app: {{ template "gravitee.name" . }}
-    component: "{{ .Values.api.name }}"
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.api.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
   replicas: {{ .Values.api.replicaCount }}
   strategy:
@@ -17,9 +18,9 @@ spec:
       maxUnavailable: 1
   selector:
     matchLabels:
-      app: {{ template "gravitee.name" . }}
-      component: "{{ .Values.api.name }}"
-      release: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ template "gravitee.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "{{ .Values.api.name }}"
   template:
     metadata:
       annotations:
@@ -28,9 +29,9 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/api-configmap.yaml") . | sha256sum }}
         {{- end }}
       labels:
-        app: {{ template "gravitee.name" . }}
-        component: "{{ .Values.api.name }}"
-        release: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ template "gravitee.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "{{ .Values.api.name }}"
     spec:
     {{- if .Values.api.nodeSelector }}
       nodeSelector:

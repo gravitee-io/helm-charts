@@ -2,13 +2,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  labels:
-    app: {{ template "gravitee.name" . }}
-    component: "{{ .Values.gateway.name }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
   name: {{ template "gravitee.gateway.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.gateway.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 data:
   gravitee.yml: |
     # Gateway HTTP server
