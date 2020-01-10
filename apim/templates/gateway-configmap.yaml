@@ -20,16 +20,20 @@ data:
     #  tcpKeepAlive: true
     #  compressionSupported: false
     #  instances: 0
-    #  secured: false
       alpn: true
-    #  ssl:
-    #    clientAuth: false
-    #    keystore:
-    #      path: ${gravitee.home}/security/keystore.jks
-    #      password: secret
-    #    truststore:
-    #      path: ${gravitee.home}/security/truststore.jks
-    #      password: secret
+      {{- if .Values.gateway.ssl.enabled }}
+      secured: true
+      ssl:
+        keystore:
+          path: {{ .Values.gateway.ssl.keystore.path }}
+          password: {{ .Values.gateway.ssl.keystore.password | quote }}
+        clientAuth: {{ .Values.gateway.ssl.clientAuth }}
+        {{- if .Values.gateway.ssl.truststore }}
+        truststore:
+          path: {{ .Values.gateway.ssl.truststore.path }}
+          password: {{ .Values.gateway.ssl.truststore.password | quote }}
+        {{- end }}
+      {{- end }}
       websocket:
         enabled: {{ .Values.gateway.websocket }}  
     management:

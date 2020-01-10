@@ -12,6 +12,21 @@ metadata:
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 data:
   gravitee.yml: |
+    {{- if .Values.api.ssl.enabled }}
+    jetty:
+      secured: true
+      ssl:
+        keystore:
+          path: {{ .Values.api.ssl.keystore.path }}
+          password: {{ .Values.api.ssl.keystore.password | quote }}
+        clientAuth: {{ .Values.api.ssl.clientAuth }}
+        {{- if .Values.api.ssl.truststore }}
+        truststore:
+          path: {{ .Values.api.ssl.truststore.path }}
+          password: {{ .Values.api.ssl.truststore.password | quote }}
+        {{- end }}
+    {{- end }}
+
     management:
       type: mongodb
       mongodb:

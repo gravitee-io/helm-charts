@@ -261,6 +261,15 @@ api:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
+  ssl:
+    enabled: false
+  #  keystore:
+  #    path: ${gravitee.home}/security/keystore.jks
+  #    password: secret
+    clientAuth: false
+  #  truststore:
+  #    path: ${gravitee.home}/security/truststore.jks
+  #    password: secret
   http:
     services:
       core:
@@ -361,6 +370,15 @@ gateway:
     graviteeLevel: DEBUG
     jettyLevel: WARN
   reloadOnConfigChange: true
+  ssl:
+    enabled: false
+  #  keystore:
+  #    path: ${gravitee.home}/security/keystore.jks
+  #    password: secret
+    clientAuth: false
+  #  truststore:
+  #    path: ${gravitee.home}/security/truststore.jks
+  #    password: secret
   replicaCount: 2
   # sharding_tags:
   # tenant:
