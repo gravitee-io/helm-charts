@@ -274,8 +274,24 @@ api:
     services:
       core:
         http:
+          port: 18083
+          host: localhost
           authentication:
-            password: adminadmin
+            password: adminadmin  
+        ingress:
+          enabled: false
+#          path: /management/_(.*)
+#          hosts:
+#            - apim.example.com
+#          annotations:
+#            kubernetes.io/ingress.class: nginx
+#            nginx.ingress.kubernetes.io/rewrite-target: /_$1
+        service: 
+#       If you choose to enable this service, you'll need to expose the technical api
+#       on an accessible host outside of the pod: api.http.services.core.http.host
+          enabled: false
+#         type: ClusterIP
+#         externalPort: 18083
     api:
       entrypoint: /management
     client:
