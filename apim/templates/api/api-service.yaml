@@ -16,6 +16,12 @@ spec:
       targetPort: {{ .Values.api.service.internalPort }}
       protocol: TCP
       name: {{ .Values.api.name }}
+    {{- if .Values.api.http.services.core.service.enabled }}
+    - port: {{ .Values.api.http.services.core.service.externalPort }}
+      targetPort: {{ .Values.api.http.services.core.http.port }}
+      protocol: TCP
+      name: {{ .Values.api.name }}-technical
+    {{- end }}
   selector:
     app: {{ template "gravitee.name" . }}
     component: "{{ .Values.api.name }}"

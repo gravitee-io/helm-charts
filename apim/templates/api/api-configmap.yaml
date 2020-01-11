@@ -32,14 +32,15 @@ data:
     services:
       core:
         http:
-          enabled: true
-          port: 18083
-          host: localhost
+          enabled: {{ .Values.api.http.services.core.http.enabled }}
+        {{- if .Values.api.http.services.core.http.enabled }}
+          port: {{ .Values.api.http.services.core.http.port }}
+          host: {{ .Values.api.http.services.core.http.host }}
           authentication:
             type: basic
             users:
               admin: {{ .Values.api.http.services.core.http.authentication.password }}
-
+        {{- end }}
     {{- if and .Values.api.http .Values.api.http.client }}
     httpClient:
       {{- if .Values.api.http.client.timeout }}
@@ -140,6 +141,7 @@ data:
     # SMTP configuration used to send mails
     email:
       enabled: {{ .Values.smtp.enabled }}
+      {{- if .Values.smtp.enabled }} 
       host: {{ .Values.smtp.host }}
       subject: {{ .Values.smtp.subject | quote }}
       port: {{ .Values.smtp.port }}
@@ -151,6 +153,7 @@ data:
       properties:
         auth: {{ .Values.smtp.properties.auth }}
         starttls.enable: {{ .Values.smtp.properties.starttlsEnable }}
+      {{- end }}
 
     # Mail templates
     templates:
