@@ -29,6 +29,9 @@ data:
       {{- if or .Values.gateway.enabled .Values.ui.title .Values.ui.portal }},
       "portal": {
         {{- if .Values.gateway.enabled }}
+        {{- if .Values.gateway.entrypoint }}
+        "entrypoint": "https://{{ index .Values.gateway.ingress.hosts 0 }}{{ .Values.gateway.entrypoint }}"
+        {{- else }}
         "entrypoint": "https://{{ index .Values.gateway.ingress.hosts 0 }}{{ .Values.gateway.ingress.path }}"
         {{- end }}
         {{- if .Values.ui.title }}{{ if .Values.gateway.enabled }},{{ end }}
