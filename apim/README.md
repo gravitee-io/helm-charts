@@ -12,6 +12,11 @@ This chart will deploy the following:
 - MongoDB replica-set (optional dependency)
 - Elasticsearch cluster (optional dependency)
 
+## Requirements
+
+To deploy the ingress of this chart, you need to have ingress-nginx installed,
+elswise you will need to update ingress annotations to reflect your installed ingress controller.
+
 ## Installing
 
 * Add the Gravitee.io helm charts repo
