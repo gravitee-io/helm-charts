@@ -15,7 +15,11 @@ data:
   gzip-types: "*"
   constants.json: |
     {
+      {{- if .Values.ui.baseURL }}
+      "baseURL": "{{ .Values.ui.baseURL }}"
+      {{- else }}
       "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/"
+      {{- end }}
       {{- if .Values.ui.managementTitle }},
       "management": {
         "title": "{{ .Values.ui.managementTitle }}"
