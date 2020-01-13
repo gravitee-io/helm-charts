@@ -274,8 +274,6 @@ api:
 #          annotations:
 #            kubernetes.io/ingress.class: nginx
 #            nginx.ingress.kubernetes.io/rewrite-target: /_$1
-#        service:
-#          externalPort: 18083
         service: 
 #       If you choose to enable this service, you'll need to expose the technical api
 #       on an accessible host outside of the pod: api.http.services.core.http.host
