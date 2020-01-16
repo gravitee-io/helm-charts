@@ -45,7 +45,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ template "gravitee.api.fullname" . }}
-          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+          image: "{{ .Values.api.image.repository }}:{{ default .Chart.AppVersion .Values.api.image.tag }}"
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.api.service.internalPort }}

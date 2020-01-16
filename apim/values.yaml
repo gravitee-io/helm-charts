@@ -257,7 +257,7 @@ api:
   replicaCount: 1
   image:
     repository: graviteeio/management-api
-    tag: 1.29.5
+    # tag: 1.29.5
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
@@ -304,7 +304,7 @@ api:
     internalPort: 8083
   autoscaling:
     enabled: true
-    minReplicas: 2
+    minReplicas: 1
     maxReplicas: 3
     targetAverageUtilization: 50
     targetMemoryAverageUtilization: 80
@@ -379,13 +379,13 @@ gateway:
   #  truststore:
   #    path: ${gravitee.home}/security/truststore.jks
   #    password: secret
-  replicaCount: 2
+  replicaCount: 1
   # sharding_tags:
   # tenant:
   websocket: false
   image:
     repository: graviteeio/gateway
-    tag: 1.29.5
+    # tag: 1.29.5
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
@@ -395,8 +395,8 @@ gateway:
     internalPort: 8082
   autoscaling:
     enabled: true
-    minReplicas: 2
-    maxReplicas: 6
+    minReplicas: 1
+    maxReplicas: 3
     targetAverageUtilization: 50
     targetMemoryAverageUtilization: 80
   ingress:
@@ -472,13 +472,13 @@ ui:
   replicaCount: 1
   image:
     repository: graviteeio/management-ui
-    tag: 1.29.5
+    # tag: 1.29.5
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
   autoscaling:
     enabled: true
-    minReplicas: 2
+    minReplicas: 1
     maxReplicas: 3
     targetAverageUtilization: 50
     targetMemoryAverageUtilization: 80
