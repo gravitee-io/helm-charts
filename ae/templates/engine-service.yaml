@@ -1,0 +1,24 @@
+{{- if .Values.engine.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "gravitee.engine.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.engine.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  type: "{{ .Values.engine.service.type }}"
+  ports:
+    - port: {{ .Values.engine.service.externalPort }}
+      targetPort: {{ .Values.engine.service.internalPort }}
+      protocol: TCP
+      name: {{ .Values.engine.name }}
+  selector:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "{{ .Values.engine.name }}"
+{{- end -}}
