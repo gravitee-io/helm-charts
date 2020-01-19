@@ -26,7 +26,7 @@ spec:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
         {{- if .Values.api.reloadOnConfigChange }}
-        checksum/config: {{ include (print $.Template.BasePath "/api-configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/api/api-configmap.yaml") . | sha256sum }}
         {{- end }}
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
