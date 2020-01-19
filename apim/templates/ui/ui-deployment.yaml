@@ -25,7 +25,7 @@ spec:
     metadata:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
-        checksum/config: {{ include (print $.Template.BasePath "/ui-configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/ui/ui-configmap.yaml") . | sha256sum }}
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
