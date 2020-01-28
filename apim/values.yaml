@@ -6,9 +6,11 @@ chaos:
 
 inMemoryAuth:
   enabled: true
+  allowEmailInSearchResults: false
 
 # Default password "admin", use bcrypt ($2a$ version) to generate a new one
 adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
+adminEmail:
 
 jwtSecret: myJWT4Gr4v1t33_S3cr3t
 
@@ -80,6 +82,7 @@ ldap:
         admin: LDAP_GROUP_ADMIN
         user: LDAP_GROUP_USER
   lookup:
+    allowEmailInSearchResults: false
     # Note that personal information can be exposed without user consentment
     user:
       # Base to lookup user, must be relative to context.base

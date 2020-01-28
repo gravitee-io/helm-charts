@@ -113,11 +113,13 @@ data:
           # - none : passwords are not hashed/encrypted
           # default value is bcrypt
           password-encoding-algo: bcrypt
+          allow-email-in-search-results: {{ .Values.inMemoryAuth.allowEmailInSearchResults }}
           users:
             - user:
               username: admin
               password: {{ .Values.adminPasswordBcrypt }}
               roles: MANAGEMENT:ADMIN, PORTAL:ADMIN
+              email: {{ .Values.adminEmail }}
           {{- if .Values.extraInMemoryUsers -}}
           {{ .Values.extraInMemoryUsers | nindent 12 }}
           {{- end -}}
@@ -148,6 +150,7 @@ data:
                   {{ .Values.ldap.authentication.group.role.user }}: USER
                 }
           lookup:
+            allow-email-in-search-results: {{ .Values.ldap.lookup.allowEmailInSearchResults }}
             user:
               base: {{ .Values.ldap.lookup.user.base | quote }} 
               filter: {{ .Values.ldap.lookup.user.filter | quote }} 
