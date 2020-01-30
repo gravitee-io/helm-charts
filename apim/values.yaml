@@ -262,8 +262,11 @@ api:
     repository: graviteeio/management-api
     # tag: 1.29.5
     pullPolicy: Always
-  # pullSecrets:
-  #   - name: gravitee_secrets
+    # pullSecrets:
+    #   - name: gravitee_secrets
+  # env:
+  #   - name: ENV_VARIABLE
+  #     value: "some value"
   ssl:
     enabled: false
   #  keystore:
@@ -406,8 +409,11 @@ gateway:
     repository: graviteeio/gateway
     # tag: 1.29.5
     pullPolicy: Always
-  # pullSecrets:
-  #   - name: gravitee_secrets
+    # pullSecrets:
+    #   - name: gravitee_secrets
+  # env:
+  #   - name: ENV_VARIABLE
+  #     value: "some value"
   service:
     type: ClusterIP
     externalPort: 82
