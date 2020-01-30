@@ -119,9 +119,9 @@ If neither `mongo.uri` or `mongo.servers` are provided, you have to define the f
 
 ### Mongo ReplicaSet
 
-| Parameter                 | Description                           | Default |
-| ------------------------- | ------------------------------------- | ------- |
-| `mongo-replicaset.enable` | Enable deployment of Mongo replicaset | `false` |
+| Parameter                    | Description                           | Default |
+| ---------------------------- | ------------------------------------- | ------- |
+| `mongodb-replicaset.enabled` | Enable deployment of Mongo replicaset | `false` |
 
 See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongodb-replicaset) for detailed documentation on helm chart.
 
@@ -138,9 +138,9 @@ See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongo
 
 ### Elasticsearch cluster
 
-| Parameter              | Description                                | Default |
-| ---------------------- | ------------------------------------------ | ------- |
-| `elasticsearch.enable` | Enable deployment of Elasticsearch cluster | `false` |
+| Parameter               | Description                                | Default |
+| ----------------------- | ------------------------------------------ | ------- |
+| `elasticsearch.enabled` | Enable deployment of Elasticsearch cluster | `false` |
 
 See [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch) for detailed documentation on optional requirements helm chart.
 
