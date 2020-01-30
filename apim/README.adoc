@@ -447,6 +447,10 @@ Deployment can have 100% unavailability by default! |`+1+`
 |`+api.image.pullSecrets+` |K8s image pull secrets, used to pull both
 Gravitee Management API image and `+extraInitContainers+` |`+null+`
 
+|`+api.env+` |Environment variables, defined as a list of `name` and `value` as specified in
+https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/[Kubernetes
+documentation] |`+null+`
+
 |`+api.service.type+` |K8s publishing
 https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types[service
 type] |`+ClusterIP+`
@@ -572,6 +576,10 @@ configuration |`+TimeBasedRollingPolicy+` for 30 days
 
 |`+gateway.image.pullSecrets+` |K8s image pull secrets, used to pull
 both Gravitee Gateway image and `+extraInitContainers+` |`+null+`
+
+|`+gateway.env+` |Environment variables, defined as a list of `name` and `value` as specified in
+https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/[Kubernetes
+documentation] |`+null+`
 
 |`+gateway.service.type+` |K8s publishing
 https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types[service

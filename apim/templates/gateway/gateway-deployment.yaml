@@ -56,6 +56,12 @@ spec:
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.gateway.service.internalPort }}
+          {{- if .Values.gateway.env }}
+          env:
+            {{- with .Values.gateway.env }}
+            {{- tpl . $ | nindent 12 }}
+            {{- end }}
+          {{- end }}
           {{- if .Values.gateway.lifecycle }}
           lifecycle:
             {{- if .Values.gateway.lifecycle.postStart }}
