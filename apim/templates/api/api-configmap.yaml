@@ -207,7 +207,11 @@ data:
         anonymize-on-delete:
           enabled: {{ .Values.api.user.anynomizeOnDelete }}
     # The portal URL used in emails
+    {{- if .Values.api.portalURL }}
+    portalURL: {{ .Values.api.portalURL }}
+    {{- else }}
     portalURL: https://{{ index .Values.ui.ingress.hosts 0 }}
+    {{- end }}
 
     # Allows to create support ticket (default value: false)
     support:

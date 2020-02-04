@@ -417,6 +417,8 @@ deletion |`+false+`
 
 |`+smtp.starttlsEnable+` |SMTP server TLS activation |`+false+`
 
+|`+api.portalURL+` |The portal URL used in emails |`+https://{{ index .Values.ui.ingress.hosts 0 }}+`
+
 |`+api.restartPolicy+` |Policy to
 https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-and-container-status[restart
 K8 pod] |`+OnFailure+`
