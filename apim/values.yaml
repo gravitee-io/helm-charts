@@ -167,6 +167,18 @@ es:
     enabled: false
     username: example
     password: example
+  ssl:
+    enabled: false
+    # keystore:
+    #   type: jks
+    #   path: path/to/jks
+    #   password: example
+    #   certs:
+    #     - /path/to/cert1
+    #     - /path/to/cert2
+    #   keys:
+    #     - /path/to/key
+    #     - /path/to/key2
   endpoints:
     - http://elastic-elasticsearch-client.default.svc.cluster.local:9200
 
