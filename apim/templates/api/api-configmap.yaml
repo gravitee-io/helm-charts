@@ -102,6 +102,19 @@ data:
           username: {{ .Values.es.security.username }}
           password: {{ .Values.es.security.password }}
         {{- end }}
+        {{- if (eq .Values.es.ssl.enabled true) }}
+        ssl:
+          keystore:
+            type: {{ .Values.es.ssl.keystore.type }}
+            {{- if or .Values.es.ssl.keystore.path .Values.es.ssl.keystore.password }}
+            path: {{ .Values.es.ssl.keystore.path }}
+            password: {{ .Values.es.ssl.keystore.password }}
+            {{- end }}
+            {{- if or .Values.es.ssl.keystore.certs .Values.es.ssl.keystore.keys }}
+            certs: {{ .Values.es.ssl.keystore.certs }}
+            keys: {{ .Values.es.ssl.keystore.keys }}
+            {{- end }}
+        {{- end }}
         index: {{ .Values.es.index }}
     security:
       providers:

@@ -170,6 +170,18 @@ replicaset] for detailed documentation on helm chart.
 
 |`+es.security.password+` |Elasticsearch username |`+example+`
 
+|`+es.tls.enabled+` |Elasticsearch TLS enabled |false
+
+|`+es.tls.keystore.type+` |Elasticsearch TLS keystore type (jks, pem or pfx) |`+null+`
+
+|`+es.tls.keystore.path+` |Elasticsearch TLS keystore path (jks, pfx) |`+null+`
+
+|`+es.tls.keystore.password+` |Elasticsearch TLS keystore password (jks, pfx) |`+null+`
+
+|`+es.tls.keystore.certs+` |Elasticsearch TLS certs (only pems) |`+null+`
+
+|`+es.tls.keystore.keys+` |Elasticsearch TLS keys (only pems) |`+null+`
+
 |`+es.cluster+` |Elasticsearch cluster name |`+elasticsearch+`
 
 |`+es.index+` |Elasticsearch index |`+gravitee+`
