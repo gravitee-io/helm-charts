@@ -145,6 +145,12 @@ data:
       request:
         transaction:
           header: X-Gravitee-Transaction-Id
+    
+    # Customize the api-key header and / or query parameter.
+    policy:
+      api-key:
+        header: {{ .Values.gateway.apiKey.header }}
+        param: {{ .Values.gateway.apiKey.param }}
   {{- if .Values.gateway.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>

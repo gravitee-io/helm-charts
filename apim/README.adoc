@@ -621,6 +621,10 @@ is `+true+`, what's the maximum number of replicas |`+3+`
 |`+gateway.websocket+` |Whether websocket protocol is enabled or not
 |`+false+`
 
+|`+gateway.apiKey.header+` |Header used for the API Key. Set an empty value to prohibit its use. |`+X-Gravitee-Api-Key+`
+
+|`+gateway.apiKey.param+` |Query parameter used for the API Key. Set an empty value to prohibit its use. |`+api-key+`
+
 |`+gateway.sharding_tags+` |Sharding tags (comma separated list) |``
 
 |`+gateway.ingress.enabled+` |Whether Ingress is enabled or not
