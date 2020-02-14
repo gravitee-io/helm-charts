@@ -417,6 +417,9 @@ gateway:
   # sharding_tags:
   # tenant:
   websocket: false
+  apiKey:
+    header: X-Gravitee-Api-Key
+    param: api-key
   image:
     repository: graviteeio/gateway
     # tag: 1.29.5
