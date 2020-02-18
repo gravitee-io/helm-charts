@@ -183,6 +183,9 @@ data:
       properties:
         auth: {{ .Values.smtp.properties.auth }}
         starttls.enable: {{ .Values.smtp.properties.starttlsEnable }}
+        {{- if .Values.smtp.properties.localhost }}
+        localhost: {{ .Values.smtp.properties.localhost }}
+        {{- end }}
       {{- end }}
 
     # Mail templates
