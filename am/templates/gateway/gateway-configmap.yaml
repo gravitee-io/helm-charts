@@ -1,0 +1,194 @@
+{{- if .Values.gateway.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "gravitee.gateway.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.gateway.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+data:
+  gravitee.yml: |
+    # Gateway HTTP server
+    http:
+      port: 8092
+      host: 0.0.0.0
+    #  idleTimeout: 0
+    #  tcpKeepAlive: true
+    #  compressionSupported: false
+    #  instances: 0
+      alpn: true
+      {{- if .Values.gateway.ssl.enabled }}
+      secured: true
+      ssl:
+        keystore:
+          path: {{ .Values.gateway.ssl.keystore.path }}
+          password: {{ .Values.gateway.ssl.keystore.password | quote }}
+        clientAuth: {{ .Values.gateway.ssl.clientAuth }}
+        {{- if .Values.gateway.ssl.truststore }}
+        truststore:
+          path: {{ .Values.gateway.ssl.truststore.path }}
+          password: {{ .Values.gateway.ssl.truststore.password | quote }}
+        {{- end }}
+      {{- end }}
+
+    management:
+      type: mongodb
+      mongodb:
+        {{- if .Values.mongo.uri }}
+        uri: {{ .Values.mongo.uri }}
+        {{ else }}
+        uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
+        {{- end }}
+
+    oauth2:
+      type: mongodb
+      mongodb:
+        {{- if .Values.mongo.uri }}
+        uri: {{ .Values.mongo.uri }}
+        {{ else }}
+        uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
+        {{- end }}
+
+    services:
+      core:
+        http:
+          port: 18092
+          host: localhost
+          authentication:
+            # authentication type to be used for the core services
+            # - none : to disable authentication
+            # - basic : to use basic authentication
+            # default is "basic"
+            type: basic
+            users:
+              admin: adminadmin
+
+    jwt:
+      secret: {{ .Values.gateway.jwt.secret }}
+      #kid: default-gravitee-AM-key
+      #expire-after: 604800
+      #issuer: https://gravitee.am
+      #cookie-path: /
+      #cookie-domain: .gravitee.io cookie domain (default "")
+      #cookie-secure: true
+
+    # SMTP configuration used to send mails
+    email:
+      enabled: {{ .Values.smtp.enabled }}
+      {{- if .Values.smtp.enabled }} 
+      host: {{ .Values.smtp.host }}
+      subject: {{ .Values.smtp.subject | quote }}
+      port: {{ .Values.smtp.port }}
+      from: {{ .Values.smtp.from }}
+      {{- if or .Values.smtp.username .Values.smtp.password }}
+      username: {{ .Values.smtp.username }}
+      password: {{ .Values.smtp.password }}
+      {{- end }}
+      properties:
+        auth: {{ .Values.smtp.properties.auth }}
+        starttls.enable: {{ .Values.smtp.properties.starttlsEnable }}
+      {{- end }}
+
+    # User management configuration
+    user:
+      # Password complexity validation policy
+      # Applications should enforce password complexity rules to discourage easy to guess passwords.
+      # Passwords should require a minimum level of complexity that makes sense for the application and its user population.
+      #password:
+      #  policy:
+      #    pattern: ^(?=\s*\S).*$ # Regex pattern for password validation (default to ^(?=\s*\S).*$ (non empty string))
+                                  # Example : ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$
+                                  # ^                # start-of-string
+                                  #(?=.*[0-9])       # a digit must occur at least once
+                                  #(?=.*[a-z])       # a lower case letter must occur at least once
+                                  #(?=.*[A-Z])       # an upper case letter must occur at least once
+                                  #(?=.*[@#$%^&+=])  # a special character must occur at least once
+                                  #(?=\S+$)          # no whitespace allowed in the entire string
+                                  #.{8,}             # anything, at least eight places though
+                                  #$                 # end-of-string
+      registration:
+        email:
+          #subject: New user registration
+        token:
+          #expire-after: 86400 # the end of validity of the token in seconds for registration email (default 86400 = a day)
+      resetPassword:
+        email:
+          #subject: Please reset your password
+        token:
+          #expire-after: 86400 # the end of validity of the token in seconds for reset password email (default 86400 = a day)
+
+    handlers:
+      request:
+        transaction:
+          header: X-Gravitee-Transaction-Id
+
+  {{- if .Values.gateway.logging.debug }}
+  logback.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+
+    <!--
+      ~ Copyright (c) 2015-2016, The Gravitee team (http://www.gravitee.io)
+      ~
+      ~  Licensed under the Apache License, Version 2.0 (the "License");
+      ~  you may not use this file except in compliance with the License.
+      ~  You may obtain a copy of the License at
+      ~
+      ~  http://www.apache.org/licenses/LICENSE-2.0
+      ~
+      ~  Unless required by applicable law or agreed to in writing, software
+      ~  distributed under the License is distributed on an "AS IS" BASIS,
+      ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      ~  See the License for the specific language governing permissions and
+      ~  limitations under the License.
+      -->
+
+    <configuration>
+
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <!-- encoders are assigned the type
+                ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+            <encoder>
+                <pattern>{{ .Values.gateway.logging.stdout.encoderPattern }}</pattern>
+            </encoder>
+        </appender>
+
+        {{- if .Values.gateway.logging.file.enabled }}
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${gravitee.home}/logs/gravitee.log</file>
+{{ .Values.gateway.logging.file.rollingPolicy | indent 16 }}
+            <encoder>
+                <pattern>{{ .Values.gateway.logging.file.encoderPattern }}</pattern>
+            </encoder>
+        </appender>
+        {{- end }}
+
+        {{- if .Values.gateway.logging.file.enabled }}
+        <appender name="async-file" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="FILE" />
+        </appender>
+        {{- end }}
+
+        <appender name="async-console" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="STDOUT" />
+        </appender>
+
+        <logger name="io.gravitee" level="{{ .Values.gateway.logging.graviteeLevel }}" />
+        <logger name="org.reflections" level="WARN" />
+        <logger name="org.springframework" level="WARN" />
+
+        <!-- Strictly speaking, the level attribute is not necessary since -->
+        <!-- the level of the root level is set to DEBUG by default.       -->
+        <root level="INFO">
+            <appender-ref ref="async-console" />
+            {{- if .Values.gateway.logging.file.enabled }}
+            <appender-ref ref="async-file" />
+            {{- end }}
+        </root>
+
+    </configuration>
+  {{- end -}}
+  {{- end -}}

@@ -1,0 +1,352 @@
+# Default values for Gravitee.io Access Management.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+chaos:
+  enabled: false
+
+smtp:
+  enabled: true
+  host: smtp.example.com
+  port: 25
+  from: info@example.com
+  username: info@example.com
+  password: example.com
+  subject: "[gravitee] %s"
+  properties:
+    auth: true
+    starttlsEnable: false
+
+mongo:
+  # uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
+  # servers: |
+  #   - host: mongo1
+  #     port: 27017
+  #   - host: mongo2
+  #     port: 27017
+  sslEnabled: false
+  socketKeepAlive: false
+  rs: rs0
+  rsEnabled: true
+  dbhost: mongo-mongodb-replicaset
+  dbname: gravitee
+  dbport: 27017
+  connectTimeoutMS: 30000
+  auth:
+    enabled: false
+    source: admin
+    username:
+    password:
+
+mongodb-replicaset:
+  enabled: false
+  replicas: 3
+  replicaSetName: rs0
+  auth:
+    enabled: false
+    adminUser: username
+    adminPassword: password
+    metricsUser: metrics
+    metricsPassword: password
+    key: keycontent
+    # existingKeySecret:
+    # existingAdminSecret:
+    # existingMetricsSecret:
+  image:
+    repository: mongo
+    tag: 3.6
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  persistentVolume:
+    enabled: true
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+  configmap: {}
+
+api:
+  enabled: true
+  name: management-api
+  logging:
+    debug: false
+    stdout:
+      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file:
+      enabled: true
+      rollingPolicy: |
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${gravitee.management.log.dir}/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%n"
+    graviteeLevel: DEBUG
+    jettyLevel: INFO
+  restartPolicy: OnFailure
+  reloadOnConfigChange: true
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicaCount: 1
+  image:
+    repository: graviteeio/am-management-api
+    # tag: 2.10.8
+    pullPolicy: Always
+    # pullSecrets:
+    #   - name: gravitee_secrets
+  # env:
+  #   - name: ENV_VARIABLE
+  #     value: "some value"
+  ssl:
+    enabled: false
+  #  keystore:
+  #    path: ${gravitee.home}/security/keystore.jks
+  #    password: secret
+    clientAuth: false
+  #  truststore:
+  #    path: ${gravitee.home}/security/truststore.jks
+  #    password: secret
+  http:
+    services:
+      core:
+        http:
+          port: 18093
+          host: localhost
+          authentication:
+            password: adminadmin  
+        ingress:
+          enabled: false
+#          path: /management/_(.*)
+#          hosts:
+#            - apim.example.com
+#          annotations:
+#            kubernetes.io/ingress.class: nginx
+#            nginx.ingress.kubernetes.io/rewrite-target: /_$1
+        service: 
+#       If you choose to enable this service, you'll need to expose the technical api
+#       on an accessible host outside of the pod: api.http.services.core.http.host
+          enabled: false
+#         type: ClusterIP
+#         externalPort: 18083
+  jwt:
+    secret: s3cR3t4grAv1t3310AMS1g1ingDftK3y
+  service:
+    type: ClusterIP
+    externalPort: 83
+    internalPort: 8093
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
+  ingress:
+    enabled: true
+    path: /management
+    # Used to create an Ingress record.
+    hosts:
+      - host: am.example.com
+        paths: 
+          - /management
+          - /admin
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      # kubernetes.io/tls-acme: "true"
+    #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+    tls:
+      - hosts:
+          - am.example.com
+        secretName: api-custom-cert
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    #  lifecycle:
+    #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee Management API" ]'
+    #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee Management API" ]'
+    ## Additional gravitee API volume mounts
+    # Defines additional volume mounts.
+    # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim
+
+gateway:
+  enabled: true
+  type: Deployment
+  name: gateway
+  logging:
+    debug: false
+    stdout:
+      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
+    file:
+      enabled: true
+      rollingPolicy: |
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${gravitee.home}/logs/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
+    graviteeLevel: DEBUG
+    jettyLevel: WARN
+  reloadOnConfigChange: true
+  ssl:
+    enabled: false
+  #  keystore:
+  #    path: ${gravitee.home}/security/keystore.jks
+  #    password: secret
+    clientAuth: false
+  #  truststore:
+  #    path: ${gravitee.home}/security/truststore.jks
+  #    password: secret
+  jwt:
+    secret: s3cR3t4grAv1t3310AMS1g1ingDftK3y
+  replicaCount: 1
+  # sharding_tags:
+  image:
+    repository: graviteeio/am-gateway
+    # tag: 2.10.8
+    pullPolicy: Always
+    # pullSecrets:
+    #   - name: gravitee_secrets
+  # env:
+  #   - name: ENV_VARIABLE
+  #     value: "some value"
+  service:
+    type: ClusterIP
+    externalPort: 82
+    internalPort: 8092
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
+  ingress:
+    enabled: true
+    path: /auth
+    # Used to create an Ingress record.
+    hosts:
+      - am.example.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+      kubernetes.io/app-root: /auth
+      kubernetes.io/rewrite-target: /auth
+      # ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      # kubernetes.io/tls-acme: "true"
+    #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+    tls:
+      - hosts:
+          - am.example.com
+        secretName: api-custom-cert
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    #  lifecycle:
+    #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee Gateway" ]'
+    #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee Gateway" ]'
+    ## Additional gravitee gateway volume mounts
+    # Defines additional volume mounts.
+    # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim
+
+ui:
+  enabled: true
+  name: management-ui
+  replicaCount: 1
+  image:
+    repository: graviteeio/am-management-ui
+    # tag: 2.10.8
+    pullPolicy: Always
+  # pullSecrets:
+  #   - name: gravitee_secrets
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
+  service:
+    name: nginx
+    type: ClusterIP
+    externalPort: 8002
+    internalPort: 80
+  ingress:
+    enabled: true
+    path: /
+    # Used to create an Ingress record.
+    hosts:
+      - am.example.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/app-root: /
+      kubernetes.io/rewrite-target: /
+      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
+      #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+    tls:
+      - hosts:
+          - am.example.com
+        secretName: api-custom-cert
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    #  lifecycle:
+    #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee UI" ]'
+    #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee UI" ]'
+    ## Additional gravitee ui volume mounts
+    # Defines additional volume mounts.
+    # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
