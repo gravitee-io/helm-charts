@@ -15,6 +15,7 @@ smtp:
   properties:
     auth: true
     starttlsEnable: false
+    #localhost: am.example.com
 
 mongo:
   # uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
