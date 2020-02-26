@@ -133,6 +133,8 @@ data:
               password: {{ .Values.adminPasswordBcrypt }}
               roles: MANAGEMENT:ADMIN, PORTAL:ADMIN
               email: {{ .Values.adminEmail }}
+              firstName: {{ .Values.adminFirstName }}
+              lastName: {{ .Values.adminLastName }}
           {{- if .Values.extraInMemoryUsers -}}
           {{ .Values.extraInMemoryUsers | nindent 12 }}
           {{- end -}}

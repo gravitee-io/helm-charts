@@ -11,6 +11,8 @@ inMemoryAuth:
 # Default password "admin", use bcrypt ($2a$ version) to generate a new one
 adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
 adminEmail:
+adminFirstName:
+adminLastName:
 
 jwtSecret: myJWT4Gr4v1t33_S3cr3t
 
@@ -23,6 +25,8 @@ extraInMemoryUsers: |
     roles: MANAGEMENT:USER, PORTAL:USER
     # Useful to receive notifications
     #email:
+    #firstName:
+    #lastName:
   - user:
     username: api1
     # Password value: api1
@@ -30,21 +34,29 @@ extraInMemoryUsers: |
     # You can declare multiple roles using comma separator
     roles: MANAGEMENT:API_PUBLISHER, PORTAL:API_PUBLISHER
     #email:
+    #firstName:
+    #lastName:
   - user:
     username: application1
     # Password value: application1
     password: $2a$10$2gtKPYRB9zaVaPcn5RBx/.3T.7SeZoDGs9GKqbo9G64fKyXFR1He.
     roles: MANAGEMENT:USER, PORTAL:USER
     #email:
+    #firstName:
+    #lastName:
 #   - user:
 #     username: publisher-user
 #     password: $2a$13$iXdXO4wAYdhx2LOwijsp7.PsoAZQ12zEdHxbriIYCbtyo.y32LTji
 #     roles: MANAGEMENT:API_PUBLISHER, PORTAL:API_PUBLISHER
 #     email:
+#     firstName:
+#     lastName:
 #   - user:
 #     username: application-test
 #     password: $2a$10$2gtKPYRB9zaVaPcn5RBx/.3T.7SeZoDGs9GKqbo9G64fKyXFR1He.
 #     email:
+#     firstName:
+#     lastName:
 
 ldap:
   enabled: false
