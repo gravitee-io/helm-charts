@@ -39,6 +39,8 @@ To install the chart from the Helm repository with the release name `graviteeio-
 $ helm install --name graviteeio-apim graviteeio/apim
 ```
 
+**Note:** If you're using Helm 3, the name parameter is no more valid. Please check https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace
+
 To install the chart using the chart archive, run:
 
 ```

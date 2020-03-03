@@ -26,6 +26,8 @@ $ helm repo add graviteeio https://helm.gravitee.io
 $ helm install --name graviteeio-apim graviteeio/apim
 ....
 
+NOTE: If you're using Helm 3, the name parameter is no more valid. Please check https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace(Helm documentation)
+
 === Create a chart archive
 
 To package this chart directory into a chart archive, run:
