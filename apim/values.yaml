@@ -126,7 +126,7 @@ mongo:
   socketKeepAlive: false
   rs: rs0
   rsEnabled: true
-  dbhost: mongo-mongodb-replicaset
+  dbhost: graviteeio-apim-mongodb-replicaset
   dbname: gravitee
   dbport: 27017
   connectTimeoutMS: 30000
@@ -193,7 +193,7 @@ es:
     #     - /path/to/key
     #     - /path/to/key2
   endpoints:
-    - http://elastic-elasticsearch-client.default.svc.cluster.local:9200
+    - http://graviteeio-apim-elasticsearch-client.default.svc.cluster.local:9200
 
 elasticsearch:
   enabled: false
