@@ -354,14 +354,17 @@ configuration |`+TimeBasedRollingPolicy+` for 30 days
 |`+api.ssl.enabled+` |API exposition through HTTPS protocol activation
 |`+false+`
 
+|`+api.ssl.keystore.type+` |Keystore type for API exposition through
+HTTPS protocol |`+jks+`
+
 |`+api.ssl.keystore.path+` |Keystore path for API exposition through
 HTTPS protocol |`+null+`
 
 |`+api.ssl.keystore.password+` |Keystore password for API exposition
 through HTTPS protocol |`+null+`
 
-|`+api.ssl.clientAuth+` |Client authentication through 2 way TLS
-activation |`+false+`
+|`+api.ssl.truststore.type+` |Truststore type for client authentication
+through 2 way TLS |`+jks+`
 
 |`+api.ssl.truststore.path+` |Truststore path for client authentication
 through 2 way TLS |`+null+`
@@ -544,6 +547,9 @@ not |`+false+`
 |`+gateway.ssl.enabled+` |API exposition through HTTPS protocol
 activation |`+false+`
 
+|`+gateway.ssl.keystore.type+` |Keystore type for API exposition through
+HTTPS protocol |`+jks+`
+
 |`+gateway.ssl.keystore.path+` |Keystore path for API exposition through
 HTTPS protocol |`+null+`
 
@@ -552,6 +558,9 @@ through HTTPS protocol |`+null+`
 
 |`+gateway.ssl.clientAuth+` |Client authentication through 2 way TLS
 activation |`+false+`
+
+|`+gateway.ssl.truststore.type+` |Truststore type for client
+authentication through 2 way TLS |`+jks+`
 
 |`+gateway.ssl.truststore.path+` |Truststore path for client
 authentication through 2 way TLS |`+null+`

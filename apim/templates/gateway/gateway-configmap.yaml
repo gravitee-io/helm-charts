@@ -25,11 +25,17 @@ data:
       secured: true
       ssl:
         keystore:
+          {{- if .Values.gateway.ssl.keystore.type }}
+          type: {{ .Values.gateway.ssl.keystore.type }}
+          {{- end }}
           path: {{ .Values.gateway.ssl.keystore.path }}
           password: {{ .Values.gateway.ssl.keystore.password | quote }}
         clientAuth: {{ .Values.gateway.ssl.clientAuth }}
         {{- if .Values.gateway.ssl.truststore }}
         truststore:
+          {{- if .Values.gateway.ssl.truststore.type }}
+          type: {{ .Values.gateway.ssl.truststore.type }}
+          {{- end }}
           path: {{ .Values.gateway.ssl.truststore.path }}
           password: {{ .Values.gateway.ssl.truststore.password | quote }}
         {{- end }}
