@@ -295,10 +295,11 @@ api:
   ssl:
     enabled: false
   #  keystore:
+  #    type: jks # Supports jks, pkcs12
   #    path: ${gravitee.home}/security/keystore.jks
   #    password: secret
-    clientAuth: false
   #  truststore:
+  #    type: jks # Supports jks, pkcs12
   #    path: ${gravitee.home}/security/truststore.jks
   #    password: secret
   http:
@@ -420,10 +421,12 @@ gateway:
   ssl:
     enabled: false
   #  keystore:
+  #    type: jks # Supports jks, pem, pkcs12
   #    path: ${gravitee.home}/security/keystore.jks
   #    password: secret
-    clientAuth: false
+    clientAuth: false # Supports false/none, request, true/requires
   #  truststore:
+  #    type: jks # Supports jks, pem, pkcs12
   #    path: ${gravitee.home}/security/truststore.jks
   #    password: secret
   replicaCount: 1

@@ -17,11 +17,17 @@ data:
       secured: true
       ssl:
         keystore:
+          {{- if .Values.api.ssl.keystore.type }}
+          type: {{ .Values.api.ssl.keystore.type }}
+          {{- end }}
           path: {{ .Values.api.ssl.keystore.path }}
           password: {{ .Values.api.ssl.keystore.password | quote }}
         clientAuth: {{ .Values.api.ssl.clientAuth }}
         {{- if .Values.api.ssl.truststore }}
         truststore:
+          {{- if .Values.api.ssl.truststore.type }}
+          type: {{ .Values.api.ssl.truststore.type }}
+          {{- end }}
           path: {{ .Values.api.ssl.truststore.path }}
           password: {{ .Values.api.ssl.truststore.password | quote }}
         {{- end }}
