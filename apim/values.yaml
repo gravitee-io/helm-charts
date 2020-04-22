@@ -169,6 +169,9 @@ mongodb-replicaset:
     size: 1Gi
   configmap: {}
 
+redis:
+  enabled: false
+
 es:
   enabled: true
   cluster: elasticsearch
@@ -439,6 +442,13 @@ gateway:
     #   url:
     #   username:
     #   password:
+  ratelimit:
+    mongo:
+      enabled: true
+    redis:
+      enabled: false
+      host:
+      port:
   services:
     bridge:
       enabled: false
