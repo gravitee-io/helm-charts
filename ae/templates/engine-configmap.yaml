@@ -15,22 +15,32 @@ data:
     ingesters:
       ws:
     #    instances: 0
-    #    port: 8072
+        port: {{ .Values.engine.service.internalPort }}
     #    host: 0.0.0.0
-    #    secured: false
     #    alpn: false
-    #    ssl:
-    #      clientAuth: false
-    #      keystore:
-    #        path: ${gravitee.home}/security/keystore.jks
-    #        password: secret
-    #      truststore:
-    #        path: ${gravitee.home}/security/truststore.jks
-    #        password: secret
+        {{- if .Values.engine.ssl.enabled }}
+        secured: true
+        ssl:
+          keystore:
+            path: {{ .Values.engine.ssl.keystore.path }}
+            password: {{ .Values.engine.ssl.keystore.password | quote }}
+          clientAuth: {{ .Values.engine.ssl.clientAuth }}
+          {{- if .Values.engine.ssl.truststore }}
+          truststore:
+            path: {{ .Values.engine.ssl.truststore.path }}
+            password: {{ .Values.engine.ssl.truststore.password | quote }}
+          {{- end }}
+        {{- else }}
+        secured: false
+        {{- end }}
         authentication: # authentication type to be used for HTTP authentication
-          type: basic # none to disable authentication / basic for basic authentication
+          {{- if .Values.engine.authentication.enabled }}
+          type: basic
           users:
-            admin: adminadmin
+            admin: {{ .Values.engine.authentication.adminPassword }}
+          {{- else }}
+          type: none
+          {{- end }}
 
     services:
       core:

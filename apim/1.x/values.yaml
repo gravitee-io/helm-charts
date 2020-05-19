@@ -257,6 +257,14 @@ elasticsearch:
         cpu: "25m"
         memory: "1536Mi"
 
+alerts:
+  enabled: false
+  endpoints:
+    - http://localhost:8072/
+  security:
+    enabled: false
+    username: admin
+    password: adminadmin
 api:
   enabled: true
   name: api
