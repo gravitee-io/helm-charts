@@ -33,10 +33,13 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "{{ .Values.api.name }}"
     spec:
-    {{- if .Values.api.nodeSelector }}
+      securityContext:  
+        runAsUser: 1001
+        runAsNonRoot: true
+      {{- if .Values.api.nodeSelector }}
       nodeSelector:
-{{ toYaml .Values.api.nodeSelector | indent 8 }}
-    {{- end }}
+        {{ toYaml .Values.api.nodeSelector | indent 8 }}
+      {{- end }}
       {{- if .Values.api.extraInitContainers }}
       initContainers:
         {{- with .Values.api.extraInitContainers }}

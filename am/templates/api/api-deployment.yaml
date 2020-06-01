@@ -11,6 +11,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
+  securityContext:  
+    runAsUser: 1001
+    runAsNonRoot: true
   replicas: {{ .Values.api.replicaCount }}
   strategy:
     type: RollingUpdate
