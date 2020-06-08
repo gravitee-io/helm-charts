@@ -26,8 +26,6 @@ $ helm repo add graviteeio https://helm.gravitee.io
 $ helm install --name graviteeio-apim graviteeio/apim
 ....
 
-NOTE: If you're using Helm 3, the name parameter is no more valid. Please check https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace(Helm documentation)
-
 === Create a chart archive
 
 To package this chart directory into a chart archive, run:
@@ -45,6 +43,10 @@ To install the chart from the Helm repository with the release name
 ----
 $ helm install --name graviteeio-apim graviteeio/apim
 ----
+
+*Note:* If you're using Helm 3, the name parameter is no more valid.
+Please check
+https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace[https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace]
 
 To install the chart using the chart archive, run:
 
@@ -152,7 +154,7 @@ define the following configuration options:
 [cols=",,",options="header",]
 |===
 |Parameter |Description |Default
-|`+mongo-replicaset.enable+` |Enable deployment of Mongo replicaset
+|`+mongodb-replicaset.enabled+` |Enable deployment of Mongo replicaset
 |`+false+`
 |===
 
@@ -170,21 +172,23 @@ replicaset] for detailed documentation on helm chart.
 
 |`+es.security.username+` |Elasticsearch username |`+example+`
 
-|`+es.security.password+` |Elasticsearch username |`+example+`
+|`+es.security.password+` |Elasticsearch password |`+example+`
 
 |`+es.tls.enabled+` |Elasticsearch TLS enabled |false
 
-|`+es.tls.keystore.type+` |Elasticsearch TLS keystore type (jks, pem or pfx) |`+null+`
+|`+es.tls.keystore.type+` |Elasticsearch TLS keystore type (jks, pem or
+pfx) |`+null+`
 
-|`+es.tls.keystore.path+` |Elasticsearch TLS keystore path (jks, pfx) |`+null+`
+|`+es.tls.keystore.path+` |Elasticsearch TLS keystore path (jks, pfx)
+|`+null+`
 
-|`+es.tls.keystore.password+` |Elasticsearch TLS keystore password (jks, pfx) |`+null+`
+|`+es.tls.keystore.password+` |Elasticsearch TLS keystore password (jks,
+pfx) |`+null+`
 
-|`+es.tls.keystore.certs+` |Elasticsearch TLS certs (only pems) |`+null+`
+|`+es.tls.keystore.certs+` |Elasticsearch TLS certs (only pems)
+|`+null+`
 
 |`+es.tls.keystore.keys+` |Elasticsearch TLS keys (only pems) |`+null+`
-
-|`+es.cluster+` |Elasticsearch cluster name |`+elasticsearch+`
 
 |`+es.index+` |Elasticsearch index |`+gravitee+`
 
@@ -197,7 +201,7 @@ replicaset] for detailed documentation on helm chart.
 [cols=",,",options="header",]
 |===
 |Parameter |Description |Default
-|`+elasticsearch.enable+` |Enable deployment of Elasticsearch cluster
+|`+elasticsearch.enabled+` |Enable deployment of Elasticsearch cluster
 |`+false+`
 |===
 
@@ -375,6 +379,47 @@ authentication through 2 way TLS |`+null+`
 |`+api.http.services.core.http.authentication.password+` |HTTP core
 service authentication password |`+adminadmin+`
 
+|`+api.http.services.core.http.port+` |HTTP core service port exposed in
+container |`+18083+`
+
+|`+api.http.services.core.http.host+` |HTTP core service bind IP or host
+inside container (0.0.0.0 for exposure on every interfaces)
+|`+localhost+`
+
+|`+api.http.services.core.http.authentication.password+` |HTTP core
+service authentication password |`+adminadmin+`
+
+|`+api.http.services.core.http.ingress.enabled+` |Ingress for HTTP core
+service authentication (requires
+`+api.http.services.core.service.enabled+` to be true) |`+false+`
+
+|`+api.http.services.core.http.ingress.path+` |The ingress path which
+should match for incoming requests to the management technical API.
+|`+/management/_(.*)+`
+
+|`+api.http.services.core.http.ingress.hosts+` |If
+`+api.ingress.enabled+` is enabled, set possible ingress hosts
+|`+[apim.example.com]+`
+
+|`+api.http.services.core.http.ingress.annotations+` |Supported Ingress
+annotations to configure ingress controller
+|`+[kubernetes.io/ingress.class: nginx, nginx.ingress.kubernetes.io/rewrite-target: /_$1]+`
+
+|`+api.http.services.core.http.ingress.tls.hosts+`
+|https://kubernetes.io/docs/concepts/services-networking/ingress/#tls[Ingress
+TLS termination] |`+[apim.example.com]+`
+
+|`+api.http.services.core.http.ingress.tls.secretName+` |Ingress TLS K8s
+secret name containing the TLS private key and certificate
+|`+api-custom-cert+`
+
+|`+api.http.services.core.http.service.enabled+` |Whether a service is
+added or not for technical API |`+false+`
+
+|`+api.http.services.core.http.service.externalPort+` |K8s service
+external port (internal port is defined by
+`+api.http.services.core.http.port+` ) |`+18083+`
+
 |`+api.http.api.entrypoint+` |Listening path for the API
 |`+/management+`
 
@@ -434,7 +479,11 @@ deletion |`+false+`
 
 |`+smtp.starttlsEnable+` |SMTP server TLS activation |`+false+`
 
-|`+api.portalURL+` |The portal URL used in emails |`+https://{{ index .Values.ui.ingress.hosts 0 }}+`
+|`+smtp.localhost+` |Hostname that is resolvable by the SMTP server
+|`+null+`
+
+|`+api.portalURL+` |The portal URL used in emails
+|`+https://{{ index .Values.ui.ingress.hosts 0 }}+`
 
 |`+api.restartPolicy+` |Policy to
 https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-and-container-status[restart
@@ -466,7 +515,8 @@ Deployment can have 100% unavailability by default! |`+1+`
 |`+api.image.pullSecrets+` |K8s image pull secrets, used to pull both
 Gravitee Management API image and `+extraInitContainers+` |`+null+`
 
-|`+api.env+` |Environment variables, defined as a list of `name` and `value` as specified in
+|`+api.env+` |Environment variables, defined as a list of `+name+` and
+`+value+` as specified in
 https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/[Kubernetes
 documentation] |`+null+`
 
@@ -602,7 +652,8 @@ configuration |`+TimeBasedRollingPolicy+` for 30 days
 |`+gateway.image.pullSecrets+` |K8s image pull secrets, used to pull
 both Gravitee Gateway image and `+extraInitContainers+` |`+null+`
 
-|`+gateway.env+` |Environment variables, defined as a list of `name` and `value` as specified in
+|`+gateway.env+` |Environment variables, defined as a list of `+name+`
+and `+value+` as specified in
 https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/[Kubernetes
 documentation] |`+null+`
 
@@ -632,9 +683,11 @@ is `+true+`, what's the maximum number of replicas |`+3+`
 |`+gateway.websocket+` |Whether websocket protocol is enabled or not
 |`+false+`
 
-|`+gateway.apiKey.header+` |Header used for the API Key. Set an empty value to prohibit its use. |`+X-Gravitee-Api-Key+`
+|`+gateway.apiKey.header+` |Header used for the API Key. Set an empty
+value to prohibit its use. |`+X-Gravitee-Api-Key+`
 
-|`+gateway.apiKey.param+` |Query parameter used for the API Key. Set an empty value to prohibit its use. |`+api-key+`
+|`+gateway.apiKey.param+` |Query parameter used for the API Key. Set an
+empty value to prohibit its use. |`+api-key+`
 
 |`+gateway.sharding_tags+` |Sharding tags (comma separated list) |``
 
