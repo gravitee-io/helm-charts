@@ -21,7 +21,7 @@ This chart will deploy the following:
   ```
 * Install it
   ```
-  $ helm install --name graviteeio-apim3x graviteeio/apim3x
+  $ helm install --name graviteeio-apim3x graviteeio/apim3
   ```
 
 ## Create a chart archive
@@ -37,7 +37,7 @@ $ helm package .
 To install the chart from the Helm repository with the release name `graviteeio-apim3x`:
 
 ```bash
-$ helm install --name graviteeio-apim3x graviteeio/apim3x
+$ helm install --name graviteeio-apim3x graviteeio/apim3
 ```
 
 **Note:** If you're using Helm 3, the name parameter is no more valid. Please check https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace
@@ -45,7 +45,7 @@ $ helm install --name graviteeio-apim3x graviteeio/apim3x
 To install the chart using the chart archive, run:
 
 ```
-$ helm install apim-3.0.0.tgz
+$ helm install apim3-3.0.0.tgz
 ```
 
 ## Configuration
