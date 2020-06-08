@@ -1,0 +1,101 @@
+{{- if .Values.portal.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "gravitee.portal.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.portal.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  securityContext:  
+    runAsUser: 1001
+    runAsNonRoot: true
+  replicas: {{ .Values.portal.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "gravitee.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "{{ .Values.portal.name }}"
+  template:
+    metadata:
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
+        checksum/config: {{ include (print $.Template.BasePath "/portal/portal-configmap.yaml") . | sha256sum }}
+      labels:
+        app.kubernetes.io/name: {{ template "gravitee.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "{{ .Values.portal.name }}"
+    spec:
+    {{- if .Values.portal.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.portal.nodeSelector | indent 8 }}
+    {{- end }}
+    {{- if or .Values.ui.extraInitContainers }}
+      initContainers:
+      {{- with .Values.portal.extraInitContainers }}
+        {{- tpl . $ | nindent 8 }}
+      {{- end }}
+    {{- end }}
+      containers:
+        - name: {{ template "gravitee.portal.fullname" . }}
+          image: "{{ .Values.portal.image.repository }}:{{ default .Chart.AppVersion .Values.portal.image.tag }}"
+          imagePullPolicy: {{ .Values.portal.image.pullPolicy }}
+          env:
+            - name: PORTAL_API_URL
+              value: "https://{{index .Values.api.ingress.portal.hosts 0 }}{{ .Values.api.ingress.portal.path }}/"
+          ports:
+            - containerPort: {{ .Values.portal.service.internalPort }}
+          {{- if .Values.portal.lifecycle }}
+          lifecycle:
+            {{- if .Values.portal.lifecycle.postStart }}
+            postStart:
+              exec:
+                command: {{ .Values.portal.lifecycle.postStart }}
+            {{- end }}
+            {{- if .Values.portal.lifecycle.preStop }}
+            preStop:
+              exec:
+                command: {{ .Values.portal.lifecycle.preStop }}
+            {{- end }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.portal.service.internalPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.portal.service.internalPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+{{ toYaml .Values.portal.resources | indent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/nginx/html/assets/config.json
+              subPath: config.json
+            {{- with .Values.portal.extraVolumeMounts }}
+            {{- tpl . $ | nindent 12 }}
+            {{- end }}
+      {{- if .Values.portal.image.pullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.portal.image.pullSecrets }}
+      {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "gravitee.portal.fullname" . }}
+      {{- with .Values.portal.extraVolumes }}
+        {{- tpl . $ | nindent 8 }}
+      {{- end }}
+{{- end -}}
