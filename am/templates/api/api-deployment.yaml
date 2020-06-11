@@ -11,9 +11,6 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
-  securityContext:  
-    runAsUser: 1001
-    runAsNonRoot: true
   replicas: {{ .Values.api.replicaCount }}
   strategy:
     type: RollingUpdate
@@ -50,6 +47,9 @@ spec:
         - name: {{ template "gravitee.api.fullname" . }}
           image: "{{ .Values.api.image.repository }}:{{ default .Chart.AppVersion .Values.api.image.tag }}"
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          securityContext:  
+            runAsUser: 1001
+            runAsNonRoot: true
           ports:
             - containerPort: {{ .Values.api.service.internalPort }}
           {{- if .Values.api.env }}

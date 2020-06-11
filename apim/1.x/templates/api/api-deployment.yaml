@@ -33,9 +33,6 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "{{ .Values.api.name }}"
     spec:
-      securityContext:  
-        runAsUser: 1001
-        runAsNonRoot: true
       {{- if .Values.api.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.api.nodeSelector | indent 8 }}
@@ -50,6 +47,9 @@ spec:
         - name: {{ template "gravitee.api.fullname" . }}
           image: "{{ .Values.api.image.repository }}:{{ default .Chart.AppVersion .Values.api.image.tag }}"
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          securityContext:  
+            runAsUser: 1001
+            runAsNonRoot: true
           ports:
             - containerPort: {{ .Values.api.service.internalPort }}
           {{- if .Values.api.env }}

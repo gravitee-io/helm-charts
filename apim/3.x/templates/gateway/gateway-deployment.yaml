@@ -11,9 +11,6 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
-  securityContext:  
-    runAsUser: 1001
-    runAsNonRoot: true
   {{- if eq .Values.gateway.type "StatefulSet" }}
   serviceName: {{ template "gravitee.gateway.fullname" . }}
   updateStrategy:
@@ -57,6 +54,9 @@ spec:
         - name: {{ template "gravitee.gateway.fullname" . }}
           image: "{{ .Values.gateway.image.repository }}:{{ default .Chart.AppVersion .Values.gateway.image.tag }}"
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
+          securityContext:  
+            runAsUser: 1001
+            runAsNonRoot: true
           ports:
             - containerPort: {{ .Values.gateway.service.internalPort }}
           {{- if .Values.gateway.env }}

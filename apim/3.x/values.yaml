@@ -530,6 +530,9 @@ portal:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
+  # env:
+  #   - name: ENV_VARIABLE
+  #     value: "some value"
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -614,6 +617,9 @@ ui:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
+  # env:
+  #   - name: ENV_VARIABLE
+  #     value: "some value"
   autoscaling:
     enabled: true
     minReplicas: 1
