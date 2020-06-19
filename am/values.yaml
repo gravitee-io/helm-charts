@@ -142,6 +142,7 @@ api:
     type: ClusterIP
     externalPort: 83
     internalPort: 8093
+  # annotations:
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -239,6 +240,7 @@ gateway:
     type: ClusterIP
     externalPort: 82
     internalPort: 8092
+  # annotations:
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -314,6 +316,7 @@ ui:
     type: ClusterIP
     externalPort: 8002
     internalPort: 80
+    # annotations:
   ingress:
     enabled: true
     path: /

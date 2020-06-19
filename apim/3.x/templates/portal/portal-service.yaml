@@ -10,6 +10,10 @@ metadata:
     app.kubernetes.io/component: "{{ .Values.portal.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    {{- range $key, $value := .Values.portal.service.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
 spec:
   type: "{{ .Values.portal.service.type }}"
   ports:

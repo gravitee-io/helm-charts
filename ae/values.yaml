@@ -45,6 +45,7 @@ engine:
     type: ClusterIP
     externalPort: 82
     internalPort: 8072
+    # annotations:
   autoscaling:
     enabled: true
     minReplicas: 1
