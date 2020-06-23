@@ -17,9 +17,9 @@ data:
   config.json: |
     {
       {{- if .Values.portal.baseURL }}
-      "baseUrl": "{{ .Values.portal.baseURL }}"
+      "baseUrl": "{{ .Values.portal.baseURL }}",
       {{- else }}
-      "baseUrl": "https://{{ index .Values.api.ingress.portal.hosts 0 }}{{ .Values.api.ingress.portal.path }}/environments/DEFAULT"
+      "baseUrl": "https://{{ index .Values.api.ingress.portal.hosts 0 }}{{ .Values.api.ingress.portal.path }}/environments/DEFAULT",
       {{- end }}
       "loaderUrl": "assets/images/gravitee-loader.gif",
       "pagination": {

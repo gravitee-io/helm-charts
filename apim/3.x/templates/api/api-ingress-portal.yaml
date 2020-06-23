@@ -1,12 +1,12 @@
 {{- if .Values.api.enabled -}}
-{{- if .Values.api.ingress.enabled -}}
+{{- if .Values.api.ingress.portal.enabled -}}
 {{- $serviceAPIName := include "gravitee.api.fullname" . -}}
 {{- $serviceAPIPort := .Values.api.service.externalPort -}}
 {{- $ingressPath   := .Values.api.ingress.portal.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "gravitee.api.fullname" . }}
+  name: {{ template "gravitee.api.fullname" . }}-portal
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
