@@ -56,9 +56,10 @@ spec:
             - containerPort: {{ .Values.api.service.internalPort }}
           {{- if .Values.api.env }}
           env:
-            {{- with .Values.api.env }}
-            {{- tpl . $ | nindent 12 }}
-            {{- end }}
+          {{- range $env := .Values.api.env }}
+            - name: {{ $env.name }}
+              value: {{ $env.value | quote }}
+          {{- end }}
           {{- end }}
           {{- if .Values.api.lifecycle }}
           lifecycle:

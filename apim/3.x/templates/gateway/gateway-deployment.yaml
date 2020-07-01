@@ -63,9 +63,10 @@ spec:
             - containerPort: {{ .Values.gateway.service.internalPort }}
           {{- if .Values.gateway.env }}
           env:
-            {{- with .Values.gateway.env }}
-            {{- tpl . $ | nindent 12 }}
-            {{- end }}
+          {{- range $env := .Values.gateway.env }}
+            - name: {{ $env.name }}
+              value: {{ $env.value | quote }}
+          {{- end }}
           {{- end }}
           {{- if .Values.gateway.lifecycle }}
           lifecycle:
