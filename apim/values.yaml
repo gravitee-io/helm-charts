@@ -8,6 +8,9 @@ inMemoryAuth:
   enabled: true
   allowEmailInSearchResults: false
 
+openshiftRoutes:
+  enabled: false
+
 # Default password "admin", use bcrypt ($2a$ version) to generate a new one
 adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
 adminEmail:
@@ -249,7 +252,7 @@ api:
   enabled: true
   name: api
   logging:
-    debug: true
+    debug: false
     stdout:
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
     file:
@@ -338,7 +341,7 @@ api:
     externalPort: 83
     internalPort: 8083
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 3
     targetAverageUtilization: 50
@@ -389,7 +392,7 @@ gateway:
   type: Deployment
   name: gateway
   logging:
-    debug: true
+    debug: false
     stdout:
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
     file:
@@ -435,7 +438,7 @@ gateway:
     externalPort: 82
     internalPort: 8082
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 3
     targetAverageUtilization: 50
@@ -518,7 +521,7 @@ ui:
   # pullSecrets:
   #   - name: gravitee_secrets
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 3
     targetAverageUtilization: 50

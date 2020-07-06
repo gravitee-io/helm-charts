@@ -62,11 +62,12 @@ To configure common features such as:
 - logs database (see [elastichsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch)
   chart)
 
-| Parameter              | Description        | Default |
-| ---------------------- | ------------------ | ------- |
-| `chaos.enabled`        | Enable Chaos test  | false   |
-| `inMemoryAuth.enabled` | Enable oauth login | true    |
-| `ldap.enabled`         | Enable LDAP login  | false   |
+| Parameter                 | Description        | Default |
+| ------------------------- | ------------------ | ------- |
+| `chaos.enabled`           | Enable Chaos test  | false   |
+| `inMemoryAuth.enabled`    | Enable oauth login | true    |
+| `ldap.enabled`            | Enable LDAP login  | false   |
+| `openshiftRoutes.enabled` | Use openshift-route instead of ingress | false |
 
 ### Mongo
 
