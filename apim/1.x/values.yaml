@@ -362,7 +362,7 @@ api:
     path: /management
     # Set enabled to true to use openshift-routes instead of kubernetes-ingress
     route:
-      enabled: true
+      enabled: false
     # Used to create an Ingress record.
     hosts:
       - apim.example.com
@@ -465,7 +465,7 @@ gateway:
     path: /gateway
     # Set enabled to true to use openshift-routes instead of kubernetes-ingress
     route:
-      enabled: true
+      enabled: false
     # Used to create an Ingress record.
     hosts:
       - apim.example.com
