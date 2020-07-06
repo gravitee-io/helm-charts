@@ -3,22 +3,39 @@
 {{- $serviceAPIName := include "gravitee.api.fullname" . -}}
 {{- $serviceAPIPort := .Values.api.service.externalPort -}}
 {{- $ingressPath   := .Values.api.ingress.path -}}
+{{- if .Values.api.ingress.route.enabled -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+{{- else }}
 apiVersion: extensions/v1beta1
 kind: Ingress
+{{- end }}
 metadata:
   name: {{ template "gravitee.api.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ template "gravitee.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
-    app.kubernetes.io/component: "{{ .Values.api.name }}"
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.api.name }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
   annotations:
     {{- range $key, $value := .Values.api.ingress.annotations }}
       {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+  {{- if .Values.api.ingress.route.enabled }}
+  host: {{ .Values.api.ingress.hosts | first }}
+  path: {{ $ingressPath }}
+  port:
+    targetPort: api
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: {{ template "gravitee.api.fullname" . }}
+    weight: 100
+  wildcardPolicy: None
+  {{- else -}}
   rules:
     {{- range $host := .Values.api.ingress.hosts }}
     - host: {{ $host }}
@@ -32,6 +49,7 @@ spec:
   {{- if .Values.api.ingress.tls }}
   tls:
 {{ toYaml .Values.api.ingress.tls | indent 4 }}
+  {{- end -}}
   {{- end -}}
 {{- end -}}
 {{- end -}}

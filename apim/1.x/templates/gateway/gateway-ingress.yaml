@@ -3,22 +3,39 @@
 {{- $serviceGWName := include "gravitee.gateway.fullname" . -}}
 {{- $serviceGWPort := .Values.gateway.service.externalPort -}}
 {{- $ingressPath   := .Values.gateway.ingress.path -}}
+{{- if .Values.gateway.ingress.route.enabled -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+{{- else }}
 apiVersion: extensions/v1beta1
 kind: Ingress
+{{- end }}
 metadata:
   name: {{ template "gravitee.gateway.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ template "gravitee.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
-    app.kubernetes.io/component: "{{ .Values.gateway.name }}"
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app: {{ template "gravitee.name" . }}
+    component: "{{ .Values.gateway.name }}"
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
   annotations:
     {{- range $key, $value := .Values.gateway.ingress.annotations }}
       {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+  {{- if .Values.gateway.ingress.route.enabled }}
+  host: {{ .Values.gateway.ingress.hosts | first }}
+  path: {{ $ingressPath }}
+  port:
+    targetPort: gateway
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: {{ template "gravitee.gateway.fullname" . }}
+    weight: 100
+  wildcardPolicy: None
+  {{- else -}}
   rules:
     {{- range $host := .Values.gateway.ingress.hosts }}
     - host: {{ $host }}
@@ -32,6 +49,7 @@ spec:
   {{- if .Values.gateway.ingress.tls }}
   tls:
 {{ toYaml .Values.gateway.ingress.tls | indent 4 }}
+  {{- end -}}
   {{- end -}}
 {{- end -}}
 {{- end -}}
