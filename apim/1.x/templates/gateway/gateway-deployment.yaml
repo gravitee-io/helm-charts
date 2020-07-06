@@ -94,11 +94,11 @@ spec:
 {{ toYaml .Values.gateway.resources | indent 12 }}
           volumeMounts:
             - name: config
-              mountPath: /opt/graviteeio-am-gateway/config/gravitee.yml
+              mountPath: /opt/graviteeio-gateway/config/gravitee.yml
               subPath: gravitee.yml
           {{- if .Values.gateway.logging.debug }}
             - name: config
-              mountPath: /opt/graviteeio-am-gateway/config/logback.xml
+              mountPath: /opt/graviteeio-gateway/config/logback.xml
               subPath: logback.xml
           {{- end }}
           {{- with .Values.gateway.extraVolumeMounts }}

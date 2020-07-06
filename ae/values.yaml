@@ -1,0 +1,98 @@
+# Default values for Gravitee.io Alert Engine
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+chaos:
+  enabled: false
+
+engine:
+  enabled: true
+  type: Deployment
+  name: engine
+  logging:
+    debug: false
+    stdout:
+      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
+    file:
+      enabled: true
+      rollingPolicy: |
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${gravitee.home}/logs/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
+    graviteeLevel: DEBUG
+  reloadOnConfigChange: true
+  ssl:
+    enabled: false
+  #  keystore:
+  #    path: ${gravitee.home}/security/keystore.jks
+  #    password: secret
+    clientAuth: false
+  #  truststore:
+  #    path: ${gravitee.home}/security/truststore.jks
+  #    password: secret
+  replicaCount: 1
+  image:
+    repository: graviteeio/ae-engine
+    # tag: 1.0.0
+    pullPolicy: Always
+  # pullSecrets:
+  #   - name: gravitee_secrets
+  service:
+    type: ClusterIP
+    externalPort: 82
+    internalPort: 8072
+    # annotations:
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
+  ingress:
+    enabled: true
+    path: /
+    # Used to create an Ingress record.
+    hosts:
+      - ae.example.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+      kubernetes.io/app-root: /
+      kubernetes.io/rewrite-target: /
+      # ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      # kubernetes.io/tls-acme: "true"
+    #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+    tls:
+      - hosts:
+          - ae.example.com
+        secretName: api-custom-cert
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    #  lifecycle:
+    #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee.io Alert Engine" ]'
+    #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee.io Alert Engine" ]'
+    ## Additional gravitee.io alert engine volume mounts
+    # Defines additional volume mounts.
+    # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim

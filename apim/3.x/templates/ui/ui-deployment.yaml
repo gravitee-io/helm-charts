@@ -52,9 +52,7 @@ spec:
           {{- end }}
           env:
             - name: MGMT_API_URL
-              value: "https://{{(index .Values.api.ingress.hosts 0).host }}"
-            - name: MGMT_UI_URL
-              value: "https://{{index .Values.ui.ingress.hosts 0 }}/ui"
+              value: "https://{{index .Values.api.ingress.management.hosts 0 }}{{ .Values.api.ingress.management.path }}/"
           {{- if .Values.ui.env }}
           {{- range $env := .Values.ui.env }}
             - name: {{ $env.name }}
@@ -90,6 +88,13 @@ spec:
             periodSeconds: 30
           resources:
 {{ toYaml .Values.ui.resources | indent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/nginx/html/constants.json
+              subPath: constants.json
+            {{- with .Values.ui.extraVolumeMounts }}
+            {{- tpl . $ | nindent 12 }}
+            {{- end }}
       {{- if .Values.ui.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.ui.image.pullSecrets }}

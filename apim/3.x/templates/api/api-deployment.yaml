@@ -33,10 +33,10 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "{{ .Values.api.name }}"
     spec:
-    {{- if .Values.api.nodeSelector }}
+      {{- if .Values.api.nodeSelector }}
       nodeSelector:
-{{ toYaml .Values.api.nodeSelector | indent 8 }}
-    {{- end }}
+        {{ toYaml .Values.api.nodeSelector | indent 8 }}
+      {{- end }}
       {{- if .Values.api.extraInitContainers }}
       initContainers:
         {{- with .Values.api.extraInitContainers }}
@@ -56,9 +56,10 @@ spec:
             - containerPort: {{ .Values.api.service.internalPort }}
           {{- if .Values.api.env }}
           env:
-            {{- with .Values.api.env }}
-            {{- tpl . $ | nindent 12 }}
-            {{- end }}
+          {{- range $env := .Values.api.env }}
+            - name: {{ $env.name }}
+              value: {{ $env.value | quote }}
+          {{- end }}
           {{- end }}
           {{- if .Values.api.lifecycle }}
           lifecycle:
@@ -87,11 +88,11 @@ spec:
 {{ toYaml .Values.api.resources | indent 12 }}
           volumeMounts:
             - name: config
-              mountPath: /opt/graviteeio-am-management-api/config/gravitee.yml
+              mountPath: /opt/graviteeio-management-api/config/gravitee.yml
               subPath: gravitee.yml
           {{- if .Values.api.logging.debug }}
             - name: config
-              mountPath: /opt/graviteeio-am-management-api/config/logback.xml
+              mountPath: /opt/graviteeio-management-api/config/logback.xml
               subPath: logback.xml
           {{- end }}
           {{- with .Values.api.extraVolumeMounts }}

@@ -1,28 +1,28 @@
-{{- if .Values.ui.enabled -}}
+{{- if .Values.portal.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "gravitee.ui.fullname" . }}
+  name: {{ template "gravitee.portal.fullname" . }}
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
-    app.kubernetes.io/component: "{{ .Values.ui.name }}"
+    app.kubernetes.io/component: "{{ .Values.portal.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
   annotations:
-    {{- range $key, $value := .Values.ui.service.annotations }}
+    {{- range $key, $value := .Values.portal.service.annotations }}
       {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
-  type: "{{ .Values.ui.service.type }}"
+  type: "{{ .Values.portal.service.type }}"
   ports:
-    - port: {{ .Values.ui.service.externalPort }}
-      targetPort: {{ .Values.ui.service.internalPort }}
+    - port: {{ .Values.portal.service.externalPort }}
+      targetPort: {{ .Values.portal.service.internalPort }}
       protocol: TCP
-      name: {{ .Values.ui.name }}
+      name: {{ .Values.portal.name }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/component: "{{ .Values.ui.name }}"
+    app.kubernetes.io/component: "{{ .Values.portal.name }}"
 {{- end -}}

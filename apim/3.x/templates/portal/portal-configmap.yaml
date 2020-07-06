@@ -1,0 +1,32 @@
+{{- if .Values.portal.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "gravitee.portal.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.portal.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+data:
+  use-gzip: "true"
+  gzip-level: "5"
+  gzip-types: "*"
+  config.json: |
+    {
+      {{- if .Values.portal.baseURL }}
+      "baseUrl": "{{ .Values.portal.baseURL }}",
+      {{- else }}
+      "baseUrl": "https://{{ index .Values.api.ingress.portal.hosts 0 }}{{ .Values.api.ingress.portal.path }}/environments/DEFAULT",
+      {{- end }}
+      "loaderUrl": "assets/images/gravitee-loader.gif",
+      "pagination": {
+        "size": {
+          "default": 10,
+          "values": [5, 10, 25, 50, 100]
+        }
+      }
+    }
+{{- end -}}

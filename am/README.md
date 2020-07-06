@@ -21,8 +21,9 @@ This chart will deploy the following:
   ```
   $ helm install --name graviteeio-am graviteeio/am
 
+**Note:** If you're using Helm 3, the name parameter is no more valid. Please check https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace
 
-  ## Create a chart archive
+## Create a chart archive
 
 To package this chart directory into a chart archive, run:
 
