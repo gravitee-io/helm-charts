@@ -13,11 +13,12 @@ kind: Ingress
 metadata:
   name: {{ template "gravitee.gateway.fullname" . }}
   labels:
-    app: {{ template "gravitee.name" . }}
-    component: "{{ .Values.gateway.name }}"
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion  }}
+    app.kubernetes.io/component: "{{ .Values.api.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
   annotations:
     {{- range $key, $value := .Values.gateway.ingress.annotations }}
       {{ $key }}: {{ $value | quote }}

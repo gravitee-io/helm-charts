@@ -261,7 +261,7 @@ api:
   enabled: true
   name: api
   logging:
-    debug: true
+    debug: false
     stdout:
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
     file:
@@ -352,7 +352,7 @@ api:
     internalPort: 8083
   # annotations:
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 3
     targetAverageUtilization: 50
@@ -406,7 +406,7 @@ gateway:
   type: Deployment
   name: gateway
   logging:
-    debug: true
+    debug: false
     stdout:
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
     file:
@@ -455,7 +455,7 @@ gateway:
     internalPort: 8082
   # annotations:
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 3
     targetAverageUtilization: 50
@@ -544,7 +544,7 @@ ui:
   #   - name: ENV_VARIABLE
   #     value: "some value"
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 3
     targetAverageUtilization: 50
