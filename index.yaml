@@ -2,8 +2,21 @@ apiVersion: v1
 entries:
   ae:
   - apiVersion: v1
+    appVersion: 1.2.0
+    created: "2020-07-10T15:24:22.374059+02:00"
+    description: Official Gravitee.io Helm chart for Alert Engine
+    digest: 151a38f99de92f55bf4106a16f7877f3f8980cc739ed1aa8f34f763db09ca34d
+    home: https://gravitee.io
+    icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
+    name: ae
+    sources:
+    - https://github.com/gravitee-io
+    urls:
+    - https://helm.gravitee.io/helm/ae/ae-1.1.4.tgz
+    version: 1.1.4
+  - apiVersion: v1
     appVersion: 1.1.0
-    created: "2020-06-23T15:29:44.023768+02:00"
+    created: "2020-07-10T15:24:22.372306+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: ad7d5b1811f75c8a33426e3366e42f20ab792d55a3efe2c117ce90e9ec4d3e28
     home: https://gravitee.io
@@ -16,7 +29,7 @@ entries:
     version: 1.1.3
   - apiVersion: v1
     appVersion: 1.1.0
-    created: "2020-06-23T15:29:44.021735+02:00"
+    created: "2020-07-10T15:24:22.371148+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 3e6cc2b6a12c9293485f9414443350609b420ded07727a885e4a8fbc383b265e
     home: https://gravitee.io
@@ -29,8 +42,21 @@ entries:
     version: 1.1.2
   am:
   - apiVersion: v1
+    appVersion: 3.0.4
+    created: "2020-07-10T15:24:22.395114+02:00"
+    description: Official Gravitee.io Helm chart for Access Management
+    digest: 4432683071a3c86f9503684348cf22f4bf1deb81bd7654123ad42dcc7365c389
+    home: https://gravitee.io
+    icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
+    name: am
+    sources:
+    - https://github.com/gravitee-io
+    urls:
+    - https://helm.gravitee.io/helm/am/am-1.0.6.tgz
+    version: 1.0.6
+  - apiVersion: v1
     appVersion: 2.10.15
-    created: "2020-06-23T15:29:44.047587+02:00"
+    created: "2020-07-10T15:24:22.393249+02:00"
     description: Official Gravitee.io Helm chart for Access Management
     digest: 57414724a6c5ef29273b78868161832ef6b79f850ade1859a590fbd7d5226ba0
     home: https://gravitee.io
@@ -43,7 +69,7 @@ entries:
     version: 1.0.5
   - apiVersion: v1
     appVersion: 2.10.15
-    created: "2020-06-23T15:29:44.045908+02:00"
+    created: "2020-07-10T15:24:22.391812+02:00"
     description: Official Gravitee.io Helm chart for Access Management
     digest: bf017acd70e24b6631329c3f9020f8e0d018eee4b238fdd471d4f114150ee046
     home: https://gravitee.io
@@ -56,7 +82,7 @@ entries:
     version: 1.0.4
   - apiVersion: v1
     appVersion: 2.10.14
-    created: "2020-06-23T15:29:44.043581+02:00"
+    created: "2020-07-10T15:24:22.389568+02:00"
     description: Official Gravitee.io Helm chart for Access Management
     digest: 750fe4ff3e23a65780f70a1b67f848d75e0a3a89651d4d03727891574a973ad1
     home: https://gravitee.io
@@ -69,7 +95,7 @@ entries:
     version: 1.0.3
   - apiVersion: v1
     appVersion: 2.10.14
-    created: "2020-06-23T15:29:44.038977+02:00"
+    created: "2020-07-10T15:24:22.385668+02:00"
     description: Official Gravitee.io Helm chart for Access Management
     digest: 5e58f82255bbcc03a8d4700291a157a827b081c0fe64e608538e899f256dcea7
     home: https://gravitee.io
@@ -82,7 +108,7 @@ entries:
     version: 1.0.2
   - apiVersion: v1
     appVersion: 2.10.9
-    created: "2020-06-23T15:29:44.033685+02:00"
+    created: "2020-07-10T15:24:22.382249+02:00"
     description: Official Gravitee.io Helm chart for Access Management
     digest: 0fad2b8dda9bdf32be67c91141ac95a1ab05fa23625465984d1d1696771b75b5
     home: https://gravitee.io
@@ -95,7 +121,7 @@ entries:
     version: 1.0.1
   - apiVersion: v1
     appVersion: 2.10.8
-    created: "2020-06-23T15:29:44.028966+02:00"
+    created: "2020-07-10T15:24:22.377971+02:00"
     description: Official Gravitee.io Helm chart for Access Management
     digest: 18a042e1d859532bf06399c98b44ac61c72b8f45d2aef99198f2380b2fd06c4a
     home: https://gravitee.io
@@ -108,8 +134,21 @@ entries:
     version: 1.0.0
   apim:
   - apiVersion: v1
+    appVersion: 1.30.15
+    created: "2020-07-10T15:24:22.431489+02:00"
+    description: Official Gravitee.io Helm chart for API Management
+    digest: a4ef14b486ebf60288f7b930674900900213302ab3148cfad5411f9e7cd28925
+    home: https://gravitee.io
+    icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
+    name: apim
+    sources:
+    - https://github.com/gravitee-io
+    urls:
+    - https://helm.gravitee.io/helm/apim/apim-1.29.8.tgz
+    version: 1.29.8
+  - apiVersion: v1
     appVersion: 1.30.13
-    created: "2020-06-23T15:29:44.08678+02:00"
+    created: "2020-07-10T15:24:22.429488+02:00"
     description: Official Gravitee.io Helm chart for API Management
     digest: e59489587cb241c1716dffaa541270b6c8f740781070119d46f3ec4ee32c08a6
     home: https://gravitee.io
@@ -122,7 +161,7 @@ entries:
     version: 1.29.7
   - apiVersion: v1
     appVersion: 1.30.12
-    created: "2020-06-23T15:29:44.083884+02:00"
+    created: "2020-07-10T15:24:22.426658+02:00"
     description: Official Gravitee.io Helm chart for API Management
     digest: 742b0f0afa9a08d777ab828af14f2f3522aa78df1ed7a09f42344d3c45120288
     home: https://gravitee.io
@@ -135,7 +174,7 @@ entries:
     version: 1.29.6
   - apiVersion: v1
     appVersion: 1.30.11
-    created: "2020-06-23T15:29:44.080624+02:00"
+    created: "2020-07-10T15:24:22.424551+02:00"
     description: Official Gravitee.io Helm chart for API Management
     digest: 7467db933d6721563f5bb375ddf8a85815b50801b2bde0e77731bd19e1dfb344
     home: https://gravitee.io
@@ -148,7 +187,7 @@ entries:
     version: 1.29.5
   - apiVersion: v1
     appVersion: 1.30.11
-    created: "2020-06-23T15:29:44.077872+02:00"
+    created: "2020-07-10T15:24:22.421645+02:00"
     description: Official Gravitee.io Helm chart for API Management
     digest: 832f621eb3d15999a42c16873f4086c56c2e1e166875e1f49a7e59958384b163
     home: https://gravitee.io
@@ -161,7 +200,7 @@ entries:
     version: 1.29.4
   - apiVersion: v1
     appVersion: 1.30.3
-    created: "2020-06-23T15:29:44.073324+02:00"
+    created: "2020-07-10T15:24:22.418387+02:00"
     description: Official Gravitee.io Helm chart for API Management
     digest: c18ae9005455b00b59ca77fe30f8502f0206089653b5683730e0c4c14fd7a439
     home: https://gravitee.io
@@ -174,7 +213,7 @@ entries:
     version: 1.29.3
   - apiVersion: v1
     appVersion: 1.30.3
-    created: "2020-06-23T15:29:44.068197+02:00"
+    created: "2020-07-10T15:24:22.415034+02:00"
     description: Official Gravitee.io Helm chart for API Management
     digest: 1c3d89de6d90483e596265f8cbbf85ae410ef9bec3adc13f8a948eb23152f02f
     home: https://gravitee.io
@@ -187,7 +226,7 @@ entries:
     version: 1.29.2
   - apiVersion: v1
     appVersion: 1.30.1
-    created: "2020-06-23T15:29:44.063732+02:00"
+    created: "2020-07-10T15:24:22.410375+02:00"
     description: Official Gravitee.io Helm chart for API Management
     digest: 0403f0b76a85291ff995aa69d71f2343efc9c5fe0221a69bfdf655d8b87e48cb
     home: https://gravitee.io
@@ -200,7 +239,7 @@ entries:
     version: 1.29.1
   - apiVersion: v1
     appVersion: 1.30.1
-    created: "2020-06-23T15:29:44.058695+02:00"
+    created: "2020-07-10T15:24:22.406613+02:00"
     description: Official Gravitee.io Helm chart for API Management
     digest: 5d9b54c31514f96cbb9373be0a98df2c2da314c6601a2e9d6fa8af31fadee3f2
     home: https://gravitee.io
@@ -213,7 +252,7 @@ entries:
     version: 1.29.0
   - apiVersion: v1
     appVersion: 1.30.1
-    created: "2020-06-23T15:29:44.056491+02:00"
+    created: "2020-07-10T15:24:22.403616+02:00"
     description: Official Gravitee.io Helm chart for API Management
     digest: 168aa9c72c8dda3191adc9400ebf4f356ae05e5faebc22e475a98a2aebf029df
     home: https://gravitee.io
@@ -226,7 +265,7 @@ entries:
     version: 1.28.0
   - apiVersion: v1
     appVersion: 1.29.4
-    created: "2020-06-23T15:29:44.05414+02:00"
+    created: "2020-07-10T15:24:22.401306+02:00"
     description: Official Gravitee.io Helm chart for API Management
     digest: a7941f9c84a52c22b36069d30fb016c3aa417043de84ecc4f4591ad06adccb86
     home: https://gravitee.io
@@ -239,7 +278,7 @@ entries:
     version: 1.27.2
   - apiVersion: v1
     appVersion: 1.29.4
-    created: "2020-06-23T15:29:44.050528+02:00"
+    created: "2020-07-10T15:24:22.398361+02:00"
     description: Official Gravitee.io Helm chart for API Management
     digest: d8bfacdade4b44689b45c07e086883a36e7a3022b32c67ba5d39130afb9345e9
     home: https://gravitee.io
@@ -252,8 +291,21 @@ entries:
     version: 1.27.1
   apim3:
   - apiVersion: v1
+    appVersion: 3.0.4
+    created: "2020-07-10T15:24:22.442066+02:00"
+    description: Official Gravitee.io Helm chart for API Management 3.x
+    digest: 3bfe65d20bac5e2befebc435115e357d961379bf81726ed45d3fb44dd0125fc1
+    home: https://gravitee.io
+    icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
+    name: apim3
+    sources:
+    - https://github.com/gravitee-io
+    urls:
+    - https://helm.gravitee.io/helm/apim3/apim3-3.0.3.tgz
+    version: 3.0.3
+  - apiVersion: v1
     appVersion: 3.0.3
-    created: "2020-06-23T15:29:44.098134+02:00"
+    created: "2020-07-10T15:24:22.43946+02:00"
     description: Official Gravitee.io Helm chart for API Management 3.x
     digest: 50b27f15abe91df643f82e060175ded249b236aaf699ddb7b7eb79e63d1506dc
     home: https://gravitee.io
@@ -266,7 +318,7 @@ entries:
     version: 3.0.2
   - apiVersion: v1
     appVersion: 3.0.2
-    created: "2020-06-23T15:29:44.095231+02:00"
+    created: "2020-07-10T15:24:22.43713+02:00"
     description: Official Gravitee.io Helm chart for API Management 3.x
     digest: 2f98c3b0666bc6e03e52d3be49cc6b9e1a65701e58323644976869da3b282212
     home: https://gravitee.io
@@ -279,7 +331,7 @@ entries:
     version: 3.0.1
   - apiVersion: v1
     appVersion: 3.0.2
-    created: "2020-06-23T15:29:44.092371+02:00"
+    created: "2020-07-10T15:24:22.435102+02:00"
     description: Official Gravitee.io Helm chart for API Management 3.x
     digest: 6a5aa856b4faf87ea459af52e40c95b7fce335393d082ebeb1f33bbeacdb6fa0
     home: https://gravitee.io
@@ -290,4 +342,4 @@ entries:
     urls:
     - https://helm.gravitee.io/helm/apim3/apim3-3.0.0.tgz
     version: 3.0.0
-generated: "2020-06-23T15:29:44.019617+02:00"
+generated: "2020-07-10T15:24:22.36975+02:00"
