@@ -248,6 +248,25 @@ data:
     # Allows to rate an API (default value: false)
     rating :
       enabled: {{ .Values.api.ratingEnabled }}
+
+    {{ if .Values.alerts.enabled }}
+    # Alert Engine communication
+    alerts:
+      alert-engine:
+        enabled: true
+        ws:
+          discovery: true
+          {{- with .Values.alerts.endpoints }}
+          endpoints:
+            {{ toYaml . | nindent 12 | trim -}}
+          {{- end }}
+          {{- if (eq .Values.alerts.security.enabled true) }}
+          security:
+            username: {{ .Values.alerts.security.username }}
+            password: {{ .Values.alerts.security.password }}
+          {{- end }}
+    {{- end }}
+
   {{- if .Values.api.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
