@@ -8,6 +8,9 @@ inMemoryAuth:
   enabled: true
   allowEmailInSearchResults: false
 
+openshiftRoutes:
+  enabled: false
+
 # Default password "admin", use bcrypt ($2a$ version) to generate a new one
 adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
 adminEmail:
@@ -360,9 +363,6 @@ api:
   ingress:
     enabled: true
     path: /management
-    # Set enabled to true to use openshift-routes instead of kubernetes-ingress
-    route:
-      enabled: false
     # Used to create an Ingress record.
     hosts:
       - apim.example.com
@@ -463,9 +463,6 @@ gateway:
   ingress:
     enabled: true
     path: /gateway
-    # Set enabled to true to use openshift-routes instead of kubernetes-ingress
-    route:
-      enabled: false
     # Used to create an Ingress record.
     hosts:
       - apim.example.com
@@ -558,9 +555,6 @@ ui:
   ingress:
     enabled: true
     path: /
-    # Set enabled to true to use openshift-routes instead of kubernetes-ingress
-    route:
-      enabled: false
     # Used to create an Ingress record.
     hosts:
       - apim.example.com

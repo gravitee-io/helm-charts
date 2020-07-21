@@ -3,7 +3,7 @@
 {{- $serviceGWName := include "gravitee.gateway.fullname" . -}}
 {{- $serviceGWPort := .Values.gateway.service.externalPort -}}
 {{- $ingressPath   := .Values.gateway.ingress.path -}}
-{{- if .Values.gateway.ingress.route.enabled -}}
+{{- if .Values.openshiftRoutes.enabled }}
 apiVersion: route.openshift.io/v1
 kind: Route
 {{- else }}
@@ -24,7 +24,7 @@ metadata:
       {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
-  {{- if .Values.gateway.ingress.route.enabled }}
+  {{- if .Values.openshiftRoutes.enabled }}
   host: {{ .Values.gateway.ingress.hosts | first }}
   path: {{ $ingressPath }}
   port:
