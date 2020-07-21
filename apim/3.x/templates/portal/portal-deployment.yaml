@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.portal.image.tag }}
     app.kubernetes.io/component: "{{ .Values.portal.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -45,11 +45,10 @@ spec:
         - name: {{ template "gravitee.portal.fullname" . }}
           image: "{{ .Values.portal.image.repository }}:{{ default .Chart.AppVersion .Values.portal.image.tag }}"
           imagePullPolicy: {{ .Values.portal.image.pullPolicy }}
-          {{- if .Values.portal.runAsNonRoot -}}
-          securityContext:  
-            runAsUser: 1001
+          securityContext:
+            runAsUser: 101
+            runAsGroup: 101
             runAsNonRoot: true
-          {{- end }}
           env:
             - name: PORTAL_API_URL
               value: "https://{{index .Values.api.ingress.portal.hosts 0 }}{{ .Values.api.ingress.portal.path }}/"
