@@ -61,6 +61,13 @@ spec:
           {{- end }}
           ports:
             - containerPort: {{ .Values.engine.service.internalPort }}
+          {{- if .Values.engine.env }}
+          env:
+          {{- range $env := .Values.engine.env }}
+            - name: {{ $env.name }}
+              value: {{ $env.value | quote }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.engine.lifecycle }}
           lifecycle:
             {{- if .Values.engine.lifecycle.postStart }}
