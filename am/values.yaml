@@ -315,7 +315,7 @@ ui:
     name: nginx
     type: ClusterIP
     externalPort: 8002
-    internalPort: 80
+    internalPort: 8080
     # annotations:
   ingress:
     enabled: true
