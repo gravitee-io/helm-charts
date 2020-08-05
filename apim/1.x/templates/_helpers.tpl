@@ -63,4 +63,21 @@ Return the apiVersion of ingress.
 {{- else -}}
     {{- print "extensions/v1beta1" -}}
 {{- end -}}
+
+{{/*
+Create auth header for api
+*/}}
+{{- define "gravitee.api.authheader" -}}
+{{- $auth := printf "admin:%s" .Values.api.http.services.core.http.authentication.password -}}
+{{- $base64auth := b64enc $auth -}}
+{{- printf "Basic %s" $base64auth -}}
+{{- end -}}
+
+{{/*
+Create auth header for gateway
+*/}}
+{{- define "gravitee.gateway.authheader" -}}
+{{- $auth := printf "admin:%s" .Values.gateway.http.services.core.http.authentication.password -}}
+{{- $base64auth := b64enc $auth -}}
+{{- printf "Basic %s" $base64auth -}}
 {{- end -}}

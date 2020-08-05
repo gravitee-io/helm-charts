@@ -105,16 +105,12 @@ data:
     services:
       core:
         http:
-          port: 18082
-          host: localhost
+          port: {{ .Values.gateway.http.services.core.http.port |default "18082" }}
+          host: {{ .Values.gateway.http.services.core.http.host |default "localhost" }}
           authentication:
-            # authentication type to be used for the core services
-            # - none : to disable authentication
-            # - basic : to use basic authentication
-            # default is "basic"
             type: basic
             users:
-              admin: adminadmin
+              admin: {{ .Values.gateway.http.services.core.http.authentication.password }}
       # Synchronization daemon used to keep the gateway state in sync with the configuration from the management repository
       # Be aware that, by disabling it, the gateway will not be sync with the configuration done through management API
       # and management UI

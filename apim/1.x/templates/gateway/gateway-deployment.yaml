@@ -81,6 +81,26 @@ spec:
                 command: {{ .Values.gateway.lifecycle.preStop }}
             {{- end }}
           {{- end }}
+          {{- if .Values.gateway.http.services.core.service.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /_node/health
+              port: {{ .Values.gateway.http.services.core.service.externalPort }}
+              httpHeaders:
+                - name: Authorization
+                  value: {{ template "gravitee.gateway.authheader" . }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /_node/health
+              port: {{ .Values.gateway.http.services.core.service.externalPort }}
+              httpHeaders:
+                - name: Authorization
+                  value: {{ template "gravitee.gateway.authheader" . }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          {{- else }}
           livenessProbe:
             tcpSocket:
               port: {{ .Values.gateway.service.internalPort }}
@@ -89,8 +109,9 @@ spec:
           readinessProbe:
             tcpSocket:
               port: {{ .Values.gateway.service.internalPort }}
-            initialDelaySeconds: 5
+            initialDelaySeconds: 60
             periodSeconds: 30
+          {{- end }}
           resources:
 {{ toYaml .Values.gateway.resources | indent 12 }}
           volumeMounts:
