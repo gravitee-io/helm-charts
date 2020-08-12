@@ -58,7 +58,8 @@ spec:
             runAsUser: 1001
             runAsNonRoot: true
           ports:
-            - containerPort: {{ .Values.gateway.service.internalPort }}
+            - name: {{ .Values.gateway.service.internalPortName }}
+              containerPort: {{ .Values.gateway.service.internalPort }}
           {{- if .Values.gateway.env }}
           env:
             {{- range $env := .Values.gateway.env }}

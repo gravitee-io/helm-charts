@@ -65,7 +65,8 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.portal.service.internalPort }}
+            - name: {{ .Values.portal.service.internalPortName }}
+              containerPort: {{ .Values.portal.service.internalPort }}
           {{- if .Values.portal.lifecycle }}
           lifecycle:
             {{- if .Values.portal.lifecycle.postStart }}

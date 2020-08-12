@@ -60,7 +60,8 @@ spec:
             runAsNonRoot: true
           {{- end }}
           ports:
-            - containerPort: {{ .Values.engine.service.internalPort }}
+            - name: {{ .Values.engine.service.internalPortName }}
+              containerPort: {{ .Values.engine.service.internalPort }}
           {{- if .Values.engine.env }}
           env:
           {{- range $env := .Values.engine.env }}

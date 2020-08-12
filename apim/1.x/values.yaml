@@ -359,6 +359,7 @@ api:
     type: ClusterIP
     externalPort: 83
     internalPort: 8083
+    internalPortName: http
   # annotations:
   autoscaling:
     enabled: true
@@ -459,6 +460,7 @@ gateway:
     type: ClusterIP
     externalPort: 82
     internalPort: 8082
+    internalPortName: http
   # annotations:
   autoscaling:
     enabled: true
@@ -557,6 +559,7 @@ ui:
     type: ClusterIP
     externalPort: 8002
     internalPort: 80
+    internalPortName: http
   # annotations:
   ingress:
     enabled: true
