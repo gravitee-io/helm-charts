@@ -289,6 +289,9 @@ type] |`+ClusterIP+`
 |`+ui.service.internalPort+` |K8s UI service internal port (container)
 |`+80+`
 
+|`+ui.service.internalPortName+` |K8s UI service internal port name
+(container) |`+http+`
+
 |`+ui.ingress.enabled+` |Whether Ingress is enabled or not |`+true+`
 
 |`+ui.ingress.hosts+` |If `+ui.ingress.enabled+` is enabled, set
@@ -529,6 +532,9 @@ type] |`+ClusterIP+`
 |`+api.service.internalPort+` |K8s service internal port (container)
 |`+8083+`
 
+|`+api.service.internalPortName+` |K8s service internal port name
+(container) |`+http+`
+
 |`+api.autoscaling.enabled+` |Whether auto-scaling is enabled or not
 |`+true+`
 
@@ -666,6 +672,9 @@ type] |`+ClusterIP+`
 
 |`+gateway.service.internalPort+` |K8s Gateway service internal port
 (container) |`+8082+`
+
+|`+gateway.service.internalPortName+` |K8s Gateway service internal port
+name (container) |`+http+`
 
 |`+gateway.autoscaling.enabled+` |Whether auto-scaling is enabled or not
 |`+true+`
