@@ -1,0 +1,23 @@
+{{- if .Values.ui.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "gravitee.ui.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.ui.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+data:
+  use-gzip: "true"
+  gzip-level: "5"
+  gzip-types: "*"
+  constants.json: |
+    {
+      "API_URL": "https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}",
+      "GRAVITEE_ENABLED": true,
+      "GRAVITEE_MANAGEMENT_UI_URL": "{{ .Values.apim.console.url }}"
+    }
+{{- end -}}

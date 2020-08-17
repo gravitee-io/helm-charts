@@ -1,0 +1,277 @@
+# Default values for Gravitee.io Designer.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+chaos:
+  enabled: false
+
+mongo:
+  # uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
+  # servers: |
+  #   - host: mongo1
+  #     port: 27017
+  #   - host: mongo2
+  #     port: 27017
+  sslEnabled: false
+  socketKeepAlive: false
+  rs: rs0
+  rsEnabled: true
+  dbhost: mongo-mongodb-replicaset
+  dbname: gravitee
+  dbport: 27017
+  connectTimeoutMS: 30000
+  auth:
+    enabled: false
+    source: admin
+    username:
+    password:
+
+mongodb-replicaset:
+  enabled: false
+  replicas: 3
+  replicaSetName: rs0
+  auth:
+    enabled: false
+    adminUser: username
+    adminPassword: password
+    metricsUser: metrics
+    metricsPassword: password
+    key: keycontent
+    # existingKeySecret:
+    # existingAdminSecret:
+    # existingMetricsSecret:
+  image:
+    repository: mongo
+    tag: 3.6
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  persistentVolume:
+    enabled: true
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+  configmap: {}
+
+apim:
+  console:
+    url: https://apim.example.com/console
+  management:
+    url: https://apim.example.com/management
+    cookie:
+      name: Auth-Graviteeio-APIM
+
+api:
+  enabled: true
+  name: designer-api
+  restartPolicy: OnFailure
+  reloadOnConfigChange: true
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicaCount: 1
+  image:
+    repository: graviteeio/designer-api
+    # tag: 1.0.0
+    pullPolicy: Always
+    # pullSecrets:
+    #   - name: gravitee_secrets
+  # env:
+  #   - name: ENV_VARIABLE
+  #     value: "some value"
+  service:
+    type: ClusterIP
+    externalPort: 83
+    internalPort: 3001
+  # annotations:
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
+  ingress:
+    enabled: true
+    path: /api
+    # Used to create an Ingress record.
+    hosts:
+      - design.example.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      # kubernetes.io/tls-acme: "true"
+    #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+    tls:
+      - hosts:
+          - design.example.com
+        secretName: api-custom-cert
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    #  lifecycle:
+    #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee Designer API" ]'
+    #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee Designer API" ]'
+    ## Additional gravitee API volume mounts
+    # Defines additional volume mounts.
+    # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim
+
+ui:
+  enabled: true
+  name: designer-ui
+  replicaCount: 1
+  image:
+    repository: graviteeio/designer-ui
+    # tag: 1.0.0
+    pullPolicy: Always
+  # pullSecrets:
+  #   - name: gravitee_secrets
+  # env:
+  #   - name: ENV_VARIABLE
+  #     value: "some value"
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
+  service:
+    name: nginx
+    type: ClusterIP
+    externalPort: 8002
+    internalPort: 8080
+    # annotations:
+  ingress:
+    enabled: true
+    path: /
+    # Used to create an Ingress record.
+    hosts:
+      - design.example.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/app-root: /
+      kubernetes.io/rewrite-target: /
+      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
+      #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+    tls:
+      - hosts:
+          - designer.example.com
+        secretName: api-custom-cert
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    #  lifecycle:
+    #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee Designer UI" ]'
+    #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee Designer UI" ]'
+    ## Additional gravitee ui volume mounts
+    # Defines additional volume mounts.
+    # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+
+generator:
+  enabled: true
+  name: designer-generator
+  restartPolicy: OnFailure
+  reloadOnConfigChange: true
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicaCount: 1
+  image:
+    repository: graviteeio/designer-api
+    # tag: 1.0.0
+    pullPolicy: Always
+    # pullSecrets:
+    #   - name: gravitee_secrets
+  # env:
+  #   - name: ENV_VARIABLE
+  #     value: "some value"
+  service:
+    type: ClusterIP
+    externalPort: 84
+    internalPort: 3001
+  # annotations:
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
+  ingress:
+    enabled: true
+    path: /generator
+    # Used to create an Ingress record.
+    hosts:
+      - host: design.example.com
+        paths: 
+          - /generator
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      # kubernetes.io/tls-acme: "true"
+    #tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+    tls:
+      - hosts:
+          - design.example.com
+        secretName: api-custom-cert
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    #  lifecycle:
+    #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee Designer Generator" ]'
+    #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee Designer Generator" ]'
+    ## Additional gravitee API volume mounts
+    # Defines additional volume mounts.
+    # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim

@@ -1,0 +1,38 @@
+{{- if .Values.generator.enabled -}}
+{{- if .Values.generator.ingress.enabled -}}
+{{- $serviceAPIName := include "gravitee.generator.fullname" . -}}
+{{- $serviceAPIPort := .Values.generator.service.externalPort -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "gravitee.generator.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.generator.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    {{- range $key, $value := .Values.generator.ingress.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- range $host := .Values.generator.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+        {{- range .paths }}
+          - path: {{ . }}
+            backend:
+              serviceName: {{ $serviceAPIName }}
+              servicePort: {{ $serviceAPIPort }}
+        {{- end -}}
+    {{- end -}}
+  {{- if .Values.generator.ingress.tls }}
+  tls:
+{{ toYaml .Values.generator.ingress.tls | indent 4 }}
+  {{- end -}}
+{{- end -}}
+{{- end -}}

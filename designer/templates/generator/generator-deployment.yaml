@@ -1,0 +1,110 @@
+{{- if .Values.generator.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "gravitee.generator.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.generator.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  replicas: {{ .Values.generator.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "gravitee.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "{{ .Values.generator.name }}"
+  template:
+    metadata:
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
+        {{- if .Values.generator.reloadOnConfigChange }}
+        checksum/config: {{ include (print $.Template.BasePath "/generator/generator-configmap.yaml") . | sha256sum }}
+        {{- end }}
+      labels:
+        app.kubernetes.io/name: {{ template "gravitee.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "{{ .Values.generator.name }}"
+    spec:
+    {{- if .Values.generator.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.generator.nodeSelector | indent 8 }}
+    {{- end }}
+      {{- if .Values.generator.extraInitContainers }}
+      initContainers:
+        {{- with .Values.generator.extraInitContainers }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ template "gravitee.generator.fullname" . }}
+          image: "{{ .Values.generator.image.repository }}:{{ default .Chart.AppVersion .Values.generator.image.tag }}"
+          imagePullPolicy: {{ .Values.generator.image.pullPolicy }}
+          {{- if .Values.generator.runAsNonRoot -}}
+          securityContext:  
+            runAsUser: 1001
+            runAsNonRoot: true
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.generator.service.internalPort }}
+          env:
+          - name: MONGO_URI
+            value: {{ .Values.mongo.uri }}
+          - name: HOST
+            value: 0.0.0.0
+          {{- if .Values.generator.env }}
+            {{- with .Values.generator.env }}
+            {{- tpl . $ | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.generator.lifecycle }}
+          lifecycle:
+            {{- if .Values.generator.lifecycle.postStart }}
+            postStart:
+              exec:
+                command: {{ .Values.generator.lifecycle.postStart }}
+            {{- end }}
+            {{- if .Values.generator.lifecycle.preStop }}
+            preStop:
+              exec:
+                command: {{ .Values.generator.lifecycle.preStop }}
+            {{- end }}
+          {{- end }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.generator.service.internalPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.generator.service.internalPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          resources:
+{{ toYaml .Values.generator.resources | indent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /app/.env.dist
+              subPath: env.dist
+          {{- with .Values.generator.extraVolumeMounts }}
+          {{- tpl . $ | nindent 12 }}
+          {{- end }}
+      {{- if .Values.generator.image.pullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.generator.image.pullSecrets }}
+      {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "gravitee.generator.fullname" . }}
+        {{- with .Values.generator.extraVolumes }}
+          {{- tpl . $ | nindent 8 }}
+        {{- end }}
+{{- end -}}
