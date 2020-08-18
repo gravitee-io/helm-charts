@@ -61,8 +61,9 @@ apim:
   console:
     url: https://apim.example.com/console
   management:
-    url: https://apim.example.com/management
+    url: http://graviteeio-apim3-api:83/management
     cookie:
+      domain: .example.com
       name: Auth-Graviteeio-APIM
 
 api:
@@ -233,27 +234,6 @@ generator:
     maxReplicas: 1
     targetAverageUtilization: 50
     targetMemoryAverageUtilization: 80
-  ingress:
-    enabled: true
-    path: /generator
-    # Used to create an Ingress record.
-    hosts:
-      - host: design.example.com
-        paths: 
-          - /generator
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
-      # kubernetes.io/tls-acme: "true"
-    #tls:
-      # Secrets must be manually created in the namespace.
-      # - secretName: chart-example-tls
-      #   hosts:
-      #     - chart-example.local
-    tls:
-      - hosts:
-          - design.example.com
-        secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little

@@ -16,14 +16,14 @@ data:
     APIZR_API_KEY=ZQvoqSZtRrueflUhqAXK
     APIZR_API_KEY_HEADER_NAME=x-apizr-apikey
     AUTOSWAGGER_FRONT_URL={{ index .Values.ui.ingress.hosts 0 }}
-    COOKIE_DOMAIN=.example.com
+    COOKIE_DOMAIN={{ .Values.apim.management.cookie.domain }}
 
     ############ JWT SECTION ###############
     JWT_COOKIE_NAME=apizr-login-cookie
     JWT_SECRET=45890GJKDLZEEF567890
     
     ############ SWAGGER PRODUCER SECTION ###############
-    SWAGGER_PRODUCER_URL=https://design.example.com/generator
+    SWAGGER_PRODUCER_URL=http://{{ template "gravitee.generator.fullname" . }}:{{ .Values.generator.service.externalPort }}
     SWAGGER_PRODUCER_APIKEY=PgUfDekIFAYmanUeRIQU
     
     ############# Gravitee configuration ################
