@@ -54,12 +54,8 @@ spec:
           {{- end }}
           ports:
             - containerPort: {{ .Values.generator.service.internalPort }}
-          env:
-          - name: MONGO_URI
-            value: {{ .Values.mongo.uri }}
-          - name: HOST
-            value: 0.0.0.0
           {{- if .Values.generator.env }}
+          env:
             {{- with .Values.generator.env }}
             {{- tpl . $ | nindent 12 }}
             {{- end }}
@@ -91,8 +87,8 @@ spec:
 {{ toYaml .Values.generator.resources | indent 12 }}
           volumeMounts:
             - name: config
-              mountPath: /app/.env.dist
-              subPath: env.dist
+              mountPath: /app/.env
+              subPath: env.props
           {{- with .Values.generator.extraVolumeMounts }}
           {{- tpl . $ | nindent 12 }}
           {{- end }}

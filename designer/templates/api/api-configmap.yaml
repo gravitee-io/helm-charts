@@ -11,7 +11,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 data:
-  env.dist: |
+  env.props: |
     ############## APIGROW MAIN CONFIGURATION ############## 
     APIZR_API_KEY=ZQvoqSZtRrueflUhqAXK
     APIZR_API_KEY_HEADER_NAME=x-apizr-apikey
@@ -32,4 +32,7 @@ data:
     GRAVITEE_COOKIE_NAME={{ .Values.apim.management.cookie.name }}
     GRAVITEE_ORGANIZATION=DEFAULT
     GRAVITEE_ENVIRONMENT=DEFAULT
+
+    MONGO_URI={{ .Values.mongo.uri }}
+    HOST=0.0.0.0
 {{- end -}}

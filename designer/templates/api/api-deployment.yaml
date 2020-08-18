@@ -54,14 +54,8 @@ spec:
           {{- end }}
           ports:
             - containerPort: {{ .Values.api.service.internalPort }}
-          env:
-          - name: MONGO_URI
-            value: {{ .Values.mongo.uri }}
-          - name: HOST
-            value: 0.0.0.0
-          - name: COOKIE_DOMAIN
-            value: .example.com
           {{- if .Values.api.env }}
+          env:
             {{- with .Values.api.env }}
             {{- tpl . $ | nindent 12 }}
             {{- end }}
@@ -93,8 +87,8 @@ spec:
 {{ toYaml .Values.api.resources | indent 12 }}
           volumeMounts:
             - name: config
-              mountPath: /app/.env.dist
-              subPath: env.dist
+              mountPath: /app/.env
+              subPath: env.props
           {{- with .Values.api.extraVolumeMounts }}
           {{- tpl . $ | nindent 12 }}
           {{- end }}
