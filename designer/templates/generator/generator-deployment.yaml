@@ -54,8 +54,12 @@ spec:
           {{- end }}
           ports:
             - containerPort: {{ .Values.generator.service.internalPort }}
-          {{- if .Values.generator.env }}
           env:
+            - name: HOST
+              value: 0.0.0.0
+            - name: APIZR_API_KEY_VALUE
+              value: PgUfDekIFAYmanUeRIQU
+          {{- if .Values.generator.env }}
             {{- with .Values.generator.env }}
             {{- tpl . $ | nindent 12 }}
             {{- end }}
