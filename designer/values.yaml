@@ -215,7 +215,7 @@ generator:
     type: RollingUpdate
   replicaCount: 1
   image:
-    repository: graviteeio/designer-api
+    repository: graviteeio/designer-generator
     # tag: 1.0.0
     pullPolicy: Always
     # pullSecrets:
@@ -226,7 +226,7 @@ generator:
   service:
     type: ClusterIP
     externalPort: 84
-    internalPort: 3001
+    internalPort: 3003
   # annotations:
   autoscaling:
     enabled: true
