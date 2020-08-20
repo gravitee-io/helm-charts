@@ -47,11 +47,9 @@ spec:
         - name: {{ template "gravitee.generator.fullname" . }}
           image: "{{ .Values.generator.image.repository }}:{{ default .Chart.AppVersion .Values.generator.image.tag }}"
           imagePullPolicy: {{ .Values.generator.image.pullPolicy }}
-          {{- if .Values.generator.runAsNonRoot -}}
           securityContext:  
             runAsUser: 1001
             runAsNonRoot: true
-          {{- end }}
           ports:
             - containerPort: {{ .Values.generator.service.internalPort }}
           env:
