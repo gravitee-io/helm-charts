@@ -24,7 +24,7 @@ $ helm repo add graviteeio https://helm.gravitee.io
 * Install it
 +
 ....
-$ helm install --name graviteeio-apim3x graviteeio/apim3
+$ helm install graviteeio-apim3x graviteeio/apim3
 ....
 
 === Create a chart archive
@@ -42,7 +42,7 @@ To install the chart from the Helm repository with the release name
 
 [source,bash]
 ----
-$ helm install --name graviteeio-apim3x graviteeio/apim3
+$ helm install graviteeio-apim3x graviteeio/apim3
 ----
 
 *Note:* If you're using Helm 3, the name parameter is no more valid.
@@ -743,7 +743,7 @@ can be provided while installing the chart. For example,
 
 [source,bash]
 ----
-$ helm install --name my-release -f values.yaml gravitee
+$ helm install my-release -f values.yaml gravitee
 ----
 
 ____

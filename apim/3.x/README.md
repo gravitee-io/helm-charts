@@ -21,7 +21,7 @@ This chart will deploy the following:
   ```
 * Install it
   ```
-  $ helm install --name graviteeio-apim3x graviteeio/apim3
+  $ helm install graviteeio-apim3x graviteeio/apim3
   ```
 
 ## Create a chart archive
@@ -37,7 +37,7 @@ $ helm package .
 To install the chart from the Helm repository with the release name `graviteeio-apim3x`:
 
 ```bash
-$ helm install --name graviteeio-apim3x graviteeio/apim3
+$ helm install graviteeio-apim3x graviteeio/apim3
 ```
 
 **Note:** If you're using Helm 3, the name parameter is no more valid. Please check https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace
@@ -96,9 +96,9 @@ mongo:
   dbname: gravitee
   auth:
     enabled: false
-    username: 
+    username:
     password:
-``` 
+```
 
 If neither `mongo.uri` or `mongo.servers` are provided, you have to define the following configuration options:
 
@@ -335,7 +335,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --name my-release -f values.yaml gravitee
+$ helm install my-release -f values.yaml gravitee
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

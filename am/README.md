@@ -19,7 +19,7 @@ This chart will deploy the following:
   ```
 * Install it
   ```
-  $ helm install --name graviteeio-am graviteeio/am
+  $ helm install graviteeio-am graviteeio/am
 
 **Note:** If you're using Helm 3, the name parameter is no more valid. Please check https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace
 
@@ -36,7 +36,7 @@ $ helm package .
 To install the chart from the Helm repository with the release name `graviteeio-am`:
 
 ```bash
-$ helm install --name graviteeio-am graviteeio/am
+$ helm install graviteeio-am graviteeio/am
 ```
 
 To install the chart using the chart archive, run:
