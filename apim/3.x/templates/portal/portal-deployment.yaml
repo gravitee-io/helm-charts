@@ -53,10 +53,16 @@ spec:
             - name: PORTAL_API_URL
               value: "https://{{index .Values.api.ingress.portal.hosts 0 }}{{ .Values.api.ingress.portal.path }}/"
           {{- if .Values.portal.env }}
-          {{- range $env := .Values.portal.env }}
+            {{- range $env := .Values.portal.env }}
             - name: {{ $env.name }}
+              {{- if $env.value }}
               value: {{ $env.value | quote }}
-          {{- end }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+            {{- end }}
           {{- end }}
           ports:
             - containerPort: {{ .Values.portal.service.internalPort }}

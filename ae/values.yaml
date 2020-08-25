@@ -44,9 +44,14 @@ engine:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
-  # env:
-  #   - name: ENV_VARIABLE
-  #     value: "some value"
+  #env:
+  #  - name: ENV_VARIABLE
+  #    value: ENV_VARIABLE_VALUE
+  #  - name: ENV_VARIABLE_WITH_FROM
+  #    valueFrom:
+  #      configMapKeyRef:
+  #        name: special-config
+  #        key: SPECIAL_LEVEL
   service:
     type: ClusterIP
     externalPort: 82

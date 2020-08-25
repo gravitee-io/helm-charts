@@ -61,10 +61,16 @@ spec:
             - containerPort: {{ .Values.gateway.service.internalPort }}
           {{- if .Values.gateway.env }}
           env:
-          {{- range $env := .Values.gateway.env }}
+            {{- range $env := .Values.gateway.env }}
             - name: {{ $env.name }}
+              {{- if $env.value }}
               value: {{ $env.value | quote }}
-          {{- end }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+            {{- end }}
           {{- end }}
           {{- if .Values.gateway.lifecycle }}
           lifecycle:

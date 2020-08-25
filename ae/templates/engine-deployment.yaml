@@ -65,7 +65,13 @@ spec:
           env:
           {{- range $env := .Values.engine.env }}
             - name: {{ $env.name }}
+              {{- if $env.value }}
               value: {{ $env.value | quote }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
           {{- end }}
           {{- end }}
           {{- if .Values.engine.lifecycle }}

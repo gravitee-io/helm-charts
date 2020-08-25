@@ -54,10 +54,16 @@ spec:
             - containerPort: {{ .Values.api.service.internalPort }}
           {{- if .Values.api.env }}
           env:
-          {{- range $env := .Values.api.env }}
+            {{- range $env := .Values.api.env }}
             - name: {{ $env.name }}
+              {{- if $env.value }}
               value: {{ $env.value | quote }}
-          {{- end }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+            {{- end }}
           {{- end }}
           {{- if .Values.api.lifecycle }}
           lifecycle:
