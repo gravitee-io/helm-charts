@@ -18,6 +18,6 @@ Please look in the chart directories for the documentation for each chart. These
 | ------------------------------------------ | ------------------------------------------------------------------------------- |
 | [API Management 1.x](./apim/1.x/README.md)         | https://docs.gravitee.io/apim/1.x/apim_installguide_kubernetes.html         |
 | [API Management 3.x](./apim/3.x/README.md)         | https://docs.gravitee.io/apim/3.x/apim_installguide_kubernetes.html         |
-| [Access Management 2.x](./am/README.md)        | https://docs.gravitee.io/am/2.x/apim_installguide_kubernetes.html           |
-| [Access Management 3.x](./am/README.md)        | https://docs.gravitee.io/am/current/apim_installguide_kubernetes.html       |
+| [Access Management 2.x](./am/README.md)        | https://docs.gravitee.io/am/2.x/am_installguide_kubernetes.html           |
+| [Access Management 3.x](./am/README.md)        | https://docs.gravitee.io/am/current/am_installguide_kubernetes.html       |
 | [Alert Engine](./ae/README.md)             | https://docs.gravitee.io/ae/installguide_docker.html                            |
