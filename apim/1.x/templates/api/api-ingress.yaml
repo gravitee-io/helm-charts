@@ -3,7 +3,7 @@
 {{- $serviceAPIName := include "gravitee.api.fullname" . -}}
 {{- $serviceAPIPort := .Values.api.service.externalPort -}}
 {{- $ingressPath   := .Values.api.ingress.path -}}
-apiVersion: extensions/v1beta1
+apiVersion: {{ template "ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "gravitee.api.fullname" . }}

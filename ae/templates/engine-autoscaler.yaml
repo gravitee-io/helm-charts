@@ -13,7 +13,7 @@ metadata:
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1beta1
+    apiVersion: apps/v1
     kind: {{ .Values.engine.type }}
     name: {{ template "gravitee.engine.fullname" . }}
   minReplicas: {{ .Values.engine.autoscaling.minReplicas }}
