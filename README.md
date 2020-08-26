@@ -7,8 +7,7 @@ The repository includes the following charts:
 - Gravitee.io Access Management
 - Gravitee.io Alert Engine 
 
-**Note:** These charts are only compatible with Kubernetes < 1.16. For latest versions of k8s, please check that issue: https://github.com/gravitee-io/issues/issues/2835 and the associated Pull Request: https://github.com/gravitee-io/helm-charts/pull/30
-
+**Note:** These charts are only compatible with Kubernetes >= 1.9
 
 ## Charts
 
