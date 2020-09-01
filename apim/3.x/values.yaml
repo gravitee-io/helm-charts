@@ -123,6 +123,11 @@ mongo:
     username:
     password:
 
+jdbc:
+  url: jdbc:mysql://localhost:3306/gravitee
+  username: 
+  password: 
+
 mongodb-replicaset:
   enabled: false
   replicas: 3
@@ -252,7 +257,13 @@ alerts:
     enabled: false
     username: admin
     password: adminadmin
-        
+
+management:
+  type: mongodb
+
+ratelimit:
+  type: mongodb
+
 api:
   enabled: true
   name: api

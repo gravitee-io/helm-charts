@@ -34,7 +34,8 @@ data:
     {{- end }}
 
     management:
-      type: mongodb
+      type: {{ .Values.management.type | default "mongodb" }}
+      {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
       mongodb:
         sslEnabled: {{ .Values.mongo.sslEnabled }}
         socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
@@ -51,6 +52,18 @@ data:
         {{- else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
+      {{- else if (eq .Values.management.type "jdbc") }}
+      jdbc:
+        url: {{ .Values.jdbc.url }}
+        {{- if .Values.jdbc.username }}
+        username: {{ .Values.jdbc.username }}
+        {{- end }}
+        {{- if .Values.jdbc.password }}
+        password: {{ .Values.jdbc.password }}
+        {{- end }}
+      {{- end }}
+
+      
     services:
       core:
         http: 
