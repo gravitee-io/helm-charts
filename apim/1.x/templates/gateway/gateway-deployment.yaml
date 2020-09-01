@@ -98,7 +98,7 @@ spec:
               httpHeaders:
                 - name: Authorization
                   value: {{ template "gravitee.gateway.authheader" . }}
-            initialDelaySeconds: 60
+            initialDelaySeconds: 5
             periodSeconds: 30
           {{- else }}
           livenessProbe:
@@ -109,7 +109,7 @@ spec:
           readinessProbe:
             tcpSocket:
               port: {{ .Values.gateway.service.internalPort }}
-            initialDelaySeconds: 60
+            initialDelaySeconds: 5
             periodSeconds: 30
           {{- end }}
           resources:
