@@ -9,12 +9,18 @@ api:
     - name: get-jdbc-plugin
       image: 'alpine'
       command: ['sh', '-c', "mkdir -p /tmp/plugins && wget -O /tmp/plugins/gravitee-repository-jdbc-3.1.1.zip https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-jdbc/gravitee-repository-jdbc-3.1.1.zip"]
+      securityContext:  
+        runAsUser: 1001
+        runAsNonRoot: true
       volumeMounts:
         - name: graviteeio-apim-plugins
           mountPath: /tmp/plugins
     - name: get-jdbc-driver
       image: 'alpine'
       command: ['sh', '-c', "mkdir -p /tmp/jdbc && wget -O /tmp/jdbc/postgresql-42.2.16.jar https://jdbc.postgresql.org/download/postgresql-42.2.16.jar "]
+      securityContext:  
+        runAsUser: 1001
+        runAsNonRoot: true
       volumeMounts:
         - name: graviteeio-apim-jdbc-driver
           mountPath: /tmp/jdbc
@@ -22,7 +28,7 @@ api:
     - name: graviteeio-apim-plugins
       mountPath: /opt/graviteeio-management-api/plugins-ext
     - name: graviteeio-apim-jdbc-driver
-      mountPath: /opt/graviteeio-management-api/plugins/ext/repository-jdbc
+      mountPath: /opt/graviteeio-management-api/plugins-ext/ext/repository-jdbc
   extraVolumes: |
     - name: graviteeio-apim-plugins
       emptyDir: {}
@@ -39,12 +45,18 @@ gateway:
     - name: get-jdbc-plugin
       image: 'alpine'
       command: ['sh', '-c', "mkdir -p /tmp/plugins && wget -O /tmp/plugins/gravitee-repository-jdbc-3.1.1.zip https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-jdbc/gravitee-repository-jdbc-3.1.1.zip"]
+      securityContext:  
+        runAsUser: 1001
+        runAsNonRoot: true
       volumeMounts:
         - name: graviteeio-apim-plugins
           mountPath: /tmp/plugins
     - name: get-jdbc-driver
       image: 'alpine'
       command: ['sh', '-c', "mkdir -p /tmp/jdbc && wget -O /tmp/jdbc/postgresql-42.2.16.jar https://jdbc.postgresql.org/download/postgresql-42.2.16.jar "]
+      securityContext:  
+        runAsUser: 1001
+        runAsNonRoot: true
       volumeMounts:
         - name: graviteeio-apim-jdbc-driver
           mountPath: /tmp/jdbc
@@ -52,7 +64,7 @@ gateway:
     - name: graviteeio-apim-plugins
       mountPath: /opt/graviteeio-gateway/plugins-ext
     - name: graviteeio-apim-jdbc-driver
-      mountPath: /opt/graviteeio-gateway/plugins/ext/repository-jdbc
+      mountPath: /opt/graviteeio-gateway/plugins-ext/ext/repository-jdbc
   extraVolumes: |
     - name: graviteeio-apim-plugins
       emptyDir: {}
