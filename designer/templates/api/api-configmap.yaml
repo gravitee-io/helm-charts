@@ -32,6 +32,8 @@ data:
     GRAVITEE_COOKIE_NAME={{ .Values.apim.management.cookie.name }}
     GRAVITEE_ORGANIZATION=DEFAULT
     GRAVITEE_ENVIRONMENT=DEFAULT
+    LICENSE_KEY={{ .Values.license.key }}
+    LICENSE_EXPIRATION={{ .Values.license.expirationDate }}
 
     MONGO_URI={{ .Values.mongo.uri }}
     HOST=0.0.0.0
