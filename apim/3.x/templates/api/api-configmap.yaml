@@ -262,6 +262,18 @@ data:
     rating :
       enabled: {{ .Values.api.ratingEnabled }}
 
+    notifiers:
+      email:
+        enabled: true
+        host: ${email.host}
+        subject: ${email.subject}
+        port: ${email.port}
+        from: ${email.from}
+        {{- if or .Values.smtp.username .Values.smtp.password }}
+        username: ${email.username}
+        password: ${email.password}
+        {{- end }}
+
     {{ if .Values.alerts.enabled }}
     # Alert Engine communication
     alerts:
