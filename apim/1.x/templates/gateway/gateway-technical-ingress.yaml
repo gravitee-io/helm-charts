@@ -1,0 +1,36 @@
+{{- if .Values.gateway.http.services.core.http.enabled -}}
+{{- if .Values.gateway.http.services.core.ingress.enabled -}}
+{{- $serviceAPIName := include "gravitee.gateway.fullname" . -}}
+{{- $serviceAPIPort := .Values.gateway.http.services.core.service.externalPort -}}
+{{- $ingressPath   := .Values.gateway.http.services.core.ingress.path -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "gravitee.gateway.fullname" . }}-technical
+  labels:
+    app.kubernetes.io/app: {{ template "gravitee.name" . }}
+    app.kubernetes.io/component: "{{ .Values.gateway.name }}"
+    app.kubernetes.io/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/release: {{ .Release.Name }}
+    app.kubernetes.io/heritage: {{ .Release.Service }}
+  annotations:
+    {{- range $key, $value := .Values.gateway.http.services.core.ingress.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- range $host := .Values.gateway.http.services.core.ingress.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: {{ $ingressPath }}
+            backend:
+              serviceName: {{ $serviceAPIName }}
+              servicePort: {{ $serviceAPIPort }}
+    {{- end -}}
+  {{- if .Values.gateway.http.services.core.ingress.tls }}
+  tls:
+{{ toYaml .Values.gateway.http.services.core.ingress.tls | indent 4 }}
+  {{- end -}}
+{{- end -}}
+{{- end -}}
