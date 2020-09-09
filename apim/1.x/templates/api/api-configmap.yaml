@@ -209,7 +209,7 @@ data:
         username: {{ .Values.notifiers.smtp.username }}
         password: {{ .Values.notifiers.smtp.password }}
         {{- end }}
-        starttls.enabled: {{ .Values.notifiers.smtp.starttls.enabled }}
+        starttls.enabled: {{ .Values.notifiers.smtp.starttlsEnabled }}
         ssl:
           trustAll: {{ .Values.notifiers.smtp.ssl.trustAll }}
           keyStore: {{ .Values.notifiers.smtp.ssl.keyStore }}

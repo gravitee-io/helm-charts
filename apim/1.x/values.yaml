@@ -124,11 +124,11 @@ notifiers:
     from: ${email.from}
     username: ${email.username}
     password: ${email.password}
-    #    starttls.enabled: false
-    #    ssl:
-    #      trustAll: false
-    #      keyStore:
-    #      keyStorePassword:
+    starttlsEnabled: true
+    ssl:
+      trustAll: false
+      keyStore:
+      keyStorePassword:
 
 mongo:
   # uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
