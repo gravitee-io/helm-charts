@@ -209,11 +209,13 @@ data:
         username: {{ .Values.notifiers.smtp.username }}
         password: {{ .Values.notifiers.smtp.password }}
         {{- end }}
-        starttls.enabled: {{ .Values.notifiers.smtp.starttls.enabled }}
+        starttls.enabled: {{ .Values.notifiers.smtp.starttlsEnabled | default false }}
+        {{- if .Values.smtp.ssl }}
         ssl:
           trustAll: {{ .Values.notifiers.smtp.ssl.trustAll }}
           keyStore: {{ .Values.notifiers.smtp.ssl.keyStore }}
           keyStorePassword: {{ .Values.notifiers.smtp.ssl.keyStorePassword }}
+        {{- end }}  
         {{- end }}
 
     # Mail templates
