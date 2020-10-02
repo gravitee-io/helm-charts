@@ -94,10 +94,10 @@ engine:
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits:
       cpu: 500m
-      memory: 512Mi
+      memory: 1Gi
     requests:
       cpu: 200m
-      memory: 256Mi
+      memory: 512Mi
     #  lifecycle:
     #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee.io Alert Engine" ]'
     #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee.io Alert Engine" ]'
