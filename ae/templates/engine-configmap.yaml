@@ -86,7 +86,7 @@ data:
                     <discovery-strategy enabled="true"
                                     class="com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategy">
                         <properties>
-                            <property name="service-dns">{{ template "gravitee.engine.fullname" . }}</property>
+                            <property name="service-dns">{{ template "gravitee.engine.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local</property>
                         </properties>
                     </discovery-strategy>
                 </discovery-strategies>

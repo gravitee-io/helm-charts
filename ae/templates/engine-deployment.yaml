@@ -104,13 +104,13 @@ spec:
             - name: config
               mountPath: /opt/graviteeio-alert-engine/config/gravitee.yml
               subPath: gravitee.yml
+            - name: config
+              mountPath: /opt/graviteeio-alert-engine/config/hazelcast.xml
+              subPath: hazelcast.xml
           {{- if .Values.engine.logging.debug }}
             - name: config
               mountPath: /opt/graviteeio-alert-engine/config/logback.xml
               subPath: logback.xml
-            - name: config
-              mountPath: /opt/graviteeio-alert-engine/config/hazelcast.xml
-              subPath: hazelcast.xml
           {{- end }}
           {{- with .Values.engine.extraVolumeMounts }}
           {{- tpl . $ | nindent 12 }}
