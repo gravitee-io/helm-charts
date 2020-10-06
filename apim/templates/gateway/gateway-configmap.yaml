@@ -16,10 +16,10 @@ data:
     http:
       port: 8082
       host: 0.0.0.0
-    #  idleTimeout: 0
-    #  tcpKeepAlive: true
-    #  compressionSupported: false
-    #  instances: 0
+      # idleTimeout: 0
+      # tcpKeepAlive: true
+      # compressionSupported: false
+      # instances: 0
       alpn: true
       {{- if .Values.gateway.ssl.enabled }}
       secured: true
@@ -118,6 +118,11 @@ data:
         bulk:
           actions: 1000           # Number of requests action before flush
           flush_interval: 5       # Flush interval in seconds
+        {{- if (eq .Values.es.ingest_plugin true) }}
+        pipeline:
+          plugins:
+            ingest: gravitee
+        {{- end }}
     services:
       core:
         http:
