@@ -95,9 +95,9 @@ data:
     </hazelcast>
 
 {{- if .Values.engine.logging.debug }}
-    logback.xml: |
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!--
+  logback.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!--
         ~ Copyright (c) 2015-2016, The Gravitee team (http://www.gravitee.io)
         ~
         ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -111,49 +111,48 @@ data:
         ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
         ~  See the License for the specific language governing permissions and
         ~  limitations under the License.
-        -->
-      <configuration>
-          <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-              <!-- encoders are assigned the type
+    -->
+    <configuration>
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <!-- encoders are assigned the type
                   ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-              <encoder>
-                  <pattern>{{ .Values.engine.logging.stdout.encoderPattern }}</pattern>
-              </encoder>
-          </appender>
-          {{- if .Values.engine.logging.file.enabled }}
-          <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-              <file>${gravitee.home}/logs/gravitee.log</file>
-              {{ .Values.engine.logging.file.rollingPolicy | indent 16 }}
-              <encoder>
-                  <pattern>{{ .Values.engine.logging.file.encoderPattern }}</pattern>
-              </encoder>
-          </appender>
-          {{- end }}
+            <encoder>
+                <pattern>{{ .Values.engine.logging.stdout.encoderPattern }}</pattern>
+            </encoder>
+        </appender>
+        {{- if .Values.engine.logging.file.enabled }}
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${gravitee.home}/logs/gravitee.log</file>
+            {{ .Values.engine.logging.file.rollingPolicy | indent 16 }}
+            <encoder>
+              <pattern>{{ .Values.engine.logging.file.encoderPattern }}</pattern>
+            </encoder>
+        </appender>
+        {{- end }}
   
-          {{- if .Values.engine.logging.file.enabled }}
-          <appender name="async-file" class="ch.qos.logback.classic.AsyncAppender">
-              <appender-ref ref="FILE" />
-          </appender>
-          {{- end }}
+        {{- if .Values.engine.logging.file.enabled }}
+        <appender name="async-file" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="FILE" />
+        </appender>
+        {{- end }}
   
-          <appender name="async-console" class="ch.qos.logback.classic.AsyncAppender">
-              <appender-ref ref="STDOUT" />
-          </appender>
+        <appender name="async-console" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="STDOUT" />
+        </appender>
   
-          <logger name="com.graviteesource" level="{{ .Values.engine.logging.graviteeLevel }}" />
-          <logger name="org.reflections" level="WARN" />
-          <logger name="org.springframework" level="WARN" />
-          <logger name="com.hazelcast" level="WARN" />
+        <logger name="com.graviteesource" level="{{ .Values.engine.logging.graviteeLevel }}" />
+        <logger name="org.reflections" level="WARN" />
+        <logger name="org.springframework" level="WARN" />
+        <logger name="com.hazelcast" level="WARN" />
   
-          <!-- Strictly speaking, the level attribute is not necessary since -->
-          <!-- the level of the root level is set to DEBUG by default.       -->
-          <root level="INFO">
-              <appender-ref ref="async-console" />
-              {{- if .Values.engine.logging.file.enabled }}
-              <appender-ref ref="async-file" />
-              {{- end }}
-          </root>
-  
-      </configuration>
+        <!-- Strictly speaking, the level attribute is not necessary since -->
+        <!-- the level of the root level is set to DEBUG by default.       -->
+        <root level="INFO">
+            <appender-ref ref="async-console" />
+            {{- if .Values.engine.logging.file.enabled }}
+            <appender-ref ref="async-file" />
+            {{- end }}
+        </root>
+    </configuration>
 {{- end -}}
 {{- end -}}
