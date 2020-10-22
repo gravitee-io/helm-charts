@@ -98,7 +98,7 @@ data:
     reporters:
       # Elasticsearch reporter
       elasticsearch:
-        enabled: true # Is the reporter enabled or not (default to true)
+        enabled: {{ .Values.es.enabled }} # Is the reporter enabled or not (default to true)
         {{- with .Values.es.endpoints }}
         endpoints:
           {{ toYaml . | nindent 10 | trim -}}

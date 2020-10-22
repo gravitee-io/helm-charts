@@ -116,6 +116,7 @@ data:
     analytics:
       type: elasticsearch
       elasticsearch:
+        enabled: {{ .Values.es.enabled }}
         {{- with .Values.es.endpoints }}
         endpoints:
           {{ toYaml . | nindent 10 | trim -}}
