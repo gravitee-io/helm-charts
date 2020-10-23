@@ -7,7 +7,8 @@ chaos:
 
 engine:
   enabled: true
-  type: Deployment
+  # Required by Hazelcast for k8s support
+  type: StatefulSet
   name: engine
   logging:
     debug: false
