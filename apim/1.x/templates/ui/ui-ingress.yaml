@@ -7,7 +7,7 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 {{- else }}
-apiVersion: extensions/v1beta1
+apiVersion: {{ template "ingress.apiVersion" . }}
 kind: Ingress
 {{- end }}
 metadata:
