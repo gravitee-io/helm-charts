@@ -60,6 +60,10 @@ spec:
           ports:
             - name: {{ .Values.gateway.service.internalPortName }}
               containerPort: {{ .Values.gateway.service.internalPort }}
+            {{- if .Values.gateway.services.bridge.enabled }}
+            - name: {{ .Values.gateway.name }}-bridge
+              containerPort: {{ .Values.gateway.services.bridge.service.internalPort }}
+            {{- end }}
           {{- if .Values.gateway.env }}
           env:
             {{- range $env := .Values.gateway.env }}
