@@ -489,6 +489,7 @@ gateway:
       # password:
   management: 
     http:
+      # The version of the connector must be aligned with the version of Gravitee.io APIM you're installing.
       # version: 3.3.1
       # url: 
       # username: 
@@ -496,6 +497,7 @@ gateway:
   services:
     bridge:
       enabled: false
+      # version: 3.3.1
       # username:
       # password:
       # service:

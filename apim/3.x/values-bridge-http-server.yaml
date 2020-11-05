@@ -14,7 +14,7 @@ gateway:
         runAsNonRoot: true
       env:
         - name: BRIDGE_VERSION
-          value: {{ .Values.gateway.management.http.version }}
+          value: {{ .Values.gateway.services.bridge.version }}
       volumeMounts:
         - name: graviteeio-apim-plugins
           mountPath: /tmp/plugins
