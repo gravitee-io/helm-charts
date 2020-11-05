@@ -21,6 +21,9 @@ spec:
       targetPort: {{ .Values.engine.service.internalPort }}
       protocol: TCP
       name: {{ .Values.engine.name }}
+    - port: 5701
+      name: {{ .Values.engine.name }}-hz
+      protocol: TCP
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

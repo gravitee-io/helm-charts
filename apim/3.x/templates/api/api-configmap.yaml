@@ -34,7 +34,8 @@ data:
     {{- end }}
 
     management:
-      type: mongodb
+      type: {{ .Values.management.type | default "mongodb" }}
+      {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
       mongodb:
         sslEnabled: {{ .Values.mongo.sslEnabled }}
         socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
@@ -51,6 +52,18 @@ data:
         {{- else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
+      {{- else if (eq .Values.management.type "jdbc") }}
+      jdbc:
+        url: {{ .Values.jdbc.url }}
+        {{- if .Values.jdbc.username }}
+        username: {{ .Values.jdbc.username }}
+        {{- end }}
+        {{- if .Values.jdbc.password }}
+        password: {{ .Values.jdbc.password }}
+        {{- end }}
+      {{- end }}
+
+      
     services:
       core:
         http: 
@@ -200,6 +213,28 @@ data:
         {{- end }}
       {{- end }}
 
+    # SMTP configuration used to send notifications / alerts
+    notifiers:
+      email:
+        enabled: {{ .Values.notifiers.smtp.enabled }}
+        {{- if .Values.notifiers.smtp.enabled }}
+        host: {{ .Values.notifiers.smtp.host }}
+        subject: {{ .Values.notifiers.smtp.subject | quote }}
+        port: {{ .Values.notifiers.smtp.port }}
+        from: {{ .Values.notifiers.smtp.from }}
+        {{- if or .Values.notifiers.smtp.username .Values.notifiers.smtp.password }}
+        username: {{ .Values.notifiers.smtp.username }}
+        password: {{ .Values.notifiers.smtp.password }}
+        {{- end }}
+        starttls.enabled: {{ .Values.notifiers.smtp.starttlsEnabled | default false }}
+        {{- if .Values.smtp.ssl }}
+        ssl:
+          trustAll: {{ .Values.notifiers.smtp.ssl.trustAll }}
+          keyStore: {{ .Values.notifiers.smtp.ssl.keyStore }}
+          keyStorePassword: {{ .Values.notifiers.smtp.ssl.keyStorePassword }}
+        {{- end }}
+        {{- end }}
+
     # Mail templates
     templates:
       path: ${gravitee.home}/templates
@@ -248,6 +283,25 @@ data:
     # Allows to rate an API (default value: false)
     rating :
       enabled: {{ .Values.api.ratingEnabled }}
+
+    {{ if .Values.alerts.enabled }}
+    # Alert Engine communication
+    alerts:
+      alert-engine:
+        enabled: true
+        ws:
+          discovery: true
+          {{- with .Values.alerts.endpoints }}
+          endpoints:
+            {{ toYaml . | nindent 12 | trim -}}
+          {{- end }}
+          {{- if (eq .Values.alerts.security.enabled true) }}
+          security:
+            username: {{ .Values.alerts.security.username }}
+            password: {{ .Values.alerts.security.password }}
+          {{- end }}
+    {{- end }}
+
   {{- if .Values.api.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>

@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.gateway.image.tag }}
     app.kubernetes.io/component: "{{ .Values.gateway.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -54,19 +54,28 @@ spec:
         - name: {{ template "gravitee.gateway.fullname" . }}
           image: "{{ .Values.gateway.image.repository }}:{{ default .Chart.AppVersion .Values.gateway.image.tag }}"
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
-          {{- if .Values.gateway.runAsNonRoot -}}
           securityContext:  
             runAsUser: 1001
             runAsNonRoot: true
-          {{- end }}
           ports:
-            - containerPort: {{ .Values.gateway.service.internalPort }}
+            - name: {{ .Values.gateway.service.internalPortName }}
+              containerPort: {{ .Values.gateway.service.internalPort }}
+            {{- if .Values.gateway.services.bridge.enabled }}
+            - name: {{ .Values.gateway.name }}-bridge
+              containerPort: {{ .Values.gateway.services.bridge.service.internalPort }}
+            {{- end }}
           {{- if .Values.gateway.env }}
           env:
-          {{- range $env := .Values.gateway.env }}
+            {{- range $env := .Values.gateway.env }}
             - name: {{ $env.name }}
+              {{- if $env.value }}
               value: {{ $env.value | quote }}
-          {{- end }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+            {{- end }}
           {{- end }}
           {{- if .Values.gateway.lifecycle }}
           lifecycle:

@@ -14,7 +14,7 @@ data:
   gravitee.yml: |
     # Gateway HTTP server
     http:
-      port: 8082
+      port: {{ .Values.gateway.service.internalPort }}
       host: 0.0.0.0
     #  idleTimeout: 0
     #  tcpKeepAlive: true
@@ -43,21 +43,61 @@ data:
       websocket:
         enabled: {{ .Values.gateway.websocket }}  
     management:
-      type: mongodb
+      type: {{ .Values.management.type | default "mongodb" }}
+      {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
       mongodb:
         {{- if .Values.mongo.uri }}
         uri: {{ .Values.mongo.uri }}
         {{ else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
+      {{- else if (eq .Values.management.type "jdbc") }}
+      jdbc:
+        url: {{ .Values.jdbc.url }}
+        {{- if .Values.jdbc.username }}
+        username: {{ .Values.jdbc.username }}
+        {{- end }}
+        {{- if .Values.jdbc.password }}
+        password: {{ .Values.jdbc.password }}
+        {{- end }}
+      {{- else if (eq .Values.management.type "http") }}
+      http:
+        url: {{ .Values.gateway.management.http.url }}
+        keepAlive: true
+        idleTimeout: 30000
+        connectTimeout: 10000
+        authentication:
+          basic:
+            username: {{ .Values.gateway.management.http.username }}
+            password: {{ .Values.gateway.management.http.password }}
+      {{- end }}
+
     ratelimit:
-      type: mongodb
+      type: {{ .Values.ratelimit.type | default "mongodb" }}
+      {{- if or (eq .Values.ratelimit.type "mongodb") (kindIs "invalid" .Values.ratelimit.type) }}
       mongodb:
         {{- if .Values.mongo.uri }}
         uri: {{ .Values.mongo.uri }}
         {{ else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
+      {{- else if (eq .Values.ratelimit.type "jdbc") }}
+      jdbc:
+        url: {{ .Values.jdbc.url }}
+        {{- if .Values.jdbc.username }}
+        username: {{ .Values.jdbc.username }}
+        {{- end }}
+        {{- if .Values.jdbc.password }}
+        password: {{ .Values.jdbc.password }}
+        {{- end }}
+      {{- else if (eq .Values.ratelimit.type "redis") }}
+      redis:
+        host: {{ .Values.gateway.ratelimit.redis.host }}
+        port: {{ .Values.gateway.ratelimit.redis.port }}
+        {{- if .Values.gateway.ratelimit.redis.password }}
+        password: {{ .Values.gateway.ratelimit.redis.password }}
+        {{- end }}
+      {{- end }}
     cache:
       type: ehcache
       enabled: true
@@ -147,6 +187,18 @@ data:
       healthcheck:
         threads: 3 # Threads core size used to check endpoint availability
 
+      {{- if .Values.gateway.services.bridge.enabled }}
+      bridge:
+        http:
+          enabled: true
+          port: {{ .Values.gateway.services.bridge.service.internalPort }}
+          host: 0.0.0.0
+          authentication:
+            type: basic
+            users:
+              {{ .Values.gateway.services.bridge.username }}: {{ .Values.gateway.services.bridge.password }}
+      {{- end }}
+
     handlers:
       request:
         transaction:
@@ -157,6 +209,25 @@ data:
       api-key:
         header: {{ .Values.gateway.apiKey.header }}
         param: {{ .Values.gateway.apiKey.param }}
+
+    {{- if .Values.alerts.enabled }}
+    # Alert Engine communication
+    alerts:
+      alert-engine:
+        enabled: true
+        ws:
+          discovery: true
+          {{- with .Values.alerts.endpoints }}
+          endpoints:
+            {{ toYaml . | nindent 12 | trim -}}
+          {{- end }}
+          {{- if (eq .Values.alerts.security.enabled true) }}
+          security:
+            username: {{ .Values.alerts.security.username }}
+            password: {{ .Values.alerts.security.password }}
+          {{- end }}
+    {{- end }}
+        
   {{- if .Values.gateway.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>

@@ -21,6 +21,12 @@ spec:
       targetPort: {{ .Values.gateway.service.internalPort }}
       protocol: TCP
       name: {{ .Values.gateway.name }}
+    {{- if .Values.gateway.services.bridge.enabled }}
+    - port: {{ .Values.gateway.services.bridge.service.externalPort }}
+      targetPort: {{ .Values.gateway.services.bridge.service.internalPort }}
+      protocol: TCP
+      name: {{ .Values.gateway.name }}-bridge
+    {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

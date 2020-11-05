@@ -249,6 +249,8 @@ replicaset] for detailed documentation on helm chart.
 
 |api.service.internalPort |int |`+8093+` |
 
+|api.service.internalPortName |string |`+http+` |
+
 |api.service.type |string |`+"ClusterIP"+` |
 
 |api.ssl.clientAuth |bool |`+false+` |
@@ -341,6 +343,8 @@ replicaset] for detailed documentation on helm chart.
 |gateway.service.externalPort |int |`+82+` |
 
 |gateway.service.internalPort |int |`+8092+` |
+
+|gateway.service.internalPortName |string |`+http+` |
 
 |gateway.service.type |string |`+"ClusterIP"+` |
 
@@ -483,6 +487,8 @@ replicaset] for detailed documentation on helm chart.
 |ui.service.externalPort |int |`+8002+` |
 
 |ui.service.internalPort |int |`+80+` |
+
+|ui.service.internalPortName |string |`+http+` |
 
 |ui.service.name |string |`+"nginx"+` |
 

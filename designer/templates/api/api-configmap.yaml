@@ -1,0 +1,40 @@
+{{- if .Values.api.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "gravitee.api.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.api.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+data:
+  env.props: |
+    ############## APIGROW MAIN CONFIGURATION ############## 
+    APIZR_API_KEY=ZQvoqSZtRrueflUhqAXK
+    APIZR_API_KEY_HEADER_NAME=x-apizr-apikey
+    AUTOSWAGGER_FRONT_URL={{ index .Values.ui.ingress.hosts 0 }}
+    COOKIE_DOMAIN={{ .Values.apim.management.cookie.domain }}
+
+    ############ JWT SECTION ###############
+    JWT_COOKIE_NAME=apizr-login-cookie
+    JWT_SECRET=45890GJKDLZEEF567890
+    
+    ############ SWAGGER PRODUCER SECTION ###############
+    SWAGGER_PRODUCER_URL=http://{{ template "gravitee.generator.fullname" . }}:{{ .Values.generator.service.externalPort }}
+    SWAGGER_PRODUCER_APIKEY=PgUfDekIFAYmanUeRIQU
+    
+    ############# Gravitee configuration ################
+    GRAVITEE_ENABLED=true
+    GRAVITEE_MANAGEMENT_API_URL={{ .Values.apim.management.url }}
+    GRAVITEE_COOKIE_NAME={{ .Values.apim.management.cookie.name }}
+    GRAVITEE_ORGANIZATION=DEFAULT
+    GRAVITEE_ENVIRONMENT=DEFAULT
+    LICENSE_KEY={{ .Values.license.key }}
+    LICENSE_EXPIRATION={{ .Values.license.expirationDate }}
+
+    MONGO_URI={{ .Values.mongo.uri }}
+    HOST=0.0.0.0
+{{- end -}}

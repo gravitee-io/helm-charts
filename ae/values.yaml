@@ -7,7 +7,8 @@ chaos:
 
 engine:
   enabled: true
-  type: Deployment
+  # Required by Hazelcast for k8s support
+  type: StatefulSet
   name: engine
   logging:
     debug: false
@@ -34,6 +35,9 @@ engine:
   #  truststore:
   #    path: ${gravitee.home}/security/truststore.jks
   #    password: secret
+  authentication:
+    enabled: true
+    adminPassword: adminadmin
   replicaCount: 1
   image:
     repository: graviteeio/ae-engine
@@ -41,10 +45,19 @@ engine:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
+  #env:
+  #  - name: ENV_VARIABLE
+  #    value: ENV_VARIABLE_VALUE
+  #  - name: ENV_VARIABLE_WITH_FROM
+  #    valueFrom:
+  #      configMapKeyRef:
+  #        name: special-config
+  #        key: SPECIAL_LEVEL
   service:
     type: ClusterIP
     externalPort: 82
     internalPort: 8072
+    internalPortName: http
     # annotations:
   autoscaling:
     enabled: true
@@ -82,10 +95,10 @@ engine:
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits:
       cpu: 500m
-      memory: 512Mi
+      memory: 1Gi
     requests:
       cpu: 200m
-      memory: 256Mi
+      memory: 512Mi
     #  lifecycle:
     #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee.io Alert Engine" ]'
     #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee.io Alert Engine" ]'

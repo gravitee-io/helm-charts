@@ -58,11 +58,18 @@ spec:
           {{- if .Values.ui.env }}
           {{- range $env := .Values.ui.env }}
             - name: {{ $env.name }}
+              {{- if $env.value }}
               value: {{ $env.value | quote }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
           {{- end }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.ui.service.internalPort }}
+            - name: {{ .Values.ui.service.internalPortName }}
+              containerPort: {{ .Values.ui.service.internalPort }}
           {{- if .Values.ui.lifecycle }}
           lifecycle:
             {{- if .Values.ui.lifecycle.postStart }}

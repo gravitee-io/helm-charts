@@ -60,7 +60,8 @@ spec:
           {{- end }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.ui.service.internalPort }}
+            - name: {{ .Values.ui.service.internalPortName }}
+              containerPort: {{ .Values.ui.service.internalPort }}
           {{- if .Values.ui.lifecycle }}
           lifecycle:
             {{- if .Values.ui.lifecycle.postStart }}

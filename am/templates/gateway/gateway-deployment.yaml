@@ -60,11 +60,19 @@ spec:
             runAsNonRoot: true
           {{- end }}
           ports:
-            - containerPort: {{ .Values.gateway.service.internalPort }}
+            - name: {{ .Values.gateway.service.internalPortName }}
+              containerPort: {{ .Values.gateway.service.internalPort }}
           {{- if .Values.gateway.env }}
           env:
-            {{- with .Values.gateway.env }}
-            {{- tpl . $ | nindent 12 }}
+            {{- range $env := .Values.gateway.env }}
+            - name: {{ $env.name }}
+              {{- if $env.value }}
+              value: {{ $env.value | quote }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
             {{- end }}
           {{- end }}
           {{- if .Values.gateway.lifecycle }}
