@@ -3,8 +3,13 @@
 {{- $serviceAPIName := include "gravitee.api.fullname" . -}}
 {{- $serviceAPIPort := .Values.api.service.externalPort -}}
 {{- $ingressPath   := .Values.api.ingress.path -}}
+{{- if .Values.openshiftRoutes.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+{{- else }}
 apiVersion: {{ template "ingress.apiVersion" . }}
 kind: Ingress
+{{- end }}
 metadata:
   name: {{ template "gravitee.api.fullname" . }}
   labels:
@@ -19,6 +24,19 @@ metadata:
       {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+  {{- if .Values.openshiftRoutes.enabled }}
+  host: {{ .Values.api.ingress.hosts | first }}
+  path: {{ $ingressPath }}
+  port:
+    targetPort: api
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: {{ template "gravitee.api.fullname" . }}
+    weight: 100
+  wildcardPolicy: None
+  {{- else -}}
   rules:
     {{- range $host := .Values.api.ingress.hosts }}
     - host: {{ $host }}
@@ -32,6 +50,7 @@ spec:
   {{- if .Values.api.ingress.tls }}
   tls:
 {{ toYaml .Values.api.ingress.tls | indent 4 }}
+  {{- end -}}
   {{- end -}}
 {{- end -}}
 {{- end -}}
