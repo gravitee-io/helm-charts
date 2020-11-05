@@ -1,0 +1,26 @@
+
+gateway:
+  env:
+    - name: GRAVITEE_PLUGINS_PATH_0
+      value: ${gravitee.home}/plugins
+    - name: GRAVITEE_PLUGINS_PATH_1
+      value: ${gravitee.home}/plugins-ext
+  extraInitContainers: |
+    - name: get-bridge-http-client-plugin
+      image: 'alpine'
+      command: ['sh', '-c', "mkdir -p /tmp/plugins && wget -O /tmp/plugins/gravitee-repository-gateway-bridge-http-client-$BRIDGE_VERSION.zip https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-gateway-bridge-http/gravitee-repository-gateway-bridge-http-client-$BRIDGE_VERSION.zip"]
+      securityContext:  
+        runAsUser: 1001
+        runAsNonRoot: true
+      env:
+        - name: BRIDGE_VERSION
+          value: {{ .Values.gateway.management.http.version }}
+      volumeMounts:
+        - name: graviteeio-apim-plugins
+          mountPath: /tmp/plugins
+  extraVolumeMounts: |
+    - name: graviteeio-apim-plugins
+      mountPath: /opt/graviteeio-gateway/plugins-ext
+  extraVolumes: |
+    - name: graviteeio-apim-plugins
+      emptyDir: {}

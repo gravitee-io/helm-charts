@@ -21,8 +21,9 @@ This chart will deploy the following:
   ```
   $ helm install --name graviteeio-am graviteeio/am
 
+**Note:** If you're using Helm 3, the name parameter is no more valid. Please check https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace
 
-  ## Create a chart archive
+## Create a chart archive
 
 To package this chart directory into a chart archive, run:
 
@@ -165,6 +166,7 @@ See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongo
 | api.restartPolicy | string | `"OnFailure"` |  |
 | api.service.externalPort | int | `83` |  |
 | api.service.internalPort | int | `8093` |  |
+| api.service.internalPortName | string | `http` |  |
 | api.service.type | string | `"ClusterIP"` |  |
 | api.ssl.clientAuth | bool | `false` |  |
 | api.ssl.enabled | bool | `false` |  |
@@ -206,6 +208,7 @@ See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongo
 | gateway.resources.requests.memory | string | `"256Mi"` |  |
 | gateway.service.externalPort | int | `82` |  |
 | gateway.service.internalPort | int | `8092` |  |
+| gateway.service.internalPortName | string | `http` |  |
 | gateway.service.type | string | `"ClusterIP"` |  |
 | gateway.ssl.clientAuth | bool | `false` |  |
 | gateway.ssl.enabled | bool | `false` |  |
@@ -275,5 +278,6 @@ See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongo
 | ui.resources.requests.memory | string | `"64Mi"` |  |
 | ui.service.externalPort | int | `8002` |  |
 | ui.service.internalPort | int | `80` |  |
+| ui.service.internalPortName | string | `http` |  |
 | ui.service.name | string | `"nginx"` |  |
 | ui.service.type | string | `"ClusterIP"` |  |

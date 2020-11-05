@@ -104,7 +104,12 @@ api:
     #   - name: gravitee_secrets
   # env:
   #   - name: ENV_VARIABLE
-  #     value: "some value"
+  #     value: ENV_VARIABLE_VALUE
+  #   - name: ENV_VARIABLE_WITH_FROM
+  #     valueFrom:
+  #       configMapKeyRef:
+  #         name: special-config
+  #         key: SPECIAL_LEVEL
   ssl:
     enabled: false
   #  keystore:
@@ -142,6 +147,8 @@ api:
     type: ClusterIP
     externalPort: 83
     internalPort: 8093
+    internalPortName: http
+  # annotations:
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -234,11 +241,18 @@ gateway:
     #   - name: gravitee_secrets
   # env:
   #   - name: ENV_VARIABLE
-  #     value: "some value"
+  #     value: ENV_VARIABLE_VALUE
+  #   - name: ENV_VARIABLE_WITH_FROM
+  #     valueFrom:
+  #       configMapKeyRef:
+  #         name: special-config
+  #         key: SPECIAL_LEVEL
   service:
     type: ClusterIP
     externalPort: 82
     internalPort: 8092
+    internalPortName: http
+  # annotations:
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -300,6 +314,14 @@ ui:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
+  # env:
+  #   - name: ENV_VARIABLE
+  #     value: ENV_VARIABLE_VALUE
+  #   - name: ENV_VARIABLE_WITH_FROM
+  #     valueFrom:
+  #       configMapKeyRef:
+  #         name: special-config
+  #         key: SPECIAL_LEVEL
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -310,7 +332,9 @@ ui:
     name: nginx
     type: ClusterIP
     externalPort: 8002
-    internalPort: 80
+    internalPort: 8080
+    internalPortName: http
+    # annotations:
   ingress:
     enabled: true
     path: /

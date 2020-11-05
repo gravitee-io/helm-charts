@@ -1,0 +1,129 @@
+{{- if .Values.engine.enabled -}}
+apiVersion: apps/v1
+kind: {{ .Values.engine.type }}
+metadata:
+  name: {{ template "gravitee.engine.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.engine.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  {{- if eq .Values.engine.type "StatefulSet" }}
+  serviceName: {{ template "gravitee.engine.fullname" . }}
+  updateStrategy:
+    type: RollingUpdate
+  {{- end }}
+  {{- if eq .Values.engine.type "Deployment" }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  {{- end }}
+  replicas: {{ .Values.engine.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "gravitee.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "{{ .Values.engine.name }}"
+  template:
+    metadata:
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
+        {{- if .Values.engine.reloadOnConfigChange }}
+        checksum/config: {{ include (print $.Template.BasePath "/engine-configmap.yaml") . | sha256sum }}
+        {{- end }}
+      labels:
+        app.kubernetes.io/name: {{ template "gravitee.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "{{ .Values.engine.name }}"
+    spec:
+    {{- if .Values.engine.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.engine.nodeSelector | indent 8 }}
+    {{- end }}
+      {{- if .Values.engine.extraInitContainers }}
+      initContainers:
+        {{- with .Values.engine.extraInitContainers }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ template "gravitee.engine.fullname" . }}
+          image: "{{ .Values.engine.image.repository }}:{{ default .Chart.AppVersion .Values.engine.image.tag }}"
+          imagePullPolicy: {{ .Values.engine.image.pullPolicy }}
+          {{- if .Values.engine.runAsNonRoot -}}
+          securityContext:  
+            runAsUser: 1001
+            runAsNonRoot: true
+          {{- end }}
+          ports:
+            - name: {{ .Values.engine.service.internalPortName }}
+              containerPort: {{ .Values.engine.service.internalPort }}
+          {{- if .Values.engine.env }}
+          env:
+          {{- range $env := .Values.engine.env }}
+            - name: {{ $env.name }}
+              {{- if $env.value }}
+              value: {{ $env.value | quote }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.engine.lifecycle }}
+          lifecycle:
+            {{- if .Values.engine.lifecycle.postStart }}
+            postStart:
+              exec:
+                command: {{ .Values.engine.lifecycle.postStart }}
+            {{- end }}
+            {{- if .Values.engine.lifecycle.preStop }}
+            preStop:
+              exec:
+                command: {{ .Values.engine.lifecycle.preStop }}
+            {{- end }}
+          {{- end }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.engine.service.internalPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.engine.service.internalPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          resources:
+{{ toYaml .Values.engine.resources | indent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /opt/graviteeio-alert-engine/config/gravitee.yml
+              subPath: gravitee.yml
+            - name: config
+              mountPath: /opt/graviteeio-alert-engine/config/hazelcast.xml
+              subPath: hazelcast.xml
+          {{- if .Values.engine.logging.debug }}
+            - name: config
+              mountPath: /opt/graviteeio-alert-engine/config/logback.xml
+              subPath: logback.xml
+          {{- end }}
+          {{- with .Values.engine.extraVolumeMounts }}
+          {{- tpl . $ | nindent 12 }}
+          {{- end }}
+      {{- if .Values.engine.image.pullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.engine.image.pullSecrets }}
+      {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "gravitee.engine.fullname" . }}
+        {{- with .Values.engine.extraVolumes }}
+          {{- tpl . $ | nindent 8 }}
+        {{- end }}
+{{- end -}}

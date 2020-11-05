@@ -1,0 +1,110 @@
+{{- if .Values.ui.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "gravitee.ui.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.ui.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  replicas: {{ .Values.ui.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "gravitee.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "{{ .Values.ui.name }}"
+  template:
+    metadata:
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
+        checksum/config: {{ include (print $.Template.BasePath "/ui/ui-configmap.yaml") . | sha256sum }}
+      labels:
+        app.kubernetes.io/name: {{ template "gravitee.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "{{ .Values.ui.name }}"
+    spec:
+    {{- if .Values.ui.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.ui.nodeSelector | indent 8 }}
+    {{- end }}
+    {{- if or .Values.ui.extraInitContainers }}
+      initContainers:
+      {{- with .Values.ui.extraInitContainers }}
+        {{- tpl . $ | nindent 8 }}
+      {{- end }}
+    {{- end }}
+      containers:
+        - name: {{ template "gravitee.ui.fullname" . }}
+          image: "{{ .Values.ui.image.repository }}:{{ default .Chart.AppVersion .Values.ui.image.tag }}"
+          imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
+          {{- if .Values.ui.runAsNonRoot -}}
+          securityContext:  
+            runAsUser: 1001
+            runAsNonRoot: true
+          {{- end }}
+          env:
+            - name: MGMT_API_URL
+              value: "https://{{index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/"
+          {{- if .Values.ui.env }}
+          {{- range $env := .Values.ui.env }}
+            - name: {{ $env.name }}
+              value: {{ $env.value | quote }}
+          {{- end }}
+          {{- end }}
+          ports:
+            - name: {{ .Values.ui.service.internalPortName }}
+              containerPort: {{ .Values.ui.service.internalPort }}
+          {{- if .Values.ui.lifecycle }}
+          lifecycle:
+            {{- if .Values.ui.lifecycle.postStart }}
+            postStart:
+              exec:
+                command: {{ .Values.ui.lifecycle.postStart }}
+            {{- end }}
+            {{- if .Values.ui.lifecycle.preStop }}
+            preStop:
+              exec:
+                command: {{ .Values.ui.lifecycle.preStop }}
+            {{- end }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.ui.service.internalPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.ui.service.internalPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+{{ toYaml .Values.ui.resources | indent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /var/www/html/constants.json
+              subPath: constants.json
+            {{- with .Values.ui.extraVolumeMounts }}
+            {{- tpl . $ | nindent 12 }}
+            {{- end }}
+      {{- if .Values.ui.image.pullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.ui.image.pullSecrets }}
+      {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "gravitee.ui.fullname" . }}
+      {{- with .Values.ui.extraVolumes }}
+        {{- tpl . $ | nindent 8 }}
+      {{- end }}
+{{- end -}}

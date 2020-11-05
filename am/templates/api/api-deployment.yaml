@@ -47,13 +47,26 @@ spec:
         - name: {{ template "gravitee.api.fullname" . }}
           image: "{{ .Values.api.image.repository }}:{{ default .Chart.AppVersion .Values.api.image.tag }}"
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          {{- if .Values.api.runAsNonRoot -}}
+          securityContext:  
+            runAsUser: 1001
+            runAsNonRoot: true
+          {{- end }}
           ports:
-            - containerPort: {{ .Values.api.service.internalPort }}
+            - name: {{ .Values.api.service.internalPortName }}
+              containerPort: {{ .Values.api.service.internalPort }}
           {{- if .Values.api.env }}
           env:
-            {{- with .Values.api.env }}
-            {{- tpl . $ | nindent 12 }}
-            {{- end }}
+            {{- range $env := .Values.api.env }}
+            - name: {{ $env.name }}
+              {{- if $env.value }}
+              value: {{ $env.value | quote }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          {{- end }}
           {{- end }}
           {{- if .Values.api.lifecycle }}
           lifecycle:

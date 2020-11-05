@@ -1,0 +1,158 @@
+{{- if .Values.engine.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "gravitee.engine.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.engine.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+data:
+  gravitee.yml: |
+    ingesters:
+      ws:
+    #    instances: 0
+        port: {{ .Values.engine.service.internalPort }}
+    #    host: 0.0.0.0
+    #    alpn: false
+        {{- if .Values.engine.ssl.enabled }}
+        secured: true
+        ssl:
+          keystore:
+            path: {{ .Values.engine.ssl.keystore.path }}
+            password: {{ .Values.engine.ssl.keystore.password | quote }}
+          clientAuth: {{ .Values.engine.ssl.clientAuth }}
+          {{- if .Values.engine.ssl.truststore }}
+          truststore:
+            path: {{ .Values.engine.ssl.truststore.path }}
+            password: {{ .Values.engine.ssl.truststore.password | quote }}
+          {{- end }}
+        {{- else }}
+        secured: false
+        {{- end }}
+        authentication: # authentication type to be used for HTTP authentication
+          {{- if .Values.engine.authentication.enabled }}
+          type: basic
+          users:
+            admin: {{ .Values.engine.authentication.adminPassword }}
+          {{- else }}
+          type: none
+          {{- end }}
+
+    services:
+      core:
+        http:
+          port: 18072
+          host: localhost
+          authentication:
+            # authentication type to be used for the core services
+            # - none : to disable authentication
+            # - basic : to use basic authentication
+            # default is "basic"
+            type: basic
+            users:
+              admin: adminadmin
+
+    cluster:
+      hazelcast:
+        config:
+          path: ${gravitee.home}/config/hazelcast.xml
+
+  hazelcast.xml: |
+    <hazelcast xmlns="http://www.hazelcast.com/schema/config"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.hazelcast.com/schema/config
+        http://www.hazelcast.com/schema/config/hazelcast-config-3.12.xsd">
+
+        <properties>
+            <property name="hazelcast.discovery.enabled">true</property>
+        </properties>
+
+        <map name="cache-properties">
+            <time-to-live-seconds>30</time-to-live-seconds>
+            <max-idle-seconds>30</max-idle-seconds>
+            <eviction-policy>NONE</eviction-policy>
+            <max-size policy="PER_NODE">1000</max-size>
+        </map>
+
+        <network>
+            <join>
+                <multicast enabled="false"/>
+                <tcp-ip enabled="false" />
+                <discovery-strategies>
+                    <discovery-strategy enabled="true"
+                                    class="com.hazelcast.kubernetes.HazelcastKubernetesDiscoveryStrategy">
+                        <properties>
+                            <property name="service-dns">{{ template "gravitee.engine.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local</property>
+                        </properties>
+                    </discovery-strategy>
+                </discovery-strategies>
+            </join>
+        </network>
+    </hazelcast>
+
+{{- if .Values.engine.logging.debug }}
+  logback.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!--
+        ~ Copyright (c) 2015-2016, The Gravitee team (http://www.gravitee.io)
+        ~
+        ~  Licensed under the Apache License, Version 2.0 (the "License");
+        ~  you may not use this file except in compliance with the License.
+        ~  You may obtain a copy of the License at
+        ~
+        ~  http://www.apache.org/licenses/LICENSE-2.0
+        ~
+        ~  Unless required by applicable law or agreed to in writing, software
+        ~  distributed under the License is distributed on an "AS IS" BASIS,
+        ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        ~  See the License for the specific language governing permissions and
+        ~  limitations under the License.
+    -->
+    <configuration>
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <!-- encoders are assigned the type
+                  ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+            <encoder>
+                <pattern>{{ .Values.engine.logging.stdout.encoderPattern }}</pattern>
+            </encoder>
+        </appender>
+        {{- if .Values.engine.logging.file.enabled }}
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${gravitee.home}/logs/gravitee.log</file>
+            {{ .Values.engine.logging.file.rollingPolicy | indent 16 }}
+            <encoder>
+              <pattern>{{ .Values.engine.logging.file.encoderPattern }}</pattern>
+            </encoder>
+        </appender>
+        {{- end }}
+  
+        {{- if .Values.engine.logging.file.enabled }}
+        <appender name="async-file" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="FILE" />
+        </appender>
+        {{- end }}
+  
+        <appender name="async-console" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="STDOUT" />
+        </appender>
+  
+        <logger name="com.graviteesource" level="{{ .Values.engine.logging.graviteeLevel }}" />
+        <logger name="org.reflections" level="WARN" />
+        <logger name="org.springframework" level="WARN" />
+        <logger name="com.hazelcast" level="WARN" />
+  
+        <!-- Strictly speaking, the level attribute is not necessary since -->
+        <!-- the level of the root level is set to DEBUG by default.       -->
+        <root level="INFO">
+            <appender-ref ref="async-console" />
+            {{- if .Values.engine.logging.file.enabled }}
+            <appender-ref ref="async-file" />
+            {{- end }}
+        </root>
+    </configuration>
+{{- end -}}
+{{- end -}}
