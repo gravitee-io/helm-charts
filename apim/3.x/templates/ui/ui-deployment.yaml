@@ -101,6 +101,11 @@ spec:
             {{- with .Values.ui.extraVolumeMounts }}
             {{- tpl . $ | nindent 12 }}
             {{- end }}
+        {{- if .Values.ui.extraContainers }}
+        {{- with .Values.ui.extraContainers }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}
+        {{- end }}
       {{- if .Values.ui.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.ui.image.pullSecrets }}
