@@ -64,6 +64,10 @@ spec:
               containerPort: {{ .Values.engine.service.internalPort }}
           {{- if .Values.engine.env }}
           env:
+            - name: "gravitee.processors.alert-engine-processor-useragent.enabled"
+              value: "false"
+            - name: "gravitee.processors.alert-engine-processor-geoip.enabled"
+              value: "false"
           {{- range $env := .Values.engine.env }}
             - name: {{ $env.name }}
               {{- if $env.value }}
