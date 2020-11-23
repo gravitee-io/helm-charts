@@ -4,6 +4,9 @@
 chaos:
   enabled: false
 
+graviteeRepoAuth:
+  enabled: true
+
 inMemoryAuth:
   enabled: true
   allowEmailInSearchResults: false
@@ -89,6 +92,37 @@ ldap:
       # The filter can be any type of complex LDAP query
       filter: (&(objectClass=person)(|(cn=*{0}*)(sAMAccountName={0})))
 
+oidcAuth:
+  enabled: false
+#  id: keycloak
+#  clientId:
+#  clientSecret:
+#  tokenIntrospectionEndpoint:
+#  tokenEndpoint:
+#  authorizeEndpoint:
+#  userInfoEndpoint:
+#  userLogoutEndpoint:
+#  color:
+#  syncMappings:
+#  scopes:
+#    - openid
+#    - profile
+#  userMapping:
+#    id: sub
+#    email: email
+#    lastname: family_name
+#    firstname: given_name
+#    picture: picture
+#  groupMapping:
+#    - condition: "{#jsonPath(#profile, '$.realm_roles').contains('group1')}"
+#      groups:
+#        - Group 1
+#        - Group 2
+#  roleMapping:
+#    - condition: "{#jsonPath(#profile, '$.realm_roles').contains('admin')}"
+#      roles:
+#        - "ENVIRONMENT:ADMIN"
+#        - "ORGANIZATION:ADMIN"
 smtp:
   enabled: true
   host: smtp.example.com
