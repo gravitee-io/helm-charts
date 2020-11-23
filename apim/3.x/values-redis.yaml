@@ -1,0 +1,46 @@
+
+api:
+  env:
+    - name: GRAVITEE_PLUGINS_PATH_0
+      value: ${gravitee.home}/plugins
+    - name: GRAVITEE_PLUGINS_PATH_1
+      value: ${gravitee.home}/plugins-ext
+  extraInitContainers: |
+    - name: get-redis-plugin
+      image: 'alpine'
+      command: ['sh', '-c', "mkdir -p /tmp/plugins && wget -O /tmp/plugins/gravitee-repository-jdbc-3.1.1.zip https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-jdbc/gravitee-repository-jdbc-3.1.1.zip"]
+      securityContext:  
+        runAsUser: 1001
+        runAsNonRoot: true
+      volumeMounts:
+        - name: graviteeio-apim-plugins
+          mountPath: /tmp/plugins
+  extraVolumeMounts: |
+    - name: graviteeio-apim-plugins
+      mountPath: /opt/graviteeio-management-api/plugins-ext
+  extraVolumes: |
+    - name: graviteeio-apim-plugins
+      emptyDir: {}
+
+gateway:
+  env:
+    - name: GRAVITEE_PLUGINS_PATH_0
+      value: ${gravitee.home}/plugins
+    - name: GRAVITEE_PLUGINS_PATH_1
+      value: ${gravitee.home}/plugins-ext
+  extraInitContainers: |
+    - name: get-redis-plugin
+      image: 'alpine'
+      command: ['sh', '-c', "mkdir -p /tmp/plugins && wget -O /tmp/plugins/gravitee-repository-redis-3.1.1.zip https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-3.1.1.zip"]
+      securityContext:  
+        runAsUser: 1001
+        runAsNonRoot: true
+      volumeMounts:
+        - name: graviteeio-apim-plugins
+          mountPath: /tmp/plugins
+  extraVolumeMounts: |
+    - name: graviteeio-apim-plugins
+      mountPath: /opt/graviteeio-gateway/plugins-ext
+  extraVolumes: |
+    - name: graviteeio-apim-plugins
+      emptyDir: {}
