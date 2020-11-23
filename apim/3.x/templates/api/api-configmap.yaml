@@ -141,7 +141,9 @@ data:
         index: {{ .Values.es.index }}
     security:
       providers:
+        {{- if .Values.graviteeRepoAuth.enabled }}
         - type: gravitee
+        {{- end }}
         {{- if .Values.inMemoryAuth.enabled }}
         - type: memory
           # password encoding/hashing algorithm. One of:
@@ -192,6 +194,67 @@ data:
             user:
               base: {{ .Values.ldap.lookup.user.base | quote }} 
               filter: {{ .Values.ldap.lookup.user.filter | quote }} 
+        {{- end }}
+        {{- if .Values.oidcAuth.enabled }}
+        - type: oidc
+          {{- if .Values.oidcAuth.id }}
+          id: {{ .Values.oidcAuth.id }}
+          {{- end }}
+          clientId: {{ .Values.oidcAuth.clientId }}
+          clientSecret: {{ .Values.oidcAuth.clientSecret }}
+          tokenIntrospectionEndpoint: {{ .Values.oidcAuth.tokenIntrospectionEndpoint | quote }}
+          tokenEndpoint: {{ .Values.oidcAuth.tokenEndpoint | quote }}
+          authorizeEndpoint: {{ .Values.oidcAuth.authorizeEndpoint | quote }}
+          userInfoEndpoint: {{ .Values.oidcAuth.userInfoEndpoint | quote }}
+          userLogoutEndpoint: {{ .Values.oidcAuth.userLogoutEndpoint | quote }}
+          {{- if .Values.oidcAuth.color }}
+          color: {{ .Values.oidcAuth.color | quote }}
+          {{- end }}
+          syncMappings: {{ .Values.oidcAuth.syncMappings | default false }}
+          {{- if .Values.oidcAuth.scopes }}
+          scopes:
+            {{- range $scope := .Values.oidcAuth.scopes }}
+            - {{ $scope }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.oidcAuth.userMapping }}
+          userMapping:
+            {{- if .Values.oidcAuth.userMapping.id }}
+            id: {{ .Values.oidcAuth.userMapping.id }}
+            {{- end }}
+            {{- if .Values.oidcAuth.userMapping.email }}
+            email: {{ .Values.oidcAuth.userMapping.email }}
+            {{- end }}
+            {{- if .Values.oidcAuth.userMapping.lastname }}
+            lastname: {{ .Values.oidcAuth.userMapping.lastname }}
+            {{- end }}
+            {{- if .Values.oidcAuth.userMapping.firstname }}
+            firstname: {{ .Values.oidcAuth.userMapping.firstname }}
+            {{- end }}
+            {{- if .Values.oidcAuth.userMapping.picture }}
+            picture: {{ .Values.oidcAuth.userMapping.picture }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.oidcAuth.groupMapping }}
+          groupMapping:
+            {{- range $groupMapping := .Values.oidcAuth.groupMapping }}
+            - condition: {{ $groupMapping.condition | quote }}
+              groups:
+              {{- range $group := $groupMapping.groups }}
+                - {{ $group | quote }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.oidcAuth.roleMapping }}
+          roleMapping:
+            {{- range $roleMapping := .Values.oidcAuth.roleMapping }}
+            - condition: {{ $roleMapping.condition | quote }}
+              roles:
+              {{- range $role := $roleMapping.roles }}
+                - {{ $role | quote }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
         {{- end }}
     # SMTP configuration used to send mails
     email:
