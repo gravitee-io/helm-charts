@@ -91,7 +91,8 @@ ldap:
       base: ou=users
       # The filter can be any type of complex LDAP query
       filter: (&(objectClass=person)(|(cn=*{0}*)(sAMAccountName={0})))
-
+security:
+  providers: []
 oidcAuth:
   enabled: false
 #  id: keycloak
