@@ -141,6 +141,9 @@ data:
         index: {{ .Values.es.index }}
     security:
       providers:
+        {{- if and .Values.security.providers }}
+        {{ toYaml .Values.security.providers | nindent 8 | trim -}}
+        {{- end }}
         {{- if .Values.graviteeRepoAuth.enabled }}
         - type: gravitee
         {{- end }}
