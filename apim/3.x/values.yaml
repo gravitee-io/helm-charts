@@ -175,8 +175,19 @@ mongo:
 
 jdbc:
   url: jdbc:mysql://localhost:3306/gravitee
-  username: 
+  # the URL to download the driver
+  driver: https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.22/mysql-connector-java-8.0.22.jar
+  # the version of the gravitee-repository-jdbc (only required for apim versions < 3.5.0)
+#  repositoryVersion: 3.3.0
+  username:
   password: 
+
+redis:
+  host: 'redis.mycompany'
+  port: 6379
+#  password: 'mysecretpassword'
+#  timeout: 2000
+#  repositoryVersion: 3.3.0
 
 mongodb-replicaset:
   enabled: false
@@ -354,6 +365,8 @@ api:
   #       configMapKeyRef:
   #         name: special-config
   #         key: SPECIAL_LEVEL
+  additionalPlugins:
+#    - https://path_to_plugin
   ssl:
     enabled: false
   #  keystore:
@@ -502,6 +515,8 @@ gateway:
     graviteeLevel: DEBUG
     jettyLevel: WARN
   reloadOnConfigChange: true
+  additionalPlugins:
+#    - https://path_to_plugin
   ssl:
     enabled: false
   #  keystore:
