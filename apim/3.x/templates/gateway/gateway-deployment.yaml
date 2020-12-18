@@ -22,7 +22,9 @@ spec:
     rollingUpdate:
       maxUnavailable: 1
   {{- end }}
+  {{- if not .Values.gateway.autoscaling.enabled }}
   replicas: {{ .Values.gateway.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ template "gravitee.name" . }}
