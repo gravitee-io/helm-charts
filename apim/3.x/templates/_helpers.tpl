@@ -21,7 +21,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "gravitee.gateway.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-%s" .Values.fullnameOverride .Values.gateway.name | trunc 63 | trimSuffix "-" -}}
+{{- else if contains $name .Release.Name -}}
 {{- printf "%s-%s" .Release.Name .Values.gateway.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s-%s" .Release.Name $name .Values.gateway.name | trunc 63 | trimSuffix "-" -}}
@@ -34,7 +36,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "gravitee.api.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-%s" .Values.fullnameOverride .Values.api.name | trunc 63 | trimSuffix "-" -}}
+{{- else if contains $name .Release.Name -}}
 {{- printf "%s-%s" .Release.Name .Values.api.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s-%s" .Release.Name $name .Values.api.name | trunc 63 | trimSuffix "-" -}}
@@ -47,7 +51,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "gravitee.ui.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-%s" .Values.fullnameOverride .Values.ui.name | trunc 63 | trimSuffix "-" -}}
+{{- else if contains $name .Release.Name -}}
 {{- printf "%s-%s" .Release.Name .Values.ui.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s-%s" .Release.Name $name .Values.ui.name | trunc 63 | trimSuffix "-" -}}
@@ -60,7 +66,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "gravitee.portal.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-%s" .Values.fullnameOverride .Values.portal.name | trunc 63 | trimSuffix "-" -}}
+{{- else if contains $name .Release.Name -}}
 {{- printf "%s-%s" .Release.Name .Values.portal.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s-%s" .Release.Name $name .Values.portal.name | trunc 63 | trimSuffix "-" -}}
