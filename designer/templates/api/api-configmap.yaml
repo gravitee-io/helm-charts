@@ -15,7 +15,7 @@ data:
     ############## APIGROW MAIN CONFIGURATION ############## 
     APIZR_API_KEY=ZQvoqSZtRrueflUhqAXK
     APIZR_API_KEY_HEADER_NAME=x-apizr-apikey
-    AUTOSWAGGER_FRONT_URL={{ index .Values.ui.ingress.hosts 0 }}
+    AUTOSWAGGER_FRONT_URL=https://{{ index .Values.ui.ingress.hosts 0 }}
     COOKIE_DOMAIN={{ .Values.apim.management.cookie.domain }}
 
     ############ JWT SECTION ###############

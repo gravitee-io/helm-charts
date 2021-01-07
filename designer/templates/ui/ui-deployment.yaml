@@ -52,7 +52,13 @@ spec:
           env:
           {{- range $env := .Values.ui.env }}
             - name: {{ $env.name }}
+              {{- if $env.value }}
               value: {{ $env.value | quote }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
           {{- end }}
           {{- end }}
           ports:
@@ -74,13 +80,13 @@ spec:
             httpGet:
               path: /
               port: {{ .Values.ui.service.internalPort }}
-            initialDelaySeconds: 30
+            initialDelaySeconds: 15
             periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /
               port: {{ .Values.ui.service.internalPort }}
-            initialDelaySeconds: 30
+            initialDelaySeconds: 15
             periodSeconds: 30
           resources:
 {{ toYaml .Values.ui.resources | indent 12 }}

@@ -54,8 +54,15 @@ spec:
             - containerPort: {{ .Values.api.service.internalPort }}
           {{- if .Values.api.env }}
           env:
-            {{- with .Values.api.env }}
-            {{- tpl . $ | nindent 12 }}
+            {{- range $env := .Values.api.env }}
+            - name: {{ $env.name }}
+              {{- if $env.value }}
+              value: {{ $env.value | quote }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
             {{- end }}
           {{- end }}
           {{- if .Values.api.lifecycle }}
@@ -74,12 +81,12 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ .Values.api.service.internalPort }}
-            initialDelaySeconds: 60
+            initialDelaySeconds: 15
             periodSeconds: 30
           readinessProbe:
             tcpSocket:
               port: {{ .Values.api.service.internalPort }}
-            initialDelaySeconds: 60
+            initialDelaySeconds: 15
             periodSeconds: 30
           resources:
 {{ toYaml .Values.api.resources | indent 12 }}
