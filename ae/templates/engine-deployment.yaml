@@ -42,6 +42,7 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "{{ .Values.engine.name }}"
     spec:
+      terminationGracePeriodSeconds: 60
     {{- if .Values.engine.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.engine.nodeSelector | indent 8 }}

@@ -8,6 +8,25 @@ This chart will deploy the following:
 
 - Gravitee.io Alert Engine
 
+## Kubernetes API
+
+AE embeds Hazelcast to propagate and process events between each node. In order to make Hazelcast work best when embedded and deployed under a Kubernetes cluster, we pre-configured the auto-discovery to work with the Kubernetes API.
+
+> Kubernetes API mode means that each node makes a REST call to Kubernetes Master in order to discover IPs of PODs (with Hazelcast members).
+
+In order to make it work, you need to grant access to the Kubernetes API.
+
+```
+$ kubectl apply -f https://raw.githubusercontent.com/gravitee-io/helm-charts/master/ae/rbac.yml
+```
+
+---
+**WARNING**
+
+rbac.yml comes with default `graviteeio` namespace. Make sure to use the right namespace if you have overridden it.
+
+---
+
 ## Installing
 
 * Add the Gravitee.io helm charts repo

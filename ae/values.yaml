@@ -8,7 +8,7 @@ chaos:
 engine:
   enabled: true
   # Required by Hazelcast for k8s support
-  type: StatefulSet
+  type: Deployment
   name: engine
   logging:
     debug: false
@@ -24,7 +24,7 @@ engine:
             <maxHistory>30</maxHistory>
         </rollingPolicy>
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
-    graviteeLevel: DEBUG
+    graviteeLevel: INFO
   reloadOnConfigChange: true
   ssl:
     enabled: false
