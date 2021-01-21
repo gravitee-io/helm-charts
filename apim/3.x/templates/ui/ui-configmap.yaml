@@ -26,6 +26,11 @@ data:
         "title": "{{ .Values.ui.managementTitle }}"
       }
       {{- end }}
+      {{- if .Values.ui.companyName }},
+      "company": {
+        "name": "{{ .Values.ui.companyName }}"
+      }
+      {{- end }}
       {{- if .Values.ui.documentationLink }},
       "documentation": {
         "url": "{{ .Values.ui.documentationLink }}"
