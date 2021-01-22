@@ -1,0 +1,139 @@
+{{- if .Values.api.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "gravitee.api.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.api.image.tag }}
+    app.kubernetes.io/component: "{{ .Values.api.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  {{- if not .Values.api.autoscaling.enabled }}
+  replicas: {{ .Values.api.replicaCount }}
+  {{- end }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "gravitee.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "{{ .Values.api.name }}"
+  template:
+    metadata:
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
+        {{- if .Values.api.reloadOnConfigChange }}
+        checksum/config: {{ include (print $.Template.BasePath "/api/api-configmap.yaml") . | sha256sum }}
+        {{- end }}
+      labels:
+        app.kubernetes.io/name: {{ template "gravitee.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "{{ .Values.api.name }}"
+    spec:
+      {{- if .Values.api.nodeSelector }}
+      nodeSelector:
+        {{ toYaml .Values.api.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- $plugins := list -}}
+      {{- if .Values.api.additionalPlugins -}}
+        {{- $plugins = concat $plugins .Values.api.additionalPlugins -}}
+      {{- end -}}
+      {{- $extPlugins := dict -}}
+      {{- $pluginParams := dict "plugins" $plugins "extPlugins" $extPlugins "appName" "graviteeio-management-api" -}}
+      {{- if or .Values.api.extraInitContainers $plugins $extPlugins}}
+      initContainers:
+        {{- include "deployment.pluginInitContainers" $pluginParams | indent 8}}
+        {{- with .Values.api.extraInitContainers }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ template "gravitee.api.fullname" . }}
+          image: "{{ .Values.api.image.repository }}:{{ default .Chart.AppVersion .Values.api.image.tag }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          securityContext:  
+            runAsUser: 1001
+            runAsNonRoot: true
+          ports:
+            - name: {{ .Values.api.service.internalPortName }}
+              containerPort: {{ .Values.api.service.internalPort }}
+          {{- if or .Values.api.env $plugins $extPlugins }}
+          env:
+            {{- if or $plugins $extPlugins }}
+            - name: GRAVITEE_PLUGINS_PATH_0
+              value: '${gravitee.home}/plugins'
+            - name: GRAVITEE_PLUGINS_PATH_1
+              value: '${gravitee.home}/plugins-ext'
+            {{- end }}
+            {{- range $env := .Values.api.env }}
+            - name: {{ $env.name }}
+              {{- if $env.value }}
+              value: {{ $env.value | quote }}
+              {{- end }}
+              {{- with $env.valueFrom }}
+              valueFrom: 
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.api.lifecycle }}
+          lifecycle:
+            {{- if .Values.api.lifecycle.postStart }}
+            postStart:
+              exec:
+                command: {{ .Values.api.lifecycle.postStart }}
+            {{- end }}
+            {{- if .Values.api.lifecycle.preStop }}
+            preStop:
+              exec:
+                command: {{ .Values.api.lifecycle.preStop }}
+            {{- end }}
+          {{- end }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.api.service.internalPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.api.service.internalPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          resources:
+{{ toYaml .Values.api.resources | indent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /opt/gravitee-cockpit-management-api/config/gravitee.yml
+              subPath: gravitee.yml
+          {{- if .Values.api.logging.debug }}
+            - name: config
+              mountPath: /opt/gravitee-cockpit-management-api/config/logback.xml
+              subPath: logback.xml
+          {{- end }}
+          {{- include "deployment.pluginVolumeMounts" $pluginParams | indent 12 }}
+          {{- with .Values.api.extraVolumeMounts }}
+          {{- tpl . $ | nindent 12 }}
+          {{- end }}
+        {{- if .Values.api.extraContainers }}
+        {{- with .Values.api.extraContainers }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}
+        {{- end }}
+      {{- if .Values.api.image.pullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.api.image.pullSecrets }}
+      {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "gravitee.api.fullname" . }}
+        {{- include "deployment.pluginVolumes" $pluginParams | indent 8 }}
+        {{- with .Values.api.extraVolumes }}
+          {{- tpl . $ | nindent 8 }}
+        {{- end }}
+{{- end -}}

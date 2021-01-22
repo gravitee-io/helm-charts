@@ -1,0 +1,266 @@
+{{- if .Values.api.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "gravitee.api.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.api.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+data:
+  gravitee.yml: |
+    jetty:
+      port: 8063
+    {{- if .Values.api.ssl.enabled }}
+      secured: true
+      ssl:
+        keystore:
+          {{- if .Values.api.ssl.keystore.type }}
+          type: {{ .Values.api.ssl.keystore.type }}
+          {{- end }}
+          path: {{ .Values.api.ssl.keystore.path }}
+          password: {{ .Values.api.ssl.keystore.password | quote }}
+        clientAuth: {{ .Values.api.ssl.clientAuth }}
+        {{- if .Values.api.ssl.truststore }}
+        truststore:
+          {{- if .Values.api.ssl.truststore.type }}
+          type: {{ .Values.api.ssl.truststore.type }}
+          {{- end }}
+          path: {{ .Values.api.ssl.truststore.path }}
+          password: {{ .Values.api.ssl.truststore.password | quote }}
+        {{- end }}
+    {{- end }}
+
+    management:
+      type: mongodb
+      mongodb:
+        sslEnabled: {{ .Values.mongo.sslEnabled }}
+        socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
+        {{- if .Values.mongo.uri }}
+        uri: {{ .Values.mongo.uri }}
+        {{- else if .Values.mongo.servers }}
+        servers:
+          {{- .Values.mongo.servers | nindent 10 }}
+        dbname: {{ .Values.mongo.dbname }}
+        {{- if (eq .Values.mongo.auth.enabled true) }}
+        username: {{ .Values.mongo.auth.username }}
+        password: {{ .Values.mongo.auth.password }}
+        {{- end }}
+        {{- else }}
+        uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
+        {{- end }}
+
+    services:
+      core:
+        http: 
+          enabled: true
+          port: {{ .Values.api.http.services.core.http.port |default "18063" }}
+          host: {{ .Values.api.http.services.core.http.host |default "localhost" }}
+          authentication:
+            type: basic
+            users:
+              admin: {{ .Values.api.http.services.core.http.authentication.password }}
+
+    {{- if and .Values.api.http .Values.api.http.client }}
+    httpClient:
+      {{- if .Values.api.http.client.timeout }}
+      timeout: {{ .Values.api.http.client.timeout }}
+      {{- end }}
+      {{- if .Values.api.http.client.proxy }}
+      proxy:
+        type: {{ .Values.api.http.client.proxy.type }}
+        {{- if .Values.api.http.client.proxy.http }}
+        http:
+          host: {{ .Values.api.http.client.proxy.http.host }}
+          port: {{ .Values.api.http.client.proxy.http.port }}
+          {{- if or .Values.api.http.client.proxy.http.username .Values.api.http.client.proxy.http.password }}
+          username: {{ .Values.api.http.client.proxy.http.username }}
+          password: {{ .Values.api.http.client.proxy.http.password }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.api.http.client.proxy.https }}
+        https:
+          host: {{ .Values.api.http.client.proxy.https.host }}
+          port: {{ .Values.api.http.client.proxy.https.port }}
+          {{- if or .Values.api.http.client.proxy.https.username .Values.api.http.client.proxy.https.password }}
+          username: {{ .Values.api.http.client.proxy.https.username }}
+          password: {{ .Values.api.http.client.proxy.https.password }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+
+    {{- if and .Values.api.http .Values.api.http.api }}
+    http:
+      api:
+        entrypoint: {{ .Values.api.http.api.entrypoint }}
+    {{- end }}
+
+    reCaptcha:
+      enabled: false
+      siteKey:
+      secretKey:
+      minScore:
+      serviceUrl:
+
+    # SMTP configuration used to send mails
+    email:
+      enabled: {{ .Values.smtp.enabled }}
+      {{- if .Values.smtp.enabled }} 
+      host: {{ .Values.smtp.host }}
+      subject: {{ .Values.smtp.subject | quote }}
+      port: {{ .Values.smtp.port }}
+      from: {{ .Values.smtp.from }}
+      {{- if or .Values.smtp.username .Values.smtp.password }}
+      username: {{ .Values.smtp.username }}
+      password: {{ .Values.smtp.password }}
+      {{- end }}
+      properties:
+        {{- range $key, $val := .Values.smtp.properties }}
+        {{ $key }} : {{ $val | quote }}
+        {{- end }}
+      {{- end }}
+
+    jwt:
+      secret: {{ .Values.api.jwt.secret }}
+      # Allows to define the end of validity of the token in seconds (default 604800 = a week)
+      #expire-after: 604800
+      # Allows to define issuer (default gravitee-cockpit-auth)
+      #issuer: gravitee-cockpit-auth
+      # Allows to define cookie context path (default /)
+      #cookie-path: /
+      # Allows to define cookie domain (default "")
+      #cookie-domain: .gravitee.io
+      # Allows to define if cookie secure only (default false)
+      #cookie-secure: true
+
+    platform:
+      admin:
+        # Password value: adminadmin
+        password: {{ .Values.api.platform.admin.password }}
+
+    certificates:
+      # The default secret to use to protect passwords of generated account keystores (WARN: need to be changed).
+      secret: QdjshTRmurH3YtzFCrYATkSG8H65xwah
+      # The principal used to generate account certificates.
+      principal: 'EMAILADDRESS=contact@graviteesource.com, CN={accountId}, OU=Cockpit, O=GraviteeSource, L=Lille, ST=France, C=FR'
+      # Expiration delay in second (default 31536000 == 1 year)
+      expire-after: 31536000
+      key:
+        alg: RSA
+        size: 4096
+      signature:
+        alg: SHA512WithRSA
+
+    endpoints:
+      loginPath: "/auth/cockpit?token={token}"
+      apim: # Default API Management endpoint to use to configure account when created
+        name: "GraviteeAPIManagement"
+        ui: "http://localhost:3000"
+        api: "http://localhost:8083/management"
+      am: # Default Access Management endpoint to use to configure account when created
+        name: "GraviteeAccessManagement"
+        ui: "http://localhost:4200"
+        api: "http://localhost:8093/management"
+      ui: "https://{{ index .Values.ui.ingress.hosts 0 }}{{ .Values.ui.ingress.path }}"
+      ws: "https://{{ index .Values.api.ingress.hosts 0 }}"
+
+    initialPlans:
+      small:
+        name: 'Small'
+        maxEnvs: 2
+        isDefault: 'true'
+      medium:
+        name: 'Medium'
+        maxEnvs: 4
+      large:
+        name: 'Large'
+        maxEnvs: -1
+
+    auth:
+      callbackUrl: {{ .Values.api.ingress.path }}/auth/login/callback
+
+      {{- if and .Values.authentication.github .Values.authentication.github.clientId }}
+      github:
+        userAutorizationUri: https://github.com/login/oauth/authorize
+        accessTokenUri: https://github.com/login/oauth/access_token
+        userProfileUri: https://api.github.com/user
+        codeParameter: code
+        responseType: code
+        clientId: {{ .Values.authentication.github.clientId }}
+        clientSecret: {{ .Values.authentication.github.clientSecret }}
+        redirectUri: https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/auth/login/callback?provider=github
+        scopes:
+      {{- end }}
+
+      {{- if and .Values.authentication.google .Values.authentication.google.clientId }}
+      google:
+        userAutorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+        accessTokenUri: https://oauth2.googleapis.com/token
+        userProfileUri: https://openidconnect.googleapis.com/v1/userinfo
+        codeParameter: code
+        responseType: code
+        clientId: {{ .Values.authentication.google.clientId }}
+        clientSecret: {{ .Values.authentication.google.clientSecret }}
+        redirectUri: https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/auth/login/callback?provider=google
+        scopes: openid,profile,email
+      {{- end }}
+  {{- if .Values.api.logging.debug }}
+  logback.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+
+    <!--
+      ~ Copyright (c) 2015-2016, The Gravitee team (http://www.gravitee.io)
+      ~
+      ~  Licensed under the Apache License, Version 2.0 (the "License");
+      ~  you may not use this file except in compliance with the License.
+      ~  You may obtain a copy of the License at
+      ~
+      ~  http://www.apache.org/licenses/LICENSE-2.0
+      ~
+      ~  Unless required by applicable law or agreed to in writing, software
+      ~  distributed under the License is distributed on an "AS IS" BASIS,
+      ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      ~  See the License for the specific language governing permissions and
+      ~  limitations under the License.
+      -->
+
+        <configuration>
+
+            <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+                <!-- encoders are assigned the type
+                    ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+                <encoder>
+                    <pattern>{{ .Values.api.logging.stdout.encoderPattern }}</pattern>
+                </encoder>
+            </appender>
+
+            {{- if .Values.api.logging.file.enabled }}
+            <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${gravitee.management.log.dir}/gravitee.log</file>
+{{ .Values.api.logging.file.rollingPolicy | indent 16 }}
+                <encoder>
+                    <pattern>{{ .Values.api.logging.file.encoderPattern }}</pattern>
+                </encoder>
+            </appender>
+            {{- end }}
+
+            <logger name="io.gravitee" level="{{ .Values.api.logging.graviteeLevel }}" />
+            <logger name="com.graviteesource" level="{{ .Values.api.logging.graviteeLevel }}" />
+            <logger name="org.eclipse.jetty" level="{{ .Values.api.logging.jettyLevel }}" />
+
+            <!-- Strictly speaking, the level attribute is not necessary since -->
+            <!-- the level of the root level is set to DEBUG by default.       -->
+            <root level="WARN">
+                <appender-ref ref="STDOUT" />
+                {{- if .Values.api.logging.file.enabled }}
+                <appender-ref ref="FILE" />
+                {{- end }}
+            </root>
+
+        </configuration>
+  {{- end }}
+{{- end -}}
