@@ -15,6 +15,8 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
   annotations:
+    # the ssl passthrough annotation is required for MTLS communication between Gravitee Cockpit and Gravitee APIM / Gravitee AM
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     {{- range $key, $value := .Values.api.ingress.annotations }}
       {{ $key }}: {{ $value | quote }}
     {{- end }}
