@@ -59,7 +59,7 @@ spec:
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
       {{- if .Values.gateway.services.bridge.enabled -}}
-        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-gateway-bridge-http/gravitee-repository-gateway-bridge-http-server%s.zip"  (.Values.gateway.services.bridge.version | default .Values.api.image.tag | default .Chart.AppVersion ) -}}
+        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-gateway-bridge-http/gravitee-repository-gateway-bridge-http-server-%s.zip"  (.Values.gateway.services.bridge.version | default .Values.api.image.tag | default .Chart.AppVersion ) -}}
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
       {{- if  and (eq .Values.management.type "jdbc") (lt (semver "3.5.0" | (semver (.Values.api.image.tag | default .Chart.AppVersion)).Compare) 0 ) -}}
