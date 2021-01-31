@@ -310,6 +310,7 @@ data:
 
     jwt:
       secret: {{ .Values.jwtSecret }}
+      {{- if .Values.jwt }}
       # Allows to define the end of validity of the token in seconds (default 604800 = a week)
       #expire-after: 604800
       # Allows to define the end of validity of the token in seconds for email registration (default 86400 = a day)
@@ -319,9 +320,14 @@ data:
       # Allows to define cookie context path (default /)
       #cookie-path: /
       # Allows to define cookie domain (default "")
-      #cookie-domain: .gravitee.io
+      {{- if .Values.jwt.cookie }}
+      cookie-domain: {{ .Values.jwt.cookie.domain }}
+      {{- else }}
+      cookie-domain: {{ index .Values.ui.ingress.hosts 0 }}
+      {{- end }}
       # Allows to define if cookie secure only (default false)
       #cookie-secure: true
+      {{- end }}
 
     swagger:
       # Default scheme used when creating an API from a Swagger descriptor if there is no scheme specified.

@@ -2,6 +2,7 @@
 {{- if .Values.api.ingress.enabled -}}
 {{- $serviceAPIName := include "gravitee.api.fullname" . -}}
 {{- $serviceAPIPort := .Values.api.service.externalPort -}}
+{{- $ingressPath   := .Values.api.ingress.path -}}
 apiVersion: {{ template "ingress.apiVersion" . }}
 kind: Ingress
 metadata:
@@ -20,15 +21,13 @@ metadata:
 spec:
   rules:
     {{- range $host := .Values.api.ingress.hosts }}
-    - host: {{ .host | quote }}
+    - host: {{ $host }}
       http:
         paths:
-        {{- range .paths }}
-          - path: {{ . }}
+          - path: {{ $ingressPath }}
             backend:
               serviceName: {{ $serviceAPIName }}
               servicePort: {{ $serviceAPIPort }}
-        {{- end -}}
     {{- end -}}
   {{- if .Values.api.ingress.tls }}
   tls:

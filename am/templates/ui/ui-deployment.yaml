@@ -54,9 +54,9 @@ spec:
           {{- end }}
           env:
             - name: MGMT_API_URL
-              value: "https://{{(index .Values.api.ingress.hosts 0).host }}"
+              value: "https://{{index .Values.api.ingress.hosts 0 }}"
             - name: MGMT_UI_URL
-              value: "https://{{index .Values.ui.ingress.hosts 0 }}/ui"
+              value: "https://{{index .Values.ui.ingress.hosts 0 }}{{ .Values.ui.ingress.path }}"
           {{- if .Values.ui.env }}
           {{- range $env := .Values.ui.env }}
             - name: {{ $env.name }}
