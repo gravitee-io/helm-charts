@@ -66,15 +66,15 @@ data:
         {{- end }}
       {{- end }}
 
-      
+
     services:
       core:
-        http: 
-          enabled: true
-          port: {{ .Values.api.http.services.core.http.port |default "18083" }}
-          host: {{ .Values.api.http.services.core.http.host |default "localhost" }}
+        http:
+          enabled: {{ .Values.api.http.services.core.http.enabled | default false }}
+          port: {{ .Values.api.http.services.core.http.port | default "18083" }}
+          host: {{ .Values.api.http.services.core.http.host | default "localhost" }}
           authentication:
-            type: basic
+            type: {{ .Values.api.http.services.core.http.authentication.type | default "basic" }}
             users:
               admin: {{ .Values.api.http.services.core.http.authentication.password }}
     {{- if and .Values.api.http .Values.api.http.client }}

@@ -381,10 +381,11 @@ api:
     services:
       core:
         http:
+          enabled: true
           port: 18083
           host: localhost
           authentication:
-            password: adminadmin  
+            password: adminadmin
         ingress:
           enabled: false
 #          path: /management/_(.*)
