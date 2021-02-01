@@ -76,7 +76,7 @@ data:
           authentication:
             type: {{ .Values.api.http.services.core.http.authentication.type | default "basic" }}
             users:
-              admin: {{ .Values.api.http.services.core.http.authentication.password }}
+              admin: {{ .Values.api.http.services.core.http.authentication.password | default "adminadmin"}}
     {{- if and .Values.api.http .Values.api.http.client }}
     httpClient:
       {{- if .Values.api.http.client.timeout }}
