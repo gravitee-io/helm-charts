@@ -145,7 +145,7 @@ data:
     services:
       core:
         http:
-          enabled: {{ .Values.gateway.services.core.http.enabled | default false }}
+          enabled: {{ .Values.gateway.services.core.http.enabled | default true }}
           port: {{ .Values.gateway.services.core.http.port | default "18082" }}
           host: {{ .Values.gateway.services.core.http.host | default "localhost" }}
           authentication:
