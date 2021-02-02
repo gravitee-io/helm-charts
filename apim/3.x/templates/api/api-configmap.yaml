@@ -70,7 +70,7 @@ data:
     services:
       core:
         http:
-          enabled: {{ .Values.api.http.services.core.http.enabled | default false }}
+          enabled: {{ .Values.api.http.services.core.http.enabled | default true }}
           port: {{ .Values.api.http.services.core.http.port | default "18083" }}
           host: {{ .Values.api.http.services.core.http.host | default "localhost" }}
           authentication:
