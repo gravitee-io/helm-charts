@@ -166,7 +166,7 @@ data:
         ui: "http://localhost:4200"
         api: "http://localhost:8093/management"
       ui: "https://{{ index .Values.ui.ingress.hosts 0 }}{{ .Values.ui.ingress.path }}"
-      ws: "https://{{ index .Values.api.ingress.hosts 0 }}"
+      ws: "https://{{ index .Values.api.controller.ws.ingress.hosts 0 }}{{ .Values.api.controller.ws.ingress.path }}"
 
     initialPlans:
       small:
