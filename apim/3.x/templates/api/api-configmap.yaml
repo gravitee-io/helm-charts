@@ -51,6 +51,7 @@ data:
         {{- if (eq .Values.mongo.auth.enabled true) }}
         username: {{ .Values.mongo.auth.username }}
         password: {{ .Values.mongo.auth.password }}
+        authSource: {{ .Values.mongo.auth.source | default "gravitee" }}
         {{- end }}
         {{- else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
