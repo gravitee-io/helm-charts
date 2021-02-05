@@ -83,8 +83,7 @@ spec:
           image: "{{ .Values.gateway.image.repository }}:{{ default .Chart.AppVersion .Values.gateway.image.tag }}"
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
           securityContext:  
-            runAsUser: 1001
-            runAsNonRoot: true
+{{ toYaml .Values.api.securityContext | trim | indent 12 }}
           ports:
             - name: {{ .Values.gateway.service.internalPortName }}
               containerPort: {{ .Values.gateway.service.internalPort }}

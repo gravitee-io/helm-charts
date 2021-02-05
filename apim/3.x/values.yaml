@@ -428,6 +428,9 @@ api:
     internalPort: 8083
     internalPortName: http
   # annotations:
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -618,6 +621,9 @@ gateway:
     internalPort: 8082
     internalPortName: http
   # annotations:
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -697,6 +703,10 @@ portal:
     internalPort: 8080
     internalPortName: http
   # annotations:
+  securityContext:
+    runAsUser: 101
+    runAsGroup: 101
+    runAsNonRoot: true
   ingress:
     enabled: true
     path: /
@@ -788,6 +798,10 @@ ui:
     internalPort: 8080
     internalPortName: http
   # annotations:
+  securityContext:
+    runAsUser: 101
+    runAsGroup: 101
+    runAsNonRoot: true
   ingress:
     enabled: true
     path: /console(/|$)(.*)

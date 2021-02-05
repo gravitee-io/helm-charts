@@ -188,6 +188,9 @@ api:
     internalPort: 8063
     internalPortName: http
   # annotations:
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -266,6 +269,10 @@ ui:
     internalPort: 8080
     internalPortName: http
   # annotations:
+  securityContext:
+    runAsUser: 101
+    runAsGroup: 101
+    runAsNonRoot: true
   ingress:
     enabled: true
     path: /
