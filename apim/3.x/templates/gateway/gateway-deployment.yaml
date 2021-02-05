@@ -50,21 +50,23 @@ spec:
       {{- if .Values.gateway.additionalPlugins -}}
         {{- $plugins = concat $plugins .Values.gateway.additionalPlugins -}}
       {{- end -}}
-      {{- if eq .Values.management.type "redis" -}}
-        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-%s.zip"  (.Values.redis.repositoryVersion | default .Values.api.image.tag | default .Chart.AppVersion ) -}}
+      {{- if ne .Values.gateway.image.tag "nightly" }}
+      {{- if and (eq .Values.management.type "redis")  -}}
+        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-%s.zip"  (.Values.redis.repositoryVersion | default .Values.gateway.image.tag | default .Chart.AppVersion ) -}}
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
       {{- if eq .Values.management.type "http" -}}
-        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-gateway-bridge-http/gravitee-repository-gateway-bridge-http-client-%s.zip"  (.Values.gateway.management.http.version | default .Values.api.image.tag | default .Chart.AppVersion ) -}}
+        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-gateway-bridge-http/gravitee-repository-gateway-bridge-http-client-%s.zip"  (.Values.gateway.management.http.version | default .Values.gateway.image.tag | default .Chart.AppVersion ) -}}
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
       {{- if .Values.gateway.services.bridge.enabled -}}
-        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-gateway-bridge-http/gravitee-repository-gateway-bridge-http-server-%s.zip"  (.Values.gateway.services.bridge.version | default .Values.api.image.tag | default .Chart.AppVersion ) -}}
+        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-gateway-bridge-http/gravitee-repository-gateway-bridge-http-server-%s.zip"  (.Values.gateway.services.bridge.version | default .Values.gateway.image.tag | default .Chart.AppVersion ) -}}
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
-      {{- if  and (eq .Values.management.type "jdbc") (lt (semver "3.5.0" | (semver (.Values.api.image.tag | default .Chart.AppVersion)).Compare) 0 ) -}}
-        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-jdbc/gravitee-repository-jdbc-%s.zip"  (.Values.jdbc.repositoryVersion | default .Values.api.image.tag | default .Chart.AppVersion ) -}}
+      {{- if  and (eq .Values.management.type "jdbc") (lt (semver "3.5.0" | (semver (.Values.gateway.image.tag | default .Chart.AppVersion)).Compare) 0 ) -}}
+        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-jdbc/gravitee-repository-jdbc-%s.zip"  (.Values.jdbc.repositoryVersion | default .Values.gateway.image.tag | default .Chart.AppVersion ) -}}
         {{- $plugins = append $plugins $url -}}
+      {{- end -}}
       {{- end -}}
       {{- $extPlugins := dict -}}
       {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
@@ -83,7 +85,7 @@ spec:
           image: "{{ .Values.gateway.image.repository }}:{{ default .Chart.AppVersion .Values.gateway.image.tag }}"
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
           securityContext:  
-{{ toYaml .Values.api.securityContext | trim | indent 12 }}
+{{ toYaml .Values.gateway.securityContext | trim | indent 12 }}
           ports:
             - name: {{ .Values.gateway.service.internalPortName }}
               containerPort: {{ .Values.gateway.service.internalPort }}
