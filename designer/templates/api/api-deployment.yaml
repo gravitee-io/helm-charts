@@ -48,8 +48,7 @@ spec:
           image: "{{ .Values.api.image.repository }}:{{ default .Chart.AppVersion .Values.api.image.tag }}"
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           securityContext:  
-            runAsUser: 1001
-            runAsNonRoot: true
+{{ toYaml .Values.api.securityContext | trim | indent 12 }}
           ports:
             - containerPort: {{ .Values.api.service.internalPort }}
           {{- if .Values.api.env }}

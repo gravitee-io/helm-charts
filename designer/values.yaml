@@ -94,6 +94,9 @@ api:
     externalPort: 83
     internalPort: 3001
   # annotations:
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -167,6 +170,9 @@ ui:
     externalPort: 8002
     internalPort: 8080
     # annotations:
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
   ingress:
     enabled: true
     path: /
@@ -232,6 +238,9 @@ generator:
     externalPort: 84
     internalPort: 3003
   # annotations:
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
   autoscaling:
     enabled: true
     minReplicas: 1

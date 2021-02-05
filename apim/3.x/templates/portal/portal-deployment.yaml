@@ -48,9 +48,7 @@ spec:
           image: "{{ .Values.portal.image.repository }}:{{ default .Chart.AppVersion .Values.portal.image.tag }}"
           imagePullPolicy: {{ .Values.portal.image.pullPolicy }}
           securityContext:
-            runAsUser: 101
-            runAsGroup: 101
-            runAsNonRoot: true
+{{ toYaml .Values.portal.securityContext | trim | indent 12 }}
           env:
             - name: PORTAL_API_URL
               value: "https://{{index .Values.api.ingress.portal.hosts 0 }}{{ .Values.api.ingress.portal.path }}/"

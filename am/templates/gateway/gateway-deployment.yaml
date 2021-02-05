@@ -56,11 +56,8 @@ spec:
         - name: {{ template "gravitee.gateway.fullname" . }}
           image: "{{ .Values.gateway.image.repository }}:{{ default .Chart.AppVersion .Values.gateway.image.tag }}"
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
-          {{- if .Values.gateway.runAsNonRoot -}}
           securityContext:  
-            runAsUser: 1001
-            runAsNonRoot: true
-          {{- end }}
+{{ toYaml .Values.gateway.securityContext | trim | indent 12 }}
           ports:
             - name: {{ .Values.gateway.service.internalPortName }}
               containerPort: {{ .Values.gateway.service.internalPort }}

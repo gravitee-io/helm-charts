@@ -48,8 +48,7 @@ spec:
           image: "{{ .Values.generator.image.repository }}:{{ default .Chart.AppVersion .Values.generator.image.tag }}"
           imagePullPolicy: {{ .Values.generator.image.pullPolicy }}
           securityContext:  
-            runAsUser: 1001
-            runAsNonRoot: true
+{{ toYaml .Values.generator.securityContext | trim | indent 12 }}
           ports:
             - containerPort: {{ .Values.generator.service.internalPort }}
           env:

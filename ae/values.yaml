@@ -59,6 +59,9 @@ engine:
     internalPort: 8072
     internalPortName: http
     # annotations:
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
   autoscaling:
     enabled: true
     minReplicas: 1
