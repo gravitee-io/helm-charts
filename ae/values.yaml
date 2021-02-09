@@ -7,7 +7,6 @@ chaos:
 
 engine:
   enabled: true
-  # Required by Hazelcast for k8s support
   type: Deployment
   name: engine
   logging:
