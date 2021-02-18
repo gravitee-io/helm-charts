@@ -43,23 +43,23 @@ spec:
       {{- if .Values.api.additionalPlugins -}}
         {{- $plugins = concat $plugins .Values.api.additionalPlugins -}}
       {{- end -}}
-      {{- if ne .Values.gateway.image.tag "nightly" }}
       {{- if eq .Values.management.type "redis" -}}
         {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-%s.zip"  (.Values.redis.repositoryVersion | default .Values.api.image.tag | default .Chart.AppVersion ) -}}
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
-      {{- if  and (eq .Values.management.type "jdbc") (lt (semver "3.5.0" | (semver (.Values.api.image.tag | default .Chart.AppVersion)).Compare) 0 ) -}}
-        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-jdbc/gravitee-repository-jdbc-%s.zip"  (.Values.jdbc.repositoryVersion | default .Values.api.image.tag | default .Chart.AppVersion ) -}}
-        {{- $plugins = append $plugins $url -}}
-      {{- end -}}
-      {{- end -}}
-      {{- $extPlugins := dict -}}
-      {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
-        {{- $_ := set $extPlugins "repository-jdbc" .Values.jdbc.driver -}}
-      {{- end -}}
-      {{- $pluginParams := dict "plugins" $plugins "extPlugins" $extPlugins "appName" "graviteeio-management-api" -}}
-      {{- if or .Values.api.extraInitContainers $plugins $extPlugins}}
+      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-management-api" -}}
+      {{- if or .Values.api.extraInitContainers $plugins}}
       initContainers:
+        {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
+        - name: get-repository-jdbc-ext
+          image: 'alpine'
+          command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  {{ .Values.jdbc.driver }}"]
+          securityContext:
+{{ toYaml .Values.api.securityContext | trim | indent 12 }}
+          volumeMounts:
+            - name: graviteeio-apim-repository-jdbc-ext
+              mountPath: /tmp/plugins-ext
+        {{- end -}}
         {{- include "deployment.pluginInitContainers" $pluginParams | indent 8}}
         {{- with .Values.api.extraInitContainers }}
         {{- tpl . $ | nindent 8 }}
@@ -74,9 +74,9 @@ spec:
           ports:
             - name: {{ .Values.api.service.internalPortName }}
               containerPort: {{ .Values.api.service.internalPort }}
-          {{- if or .Values.api.env $plugins $extPlugins }}
+          {{- if or .Values.api.env $plugins }}
           env:
-            {{- if or $plugins $extPlugins }}
+            {{- if or $plugins }}
             - name: GRAVITEE_PLUGINS_PATH_0
               value: '${gravitee.home}/plugins'
             - name: GRAVITEE_PLUGINS_PATH_1
@@ -127,6 +127,10 @@ spec:
               mountPath: /opt/graviteeio-management-api/config/logback.xml
               subPath: logback.xml
           {{- end }}
+          {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
+            - name: graviteeio-apim-repository-jdbc-ext
+              mountPath: /opt/graviteeio-management-api/plugins/ext/repository-jdbc
+          {{- end }}
           {{- include "deployment.pluginVolumeMounts" $pluginParams | indent 12 }}
           {{- with .Values.api.extraVolumeMounts }}
           {{- tpl . $ | nindent 12 }}
@@ -144,6 +148,10 @@ spec:
         - name: config
           configMap:
             name: {{ template "gravitee.api.fullname" . }}
+        {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
+        - name: graviteeio-apim-repository-jdbc-ext
+          emptyDir: {}
+        {{- end }}
         {{- include "deployment.pluginVolumes" $pluginParams | indent 8 }}
         {{- with .Values.api.extraVolumes }}
           {{- tpl . $ | nindent 8 }}
