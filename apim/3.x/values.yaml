@@ -234,6 +234,14 @@ es:
     enabled: false
     username: example
     password: example
+  lifecyle:
+    enabled: false
+    policyPropertyName: index.lifecycle.name   #for openDistro, use 'opendistro.index_state_management.policy_id' instead of 'index.lifecycle.name'
+    policies:
+      monitor: my_policy ## ILM policy for the gravitee-monitor-* indexes
+      request: my_policy ## ILM policy for the gravitee-request-* indexes
+      health: my_policy ## ILM policy for the gravitee-health-* indexes
+      log: my_policy ## ILM policy for the gravitee-log-* indexes
   ssl:
     enabled: false
     # keystore:
