@@ -142,6 +142,15 @@ data:
         endpoints:
           {{ toYaml . | nindent 10 | trim -}}
         {{- end }}
+        {{- if (eq .Values.es.lifecyle.enabled true) }}
+        lifecyle:
+          policy_property_name: {{ .Values.es.lifecyle.policyPropertyName }}
+          policies:
+            monitor: {{ .Values.es.lifecyle.policies.monitor }}
+            request: {{ .Values.es.lifecyle.policies.request }}
+            health: {{ .Values.es.lifecyle.policies.health }}
+            log: {{ .Values.es.lifecyle.policies.log }}
+        {{- end }}
         {{- if (eq .Values.es.security.enabled true) }}
         security:
           username: {{ .Values.es.security.username }}
