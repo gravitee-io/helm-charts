@@ -602,6 +602,15 @@ gateway:
   apiKey:
     header: X-Gravitee-Api-Key
     param: api-key
+  reporters:
+    elasticsearch:
+      enabled: true
+#    tcp:
+#      enabled: true
+#      host: localhost
+#      port: 8379
+#    file:
+
   image:
     repository: graviteeio/apim-gateway
     # tag: 3.0.2

@@ -137,7 +137,7 @@ data:
     reporters:
       # Elasticsearch reporter
       elasticsearch:
-        enabled: true # Is the reporter enabled or not (default to true)
+        enabled: {{ .Values.gateway.reporters.elasticsearch.enabled }}
         {{- with .Values.es.endpoints }}
         endpoints:
           {{ toYaml . | nindent 10 | trim -}}
@@ -164,6 +164,14 @@ data:
         bulk:
           actions: 1000           # Number of requests action before flush
           flush_interval: 5       # Flush interval in seconds
+
+      {{- range $key, $value := .Values.gateway.reporters }}
+      {{- if ne $key "elasticsearch"}}
+      {{ $key }}:
+{{ toYaml $value | indent 8 }}      
+      {{- end }}
+      {{- end }}
+
     services:
       core:
         http:
