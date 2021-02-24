@@ -144,6 +144,7 @@ data:
         {{- end }}
         index: {{ .Values.es.index }}
     security:
+      trustAll: {{ .Values.security.trustAll | default false }}
       providers:
         {{- if and .Values.security.providers }}
         {{ toYaml .Values.security.providers | nindent 8 | trim -}}
