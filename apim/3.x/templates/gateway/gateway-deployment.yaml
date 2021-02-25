@@ -51,7 +51,7 @@ spec:
         {{- $plugins = concat $plugins .Values.gateway.additionalPlugins -}}
       {{- end -}}
       {{- if ne .Values.gateway.image.tag "nightly" }}
-      {{- if and (eq .Values.management.type "redis")  -}}
+      {{- if and (eq .Values.management.type "redis") -}}
         {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-%s.zip"  (.Values.redis.repositoryVersion | default .Values.gateway.image.tag | default .Chart.AppVersion ) -}}
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
