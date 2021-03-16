@@ -191,6 +191,17 @@ data:
             type: {{ .Values.gateway.services.core.http.authentication.type | default "basic" }}
             users:
               admin: {{ .Values.gateway.services.core.http.authentication.password | default "adminadmin" }}
+          secured: {{ .Values.gateway.services.core.http.secured | default false }}
+          {{- if (eq .Values.gateway.services.core.http.secured true) }}
+          ssl:
+            keystore:
+              type: {{ .Values.gateway.services.core.http.ssl.keystore.type }}
+              path: {{ .Values.gateway.services.core.http.ssl.keystore.path }}
+          {{- end }}
+      {{- if .Values.gateway.services.kubeController }}
+      kubernetes:
+        enabled: {{ .Values.gateway.services.kubeController.enabled | default false }}
+      {{- end }}
       # Synchronization daemon used to keep the gateway state in sync with the configuration from the management repository
       # Be aware that, by disabling it, the gateway will not be sync with the configuration done through management API
       # and management UI
