@@ -566,6 +566,11 @@ gateway:
         authentication:
           type: basic
           password: adminadmin
+        secured: false
+        ssl:
+          keystore:
+            type: "PKCS12"
+            path: "/p12/keystore"
       ingress:
         enabled: false
 #          path: /management/_(.*)
@@ -580,6 +585,8 @@ gateway:
         enabled: false
 #         type: ClusterIP
 #         externalPort: 18082
+    kubeController:
+      enabled: false
     bridge:
       enabled: false
       # version: 3.3.1
@@ -607,6 +614,7 @@ gateway:
       #     - secretName: chart-example-tls
       #       hosts:
       #         - chart-example.local
+
   apiKey:
     header: X-Gravitee-Api-Key
     param: api-key
