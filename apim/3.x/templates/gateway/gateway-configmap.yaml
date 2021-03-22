@@ -246,10 +246,10 @@ data:
               {{ .Values.gateway.services.bridge.username }}: {{ .Values.gateway.services.bridge.password }}
       {{- end }}
 
+    {{- if or .Values.gateway.handlers }}
     handlers:
-      request:
-        transaction:
-          header: X-Gravitee-Transaction-Id
+{{ toYaml .Values.gateway.handlers | indent 6 }}   
+    {{- end }}
     
     # Customize the api-key header and / or query parameter.
     policy:

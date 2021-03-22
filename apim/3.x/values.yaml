@@ -615,6 +615,12 @@ gateway:
       #       hosts:
       #         - chart-example.local
 
+  # handlers:
+  #   request:
+  #     transaction:
+  #       header: X-Gravitee-Transaction-Id
+  #     request:
+  #       header: X-Gravitee-Request-Id
   apiKey:
     header: X-Gravitee-Api-Key
     param: api-key
