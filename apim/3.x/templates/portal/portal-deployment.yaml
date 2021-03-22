@@ -37,7 +37,7 @@ spec:
       nodeSelector:
 {{ toYaml .Values.portal.nodeSelector | indent 8 }}
     {{- end }}
-    {{- if or .Values.ui.extraInitContainers }}
+    {{- if or .Values.portal.extraInitContainers }}
       initContainers:
       {{- with .Values.portal.extraInitContainers }}
         {{- tpl . $ | nindent 8 }}
