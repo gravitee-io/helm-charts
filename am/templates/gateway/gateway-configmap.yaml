@@ -14,7 +14,7 @@ data:
   gravitee.yml: |
     # Gateway HTTP server
     http:
-      port: 8092
+      port: {{ .Values.gateway.service.internalPort }}
       host: 0.0.0.0
     #  idleTimeout: 0
     #  tcpKeepAlive: true
@@ -25,61 +25,112 @@ data:
       secured: true
       ssl:
         keystore:
+          {{- if .Values.gateway.ssl.keystore.type }}
+          type: {{ .Values.gateway.ssl.keystore.type }}
+          {{- end }}
           path: {{ .Values.gateway.ssl.keystore.path }}
           password: {{ .Values.gateway.ssl.keystore.password | quote }}
         clientAuth: {{ .Values.gateway.ssl.clientAuth }}
         {{- if .Values.gateway.ssl.truststore }}
         truststore:
+          {{- if .Values.gateway.ssl.truststore.type }}
+          type: {{ .Values.gateway.ssl.truststore.type }}
+          {{- end }}
           path: {{ .Values.gateway.ssl.truststore.path }}
           password: {{ .Values.gateway.ssl.truststore.password | quote }}
         {{- end }}
       {{- end }}
 
     management:
-      type: mongodb
+      type: {{ .Values.management.type | default "mongodb" }}
+      {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
       mongodb:
         {{- if .Values.mongo.uri }}
         uri: {{ .Values.mongo.uri }}
         {{ else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
+      {{- else if (eq .Values.management.type "jdbc") }}
+      jdbc:
+        driver: {{ .Values.jdbc.driver }}
+        host: {{ .Values.jdbc.host }}
+        port: {{ .Values.jdbc.port }}
+        database: {{ .Values.jdbc.database }}
+        {{- if .Values.jdbc.username }}
+        username: {{ .Values.jdbc.username }}
+        {{- end }}
+        {{- if .Values.jdbc.password }}
+        password: {{ .Values.jdbc.password }}
+        {{- end }}
+      {{- end }}
 
     oauth2:
-      type: mongodb
+      type: {{ .Values.oauth2.type | default "mongodb" }}
+      {{- if or (eq .Values.oauth2.type "mongodb") (kindIs "invalid" .Values.oauth2.type) }}
       mongodb:
         {{- if .Values.mongo.uri }}
         uri: {{ .Values.mongo.uri }}
         {{ else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
+      {{- else if (eq .Values.oauth2.type "jdbc") }}
+      jdbc:
+        driver: {{ .Values.jdbc.driver }}
+        host: {{ .Values.jdbc.host }}
+        port: {{ .Values.jdbc.port }}
+        database: {{ .Values.jdbc.database }}
+        {{- if .Values.jdbc.username }}
+        username: {{ .Values.jdbc.username }}
+        {{- end }}
+        {{- if .Values.jdbc.password }}
+        password: {{ .Values.jdbc.password }}
+        {{- end }}
+      {{- end }}
+
+    # Sharding tags configuration
+    # Allows to define inclusion/exclusion sharding tags to only deploy a part of APIs. To exclude just prefix the tag with '!'.
+    tags: {{ .Values.gateway.sharding_tags }}
 
     services:
       core:
         http:
-          port: 18092
-          host: localhost
+          enabled: {{ .Values.gateway.services.core.http.enabled | default true }}
+          port: {{ .Values.gateway.services.core.http.port | default "18092" }}
+          host: {{ .Values.gateway.services.core.http.host | default "localhost" }}
           authentication:
-            # authentication type to be used for the core services
-            # - none : to disable authentication
-            # - basic : to use basic authentication
-            # default is "basic"
-            type: basic
-            users:
-              admin: adminadmin
+           type: {{ .Values.gateway.services.core.http.authentication.type | default "basic" }}
+           users:
+             admin: {{ .Values.gateway.services.core.http.authentication.password | default "adminadmin" }}
+          secured: {{ .Values.gateway.services.core.http.secured | default false }}
+          {{- if (eq .Values.gateway.services.core.http.secured true) }}
+          ssl:
+            keystore:
+              type: {{ .Values.gateway.services.core.http.ssl.keystore.type }}
+              path: {{ .Values.gateway.services.core.http.ssl.keystore.path }}
+          {{- end }}
 
     jwt:
       secret: {{ .Values.gateway.jwt.secret }}
-      #kid: default-gravitee-AM-key
-      #expire-after: 604800
-      #issuer: https://gravitee.am
-      #cookie-path: /
-      #cookie-domain: .gravitee.io cookie domain (default "")
-      #cookie-secure: true
+      kid: {{ .Values.gateway.jwt.kid | default "default-gravitee-AM-key" }}
+      # Allows to define the end of validity of the token in seconds (default 604800 = a week)
+      expire-after: {{ .Values.gateway.jwt.expireAfter | default 604800 }}
+      # Allows to define issuer (default https://gravitee.am)
+      issuer: {{ .Values.gateway.jwt.issuer | default "https://gravitee.am" }}
+      # Allows to define cookie context path (default /)
+      cookie-path: {{ .Values.gateway.jwt.cookie.path | default "/" }}
+      # Allows to define cookie domain (default "")
+      {{- if .Values.gateway.jwt.cookie }}
+      cookie-domain: {{ .Values.gateway.jwt.cookie.domain }}
+      {{- else }}
+      cookie-domain: {{ index .Values.ui.ingress.hosts 0 }}
+      {{- end }}
+      # Allows to define if cookie secure only (default false)
+      cookie-secure: {{ .Values.gateway.jwt.cookie.secure | default false }}
 
     # SMTP configuration used to send mails
     email:
       enabled: {{ .Values.smtp.enabled }}
-      {{- if .Values.smtp.enabled }} 
+      {{- if .Values.smtp.enabled }}
       host: {{ .Values.smtp.host }}
       subject: {{ .Values.smtp.subject | quote }}
       port: {{ .Values.smtp.port }}
@@ -124,10 +175,10 @@ data:
         token:
           #expire-after: 86400 # the end of validity of the token in seconds for reset password email (default 86400 = a day)
 
+    {{- if or .Values.gateway.handlers }}
     handlers:
-      request:
-        transaction:
-          header: X-Gravitee-Transaction-Id
+{{ toYaml .Values.gateway.handlers | indent 6 }}
+    {{- end }}
 
   {{- if .Values.gateway.logging.debug }}
   logback.xml: |

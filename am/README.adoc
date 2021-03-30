@@ -104,7 +104,7 @@ mongo:
   dbname: gravitee
   auth:
     enabled: false
-    username: 
+    username:
     password:
 ----
 
@@ -198,10 +198,6 @@ replicaset] for detailed documentation on helm chart.
 |api.ingress.enabled |bool |`+true+` |
 
 |api.ingress.hosts[0].host |string |`+"am.example.com"+` |
-
-|api.ingress.hosts[0].paths[0] |string |`+"/management"+` |
-
-|api.ingress.hosts[0].paths[1] |string |`+"/admin"+` |
 
 |api.ingress.path |string |`+"/management"+` |
 
