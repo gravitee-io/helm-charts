@@ -17,18 +17,25 @@ data:
       secured: true
       ssl:
         keystore:
+          {{- if .Values.api.ssl.keystore.type }}
+          type: {{ .Values.api.ssl.keystore.type }}
+          {{- end }}
           path: {{ .Values.api.ssl.keystore.path }}
           password: {{ .Values.api.ssl.keystore.password | quote }}
         clientAuth: {{ .Values.api.ssl.clientAuth }}
         {{- if .Values.api.ssl.truststore }}
         truststore:
+          {{- if .Values.api.ssl.truststore.type }}
+          type: {{ .Values.api.ssl.truststore.type }}
+          {{- end }}
           path: {{ .Values.api.ssl.truststore.path }}
           password: {{ .Values.api.ssl.truststore.password | quote }}
         {{- end }}
     {{- end }}
 
     management:
-      type: mongodb
+      type: {{ .Values.management.type | default "mongodb" }}
+      {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
       mongodb:
         sslEnabled: {{ .Values.mongo.sslEnabled }}
         socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
@@ -45,9 +52,23 @@ data:
         {{- else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
+      {{- else if (eq .Values.management.type "jdbc") }}
+      jdbc:
+        driver: {{ .Values.jdbc.driver }}
+        host: {{ .Values.jdbc.host }}
+        port: {{ .Values.jdbc.port }}
+        database: {{ .Values.jdbc.database }}
+        {{- if .Values.jdbc.username }}
+        username: {{ .Values.jdbc.username }}
+        {{- end }}
+        {{- if .Values.jdbc.password }}
+        password: {{ .Values.jdbc.password }}
+        {{- end }}
+      {{- end }}
 
     oauth2:
-      type: mongodb
+      type: {{ .Values.oauth2.type | default "mongodb" }}
+      {{- if or (eq .Values.oauth2.type "mongodb") (kindIs "invalid" .Values.oauth2.type) }}
       mongodb:
         sslEnabled: {{ .Values.mongo.sslEnabled }}
         socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
@@ -64,22 +85,35 @@ data:
         {{- else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
+      {{- else if (eq .Values.oauth2.type "jdbc") }}
+      jdbc:
+        driver: {{ .Values.jdbc.driver }}
+        host: {{ .Values.jdbc.host }}
+        port: {{ .Values.jdbc.port }}
+        database: {{ .Values.jdbc.database }}
+        {{- if .Values.jdbc.username }}
+        username: {{ .Values.jdbc.username }}
+        {{- end }}
+        {{- if .Values.jdbc.password }}
+        password: {{ .Values.jdbc.password }}
+        {{- end }}
+      {{- end }}
 
     services:
       core:
-        http: 
+        http:
           enabled: true
-          port: {{ .Values.api.http.services.core.http.port |default "18093" }}
-          host: {{ .Values.api.http.services.core.http.host |default "localhost" }}
+          port: {{ .Values.api.http.services.core.http.port | default "18093" }}
+          host: {{ .Values.api.http.services.core.http.host | default "localhost" }}
           authentication:
-            type: basic
+            type: {{ .Values.api.http.services.core.http.authentication.type | default "basic" }}
             users:
-              admin: {{ .Values.api.http.services.core.http.authentication.password }}
+              admin: {{ .Values.api.http.services.core.http.authentication.password | default "adminadmin"}}
 
     # SMTP configuration used to send mails
     email:
       enabled: {{ .Values.smtp.enabled }}
-      {{- if .Values.smtp.enabled }} 
+      {{- if .Values.smtp.enabled }}
       host: {{ .Values.smtp.host }}
       subject: {{ .Values.smtp.subject | quote }}
       port: {{ .Values.smtp.port }}
@@ -109,12 +143,21 @@ data:
 
     jwt:
       secret: {{ .Values.api.jwt.secret }}
-      #kid: default-gravitee-AM-key
-      #expire-after: 604800
-      #issuer: https://gravitee.am
-      #cookie-path: /
-      #cookie-domain: .gravitee.io cookie domain (default "")
-      #cookie-secure: true
+      kid: {{ .Values.api.jwt.kid | default "default-gravitee-AM-key" }}
+      # Allows to define the end of validity of the token in seconds (default 604800 = a week)
+      expire-after: {{ .Values.api.jwt.expireAfter | default 604800 }}
+      # Allows to define issuer (default https://gravitee.am)
+      issuer: {{ .Values.api.jwt.issuer | default "https://gravitee.am" }}
+      # Allows to define cookie context path (default /)
+      cookie-path: {{ .Values.api.jwt.cookie.path | default "/" }}
+      # Allows to define cookie domain (default "")
+      {{- if .Values.api.jwt.cookie }}
+      cookie-domain: {{ .Values.api.jwt.cookie.domain }}
+      {{- else }}
+      cookie-domain: {{ index .Values.ui.ingress.hosts 0 }}
+      {{- end }}
+      # Allows to define if cookie secure only (default false)
+      cookie-secure: {{ .Values.api.jwt.cookie.secure | default false }}
 
     # User management configuration
     user:

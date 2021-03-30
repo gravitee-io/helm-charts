@@ -70,6 +70,24 @@ mongodb-replicaset:
     size: 1Gi
   configmap: {}
 
+jdbc:
+  driver: mysql
+  host: localhost
+  port: 3306
+  database: graviteeam
+  username:
+  password:
+  # URLs to download the drivers
+  drivers:
+    - https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.22/mysql-connector-java-8.0.22.jar
+    - https://repo1.maven.org/maven2/dev/miku/r2dbc-mysql/0.8.2.RELEASE/r2dbc-mysql-0.8.2.RELEASE.jar
+
+management:
+  type: mongodb
+
+oauth2:
+  type: mongodb
+
 api:
   enabled: true
   name: management-api
@@ -110,13 +128,17 @@ api:
   #       configMapKeyRef:
   #         name: special-config
   #         key: SPECIAL_LEVEL
+  additionalPlugins:
+#    - https://path_to_plugin
   ssl:
     enabled: false
   #  keystore:
+  #    type: jks # Supports jks, pem, pkcs12
   #    path: ${gravitee.home}/security/keystore.jks
   #    password: secret
     clientAuth: false
   #  truststore:
+  #    type: jks # Supports jks, pem, pkcs12
   #    path: ${gravitee.home}/security/truststore.jks
   #    password: secret
   http:
@@ -126,16 +148,16 @@ api:
           port: 18093
           host: localhost
           authentication:
-            password: adminadmin  
+            password: adminadmin
         ingress:
           enabled: false
 #          path: /management/_(.*)
 #          hosts:
-#            - apim.example.com
+#            - am.example.com
 #          annotations:
 #            kubernetes.io/ingress.class: nginx
 #            nginx.ingress.kubernetes.io/rewrite-target: /_$1
-        service: 
+        service:
 #       If you choose to enable this service, you'll need to expose the technical api
 #       on an accessible host outside of the pod: api.http.services.core.http.host
           enabled: false
@@ -143,6 +165,12 @@ api:
 #         externalPort: 18083
   jwt:
     secret: s3cR3t4grAv1t3310AMS1g1ingDftK3y
+    kid: default-gravitee-AM-key
+    expireAfter: 604800
+    issuer: https://gravitee.am
+    cookie:
+      secure: false
+      path: /
   service:
     type: ClusterIP
     externalPort: 83
@@ -163,10 +191,7 @@ api:
     path: /management
     # Used to create an Ingress record.
     hosts:
-      - host: am.example.com
-        paths: 
-          - /management
-          - /admin
+      - am.example.com
     annotations:
       kubernetes.io/ingress.class: nginx
       ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
@@ -223,19 +248,63 @@ gateway:
     graviteeLevel: DEBUG
     jettyLevel: WARN
   reloadOnConfigChange: true
+  additionalPlugins:
+#    - https://path_to_plugin
   ssl:
     enabled: false
   #  keystore:
+  #    type: jks # Supports jks, pem, pkcs12
   #    path: ${gravitee.home}/security/keystore.jks
   #    password: secret
     clientAuth: false
   #  truststore:
+  #    type: jks # Supports jks, pem, pkcs12
   #    path: ${gravitee.home}/security/truststore.jks
   #    password: secret
+  services:
+    core:
+      http:
+        enabled: true
+        port: 18092
+        host: localhost
+        authentication:
+          type: basic
+          password: adminadmin
+        secured: false
+        ssl:
+          keystore:
+            type: "PKCS12"
+            path: "/p12/keystore"
+      ingress:
+        enabled: false
+      #          path: /management/_(.*)
+      #          hosts:
+      #            - am.example.com
+      #          annotations:
+      #            kubernetes.io/ingress.class: nginx
+      #            nginx.ingress.kubernetes.io/rewrite-target: /_$1
+      service:
+        #       If you choose to enable this service, you'll need to expose the technical api
+        #       on an accessible host outside of the pod: api.http.services.core.http.host
+        enabled: false
+  #         type: ClusterIP
+  #         externalPort: 18082
   jwt:
     secret: s3cR3t4grAv1t3310AMS1g1ingDftK3y
-  replicaCount: 1
+    kid: default-gravitee-AM-key
+    expireAfter: 604800
+    issuer: https://gravitee.am
+    cookie:
+      secure: false
+      path: /
+  # handlers:
+  #   request:
+  #     transaction:
+  #       header: X-Gravitee-Transaction-Id
+  #     request:
+  #       header: X-Gravitee-Request-Id
   # sharding_tags:
+  replicaCount: 1
   image:
     repository: graviteeio/am-gateway
     # tag: 2.10.8

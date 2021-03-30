@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.api.image.tag }}
     app.kubernetes.io/component: "{{ .Values.api.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -35,12 +35,20 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "{{ .Values.api.name }}"
     spec:
-    {{- if .Values.api.nodeSelector }}
+      {{- if .Values.api.nodeSelector }}
       nodeSelector:
-{{ toYaml .Values.api.nodeSelector | indent 8 }}
-    {{- end }}
-      {{- if .Values.api.extraInitContainers }}
+        {{ toYaml .Values.api.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- $plugins := list -}}
+      {{- if .Values.api.additionalPlugins -}}
+        {{- $plugins = concat $plugins .Values.api.additionalPlugins -}}
+      {{- end -}}
+      {{- $pluginParams := dict "plugins" $plugins "jdbcDrivers" .Values.jdbc.drivers "securityContext" .Values.api.securityContext "appName" "graviteeio-am-management-api" -}}
+      {{- if or .Values.api.extraInitContainers $plugins .Values.jdbc.drivers }}
       initContainers:
+        {{- if and .Values.jdbc.drivers (eq .Values.management.type "jdbc") }}
+        {{- include "deployment.jdbcDriverInitContainers" $pluginParams | indent 8 }}
+        {{- end -}}
         {{- with .Values.api.extraInitContainers }}
         {{- tpl . $ | nindent 8 }}
         {{- end }}
@@ -49,7 +57,7 @@ spec:
         - name: {{ template "gravitee.api.fullname" . }}
           image: "{{ .Values.api.image.repository }}:{{ default .Chart.AppVersion .Values.api.image.tag }}"
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
-          securityContext:  
+          securityContext:
 {{ toYaml .Values.api.securityContext | trim | indent 12 }}
           ports:
             - name: {{ .Values.api.service.internalPortName }}
@@ -62,7 +70,7 @@ spec:
               value: {{ $env.value | quote }}
               {{- end }}
               {{- with $env.valueFrom }}
-              valueFrom: 
+              valueFrom:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
           {{- end }}
@@ -101,6 +109,12 @@ spec:
               mountPath: /opt/graviteeio-am-management-api/config/logback.xml
               subPath: logback.xml
           {{- end }}
+          {{- if and .Values.jdbc.drivers (eq .Values.management.type "jdbc") }}
+            - name: graviteeio-am-jdbc-ext
+              mountPath: /opt/graviteeio-am-management-api/plugins/ext/repository-am-jdbc
+            - name: graviteeio-am-jdbc-ext
+              mountPath: /opt/graviteeio-am-management-api/plugins/ext/reporter-am-jdbc
+          {{- end }}
           {{- with .Values.api.extraVolumeMounts }}
           {{- tpl . $ | nindent 12 }}
           {{- end }}
@@ -112,6 +126,10 @@ spec:
         - name: config
           configMap:
             name: {{ template "gravitee.api.fullname" . }}
+        {{- if and .Values.jdbc.drivers (eq .Values.management.type "jdbc") }}
+        - name: graviteeio-am-jdbc-ext
+          emptyDir: {}
+        {{- end }}
         {{- with .Values.api.extraVolumes }}
           {{- tpl . $ | nindent 8 }}
         {{- end }}

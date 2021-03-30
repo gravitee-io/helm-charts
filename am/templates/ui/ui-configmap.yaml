@@ -14,4 +14,12 @@ data:
   use-gzip: "true"
   gzip-level: "5"
   gzip-types: "*"
+  config.json: |
+    {
+      {{- if .Values.ui.baseURL }}
+      "baseURL": "{{ .Values.ui.baseURL }}",
+      {{- else }}
+      "baseURL": "https://{{ index .Values.ui.ingress.hosts 0 }}{{ .Values.ui.ingress.path }}/management",
+      {{- end }}
+    }
 {{- end -}}
