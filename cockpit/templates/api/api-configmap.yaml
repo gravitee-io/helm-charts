@@ -100,11 +100,15 @@ data:
     {{- end }}
 
     reCaptcha:
-      enabled: false
-      siteKey:
-      secretKey:
-      minScore:
-      serviceUrl:
+      enabled: {{ .Values.api.reCaptcha.enabled | default false }}
+      siteKey: {{ .Values.api.reCaptcha.siteKey }}
+      secretKey: {{ .Values.api.reCaptcha.secretKey }}
+      {{- if .Values.api.reCaptcha.minScore }}
+      minScore: {{ .Values.api.reCaptcha.minScore }}
+      {{- end }}
+      {{- if .Values.api.reCaptcha.serviceUrl }}
+      serviceUrl: {{ .Values.api.reCaptcha.serviceUrl }}
+      {{- end }}
 
     # SMTP configuration used to send mails
     email:
