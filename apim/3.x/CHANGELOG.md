@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [ingress-nginx](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.4
+
+- [X] [#94](https://github.com/gravitee-io/helm-charts/pull/94) Do not apply special treatment for nightly tag
+- Update gravitee.io APIM v3.7.0
+
 ### 3.1.3
 
 - [X] Disable HTTP proxy by default
