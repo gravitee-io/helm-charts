@@ -31,6 +31,7 @@ data:
           path: {{ .Values.gateway.ssl.keystore.path }}
           password: {{ .Values.gateway.ssl.keystore.password | quote }}
         clientAuth: {{ .Values.gateway.ssl.clientAuth }}
+        tlsProtocols: {{ .Values.gateway.ssl.tlsProtocols }}
         {{- if .Values.gateway.ssl.truststore }}
         truststore:
           {{- if .Values.gateway.ssl.truststore.type }}

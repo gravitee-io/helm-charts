@@ -252,6 +252,7 @@ gateway:
 #    - https://path_to_plugin
   ssl:
     enabled: false
+    tlsProtocols: TLSv1.2, TLSv1.3
   #  keystore:
   #    type: jks # Supports jks, pem, pkcs12
   #    path: ${gravitee.home}/security/keystore.jks
