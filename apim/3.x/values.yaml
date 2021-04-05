@@ -552,11 +552,26 @@ gateway:
       # password:
   management: 
     http:
-      # The version of the connector must be aligned with the version of Gravitee.io APIM you're installing.
-      # version: 3.3.1
       # url: 
       # username: 
       # pssword: 
+      # ssl:
+      #   trustall: true
+      #   verifyHostname: true
+      #   keystore:
+      #     type: jks # Supports jks, pem, pkcs12
+      #     path: ${gravitee.home}/security/keystore.jks
+      #     password: secret
+      #   truststore:
+      #     type: jks # Supports jks, pem, pkcs12
+      #     path: ${gravitee.home}/security/truststore.jks
+      #     password: secret
+      # proxy:
+      #   host:
+      #   port:
+      #   type: http
+      #   username:
+      #   password:
   services:
     core:
       http:
@@ -590,8 +605,20 @@ gateway:
     bridge:
       enabled: false
       # version: 3.3.1
+      # host: localhost
       # username:
       # password:
+      # ssl:
+      #  enabled: false
+      #  keystore:
+      #    type: jks # Supports jks, pem, pkcs12
+      #    path: ${gravitee.home}/security/keystore.jks
+      #    password: secret
+      #  clientAuth: false
+      #  truststore:
+      #    type: jks # Supports jks, pem, pkcs12
+      #    path: ${gravitee.home}/security/truststore.jks
+      #    password: secret
       # service:
       #   externalPort: 92
       #   internalPort: 18092

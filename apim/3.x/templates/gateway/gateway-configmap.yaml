@@ -81,6 +81,27 @@ data:
           basic:
             username: {{ .Values.gateway.management.http.username }}
             password: {{ .Values.gateway.management.http.password }}
+        {{- if .Values.gateway.management.http.ssl }}
+        ssl:
+          trustall: {{ .Values.gateway.management.http.ssl.trustall | default true }}
+          verifyHostname: {{ .Values.gateway.management.http.ssl.verifyHostname | default true }}
+          {{- if .Values.gateway.management.http.ssl.keystore }}
+          keystore:
+            {{- if .Values.gateway.management.http.ssl.keystore.type }}
+            type: {{ .Values.gateway.management.http.ssl.keystore.type }}
+            {{- end }}
+            path: {{ .Values.gateway.management.http.ssl.keystore.path }}
+            password: {{ .Values.gateway.management.http.ssl.keystore.password | quote }}
+          {{- end }}
+          {{- if .Values.gateway.management.http.ssl.truststore }}
+          truststore:
+            {{- if .Values.gateway.management.http.ssl.truststore.type }}
+            type: {{ .Values.gateway.management.http.ssl.truststore.type }}
+            {{- end }}
+            path: {{ .Values.gateway.management.http.ssl.truststore.path }}
+            password: {{ .Values.gateway.management.http.ssl.truststore.password | quote }}
+          {{- end }}
+        {{- end }}
       {{- end }}
 
     ratelimit:
@@ -239,11 +260,31 @@ data:
         http:
           enabled: true
           port: {{ .Values.gateway.services.bridge.service.internalPort }}
-          host: 0.0.0.0
+          host: {{ .Values.gateway.services.bridge.host | default "localhost" }}
           authentication:
             type: basic
             users:
               {{ .Values.gateway.services.bridge.username }}: {{ .Values.gateway.services.bridge.password }}
+          {{- if .Values.gateway.services.bridge.ssl.enabled }}
+          secured: true
+          alpn: true
+          ssl:
+            keystore:
+              {{- if .Values.gateway.services.bridge.ssl.keystore.type }}
+              type: {{ .Values.gateway.services.bridge.ssl.keystore.type }}
+              {{- end }}
+              path: {{ .Values.gateway.services.bridge.ssl.keystore.path }}
+              password: {{ .Values.gateway.services.bridge.ssl.keystore.password | quote }}
+            clientAuth: {{ .Values.gateway.services.bridge.ssl.clientAuth }}
+            {{- if .Values.gateway.services.bridge.ssl.truststore }}
+            truststore:
+              {{- if .Values.gateway.services.bridge.ssl.truststore.type }}
+              type: {{ .Values.gateway.services.bridge.ssl.truststore.type }}
+              {{- end }}
+              path: {{ .Values.gateway.services.bridge.ssl.truststore.path }}
+              password: {{ .Values.gateway.services.bridge.ssl.truststore.password | quote }}
+            {{- end }}
+          {{- end }}
       {{- end }}
 
     {{- if or .Values.gateway.handlers }}

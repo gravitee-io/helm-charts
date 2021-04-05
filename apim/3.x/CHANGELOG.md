@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [ingress-nginx](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.5
+
+- [X] Client authentication support for HTTP bridge (hybrid deployment)
+
 ### 3.1.4
 
 - [X] [#94](https://github.com/gravitee-io/helm-charts/pull/94) Do not apply special treatment for nightly tag
