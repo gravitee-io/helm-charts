@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [ingress-nginx](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.7
+
+- [X] Create an init container with JDBC driver for management API when JDBC is enabled
+
 ### 3.1.6
 
 - [X] Add support for policy configuration from gravitee.yml
