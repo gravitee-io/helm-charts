@@ -292,12 +292,16 @@ data:
 {{ toYaml .Values.gateway.handlers | indent 6 }}   
     {{- end }}
     
-    # Customize the api-key header and / or query parameter.
+    {{- if .Values.gateway.policy }}
+    policy: 
+{{ toYaml .Values.gateway.policy | indent 6 }}   
+    {{ else }}
     policy:
       api-key:
         header: {{ .Values.gateway.apiKey.header }}
         param: {{ .Values.gateway.apiKey.param }}
-
+    {{- end }}
+    
     {{- if .Values.alerts.enabled }}
     # Alert Engine communication
     alerts:
