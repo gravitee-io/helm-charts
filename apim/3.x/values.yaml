@@ -648,9 +648,6 @@ gateway:
   #       header: X-Gravitee-Transaction-Id
   #     request:
   #       header: X-Gravitee-Request-Id
-  apiKey:
-    header: X-Gravitee-Api-Key
-    param: api-key
   reporters:
     elasticsearch:
       enabled: true
@@ -659,6 +656,16 @@ gateway:
 #      host: localhost
 #      port: 8379
 #    file:
+
+  # WARNING: This part will be removed shortly in favor of gateway.policy (see below)
+  apiKey:
+    header: X-Gravitee-Api-Key
+    param: api-key
+
+  #policy:
+  #  api-key:
+  #    header: X-Gravitee-Api-Key
+  #    param: api-key
 
   image:
     repository: graviteeio/apim-gateway
