@@ -48,7 +48,7 @@ spec:
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
       {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-management-api" -}}
-      {{- if or .Values.api.extraInitContainers $plugins}}
+      {{- if or .Values.api.extraInitContainers $plugins .Values.jdbc.driver }}
       initContainers:
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: get-repository-jdbc-ext
