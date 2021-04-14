@@ -3,7 +3,7 @@ name: cockpit
 # When the version is modified, make sure the artifacthub.io/changes list is updated
 # Also update CHANGELOG.md
 version: 1.0.0
-appVersion: 3.0.0
+appVersion: 1.2.0
 description: Official Gravitee.io Helm chart for Cockpit 3.x
 home: https://gravitee.io
 sources:
@@ -17,3 +17,8 @@ keywords:
   - platform
   - API
 kubeVersion: ">=1.16.0-0"
+annotations:
+  # List of changes for the release in artifacthub.io
+  # https://artifacthub.io/packages/helm/graviteeio/cockpit?modal=changelog
+  artifacthub.io/changes: |
+    - Initial Chart for Gravitee.io Cockpit
