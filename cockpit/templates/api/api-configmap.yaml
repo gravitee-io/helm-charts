@@ -99,16 +99,13 @@ data:
         entrypoint: {{ .Values.api.http.api.entrypoint }}
     {{- end }}
 
+    {{- if .Values.api.reCaptcha.enabled }}
     reCaptcha:
-      enabled: {{ .Values.api.reCaptcha.enabled | default false }}
-      siteKey: {{ .Values.api.reCaptcha.siteKey }}
-      secretKey: {{ .Values.api.reCaptcha.secretKey }}
-      {{- if .Values.api.reCaptcha.minScore }}
-      minScore: {{ .Values.api.reCaptcha.minScore }}
-      {{- end }}
-      {{- if .Values.api.reCaptcha.serviceUrl }}
-      serviceUrl: {{ .Values.api.reCaptcha.serviceUrl }}
-      {{- end }}
+{{ toYaml .Values.api.reCaptcha | indent 6 }}
+    {{ else }}
+    reCaptcha:
+      enabled: false
+    {{- end }}
 
     controller:
       {{- if .Values.api.controller.compatibleVersions }}
