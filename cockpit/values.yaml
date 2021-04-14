@@ -156,6 +156,13 @@ api:
 #         type: ClusterIP
 #         externalPort: 18063
 
+  reCaptcha:
+    enabled: false
+#    serviceUrl:
+#    siteKey:
+#    secretKey:
+#    minScore:
+
   controller:
 #    compatibleVersions:
 #      apim:
