@@ -110,6 +110,12 @@ data:
       serviceUrl: {{ .Values.api.reCaptcha.serviceUrl }}
       {{- end }}
 
+    controller:
+      {{- if .Values.api.controller.compatibleVersions }}
+      compatible-versions:
+{{ toYaml .Values.api.controller.compatibleVersions | indent 8 }}
+      {{- end }}
+
     # SMTP configuration used to send mails
     email:
       enabled: {{ .Values.smtp.enabled }}
