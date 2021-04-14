@@ -155,7 +155,12 @@ api:
           enabled: false
 #         type: ClusterIP
 #         externalPort: 18063
+
   controller:
+#    compatibleVersions:
+#      apim:
+#      am:
+#      connector:
     ws:
       enabled: true
       port: 8062
