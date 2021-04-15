@@ -130,6 +130,10 @@ data:
         {{ $key }} : {{ $val | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.api.email.notifications }}
+      notifications:
+{{ toYaml .Values.api.email.notifications | indent 8 }}
+      {{- end }}
 
     jwt:
       secret: {{ .Values.api.jwt.secret }}
