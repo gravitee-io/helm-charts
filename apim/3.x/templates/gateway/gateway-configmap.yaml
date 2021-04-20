@@ -398,8 +398,12 @@ data:
 
         <network>
             <join>
-                <!-- Multicast is disabled by default to avoid latency when starting gateway -->
-                <multicast enabled="false" />
+                <multicast enabled="false"/>
+                <tcp-ip enabled="false"/>
+                <kubernetes enabled="true">
+                    <namespace>{{ .Release.Namespace }}</namespace>
+                    <service-name>{{ template "gravitee.gateway.fullname" . }}</service-name>
+                </kubernetes>
             </join>
         </network>
 
