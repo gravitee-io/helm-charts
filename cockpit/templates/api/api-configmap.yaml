@@ -179,17 +179,38 @@ data:
       ui: "https://{{ index .Values.ui.ingress.hosts 0 }}{{ .Values.ui.ingress.path }}"
       ws: "https://{{ index .Values.api.controller.ws.ingress.hosts 0 }}{{ .Values.api.controller.ws.ingress.path }}"
 
+    {{- if .Values.api.initialPlans }}
     initialPlans:
+      {{- if .Values.api.initialPlans.small }}
       small:
-        name: 'Small'
-        maxEnvs: 2
-        isDefault: 'true'
+        name: {{ .Values.api.initialPlans.small.name }}
+        maxEnvs: {{ .Values.api.initialPlans.small.maxEnvs }}
+        isDefault: {{ .Values.api.initialPlans.small.isDefault }}
+        healthCheckRetentionDuration: {{ .Values.api.initialPlans.small.healthCheckRetentionDuration }}
+      {{- end }}
+      {{- if .Values.api.initialPlans.medium }}
       medium:
-        name: 'Medium'
-        maxEnvs: 4
+        name: {{ .Values.api.initialPlans.medium.name }}
+        maxEnvs: {{ .Values.api.initialPlans.medium.maxEnvs }}
+        healthCheckRetentionDuration: {{ .Values.api.initialPlans.medium.healthCheckRetentionDuration }}
+      {{- end }}
+      {{- if .Values.api.initialPlans.large }}
       large:
-        name: 'Large'
-        maxEnvs: -1
+        name: {{ .Values.api.initialPlans.large.name }}
+        maxEnvs: {{ .Values.api.initialPlans.large.maxEnvs }}
+        healthCheckRetentionDuration: {{ .Values.api.initialPlans.large.healthCheckRetentionDuration }}
+      {{- end }}
+    {{- end }}
+
+    {{- if and .Values.api.services .Values.api.services.scheduler }}
+    services:
+      scheduler:
+        healthCheckPurgeCron: {{ .Values.api.scheduler.healthCheckPurgeCron }}
+        {{ - if .Values.api.onPremise }}
+        onPremise:
+          healthCheckRetentionDuration: {{ .Values.api.onPremise.healthCheckRetentionDuration }}
+        {{- end }}
+    {{- end }}
 
     auth:
       callbackUrl: {{ .Values.api.ingress.path }}/auth/login/callback
