@@ -490,3 +490,26 @@ replicaset] for detailed documentation on helm chart.
 
 |ui.service.type |string |`+"ClusterIP"+` |
 |===
+
+
+== OpenShift
+
+The Gravitee.io Access Management Helm Chart supports OpenShift > 3.10
+This chart is only supporting Ingress standard objects and not the specific OpenShift Routes, reason why OpenShift is supported started from 3.10.
+
+There are two major considerations to have in mind when deploying Gravitee.io Access Management within OpenShift:
+1_ Use full host domain instead of paths for all the components (ingress paths are not well supported by OpenShift)
+2_ Override the security context to let OpenShift to define automatically the user-id and the group-id to run the containers.
+
+Here is an example regarding the UI component:
+
+[source,yaml]
+----
+ui:
+  securityContext:
+    runAsUser: null
+    runAsGroup: null
+    runAsNonRoot: true
+----
+
+By setting the value to `null` for `runAsUser` and `runAsGroup` it forces OpenShift to define the correct values for you while deploying the Helm Chart.
