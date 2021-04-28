@@ -63,6 +63,10 @@ data:
             type: basic
             users:
               admin: {{ .Values.api.http.services.core.http.authentication.password }}
+      {{- if .Values.api.scheduler }}
+      scheduler:
+{{ toYaml .Values.api.scheduler | indent 8}}
+      {{- end }}
 
     {{- if and .Values.api.http .Values.api.http.client }}
     httpClient:
@@ -181,35 +185,7 @@ data:
 
     {{- if .Values.api.initialPlans }}
     initialPlans:
-      {{- if .Values.api.initialPlans.small }}
-      small:
-        name: {{ .Values.api.initialPlans.small.name }}
-        maxEnvs: {{ .Values.api.initialPlans.small.maxEnvs }}
-        isDefault: {{ .Values.api.initialPlans.small.isDefault }}
-        healthCheckRetentionDuration: {{ .Values.api.initialPlans.small.healthCheckRetentionDuration }}
-      {{- end }}
-      {{- if .Values.api.initialPlans.medium }}
-      medium:
-        name: {{ .Values.api.initialPlans.medium.name }}
-        maxEnvs: {{ .Values.api.initialPlans.medium.maxEnvs }}
-        healthCheckRetentionDuration: {{ .Values.api.initialPlans.medium.healthCheckRetentionDuration }}
-      {{- end }}
-      {{- if .Values.api.initialPlans.large }}
-      large:
-        name: {{ .Values.api.initialPlans.large.name }}
-        maxEnvs: {{ .Values.api.initialPlans.large.maxEnvs }}
-        healthCheckRetentionDuration: {{ .Values.api.initialPlans.large.healthCheckRetentionDuration }}
-      {{- end }}
-    {{- end }}
-
-    {{- if and .Values.api.services .Values.api.services.scheduler }}
-    services:
-      scheduler:
-        healthCheckPurgeCron: {{ .Values.api.scheduler.healthCheckPurgeCron }}
-        {{ - if .Values.api.onPremise }}
-        onPremise:
-          healthCheckRetentionDuration: {{ .Values.api.onPremise.healthCheckRetentionDuration }}
-        {{- end }}
+{{ toYaml .Values.api.initialPlans | indent 6 }}
     {{- end }}
 
     auth:

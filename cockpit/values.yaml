@@ -254,6 +254,25 @@ api:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+  initialPlans:
+    small:
+      name: 'Small'
+      maxEnvs: 2
+      isDefault: 'true'
+      healthCheckRetentionDuration: 1
+    medium:
+      name: 'Medium'
+      maxEnvs: 4
+      healthCheckRetentionDuration: 30
+    large:
+      name: 'Large'
+      maxEnvs: -1
+      healthCheckRetentionDuration: 182
+
+  scheduler:
+    healthCheckPurgeCron: "0 0 0 */1 * *"
+    onPremise:
+      healthCheckRetentionDuration: -1
 
 ui:
   enabled: true
