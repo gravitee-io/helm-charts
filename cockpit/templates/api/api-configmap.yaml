@@ -63,9 +63,9 @@ data:
             type: basic
             users:
               admin: {{ .Values.api.http.services.core.http.authentication.password }}
-      {{- if .Values.api.scheduler }}
-      scheduler:
-{{ toYaml .Values.api.scheduler | indent 8}}
+      {{- if .Values.api.services.healthCheckPurge }}
+      healthCheckPurge:
+{{ toYaml .Values.api.services.healthCheckPurge | indent 8}}
       {{- end }}
 
     {{- if and .Values.api.http .Values.api.http.client }}

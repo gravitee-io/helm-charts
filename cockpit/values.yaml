@@ -268,11 +268,11 @@ api:
       name: 'Large'
       maxEnvs: -1
       healthCheckRetentionDuration: 182
-
-  scheduler:
-    healthCheckPurgeCron: "0 0 0 */1 * *"
-    onPremise:
-      healthCheckRetentionDuration: -1
+  services:
+    healthCheckPurge:
+      cron: "0 0 0 */1 * *"
+      onPremise:
+        healthCheckRetentionDuration: -1
 
 ui:
   enabled: true
