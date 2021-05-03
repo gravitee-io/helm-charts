@@ -14,7 +14,7 @@ data:
   use-gzip: "true"
   gzip-level: "5"
   gzip-types: "*"
-  config.json: |
+  constants.json: |
     {
       {{- if .Values.ui.baseURL }}
       "baseURL": "{{ .Values.ui.baseURL }}",
