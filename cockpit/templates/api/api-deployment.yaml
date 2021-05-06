@@ -109,6 +109,9 @@ spec:
             - name: config
               mountPath: /opt/gravitee-cockpit-management-api/config/gravitee.yml
               subPath: gravitee.yml
+            - name: config
+              mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast.xml
+              subPath: hazelcast.xml
           {{- if .Values.api.logging.debug }}
             - name: config
               mountPath: /opt/gravitee-cockpit-management-api/config/logback.xml
