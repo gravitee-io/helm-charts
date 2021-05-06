@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.17
+
+- [X] Correctly mount constants.json file
+- [X] Handle gateway.url value
+
 ### 1.0.16
 
 - [X] Fix wrong constants.json file

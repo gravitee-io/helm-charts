@@ -96,6 +96,18 @@ spec:
             periodSeconds: 30
           resources:
 {{ toYaml .Values.ui.resources | indent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/nginx/html/constants.json
+              subPath: constants.json
+            {{- with .Values.ui.extraVolumeMounts }}
+            {{- tpl . $ | nindent 12 }}
+            {{- end }}
+        {{- if .Values.ui.extraContainers }}
+        {{- with .Values.ui.extraContainers }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}
+        {{- end }}
       {{- if .Values.ui.image.pullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.ui.image.pullSecrets }}
