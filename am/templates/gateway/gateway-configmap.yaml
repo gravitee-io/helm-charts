@@ -150,8 +150,12 @@ data:
 
     # Gateway entry point used in emails
     gateway:
+    {{- if .Values.api.gateway }}
+      url: {{ .Values.api.gateway.url }}
+    {{- else }}
       url: https://{{index .Values.gateway.ingress.hosts 0 }}{{ .Values.gateway.ingress.path }}
-
+    {{- end }}
+    
     # User management configuration
     user:
       # Password complexity validation policy
