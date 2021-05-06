@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+
+### 3.1.9
+
+- [X] Correctly evaluate ingress properties to customize constants.json file
+
 ### 3.1.8
 
 - [X] Enable only if the ssl dictionary is defined from values

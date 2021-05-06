@@ -17,9 +17,14 @@ data:
   constants.json: |
     {
       {{- if .Values.ui.baseURL }}
-      "baseURL": "{{ .Values.ui.baseURL }}",
+      "baseURL": "{{ .Values.ui.baseURL }}"
       {{- else }}
-      "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/management",
+      {{- if hasSuffix .Values.api.ingress.path "/" }}
+      "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}management"
+      {{- else }}
+      "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/management"
       {{- end }}
+      {{- end }}
+      
     }
 {{- end -}}

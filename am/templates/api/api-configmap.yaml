@@ -130,10 +130,6 @@ data:
         {{- end }}
       {{- end }}
 
-    # Gateway entry point used in emails
-    gateway:
-      url: https://{{index .Values.gateway.ingress.hosts 0 }}{{ .Values.gateway.ingress.path }}
-
     domains:
       certificates:
         default:
@@ -196,7 +192,7 @@ data:
     {{- if .Values.api.gateway }}
       url: {{ .Values.api.gateway.url }}
     {{- else }}
-      url: https://{{ index .Values.gateway.ingress.hosts 0 }}
+      url: https://{{index .Values.gateway.ingress.hosts 0 }}{{ .Values.gateway.ingress.path }}
     {{- end }}
 
   {{- if .Values.api.logging.debug }}
