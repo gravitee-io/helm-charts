@@ -700,6 +700,10 @@ gateway:
     enabled: true
     path: /gateway
     # Used to create an Ingress record.
+    # Multiple hostnames supported
+    # - hosts:
+    #     - chart-example.local
+    #     - chart-example2.local
     hosts:
       - apim.example.com
     annotations:
@@ -712,6 +716,7 @@ gateway:
       # - secretName: chart-example-tls
       #   hosts:
       #     - chart-example.local
+      #     - chart-example2.local
     tls:
       - hosts:
           - apim.example.com
