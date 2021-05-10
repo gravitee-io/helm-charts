@@ -77,7 +77,7 @@ data:
 
     oauth2:
       type: {{ .Values.oauth2.type | default "mongodb" }}
-     {{- if or (eq .Values.oauth2.type "mongodb") (kindIs "invalid" .Values.oauth2.type) }}
+      {{- if or (eq .Values.oauth2.type "mongodb") (kindIs "invalid" .Values.oauth2.type) }}
       mongodb:
         sslEnabled: {{ .Values.mongo.sslEnabled }}
         socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
