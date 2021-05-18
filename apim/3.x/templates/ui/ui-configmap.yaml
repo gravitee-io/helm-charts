@@ -19,7 +19,7 @@ data:
       {{- if .Values.ui.baseURL }}
       "baseURL": "{{ .Values.ui.baseURL }}"
       {{- else }}
-      {{- if hasSuffix .Values.api.ingress.management.path "/" }}
+      {{- if hasSuffix "/" .Values.api.ingress.management.path }}
       "baseURL": "https://{{ index .Values.api.ingress.management.hosts 0 }}{{ .Values.api.ingress.management.path }}organizations/DEFAULT/environments/DEFAULT/"
       {{- else }}
       "baseURL": "https://{{ index .Values.api.ingress.management.hosts 0 }}{{ .Values.api.ingress.management.path }}/organizations/DEFAULT/environments/DEFAULT/"
