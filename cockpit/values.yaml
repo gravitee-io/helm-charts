@@ -24,6 +24,13 @@ authentication:
   google:
   #   clientId:
     clientSecret:
+  oidc:
+  #  clientId:
+    clientSecret:
+  #  wellKnownUri:
+    userAuthorizationUri:
+    accessTokenUri:
+    userProfileUri:
 
 mongo:
   # uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
