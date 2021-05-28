@@ -191,47 +191,28 @@ data:
     auth:
       callbackUrl: {{ .Values.api.ingress.path }}/auth/login/callback
 
-      {{- if and .Values.authentication.github .Values.authentication.github.clientId }}
+      {{- if .Values.authentication.github }}
       github:
-        userAutorizationUri: https://github.com/login/oauth/authorize
-        accessTokenUri: https://github.com/login/oauth/access_token
-        userProfileUri: https://api.github.com/user
-        codeParameter: code
-        responseType: code
-        clientId: {{ .Values.authentication.github.clientId }}
-        clientSecret: {{ .Values.authentication.github.clientSecret }}
+        {{- if not .Values.authentication.github.redirectUri }}
         redirectUri: https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/auth/login/callback?provider=github
-        scopes:
-      {{- end }}
-
-      {{- if and .Values.authentication.google .Values.authentication.google.clientId }}
-      google:
-        userAutorizationUri: https://accounts.google.com/o/oauth2/v2/auth
-        accessTokenUri: https://oauth2.googleapis.com/token
-        userProfileUri: https://openidconnect.googleapis.com/v1/userinfo
-        codeParameter: code
-        responseType: code
-        clientId: {{ .Values.authentication.google.clientId }}
-        clientSecret: {{ .Values.authentication.google.clientSecret }}
-        redirectUri: https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/auth/login/callback?provider=google
-        scopes: openid,profile,email
-      {{- end }}
-
-      {{- if and .Values.authentication.oidc .Values.authentication.oidc.clientId }}
-      oidc:
-        {{- if and .Values.authentication.oidc.wellKnownUri }}
-        wellKnownUri: {{.Values.authentication.oidc.wellKnownUri}}
-        {{ else }}
-        userAuthorizationUri: {{.Values.authentication.oidc.userAuthorizationUri}}
-        accessTokenUri: {{.Values.authentication.oidc.accessTokenUri}}
-        userProfileUri: {{.Values.authentication.oidc.userProfileUri}}
         {{- end }}
-        codeParameter: code
-        responseType: code
-        clientId: {{ .Values.authentication.oidc.clientId }}
-        clientSecret: {{ .Values.authentication.oidc.clientSecret }}
+{{ toYaml .Values.authentication.github | indent 8 }}
+      {{- end }}
+
+      {{- if .Values.authentication.google }}
+      google:
+        {{- if not .Values.authentication.google.redirectUri }}
+        redirectUri: https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/auth/login/callback?provider=google
+        {{- end }}
+{{ toYaml .Values.authentication.google | indent 8 }}
+      {{- end }}
+
+      {{- if .Values.authentication.oidc }}
+      oidc:
+        {{- if not .Values.authentication.oidc.redirectUri }}
         redirectUri: https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/auth/login/callback?provider=oidc
-        scopes: openid,profile,email
+        {{- end }}
+{{ toYaml .Values.authentication.oidc | indent 8 }}
       {{- end }}
 
   hazelcast.xml: |

@@ -19,18 +19,28 @@ smtp:
 
 authentication:
   github:
-  #   clientId:
+    clientId:
     clientSecret:
+    userAutorizationUri: https://github.com/login/oauth/authorize
+    accessTokenUri: https://github.com/login/oauth/access_token
+    userProfileUri: https://api.github.com/user
+    codeParameter: code
+    responseType: code
   google:
-  #   clientId:
+    clientId:
     clientSecret:
+    userAutorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+    accessTokenUri: https://oauth2.googleapis.com/token
+    userProfileUri: https://openidconnect.googleapis.com/v1/userinfo
+    codeParameter: code
+    responseType: code
+    scopes: openid,profile,email
   oidc:
-  #  clientId:
+    clientId:
     clientSecret:
-  #  wellKnownUri:
-    userAuthorizationUri:
-    accessTokenUri:
-    userProfileUri:
+    codeParameter: code
+    responseType: code
+    scopes: openid,profile,email
 
 mongo:
   # uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
