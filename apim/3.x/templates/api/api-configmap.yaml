@@ -65,8 +65,13 @@ data:
         {{- if .Values.jdbc.password }}
         password: {{ .Values.jdbc.password }}
         {{- end }}
+        schema: {{ .Values.jdbc.schema | default "public" }}
+        liquibase: {{ .Values.jdbc.liquibase | default true }}
+        {{- if .Values.jdbc.pool }}
+        pool:
+          {{ toYaml .Values.jdbc.pool | nindent 10 | trim -}}
+        {{- end }}
       {{- end }}
-
 
     services:
       core:

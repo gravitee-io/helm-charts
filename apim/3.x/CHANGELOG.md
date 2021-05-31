@@ -2,18 +2,14 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
-
-### 3.1.10
-
-- [X] Fix baseURL generation issue
-
-### 3.1.9
-
-- [X] Correctly evaluate ingress properties to customize constants.json file
-
 ### 3.1.8
 
+- [X] Add support JDBC connection pool
+- [X] Fix baseURL generation issue
+- [X] Correctly evaluate ingress properties to customize constants.json file
 - [X] Enable only if the ssl dictionary is defined from values
+- [X] Downgrade required kube version to 1.14
+- Update gravitee.io APIM v3.8.3
 
 ### 3.1.7
 
