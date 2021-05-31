@@ -182,6 +182,16 @@ jdbc:
 #  repositoryVersion: 3.3.0
   username:
   password: 
+  liquibase: true
+  schema: public
+  pool:
+    autoCommit:  true
+    connectionTimeout: 10000
+    idleTimeout: 600000
+    maxLifetime: 1800000
+    minIdle: 10
+    maxPoolSize: 10
+    registerMbeans: true
 
 redis:
   host: 'redis.mycompany'

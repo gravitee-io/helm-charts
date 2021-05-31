@@ -71,6 +71,12 @@ data:
         {{- if .Values.jdbc.password }}
         password: {{ .Values.jdbc.password }}
         {{- end }}
+        schema: {{ .Values.jdbc.schema | default "public" }}
+        liquibase: {{ .Values.jdbc.liquibase | default true }}
+        {{- if .Values.jdbc.pool }}
+        pool:
+          {{ toYaml .Values.jdbc.pool | nindent 10 | trim -}}
+        {{- end }}
       {{- else if (eq .Values.management.type "http") }}
       http:
         url: {{ .Values.gateway.management.http.url }}
@@ -133,6 +139,12 @@ data:
         {{- if .Values.jdbc.password }}
         password: {{ .Values.jdbc.password }}
         {{- end }}
+        schema: {{ .Values.jdbc.schema | default "public" }}
+        liquibase: {{ .Values.jdbc.liquibase | default true }}
+        {{- if .Values.jdbc.pool }}
+        pool:
+          {{ toYaml .Values.jdbc.pool | nindent 10 | trim -}}
+        {{- end }}
       {{- else if (eq .Values.ratelimit.type "redis") }}
       redis:
         host: {{ .Values.gateway.ratelimit.redis.host }}
@@ -141,6 +153,7 @@ data:
         password: {{ .Values.gateway.ratelimit.redis.password }}
         {{- end }}
       {{- end }}
+
     cache:
       type: ehcache
       enabled: true
