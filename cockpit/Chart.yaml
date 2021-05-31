@@ -2,9 +2,9 @@ apiVersion: v1
 name: cockpit
 # When the version is modified, make sure the artifacthub.io/changes list is updated
 # Also update CHANGELOG.md
-version: 1.1.0
-appVersion: 1.2.1
-description: Official Gravitee.io Helm chart for Cockpit 3.x
+version: 1.2.0
+appVersion: 1.3.0
+description: Official Gravitee.io Helm chart for Cockpit
 home: https://gravitee.io
 sources:
   - https://github.com/gravitee-io
@@ -21,5 +21,4 @@ annotations:
   # List of changes for the release in artifacthub.io
   # https://artifacthub.io/packages/helm/graviteeio/cockpit?modal=changelog
   artifacthub.io/changes: |
-    - Add Hazelcast configuration
-    - Add support for health check cron job attributes
+    - Add OIDC idp configuration
