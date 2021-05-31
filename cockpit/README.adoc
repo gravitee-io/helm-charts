@@ -154,8 +154,16 @@ $ helm install cockpit-1.0.0.tgz
 | api.ssl.enabled | bool | `false` |
 | api.updateStrategy.rollingUpdate.maxUnavailable | int | `1` |
 | api.updateStrategy.type | string | `"RollingUpdate"` |
+| authentication.github.clientId | string | `nil` |
 | authentication.github.clientSecret | string | `nil` |
+| authentication.google.clientId | string | `nil` |
 | authentication.google.clientSecret | string | `nil` |
+| authentication.oidc.clientId | string | `nil` |  |
+| authentication.oidc.clientSecret | string | `nil` |  |
+| authentication.oidc.accessTokenUri | string | `nil` |  |
+| authentication.oidc.userAuthorizationUri | string | `nil` |  |
+| authentication.oidc.userProfileUri | string | `nil` |  |
+| authentication.oidc.wellKnownUri | string | `nil` |  |
 | chaos.enabled | bool | `false` |
 | mongo.auth.enabled | bool | `false` |
 | mongo.auth.password | string | `nil` |
