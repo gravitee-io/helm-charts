@@ -81,6 +81,14 @@ jdbc:
   drivers:
     - https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.22/mysql-connector-java-8.0.22.jar
     - https://repo1.maven.org/maven2/dev/miku/r2dbc-mysql/0.8.2.RELEASE/r2dbc-mysql-0.8.2.RELEASE.jar
+  pool:
+    acquireRetry:  1
+    initialSize: 0
+    maxSize: 10
+    maxIdleTime: 30000
+    maxLifeTime: 30000
+    maxAcquireTime: 0
+    maxCreateConnectionTime: 0
 
 management:
   type: mongodb
