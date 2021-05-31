@@ -5,6 +5,8 @@ This file documents all notable changes to [Gravitee.io Access Management 3.x](h
 ### 1.0.19
 
 - [X] Add validation on baseURL value 
+- [X] Add support for JDBC Connection pool
+- Update gravitee.io AM v3.9.0
 
 ### 1.0.18
 

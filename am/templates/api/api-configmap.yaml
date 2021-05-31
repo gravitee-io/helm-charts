@@ -64,6 +64,9 @@ data:
         {{- if .Values.jdbc.password }}
         password: {{ .Values.jdbc.password }}
         {{- end }}
+        {{- if .Values.jdbc.pool }}
+        {{ toYaml .Values.jdbc.pool | nindent 8 | trim -}}
+        {{- end }}
       {{- end }}
 
     oauth2:
@@ -96,6 +99,9 @@ data:
         {{- end }}
         {{- if .Values.jdbc.password }}
         password: {{ .Values.jdbc.password }}
+        {{- end }}
+        {{- if .Values.jdbc.pool }}
+        {{ toYaml .Values.jdbc.pool | nindent 8 | trim -}}
         {{- end }}
       {{- end }}
 
