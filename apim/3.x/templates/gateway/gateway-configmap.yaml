@@ -318,7 +318,7 @@ data:
     {{- if .Values.alerts.enabled }}
     # Alert Engine communication
     alerts:
-      alert-engine:
+      alert-engine-connector-ws:
         enabled: true
         ws:
           discovery: true
