@@ -234,6 +234,15 @@ data:
             <async-backup-count>1</async-backup-count>
         </queue>
 
+        <map name="cockpit.channels.*">
+            <backup-count>0</backup-count>
+            <async-backup-count>1</async-backup-count>
+        </map>
+
+        <reliable-topic name="cockpit.primaryChannels">
+            <read-batch-size>10</read-batch-size>
+        </reliable-topic>
+
         <cp-subsystem>
             <cp-member-count>0</cp-member-count>
         </cp-subsystem>
