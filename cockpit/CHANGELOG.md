@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 ### 1.2.0
 
 - Add OIDC idp configuration
+- Update Hazelcast configuration for primary/replica installations
 
 ### 1.1.0
 
