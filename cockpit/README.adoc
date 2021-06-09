@@ -22,7 +22,7 @@ Kubernetes: `>=1.16.0-0`
 
 ==== Hazelcast
 
-Cockpit embeds Hazelcast to handles installations connections.
+Cockpit embeds Hazelcast to handle installations connections.
 In order to make Hazelcast work best when embedded and deployed under a Kubernetes cluster, we pre-configured the auto-discovery to work with the Kubernetes API.
 
 [quote]
