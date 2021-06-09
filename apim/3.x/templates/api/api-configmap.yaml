@@ -366,11 +366,12 @@ data:
     rating :
       enabled: {{ .Values.api.ratingEnabled }}
 
-    {{ if .Values.alerts.enabled }}
     # Alert Engine communication
+    {{ if .Values.alerts.enabled }}
     alerts:
       alert-engine-connector-ws:
         enabled: true
+      alert-engine:
         ws:
           discovery: true
           {{- with .Values.alerts.endpoints }}
@@ -382,6 +383,10 @@ data:
             username: {{ .Values.alerts.security.username }}
             password: {{ .Values.alerts.security.password }}
           {{- end }}
+    {{- else }}
+    alerts:
+      alert-engine-connector-ws:
+        enabled: false
     {{- end }}
 
   {{- if .Values.api.logging.debug }}
