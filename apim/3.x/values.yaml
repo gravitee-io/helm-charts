@@ -560,6 +560,11 @@ gateway:
       # host:
       # port:
       # password:
+   # use the management node endpoint as readinessProbe to test the api-sync
+   # in this case, the gateway.management.services.core.http.host must be defined to the Pod IP or 0.0.0.0
+  readinessProbe:
+    apiSync: false
+    initialDelaySeconds: 5
   management: 
     http:
       # url: 
