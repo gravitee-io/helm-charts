@@ -91,7 +91,7 @@ spec:
             - name: {{ .Values.gateway.name }}-bridge
               containerPort: {{ .Values.gateway.services.bridge.service.internalPort }}
             {{- end }}
-            {{- if and .Values.gateway.services.core.http.enabled .Values.gateway.services.kubeController.enabled }}
+            {{- if and .Values.gateway.services.core.http.enabled (or .Values.gateway.services.kubeController.enabled .Values.gateway.readinessProbe.apiSync) }}
             - name: {{ .Values.gateway.name }}-hook
               containerPort: {{ .Values.gateway.services.core.http.port | default "18082" }}
             {{- end }}
@@ -139,9 +139,24 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 30
           readinessProbe:
+            {{- if eq .Values.gateway.readinessProbe.apiSync true }}
+            httpGet:
+              path: /_node/health?probes=api-sync
+              port: {{ .Values.gateway.services.core.http.port | default 18082 }}
+              {{- if eq .Values.gateway.services.core.http.secured true}}
+              scheme: HTTPS
+              {{- end }}
+              {{- if eq .Values.gateway.services.core.http.authentication.type "basic" }}
+              httpHeaders:
+                - name: Authorization
+                  value: {{ print "Basic "}}{{print "admin:" .Values.gateway.services.core.http.authentication.password | b64enc }}
+              {{- end }}
+            {{- else }}
             tcpSocket:
               port: {{ .Values.gateway.service.internalPort }}
-            initialDelaySeconds: 5
+            {{- end }}
+            initialDelaySeconds: {{ .Values.gateway.readinessProbe.initialDelaySeconds | default 5 }}
+            failureThreshold: {{ .Values.gateway.readinessProbe.failureThreshold | default 3 }}
             periodSeconds: 30
           resources:
 {{ toYaml .Values.gateway.resources | indent 12 }}
