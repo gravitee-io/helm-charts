@@ -396,6 +396,12 @@ api:
   #    type: jks # Supports jks, pkcs12
   #    path: ${gravitee.home}/security/truststore.jks
   #    password: secret
+  services:
+    metrics:
+      enabled: false
+      prometheus:
+        enabled: true
+
   http:
     services:
       core:
@@ -656,6 +662,10 @@ gateway:
       #     - secretName: chart-example-tls
       #       hosts:
       #         - chart-example.local
+    metrics:
+      enabled: false
+      prometheus:
+        enabled: true
 
   # handlers:
   #   request:

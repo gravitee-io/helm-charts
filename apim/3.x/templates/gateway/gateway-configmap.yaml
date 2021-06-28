@@ -300,9 +300,18 @@ data:
           {{- end }}
       {{- end }}
 
+      {{- if .Values.gateway.services.metrics.enabled }}
+      metrics:
+        enabled: {{ .Values.gateway.services.metrics.enabled }}
+        {{- if .Values.gateway.services.metrics.prometheus }}
+        prometheus:
+{{ toYaml .Values.gateway.services.metrics.prometheus | indent 10 }}
+        {{- end }}
+      {{- end }}
+
     {{- if or .Values.gateway.handlers }}
     handlers:
-{{ toYaml .Values.gateway.handlers | indent 6 }}   
+{{ toYaml .Values.gateway.handlers | indent 6 }}
     {{- end }}
     
     {{- if .Values.gateway.policy }}
