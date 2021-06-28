@@ -83,6 +83,16 @@ data:
             type: {{ .Values.api.http.services.core.http.authentication.type | default "basic" }}
             users:
               admin: {{ .Values.api.http.services.core.http.authentication.password | default "adminadmin"}}
+
+      {{- if .Values.api.services.metrics.enabled }}
+      metrics:
+        enabled: {{ .Values.api.services.metrics.enabled }}
+        {{- if .Values.api.services.metrics.prometheus }}
+        prometheus:
+{{ toYaml .Values.api.services.metrics.prometheus | indent 10 }}
+        {{- end }}
+      {{- end }}
+
     {{- if and .Values.api.http .Values.api.http.client }}
     httpClient:
       {{- if .Values.api.http.client.timeout }}

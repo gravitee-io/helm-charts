@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.12
+
+- [X] Allow to configure Prometheus support for API Gateway and Management API
+- Update gravitee.io APIM v3.8.4
+
 ### 3.1.11
 
 - [X] Allow to use the management node API as readinessProbe
