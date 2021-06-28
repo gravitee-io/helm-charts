@@ -24,7 +24,7 @@ spec:
     - host: {{ $host }}
       http:
         paths:
-          - path: {{ $ingressPath }}(/|$)(.*)
+          - path: {{ $ingressPath }}
             backend:
               serviceName: {{ $serviceAPIName }}
               servicePort: {{ $serviceAPIPort }}
