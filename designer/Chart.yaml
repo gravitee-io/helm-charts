@@ -7,3 +7,15 @@ home: https://gravitee.io
 sources:
   - https://github.com/gravitee-io
 icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
+keywords:
+  - gravitee.io
+  - gravitee
+  - graviteeio 
+  - API
+  - API Designer
+kubeVersion: ">=1.14.0-0"
+annotations:
+  # List of changes for the release in artifacthub.io
+  # https://artifacthub.io/packages/helm/graviteeio/designer?modal=changelog
+  artifacthub.io/changes: |
+    - Remove useless path regex capture from API's ingress
