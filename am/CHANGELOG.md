@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.20
+
+- [X] Remove Ingress beta API and add support for networking.k8s.io
+- Update gravitee.io AM v3.9.2
+
 ### 1.0.19
 
 - [X] Add validation on baseURL value 
