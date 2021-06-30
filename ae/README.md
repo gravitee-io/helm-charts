@@ -20,6 +20,10 @@ In order to make it work, you need to grant access to the Kubernetes API.
 $ kubectl apply -f https://raw.githubusercontent.com/gravitee-io/helm-charts/master/ae/rbac.yml
 ```
 
+If you want to let Helm to create the Service Account with required cluster role while installating the Chart, use `--set engine.managedServiceAccount=true`
+
+Please note that `managedServiceAccount` is enabled by default and so, you'll have to switch it off if you want to manage the Service Account by yourself.
+
 ---
 **WARNING**
 

@@ -38,3 +38,15 @@ Return the apiVersion of ingress.
     {{- print "extensions/v1beta1" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Use the fullname if the serviceAccount value is not set
+*/}}
+{{- define "engine.serviceAccount" -}}
+{{- if .Values.engine.serviceAccount }}
+{{- .Values.engine.serviceAccount -}}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}

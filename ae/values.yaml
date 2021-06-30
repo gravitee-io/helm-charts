@@ -25,6 +25,25 @@ engine:
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
     graviteeLevel: INFO
   reloadOnConfigChange: true
+
+  # Whether this chart should self-manage its service account, role, and associated role binding.
+  managedServiceAccount: true
+
+  # Custom service account override that the pod will use
+  serviceAccount: ""
+
+  clusterRoleRules:
+    - apiGroups:
+        - ""
+      resources:
+        - endpoints
+        - pods
+        - nodes
+        - services
+      verbs:
+        - get
+        - list
+
   ssl:
     enabled: false
   #  keystore:
