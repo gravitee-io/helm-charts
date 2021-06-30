@@ -365,6 +365,50 @@ api:
     jettyLevel: INFO
   restartPolicy: OnFailure
   reloadOnConfigChange: true
+  deployment:
+    # Annotations to apply to the deployment
+    annotations: {}
+    # additionals labels
+    labels: {}
+    affinity: {}
+    hostAliases: []
+    #- ip: "127.0.0.1"
+    #  hostnames:
+    #  - "foo.local"
+    #  - "bar.local"
+    nodeSelector: {}
+    tolerations: []
+    envFrom: []
+    # - configMapRef:
+    #     name: config-secret
+    securityContext:
+      runAsUser: 1001
+      runAsNonRoot: true
+
+  livenessProbe:
+    tcpSocket:  
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 3
+
+  readinessProbe:
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 3
+
+  podAnnotations: {}
+    # iam.amazonaws.com/role: es-cluster
+
+  # How long to wait for APIM Management API pods to stop gracefully
+  terminationGracePeriod: 30
+
+  # This is the PriorityClass settings as defined in
+  # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1
@@ -376,7 +420,7 @@ api:
     pullPolicy: Always
     # pullSecrets:
     #   - name: gravitee_secrets
-  # env:
+  env: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
   #   - name: ENV_VARIABLE_WITH_FROM
@@ -453,6 +497,7 @@ api:
     internalPort: 8083
     internalPortName: http
   # annotations:
+  # DEPRECATED, please define api.deployment.securityContext instead
   securityContext:
     runAsUser: 1001
     runAsNonRoot: true
@@ -544,6 +589,53 @@ gateway:
     graviteeLevel: DEBUG
     jettyLevel: WARN
   reloadOnConfigChange: true
+  deployment:
+    # Annotations to apply to the deployment
+    annotations: {}
+    # additionals labels
+    labels: {}
+    affinity: {}
+    hostAliases: []
+    #- ip: "127.0.0.1"
+    #  hostnames:
+    #  - "foo.local"
+    #  - "bar.local"
+    nodeSelector: {}
+    tolerations: []
+    envFrom: []
+    # - configMapRef:
+    #     name: config-secret
+    securityContext:
+      runAsUser: 1001
+      runAsNonRoot: true
+
+  livenessProbe:
+    tcpSocket:  
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 3
+
+  readinessProbe:
+    # use the management node endpoint as readinessProbe to test the api-sync
+    # in this case, the gateway.management.services.core.http.host must be defined to the Pod IP or 0.0.0.0
+    apiSync: false
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    failureThreshold: 3
+
+  podAnnotations: {}
+    # iam.amazonaws.com/role: es-cluster
+
+  # How long to wait for APIM Gateway pods to stop gracefully
+  terminationGracePeriod: 30
+
+  # This is the PriorityClass settings as defined in
+  # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+
   additionalPlugins:
 #    - https://path_to_plugin
   ssl:
@@ -566,11 +658,6 @@ gateway:
       # host:
       # port:
       # password:
-   # use the management node endpoint as readinessProbe to test the api-sync
-   # in this case, the gateway.management.services.core.http.host must be defined to the Pod IP or 0.0.0.0
-  readinessProbe:
-    apiSync: false
-    initialDelaySeconds: 5
   management: 
     http:
       # url: 
@@ -682,7 +769,7 @@ gateway:
 #      port: 8379
 #    file:
 
-  # WARNING: This part will be removed shortly in favor of gateway.policy (see below)
+  # DEPRECATED: This part will be removed shortly in favor of gateway.policy (see below)
   apiKey:
     header: X-Gravitee-Api-Key
     param: api-key
@@ -698,7 +785,7 @@ gateway:
     pullPolicy: Always
     # pullSecrets:
     #   - name: gravitee_secrets
-  # env:
+  env: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
   #   - name: ENV_VARIABLE_WITH_FROM
@@ -712,6 +799,7 @@ gateway:
     internalPort: 8082
     internalPortName: http
   # annotations:
+  # DEPRECATED, please define gateway.deployment.securityContext instead
   securityContext:
     runAsUser: 1001
     runAsNonRoot: true
@@ -773,7 +861,55 @@ portal:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
-  # env:
+
+  deployment:
+    # Annotations to apply to the deployment
+    annotations: {}
+    # additionals labels
+    labels: {}
+    affinity: {}
+    hostAliases: []
+    #- ip: "127.0.0.1"
+    #  hostnames:
+    #  - "foo.local"
+    #  - "bar.local"
+    nodeSelector: {}
+    tolerations: []
+    envFrom: []
+    # - configMapRef:
+    #     name: config-secret
+    securityContext:
+      runAsUser: 101
+      runAsGroup: 101
+      runAsNonRoot: true
+
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    failureThreshold: 3
+
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    failureThreshold: 3
+            
+  podAnnotations: {}
+    # iam.amazonaws.com/role: es-cluster
+
+  # How long to wait for APIM Portal pods to stop gracefully
+  terminationGracePeriod: 30
+
+  # This is the PriorityClass settings as defined in
+  # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+
+  env: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
   #   - name: ENV_VARIABLE_WITH_FROM
@@ -794,6 +930,7 @@ portal:
     internalPort: 8080
     internalPortName: http
   # annotations:
+  # DEPRECATED, please define portal.deployment.securityContext instead
   securityContext:
     runAsUser: 101
     runAsGroup: 101
@@ -868,7 +1005,55 @@ ui:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
-  # env:
+
+  deployment:
+    # Annotations to apply to the deployment
+    annotations: {}
+    # additionals labels
+    labels: {}
+    affinity: {}
+    hostAliases: []
+    #- ip: "127.0.0.1"
+    #  hostnames:
+    #  - "foo.local"
+    #  - "bar.local"
+    nodeSelector: {}
+    tolerations: []
+    envFrom: []
+    # - configMapRef:
+    #     name: config-secret
+    securityContext:
+      runAsUser: 101
+      runAsGroup: 101
+      runAsNonRoot: true
+
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    failureThreshold: 3
+
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    failureThreshold: 3
+
+  podAnnotations: {}
+    # iam.amazonaws.com/role: es-cluster 
+
+  # How long to wait for APIM Console pods to stop gracefully
+  terminationGracePeriod: 30
+
+  # This is the PriorityClass settings as defined in
+  # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+
+  env: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
   #   - name: ENV_VARIABLE_WITH_FROM
@@ -889,6 +1074,7 @@ ui:
     internalPort: 8080
     internalPortName: http
   # annotations:
+  # DEPRECATED, please define ui.deployment.securityContext instead
   securityContext:
     runAsUser: 101
     runAsGroup: 101

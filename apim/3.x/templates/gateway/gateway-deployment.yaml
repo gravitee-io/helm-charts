@@ -10,6 +10,21 @@ metadata:
     app.kubernetes.io/component: "{{ .Values.gateway.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    {{- if .Values.gateway.deployment.labels }}
+    {{- range $key, $value := .Values.gateway.deployment.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- else }}
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+  {{- if .Values.gateway.deployment.annotations}}
+  annotations:
+    {{- range $key, $value := .Values.gateway.deployment.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   {{- if eq .Values.gateway.type "StatefulSet" }}
   serviceName: {{ template "gravitee.gateway.fullname" . }}
@@ -37,15 +52,34 @@ spec:
         {{- if .Values.gateway.reloadOnConfigChange }}
         checksum/config: {{ include (print $.Template.BasePath "/gateway/gateway-configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- range $key, $value := .Values.gateway.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "{{ .Values.gateway.name }}"
+        {{- if .Values.gateway.deployment.labels }}
+        {{- range $key, $value := .Values.gateway.deployment.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- else }}
+        {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
     spec:
-    {{- if .Values.gateway.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.gateway.nodeSelector | indent 8 }}
-    {{- end }}
+      affinity: {{ toYaml .Values.gateway.deployment.affinity | nindent 8 }}
+      nodeSelector: {{ toYaml .Values.gateway.deployment.nodeSelector | nindent 8 }}
+      tolerations: {{ toYaml .Values.gateway.deployment.tolerations | nindent 8 }}
+      {{- if .Values.gateway.priorityClassName }}
+      priorityClassName: {{ .Values.gateway.priorityClassName  }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.gateway.terminationGracePeriod }}
+      {{- if .Values.gateway.deployment.hostAliases }}
+      hostAliases: {{ toYaml .Values.gateway.deployment.hostAliases | nindent 6 }}
+      {{- end }}
+
       {{- $plugins := list -}}
       {{- if .Values.gateway.additionalPlugins -}}
         {{- $plugins = concat $plugins .Values.gateway.additionalPlugins -}}
@@ -63,8 +97,7 @@ spec:
         - name: get-repository-jdbc-ext
           image: 'alpine'
           command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  {{ .Values.jdbc.driver }}"]
-          securityContext:
-{{ toYaml .Values.gateway.securityContext | trim | indent 12 }}
+          securityContext: {{ toYaml ( .Values.gateway.securityContext | default .Values.gateway.deployment.securityContext ) | nindent 12 }}
           volumeMounts:
             - name: graviteeio-apim-repository-jdbc-ext
               mountPath: /tmp/plugins-ext
@@ -82,8 +115,7 @@ spec:
         - name: {{ template "gravitee.gateway.fullname" . }}
           image: "{{ .Values.gateway.image.repository }}:{{ default .Chart.AppVersion .Values.gateway.image.tag }}"
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
-          securityContext:  
-{{ toYaml .Values.gateway.securityContext | trim | indent 12 }}
+          securityContext: {{ toYaml ( .Values.gateway.securityContext | default .Values.gateway.deployment.securityContext ) | nindent 12 }}
           ports:
             - name: {{ .Values.gateway.service.internalPortName }}
               containerPort: {{ .Values.gateway.service.internalPort }}
@@ -95,23 +127,12 @@ spec:
             - name: {{ .Values.gateway.name }}-hook
               containerPort: {{ .Values.gateway.services.core.http.port | default "18082" }}
             {{- end }}
-          {{- if or .Values.gateway.env .Values.gateway.services.kubeController.enabled $plugins }}
           env:
-            {{- if or $plugins }}
+            {{- if $plugins }}
             - name: GRAVITEE_PLUGINS_PATH_0
               value: '${gravitee.home}/plugins'
             - name: GRAVITEE_PLUGINS_PATH_1
               value: '${gravitee.home}/plugins-ext'
-            {{- end }}
-            {{- range $env := .Values.gateway.env }}
-            - name: {{ $env.name }}
-              {{- if $env.value }}
-              value: {{ $env.value | quote }}
-              {{- end }}
-              {{- with $env.valueFrom }}
-              valueFrom: 
-                {{- toYaml . | nindent 16 }}
-              {{- end }}
             {{- end }}
             {{- if or .Values.gateway.services.kubeController.enabled }}
             - name: KUBERNETES_AUTH_TRYKUBECONFIG
@@ -119,7 +140,10 @@ spec:
             - name: KUBERNETES_AUTH_TRYSERVICEACCOUNT
               value: "true"
             {{- end }}
-          {{- end }}
+{{- if .Values.gateway.env | default .Values.gateway.deployment.extraEnvs }}
+{{ toYaml ( .Values.gateway.env | default .Values.gateway.deployment.extraEnvs ) | indent 12 }}
+{{- end }}
+          envFrom: {{ toYaml .Values.gateway.deployment.envFrom | nindent 12 }}
           {{- if .Values.gateway.lifecycle }}
           lifecycle:
             {{- if .Values.gateway.lifecycle.postStart }}
@@ -133,11 +157,7 @@ spec:
                 command: {{ .Values.gateway.lifecycle.preStop }}
             {{- end }}
           {{- end }}
-          livenessProbe:
-            tcpSocket:
-              port: {{ .Values.gateway.service.internalPort }}
-            initialDelaySeconds: 60
-            periodSeconds: 30
+          livenessProbe: {{ toYaml .Values.gateway.livenessProbe | nindent 12 }}
           readinessProbe:
             {{- if eq .Values.gateway.readinessProbe.apiSync true }}
             httpGet:
@@ -157,9 +177,8 @@ spec:
             {{- end }}
             initialDelaySeconds: {{ .Values.gateway.readinessProbe.initialDelaySeconds | default 5 }}
             failureThreshold: {{ .Values.gateway.readinessProbe.failureThreshold | default 3 }}
-            periodSeconds: 30
-          resources:
-{{ toYaml .Values.gateway.resources | indent 12 }}
+            periodSeconds: {{ .Values.gateway.readinessProbe.periodSeconds | default 30 }}
+          resources: {{ toYaml .Values.gateway.resources | nindent 12 }}
           volumeMounts:
             - name: config
               mountPath: /opt/graviteeio-gateway/config/gravitee.yml
