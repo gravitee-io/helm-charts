@@ -10,6 +10,21 @@ metadata:
     app.kubernetes.io/component: "{{ .Values.ui.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    {{- if .Values.ui.deployment.labels }}
+    {{- range $key, $value := .Values.ui.deployment.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- else }}
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+  {{- if .Values.ui.deployment.annotations}}
+  annotations:
+    {{- range $key, $value := .Values.ui.deployment.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   {{- if not .Values.ui.autoscaling.enabled }}
   replicas: {{ .Values.ui.replicaCount }}
@@ -28,15 +43,34 @@ spec:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
         checksum/config: {{ include (print $.Template.BasePath "/ui/ui-configmap.yaml") . | sha256sum }}
+        {{- range $key, $value := .Values.ui.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "{{ .Values.ui.name }}"
+        {{- if .Values.ui.deployment.labels }}
+        {{- range $key, $value := .Values.ui.deployment.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- else }}
+        {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
     spec:
-    {{- if .Values.ui.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.ui.nodeSelector | indent 8 }}
-    {{- end }}
+      affinity: {{ toYaml .Values.ui.deployment.affinity | nindent 8 }}
+      nodeSelector: {{ toYaml .Values.ui.deployment.nodeSelector | nindent 8 }}
+      tolerations: {{ toYaml .Values.ui.deployment.tolerations | nindent 8 }}
+      {{- if .Values.ui.priorityClassName }}
+      priorityClassName: {{ .Values.ui.priorityClassName  }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.ui.terminationGracePeriod }}
+      {{- if .Values.ui.deployment.hostAliases }}
+      hostAliases: {{ toYaml .Values.ui.deployment.hostAliases | nindent 6 }}
+      {{- end }}
+
     {{- if or .Values.ui.extraInitContainers }}
       initContainers:
       {{- with .Values.ui.extraInitContainers }}
@@ -47,25 +81,16 @@ spec:
         - name: {{ template "gravitee.ui.fullname" . }}
           image: "{{ .Values.ui.image.repository }}:{{ default .Chart.AppVersion .Values.ui.image.tag }}"
           imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
-          securityContext:
-{{ toYaml .Values.ui.securityContext | trim | indent 12 }}
+          securityContext: {{ toYaml ( .Values.ui.securityContext | default .Values.ui.deployment.securityContext ) | nindent 12 }}
           env:
             - name: MGMT_API_URL
               value: "https://{{index .Values.api.ingress.hosts 0 }}"
             - name: MGMT_UI_URL
               value: "https://{{index .Values.ui.ingress.hosts 0 }}{{ .Values.ui.ingress.path }}"
-          {{- if .Values.ui.env }}
-          {{- range $env := .Values.ui.env }}
-            - name: {{ $env.name }}
-              {{- if $env.value }}
-              value: {{ $env.value | quote }}
-              {{- end }}
-              {{- with $env.valueFrom }}
-              valueFrom:
-                {{- toYaml . | nindent 16 }}
-              {{- end }}
-          {{- end }}
-          {{- end }}
+{{- if .Values.ui.env | default .Values.ui.deployment.extraEnvs }}
+{{ toYaml ( .Values.ui.env | default .Values.ui.deployment.extraEnvs ) | indent 12 }}
+{{- end }}
+          envFrom: {{ toYaml .Values.ui.deployment.envFrom | nindent 12 }}
           ports:
             - name: {{ .Values.ui.service.internalPortName }}
               containerPort: {{ .Values.ui.service.internalPort }}
@@ -82,20 +107,9 @@ spec:
                 command: {{ .Values.ui.lifecycle.preStop }}
             {{- end }}
           {{- end }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.ui.service.internalPort }}
-            initialDelaySeconds: 30
-            periodSeconds: 30
-          readinessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.ui.service.internalPort }}
-            initialDelaySeconds: 30
-            periodSeconds: 30
-          resources:
-{{ toYaml .Values.ui.resources | indent 12 }}
+          livenessProbe: {{ toYaml .Values.ui.livenessProbe | nindent 12 }}
+          readinessProbe: {{ toYaml .Values.ui.readinessProbe | nindent 12 }}
+          resources: {{ toYaml .Values.ui.resources | nindent 12 }}
           volumeMounts:
             - name: config
               mountPath: /usr/share/nginx/html/constants.json
