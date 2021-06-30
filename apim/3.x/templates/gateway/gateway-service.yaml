@@ -16,6 +16,9 @@ metadata:
     {{- end }}
 spec:
   type: "{{ .Values.gateway.service.type }}"
+  {{- if .Values.gateway.service.loadBalancerIP }}
+  loadBalancerIP: "{{ .Values.gateway.service.loadBalancerIP }}"
+  {{- end }}
   ports:
     - port: {{ .Values.gateway.service.externalPort }}
       targetPort: {{ .Values.gateway.service.internalPort }}

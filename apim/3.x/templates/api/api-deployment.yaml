@@ -109,13 +109,15 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ .Values.api.service.internalPort }}
-            initialDelaySeconds: 60
-            periodSeconds: 30
+            initialDelaySeconds: {{ .Values.api.livenessProbe.initialDelaySeconds | default 60 }}
+            failureThreshold: {{ .Values.api.livenessProbe.failureThreshold | default 3 }}
+            periodSeconds: {{ .Values.api.livenessProbe.periodSeconds | default 30 }}
           readinessProbe:
             tcpSocket:
               port: {{ .Values.api.service.internalPort }}
-            initialDelaySeconds: 60
-            periodSeconds: 30
+            initialDelaySeconds: {{ .Values.api.readinessProbe.initialDelaySeconds | default 5 }}
+            failureThreshold: {{ .Values.api.readinessProbe.failureThreshold | default 3 }}
+            periodSeconds: {{ .Values.api.readinessProbe.periodSeconds | default 30 }}
           resources:
 {{ toYaml .Values.api.resources | indent 12 }}
           volumeMounts:

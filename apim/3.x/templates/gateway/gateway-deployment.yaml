@@ -136,8 +136,9 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ .Values.gateway.service.internalPort }}
-            initialDelaySeconds: 60
-            periodSeconds: 30
+            initialDelaySeconds: {{ .Values.gateway.livenessProbe.initialDelaySeconds | default 60 }}
+            failureThreshold: {{ .Values.gateway.livenessProbe.failureThreshold | default 3 }}
+            periodSeconds: {{ .Values.gateway.livenessProbe.periodSeconds | default 30 }}
           readinessProbe:
             {{- if eq .Values.gateway.readinessProbe.apiSync true }}
             httpGet:
@@ -157,7 +158,7 @@ spec:
             {{- end }}
             initialDelaySeconds: {{ .Values.gateway.readinessProbe.initialDelaySeconds | default 5 }}
             failureThreshold: {{ .Values.gateway.readinessProbe.failureThreshold | default 3 }}
-            periodSeconds: 30
+            periodSeconds: {{ .Values.gateway.readinessProbe.periodSeconds | default 30 }}
           resources:
 {{ toYaml .Values.gateway.resources | indent 12 }}
           volumeMounts:

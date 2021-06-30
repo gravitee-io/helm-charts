@@ -350,6 +350,15 @@ ratelimit:
 api:
   enabled: true
   name: api
+  readinessProbe:
+    apiSync: false
+    initialDelaySeconds: 5
+    failureThreshold: 3
+    periodSeconds: 30
+  livenessProbe:
+    initialDelaySeconds: 60
+    failureThreshold: 3
+    periodSeconds: 30
   logging:
     debug: false
     stdout:
@@ -568,6 +577,12 @@ gateway:
   readinessProbe:
     apiSync: false
     initialDelaySeconds: 5
+    failureThreshold: 3
+    periodSeconds: 30
+  livenessProbe:
+    initialDelaySeconds: 60
+    failureThreshold: 3
+    periodSeconds: 30
   management: 
     http:
       # url: 
