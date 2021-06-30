@@ -163,16 +163,18 @@ data:
           # - bcrypt : passwords are hashed with bcrypt
           # - none : passwords are not hashed/encrypted
           # default value is bcrypt
-          password-encoding-algo: bcrypt
+          password-encoding-algo: {{ .Values.inMemoryAuth.passwordEncodingAlgo | default bcrypt }}
           allow-email-in-search-results: {{ .Values.inMemoryAuth.allowEmailInSearchResults }}
           users:
             - user:
+            {{- if .Values.adminAccountEnable }}
               username: admin
               password: {{ .Values.adminPasswordBcrypt }}
               roles: ORGANIZATION:ADMIN, ENVIRONMENT:ADMIN
               email: {{ .Values.adminEmail }}
               firstName: {{ .Values.adminFirstName }}
               lastName: {{ .Values.adminLastName }}
+            {{- end }}
           {{- if .Values.extraInMemoryUsers -}}
           {{ .Values.extraInMemoryUsers | nindent 12 }}
           {{- end -}}
