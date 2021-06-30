@@ -114,3 +114,15 @@ Create volumes for plugins
   emptyDir: {}
 {{- end }}
 {{- end -}}
+
+{{/*
+Use the fullname if the serviceAccount value is not set
+*/}}
+{{- define "api.serviceAccount" -}}
+{{- if .Values.api.serviceAccount }}
+{{- .Values.api.serviceAccount -}}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}

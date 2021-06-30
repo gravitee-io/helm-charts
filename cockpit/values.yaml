@@ -116,6 +116,28 @@ api:
     jettyLevel: INFO
   restartPolicy: OnFailure
   reloadOnConfigChange: true
+
+  # Whether this chart should self-manage its service account, role, and associated role binding.
+  managedServiceAccount: true
+
+  # Custom service account override that the pod will use
+  serviceAccount: ""
+
+  # Annotations to add to the ServiceAccount that is created if the serviceAccount value isn't set.
+  serviceAccountAnnotations: {}
+
+  clusterRoleRules:
+    - apiGroups:
+        - ""
+      resources:
+        - endpoints
+        - pods
+        - nodes
+        - services
+      verbs:
+        - get
+        - list
+
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1
