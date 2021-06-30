@@ -167,6 +167,14 @@ data:
           allow-email-in-search-results: {{ .Values.inMemoryAuth.allowEmailInSearchResults }}
           users:
             - user:
+            {{- if .Values.adminAccountEnable }}
+              username: admin
+              password: {{ .Values.adminPasswordBcrypt }}
+              roles: ORGANIZATION:ADMIN, ENVIRONMENT:ADMIN
+              email: {{ .Values.adminEmail }}
+              firstName: {{ .Values.adminFirstName }}
+              lastName: {{ .Values.adminLastName }}
+            {{- end }}
           {{- if .Values.extraInMemoryUsers -}}
           {{ .Values.extraInMemoryUsers | nindent 12 }}
           {{- end -}}
