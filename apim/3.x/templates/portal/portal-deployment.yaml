@@ -10,6 +10,21 @@ metadata:
     app.kubernetes.io/component: "{{ .Values.portal.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    {{- if .Values.portal.deployment.labels }}
+    {{- range $key, $value := .Values.portal.deployment.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- else }}
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+  {{- if .Values.portal.deployment.annotations}}
+  annotations:
+    {{- range $key, $value := .Values.portal.deployment.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   {{- if not .Values.portal.autoscaling.enabled }}
   replicas: {{ .Values.portal.replicaCount }}
@@ -28,15 +43,25 @@ spec:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
         checksum/config: {{ include (print $.Template.BasePath "/portal/portal-configmap.yaml") . | sha256sum }}
+        {{- range $key, $value := .Values.portal.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "{{ .Values.portal.name }}"
+        {{- if .Values.portal.deployment.labels }}
+        {{- range $key, $value := .Values.portal.deployment.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- else }}
+        {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
     spec:
-    {{- if .Values.portal.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.portal.nodeSelector | indent 8 }}
-    {{- end }}
+      affinity: {{ toYaml .Values.portal.deployment.affinity | nindent 8 }}
+      nodeSelector: {{ toYaml .Values.portal.deployment.nodeSelector | nindent 8 }}
     {{- if or .Values.portal.extraInitContainers }}
       initContainers:
       {{- with .Values.portal.extraInitContainers }}
@@ -47,23 +72,14 @@ spec:
         - name: {{ template "gravitee.portal.fullname" . }}
           image: "{{ .Values.portal.image.repository }}:{{ default .Chart.AppVersion .Values.portal.image.tag }}"
           imagePullPolicy: {{ .Values.portal.image.pullPolicy }}
-          securityContext:
-{{ toYaml .Values.portal.securityContext | trim | indent 12 }}
+          securityContext: {{ toYaml ( .Values.portal.securityContext | default .Values.portal.deployment.securityContext ) | nindent 12 }}
           env:
             - name: PORTAL_API_URL
               value: "https://{{index .Values.api.ingress.portal.hosts 0 }}{{ .Values.api.ingress.portal.path }}/"
-          {{- if .Values.portal.env }}
-            {{- range $env := .Values.portal.env }}
-            - name: {{ $env.name }}
-              {{- if $env.value }}
-              value: {{ $env.value | quote }}
-              {{- end }}
-              {{- with $env.valueFrom }}
-              valueFrom: 
-                {{- toYaml . | nindent 16 }}
-              {{- end }}
-            {{- end }}
-          {{- end }}
+{{- if .Values.portal.env | default .Values.portal.deployment.extraEnvs }}
+{{ toYaml ( .Values.portal.env | default .Values.portal.deployment.extraEnvs ) | indent 12 }}
+{{- end }}
+          envFrom: {{ toYaml .Values.portal.deployment.envFrom | nindent 12 }}
           ports:
             - name: {{ .Values.portal.service.internalPortName }}
               containerPort: {{ .Values.portal.service.internalPort }}
@@ -80,20 +96,9 @@ spec:
                 command: {{ .Values.portal.lifecycle.preStop }}
             {{- end }}
           {{- end }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.portal.service.internalPort }}
-            initialDelaySeconds: 30
-            periodSeconds: 30
-          readinessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.portal.service.internalPort }}
-            initialDelaySeconds: 30
-            periodSeconds: 30
-          resources:
-{{ toYaml .Values.portal.resources | indent 12 }}
+          livenessProbe: {{ toYaml .Values.portal.livenessProbe | nindent 12 }}
+          readinessProbe: {{ toYaml .Values.portal.readinessProbe | nindent 12 }}
+          resources: {{ toYaml .Values.portal.resources | nindent 12 }}
           volumeMounts:
             - name: config
               mountPath: /usr/share/nginx/html/assets/config.json
