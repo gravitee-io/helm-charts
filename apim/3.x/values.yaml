@@ -12,15 +12,17 @@ inMemoryAuth:
   allowEmailInSearchResults: false
   passwordEncodingAlgo: bcrypt
 
+jwtSecret: myJWT4Gr4v1t33_S3cr3t
+
+# Define extra inMemory users here or disable the default ones here
+# By default, admin user will be added. If you want to remove the default admin turn the followong boolean to false. 
+adminAccountEnable: true
 # Default password "admin", use bcrypt ($2a$ version) to generate a new one
 adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
 adminEmail:
 adminFirstName:
 adminLastName:
 
-jwtSecret: myJWT4Gr4v1t33_S3cr3t
-
-# Define extra inMemory users here or disable the default ones here
 extraInMemoryUsers: |
   - user:
     username: user
