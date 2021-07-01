@@ -173,6 +173,15 @@ api:
   # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   priorityClassName: ""
 
+  env: []
+  #   - name: ENV_VARIABLE
+  #     value: ENV_VARIABLE_VALUE
+  #   - name: ENV_VARIABLE_WITH_FROM
+  #     valueFrom:
+  #       configMapKeyRef:
+  #         name: special-config
+  #         key: SPECIAL_LEVEL
+
   additionalPlugins:
 #    - https://path_to_plugin
   ssl:
@@ -401,7 +410,8 @@ gateway:
     pullPolicy: Always
     # pullSecrets:
     #   - name: gravitee_secrets
-  # env:
+
+  env: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
   #   - name: ENV_VARIABLE_WITH_FROM
@@ -409,6 +419,7 @@ gateway:
   #       configMapKeyRef:
   #         name: special-config
   #         key: SPECIAL_LEVEL
+
   service:
     type: ClusterIP
     externalPort: 82

@@ -149,7 +149,52 @@ api:
     pullPolicy: Always
     # pullSecrets:
     #   - name: gravitee_secrets
-  # env:
+
+  deployment:
+    # Annotations to apply to the deployment
+    annotations: {}
+    # additionals labels
+    labels: {}
+    affinity: {}
+    hostAliases: []
+    #- ip: "127.0.0.1"
+    #  hostnames:
+    #  - "foo.local"
+    #  - "bar.local"
+    nodeSelector: {}
+    tolerations: []
+    envFrom: []
+    # - configMapRef:
+    #     name: config-secret
+    securityContext:
+      runAsUser: 1001
+      runAsNonRoot: true
+
+  livenessProbe:
+    tcpSocket:  
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 3
+
+  readinessProbe:
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 3
+
+  podAnnotations: {}
+    # iam.amazonaws.com/role: es-cluster
+
+  # How long to wait for Cockpit Management API pods to stop gracefully
+  terminationGracePeriod: 30
+
+  # This is the PriorityClass settings as defined in
+  # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+
+  env: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
   #   - name: ENV_VARIABLE_WITH_FROM
@@ -157,6 +202,7 @@ api:
   #       configMapKeyRef:
   #         name: special-config
   #         key: SPECIAL_LEVEL
+
   ssl:
     enabled: false
   #  keystore:
@@ -323,7 +369,54 @@ ui:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
-  # env:
+  deployment:
+    # Annotations to apply to the deployment
+    annotations: {}
+    # additionals labels
+    labels: {}
+    affinity: {}
+    hostAliases: []
+    #- ip: "127.0.0.1"
+    #  hostnames:
+    #  - "foo.local"
+    #  - "bar.local"
+    nodeSelector: {}
+    tolerations: []
+    envFrom: []
+    # - configMapRef:
+    #     name: config-secret
+    securityContext:
+      runAsUser: 101
+      runAsGroup: 101
+      runAsNonRoot: true
+
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    failureThreshold: 3
+
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    failureThreshold: 3
+
+  podAnnotations: {}
+    # iam.amazonaws.com/role: es-cluster 
+
+  # How long to wait for Coockpit Console pods to stop gracefully
+  terminationGracePeriod: 30
+
+  # This is the PriorityClass settings as defined in
+  # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+
+  env: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
   #   - name: ENV_VARIABLE_WITH_FROM
