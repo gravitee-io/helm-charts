@@ -282,6 +282,7 @@ data:
           secured: {{ .Values.gateway.services.bridge.ssl.enabled | default true }}
           alpn: true
           ssl:
+            {{- if .Values.gateway.services.bridge.ssl.keystore }}
             keystore:
               {{- if .Values.gateway.services.bridge.ssl.keystore.type }}
               type: {{ .Values.gateway.services.bridge.ssl.keystore.type }}
@@ -289,6 +290,7 @@ data:
               path: {{ .Values.gateway.services.bridge.ssl.keystore.path }}
               password: {{ .Values.gateway.services.bridge.ssl.keystore.password | quote }}
             clientAuth: {{ .Values.gateway.services.bridge.ssl.clientAuth }}
+            {{- end }}
             {{- if .Values.gateway.services.bridge.ssl.truststore }}
             truststore:
               {{- if .Values.gateway.services.bridge.ssl.truststore.type }}
