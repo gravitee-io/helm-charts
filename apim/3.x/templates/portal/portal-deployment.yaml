@@ -62,6 +62,15 @@ spec:
     spec:
       affinity: {{ toYaml .Values.portal.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.portal.deployment.nodeSelector | nindent 8 }}
+      tolerations: {{ toYaml .Values.portal.deployment.tolerations | nindent 8 }}
+      {{- if .Values.portal.priorityClassName }}
+      priorityClassName: {{ .Values.portal.priorityClassName  }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.portal.terminationGracePeriod }}
+      {{- if .Values.portal.deployment.hostAliases }}
+      hostAliases: {{ toYaml .Values.portal.deployment.hostAliases | nindent 6 }}
+      {{- end }}
+
     {{- if or .Values.portal.extraInitContainers }}
       initContainers:
       {{- with .Values.portal.extraInitContainers }}
