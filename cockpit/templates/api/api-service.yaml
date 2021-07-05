@@ -21,6 +21,9 @@ spec:
       targetPort: {{ .Values.api.service.internalPort }}
       protocol: TCP
       name: {{ .Values.api.name }}
+    - port: 5701
+      name: {{ .Values.api.name }}-hz
+      protocol: TCP
     {{- if .Values.api.controller.ws.service.enabled }}
     - port: {{ .Values.api.controller.ws.service.externalPort }}
       targetPort: {{ .Values.api.controller.ws.port }}

@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.2.2
+
+- Add hazelcast default port to cockpit service
+
 ### 1.2.1
 
 - Add native support for service account
