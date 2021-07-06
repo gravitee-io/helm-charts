@@ -129,6 +129,9 @@ api:
     # pullSecrets:
     #   - name: gravitee_secrets
 
+  liquibase:
+    enabled: true
+
   deployment:
     # Annotations to apply to the deployment
     annotations: {}
@@ -196,6 +199,10 @@ api:
   #    path: ${gravitee.home}/security/truststore.jks
   #    password: secret
   http:
+    api:
+      entrypoint: /
+      management:
+        entrypoint: ${http.api.entrypoint}management
     services:
       core:
         http:
@@ -301,6 +308,9 @@ gateway:
     graviteeLevel: DEBUG
     jettyLevel: WARN
   reloadOnConfigChange: true
+  
+  liquibase:
+    enabled: false
 
   deployment:
     # Annotations to apply to the deployment

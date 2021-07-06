@@ -38,12 +38,3 @@ tests:
       - matchRegex:
           path: data.[constants.json]
           pattern: "[ ]+\"baseURL\": \"https://custom.hostname/custom/path/management\""
-
-  - it: should have reject ingress path not ending with /management
-    set:
-      api.ingress.hosts[0]: "custom.hostname"
-      api.ingress.path: "/custom/path/"
-
-    asserts:
-      - failedTemplate: 
-          errorMessage: "API Ingress Path must end with '/management'"

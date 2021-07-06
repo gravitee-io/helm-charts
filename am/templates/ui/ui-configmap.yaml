@@ -19,10 +19,10 @@ data:
       {{- if .Values.ui.baseURL }}
       "baseURL": "{{ .Values.ui.baseURL }}"
       {{- else }}
-        {{- if  hasSuffix "/management" .Values.api.ingress.path  }}
+        {{- if hasPrefix "/" .Values.api.ingress.path }}
       "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}"
         {{- else }}
-          {{- fail "API Ingress Path must end with '/management' " }}
+      "baseURL": "https://{{ index .Values.api.ingress.hosts 0 }}/{{ .Values.api.ingress.path }}"
         {{- end }}
       {{- end }}
     }

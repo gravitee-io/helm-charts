@@ -41,7 +41,10 @@ data:
           password: {{ .Values.gateway.ssl.truststore.password | quote }}
         {{- end }}
       {{- end }}
-
+    
+    liquibase:
+      enabled: {{ .Values.gateway.liquibase.enabled }}
+  
     management:
       type: {{ .Values.management.type | default "mongodb" }}
       {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
