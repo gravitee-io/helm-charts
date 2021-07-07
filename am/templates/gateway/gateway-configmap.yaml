@@ -49,9 +49,24 @@ data:
       type: {{ .Values.management.type | default "mongodb" }}
       {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
       mongodb:
+        sslEnabled: {{ .Values.mongo.sslEnabled }}
+        socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
         {{- if .Values.mongo.uri }}
         uri: {{ .Values.mongo.uri }}
-        {{ else }}
+        {{- else if .Values.mongo.servers }}
+        servers:
+          {{- .Values.mongo.servers | nindent 10 }}
+        dbname: {{ .Values.mongo.dbname }}
+        {{- if (eq .Values.mongo.auth.enabled true) }}
+        username: {{ .Values.mongo.auth.username }}
+        {{- if .Values.mongo.auth.password }}
+        password: {{ .Values.mongo.auth.password }}
+        {{- end }}
+        {{- if .Values.mongo.auth.source }}
+        authSource: {{ .Values.mongo.auth.source }}
+        {{- end }}
+        {{- end }}
+        {{- else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
       {{- else if (eq .Values.management.type "jdbc") }}
@@ -75,9 +90,24 @@ data:
       type: {{ .Values.oauth2.type | default "mongodb" }}
       {{- if or (eq .Values.oauth2.type "mongodb") (kindIs "invalid" .Values.oauth2.type) }}
       mongodb:
+        sslEnabled: {{ .Values.mongo.sslEnabled }}
+        socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
         {{- if .Values.mongo.uri }}
         uri: {{ .Values.mongo.uri }}
-        {{ else }}
+        {{- else if .Values.mongo.servers }}
+        servers:
+          {{- .Values.mongo.servers | nindent 10 }}
+        dbname: {{ .Values.mongo.dbname }}
+        {{- if (eq .Values.mongo.auth.enabled true) }}
+        username: {{ .Values.mongo.auth.username }}
+        {{- if .Values.mongo.auth.password }}
+        password: {{ .Values.mongo.auth.password }}
+        {{- end }}
+        {{- if .Values.mongo.auth.source }}
+        authSource: {{ .Values.mongo.auth.source }}
+        {{- end }}
+        {{- end }}
+        {{- else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
       {{- else if (eq .Values.oauth2.type "jdbc") }}
