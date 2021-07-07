@@ -1,0 +1,53 @@
+suite: test that API configmap will contain the right entrypoints
+templates:
+  - "api/api-configmap.yaml"
+tests:
+  - it: should have default API entrypoint
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}entrypoint: /"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}entrypoint: \\$\\{http\\.api\\.entrypoint\\}management"
+
+  - it: should have custom API entrypoint
+    set:
+      api:
+        http:
+          api:
+            entrypoint: /custom
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}entrypoint: /custom"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}entrypoint: \\$\\{http\\.api\\.entrypoint\\}management"
+
+  - it: should have custom Management API entrypoint
+    set:
+      api:
+        http:
+          api:
+            management: 
+              entrypoint: /custom/my-custom-management
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}entrypoint: /"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}entrypoint: /custom/my-custom-management"
