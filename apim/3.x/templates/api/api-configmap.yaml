@@ -173,7 +173,7 @@ data:
           # - bcrypt : passwords are hashed with bcrypt
           # - none : passwords are not hashed/encrypted
           # default value is bcrypt
-          password-encoding-algo: {{ .Values.inMemoryAuth.passwordEncodingAlgo | default bcrypt }}
+          password-encoding-algo: {{ .Values.inMemoryAuth.passwordEncodingAlgo | default "bcrypt" }}
           allow-email-in-search-results: {{ .Values.inMemoryAuth.allowEmailInSearchResults }}
           users:
             - user:
