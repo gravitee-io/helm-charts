@@ -347,6 +347,9 @@ management:
 ratelimit:
   type: mongodb
 
+cache:
+  type: ehcache
+
 api:
   enabled: true
   name: api
