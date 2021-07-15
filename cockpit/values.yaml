@@ -364,7 +364,7 @@ ui:
   name: ui
   replicaCount: 1
   image:
-    repository: graviteeio/cockpit-webui
+    repository: graviteeio/cockpit-management-ui
     # tag: 3.0.0
     pullPolicy: Always
   # pullSecrets:
