@@ -3,7 +3,7 @@ name: cockpit
 # When the version is modified, make sure the artifacthub.io/changes list is updated
 # Also update CHANGELOG.md
 version: 1.2.1
-appVersion: 1.3.0
+appVersion: 1.4.1
 description: Official Gravitee.io Helm chart for Cockpit
 home: https://gravitee.io
 sources:
@@ -21,4 +21,4 @@ annotations:
   # List of changes for the release in artifacthub.io
   # https://artifacthub.io/packages/helm/graviteeio/cockpit?modal=changelog
   artifacthub.io/changes: |
-    - Add native support for service account
+    - Update cockpit ui default image name
