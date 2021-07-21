@@ -148,6 +148,7 @@ spec:
         - name: graviteeio-am-jdbc-ext
           emptyDir: {}
         {{- end }}
+        {{- include "deployment.pluginVolumes" $pluginParams | indent 8 }}
         {{- with .Values.api.extraVolumes }}
           {{- tpl . $ | nindent 8 }}
         {{- end }}
