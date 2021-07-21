@@ -114,6 +114,7 @@ api:
         </rollingPolicy>
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%n"
     graviteeLevel: DEBUG
+    graviteeSourceLevel: DEBUG
     jettyLevel: INFO
   restartPolicy: OnFailure
   reloadOnConfigChange: true
@@ -306,6 +307,7 @@ gateway:
         </rollingPolicy>
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
     graviteeLevel: DEBUG
+    graviteeSourceLevel: DEBUG
     jettyLevel: WARN
   reloadOnConfigChange: true
   

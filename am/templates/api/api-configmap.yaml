@@ -267,6 +267,7 @@ data:
             {{- end }}
 
             <logger name="io.gravitee" level="{{ .Values.api.logging.graviteeLevel }}" />
+            <logger name="com.graviteesource" level="{{ .Values.api.logging.graviteeSourceLevel }}" />
             <logger name="org.eclipse.jetty" level="{{ .Values.api.logging.jettyLevel }}" />
 
             <!-- Strictly speaking, the level attribute is not necessary since -->

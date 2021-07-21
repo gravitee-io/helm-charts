@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.25
+
+- [X] Add logger for com.graviteesource packages
+
 ### 1.0.24
 
 - [X] Fix additional plugins integration
