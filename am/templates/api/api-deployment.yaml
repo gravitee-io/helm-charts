@@ -97,6 +97,12 @@ spec:
             - name: {{ .Values.api.service.internalPortName }}
               containerPort: {{ .Values.api.service.internalPort }}
           env:
+            {{- if $plugins }}
+            - name: GRAVITEE_PLUGINS_PATH_0
+              value: '${gravitee.home}/plugins'
+            - name: GRAVITEE_PLUGINS_PATH_1
+              value: '${gravitee.home}/plugins-ext'
+            {{- end }}
 {{- if .Values.api.env | default .Values.api.deployment.extraEnvs }}
 {{ toYaml ( .Values.api.env | default .Values.api.deployment.extraEnvs ) | indent 12 }}
 {{- end }}
