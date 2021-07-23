@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.4.0
+
+- Make management-api ingress sse compatible
+
 ### 1.3.0
 
 - Update cockpit ui default image name
