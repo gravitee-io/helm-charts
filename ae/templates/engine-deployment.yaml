@@ -10,6 +10,21 @@ metadata:
     app.kubernetes.io/component: "{{ .Values.engine.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    {{- if .Values.engine.deployment.labels }}
+    {{- range $key, $value := .Values.engine.deployment.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- else }}
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+  {{- if .Values.engine.deployment.annotations}}
+  annotations:
+    {{- range $key, $value := .Values.engine.deployment.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   {{- if eq .Values.engine.type "StatefulSet" }}
   serviceName: {{ template "gravitee.engine.fullname" . }}
@@ -37,17 +52,35 @@ spec:
         {{- if .Values.engine.reloadOnConfigChange }}
         checksum/config: {{ include (print $.Template.BasePath "/engine-configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- range $key, $value := .Values.engine.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: "{{ .Values.engine.name }}"
+        {{- if .Values.engine.deployment.labels }}
+        {{- range $key, $value := .Values.engine.deployment.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- else }}
+        {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
     spec:
       serviceAccountName: {{ template "engine.serviceAccount" . }}
-      terminationGracePeriodSeconds: 60
-    {{- if .Values.engine.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.engine.nodeSelector | indent 8 }}
-    {{- end }}
+      affinity: {{ toYaml .Values.engine.deployment.affinity | nindent 8 }}
+      nodeSelector: {{ toYaml .Values.engine.deployment.nodeSelector | nindent 8 }}
+      tolerations: {{ toYaml .Values.engine.deployment.tolerations | nindent 8 }}
+      {{- if .Values.engine.priorityClassName }}
+      priorityClassName: {{ .Values.engine.priorityClassName  }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.engine.terminationGracePeriod }}
+      {{- if .Values.engine.deployment.hostAliases }}
+      hostAliases: {{ toYaml .Values.engine.deployment.hostAliases | nindent 6 }}
+      {{- end }}
+
       {{- if .Values.engine.extraInitContainers }}
       initContainers:
         {{- with .Values.engine.extraInitContainers }}
@@ -71,15 +104,9 @@ spec:
               value: "false"
             - name: "gravitee.processors.alert-engine-processor-geoip.enabled"
               value: "false"
-          {{- range $env := .Values.engine.env }}
-            - name: {{ $env.name }}
-              {{- if $env.value }}
-              value: {{ $env.value | quote }}
-              {{- end }}
-              {{- with $env.valueFrom }}
-              valueFrom: 
-                {{- toYaml . | nindent 16 }}
-              {{- end }}
+{{- if .Values.engine.env | default .Values.engine.deployment.extraEnvs }}
+{{ toYaml ( .Values.engine.env | default .Values.engine.deployment.extraEnvs ) | indent 12 }}
+{{- end }}
           {{- end }}
           {{- end }}
           {{- if .Values.engine.lifecycle }}
@@ -95,18 +122,9 @@ spec:
                 command: {{ .Values.engine.lifecycle.preStop }}
             {{- end }}
           {{- end }}
-          livenessProbe:
-            tcpSocket:
-              port: {{ .Values.engine.service.internalPort }}
-            initialDelaySeconds: 60
-            periodSeconds: 30
-          readinessProbe:
-            tcpSocket:
-              port: {{ .Values.engine.service.internalPort }}
-            initialDelaySeconds: 5
-            periodSeconds: 30
-          resources:
-{{ toYaml .Values.engine.resources | indent 12 }}
+          livenessProbe: {{ toYaml .Values.engine.livenessProbe | nindent 12 }}
+          readinessProbe: {{ toYaml .Values.engine.readinessProbe | nindent 12 }}
+          resources: {{ toYaml .Values.engine.resources | nindent 12 }}
           volumeMounts:
             - name: config
               mountPath: /opt/graviteeio-alert-engine/config/gravitee.yml
