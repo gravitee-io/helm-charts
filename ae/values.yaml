@@ -63,14 +63,43 @@ engine:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
-  #env:
-  #  - name: ENV_VARIABLE
-  #    value: ENV_VARIABLE_VALUE
-  #  - name: ENV_VARIABLE_WITH_FROM
-  #    valueFrom:
-  #      configMapKeyRef:
-  #        name: special-config
-  #        key: SPECIAL_LEVEL
+
+  deployment:
+    # Annotations to apply to the deployment
+    annotations: {}
+    # additionals labels
+    labels: {}
+    affinity: {}
+    hostAliases: []
+    #- ip: "127.0.0.1"
+    #  hostnames:
+    #  - "foo.local"
+    #  - "bar.local"
+    nodeSelector: {}
+    tolerations: []
+    envFrom: []
+    # - configMapRef:
+    #     name: config-secret
+    securityContext:
+      runAsUser: 1001
+      runAsNonRoot: true
+
+  # How long to wait for Alert Engine pods to stop gracefully
+  terminationGracePeriod: 30
+
+  # This is the PriorityClass settings as defined in
+  # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+
+  env: []
+  #   - name: ENV_VARIABLE
+  #     value: ENV_VARIABLE_VALUE
+  #   - name: ENV_VARIABLE_WITH_FROM
+  #     valueFrom:
+  #       configMapKeyRef:
+  #         name: special-config
+  #         key: SPECIAL_LEVEL
+  
   service:
     type: ClusterIP
     externalPort: 82
