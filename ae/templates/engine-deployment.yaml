@@ -108,7 +108,6 @@ spec:
 {{ toYaml ( .Values.engine.env | default .Values.engine.deployment.extraEnvs ) | indent 12 }}
 {{- end }}
           {{- end }}
-          {{- end }}
           {{- if .Values.engine.lifecycle }}
           lifecycle:
             {{- if .Values.engine.lifecycle.postStart }}
