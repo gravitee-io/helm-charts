@@ -37,12 +37,6 @@ data:
     http:
       api:
         entrypoint: {{ .Values.api.http.api.entrypoint }}
-        management:
-    {{- if and .Values.api.http.api.management .Values.api.http.api.management.entrypoint }}
-          entrypoint: {{.Values.api.http.api.management.entrypoint}}
-    {{- else }}
-          entrypoint: ${http.api.entrypoint}management
-    {{- end }}
     {{- end }}
     
     liquibase:
