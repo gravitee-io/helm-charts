@@ -1,0 +1,126 @@
+{{- if .Values.generator.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "gravitee.generator.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.generator.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    {{- if .Values.generator.deployment.labels }}
+    {{- range $key, $value := .Values.generator.deployment.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- else }}
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+  {{- if .Values.generator.deployment.annotations}}
+  annotations:
+    {{- range $key, $value := .Values.generator.deployment.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.generator.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "gravitee.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "{{ .Values.generator.name }}"
+  template:
+    metadata:
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
+        {{- if .Values.generator.reloadOnConfigChange }}
+        checksum/config: {{ include (print $.Template.BasePath "/generator/generator-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- range $key, $value := .Values.generator.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      labels:
+        app.kubernetes.io/name: {{ template "gravitee.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "{{ .Values.generator.name }}"
+        {{- if .Values.generator.deployment.labels }}
+        {{- range $key, $value := .Values.generator.deployment.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- else }}
+        {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+    spec:
+      affinity: {{ toYaml .Values.generator.deployment.affinity | nindent 8 }}
+      nodeSelector: {{ toYaml .Values.generator.deployment.nodeSelector | nindent 8 }}
+      tolerations: {{ toYaml .Values.generator.deployment.tolerations | nindent 8 }}
+      {{- if .Values.generator.priorityClassName }}
+      priorityClassName: {{ .Values.generator.priorityClassName  }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.generator.terminationGracePeriod }}
+      {{- if .Values.generator.deployment.hostAliases }}
+      hostAliases: {{ toYaml .Values.generator.deployment.hostAliases | nindent 6 }}
+      {{- end }}
+      {{- if .Values.generator.extraInitContainers }}
+      initContainers:
+        {{- with .Values.generator.extraInitContainers }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ template "gravitee.generator.fullname" . }}
+          image: "{{ .Values.generator.image.repository }}:{{ default .Chart.AppVersion .Values.generator.image.tag }}"
+          imagePullPolicy: {{ .Values.generator.image.pullPolicy }}
+          securityContext:  
+{{ toYaml .Values.generator.securityContext | trim | indent 12 }}
+          ports:
+            - containerPort: {{ .Values.generator.service.internalPort }}
+          env:
+{{- if .Values.generator.env | default .Values.generator.deployment.extraEnvs }}
+{{ toYaml ( .Values.generator.env | default .Values.generator.deployment.extraEnvs ) | indent 12 }}
+{{- end }}
+          envFrom: {{ toYaml .Values.generator.deployment.envFrom | nindent 12 }}
+          {{- if .Values.generator.lifecycle }}
+          lifecycle:
+            {{- if .Values.generator.lifecycle.postStart }}
+            postStart:
+              exec:
+                command: {{ .Values.generator.lifecycle.postStart }}
+            {{- end }}
+            {{- if .Values.generator.lifecycle.preStop }}
+            preStop:
+              exec:
+                command: {{ .Values.generator.lifecycle.preStop }}
+            {{- end }}
+          {{- end }}
+          livenessProbe: {{ toYaml .Values.generator.livenessProbe | nindent 12 }}
+          readinessProbe: {{ toYaml .Values.generator.readinessProbe | nindent 12 }}
+          resources: {{ toYaml .Values.generator.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /app/.env
+              subPath: env.props
+          {{- with .Values.generator.extraVolumeMounts }}
+          {{- tpl . $ | nindent 12 }}
+          {{- end }}
+      {{- if .Values.generator.image.pullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.generator.image.pullSecrets }}
+      {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "gravitee.generator.fullname" . }}
+        {{- with .Values.generator.extraVolumes }}
+          {{- tpl . $ | nindent 8 }}
+        {{- end }}
+{{- end -}}

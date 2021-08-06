@@ -481,3 +481,115 @@ ui:
     # - name: extra-volume
     #   mountPath: /mnt/volume
     #   readOnly: true
+
+generator:
+  enabled: true
+  name: swagger-generator
+  restartPolicy: OnFailure
+  reloadOnConfigChange: true
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicaCount: 1
+  image:
+    repository: graviteeio/designer-generator
+    # tag: 1.0.0
+    pullPolicy: Always
+    # pullSecrets:
+    #   - name: gravitee_secrets
+
+  deployment:
+    # Annotations to apply to the deployment
+    annotations: {}
+    # additionals labels
+    labels: {}
+    affinity: {}
+    hostAliases: []
+    #- ip: "127.0.0.1"
+    #  hostnames:
+    #  - "foo.local"
+    #  - "bar.local"
+    nodeSelector: {}
+    tolerations: []
+    envFrom: []
+    # - configMapRef:
+    #     name: config-secret
+    securityContext:
+      runAsUser: 1001
+      runAsNonRoot: true
+
+  env: []
+  #   - name: ENV_VARIABLE
+  #     value: ENV_VARIABLE_VALUE
+  #   - name: ENV_VARIABLE_WITH_FROM
+  #     valueFrom:
+  #       configMapKeyRef:
+  #         name: special-config
+  #         key: SPECIAL_LEVEL
+
+  apiKey: api_key_value
+  license:
+    key: license_value
+    expirationDate: license_expiration_date
+
+  service:
+    type: ClusterIP
+    externalPort: 84
+    internalPort: 3003
+  # annotations:
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: 80
+
+  livenessProbe:
+    tcpSocket:
+      port: 3003
+    initialDelaySeconds: 15
+    periodSeconds: 30
+    failureThreshold: 3
+
+  readinessProbe:
+    tcpSocket:
+      port: 3003
+    initialDelaySeconds: 15
+    periodSeconds: 30
+    failureThreshold: 3
+
+  podAnnotations: { }
+  # iam.amazonaws.com/role: es-cluster
+
+  # How long to wait for Swagger Generator API pods to stop gracefully
+  terminationGracePeriod: 30
+
+  # This is the PriorityClass settings as defined in
+  # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    #  lifecycle:
+    #    postStart: '[ "/bin/sh", "-c", "echo Post starting Gravitee Designer Generator" ]'
+    #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee Designer Generator" ]'
+    ## Additional gravitee API volume mounts
+    # Defines additional volume mounts.
+    # extraVolumeMounts: |
+    # - name: extra-volume
+    #   mountPath: /mnt/volume
+    #   readOnly: true
+    #   existingClaim: volume-claim
