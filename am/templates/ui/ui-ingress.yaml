@@ -1,9 +1,16 @@
 {{- if .Values.ui.enabled -}}
 {{- if .Values.ui.ingress.enabled -}}
-{{- $serviceAPIName := include "gravitee.ui.fullname" . -}}
-{{- $serviceAPIPort := .Values.ui.service.externalPort -}}
+{{- $serviceUIName := include "gravitee.ui.fullname" . -}}
+{{- $serviceUIPort := .Values.ui.service.externalPort -}}
 {{- $ingressPath   := .Values.ui.ingress.path -}}
-apiVersion: {{ template "ingress.apiVersion" . }}
+{{- $ingressPathType   := .Values.api.ingress.pathType | default "Prefix" -}}
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
 kind: Ingress
 metadata:
   name: {{ template "gravitee.ui.fullname" . }}
@@ -25,9 +32,19 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
+            {{- if (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: {{ $ingressPathType }}
+            {{- end }}
             backend:
-              serviceName: {{ $serviceAPIName }}
-              servicePort: {{ $serviceAPIPort }}
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $serviceUIName }}
+                port:
+                  number: {{ $serviceUIPort }}
+              {{- else }}
+              serviceName: {{ $serviceUIName }}
+              servicePort: {{ $serviceUIPort }}
+              {{- end }}
     {{- end -}}
   {{- if .Values.ui.ingress.tls }}
   tls:
