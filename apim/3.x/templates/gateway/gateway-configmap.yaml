@@ -176,14 +176,14 @@ data:
         endpoints:
           {{ toYaml . | nindent 10 | trim -}}
         {{- end }}
-        {{- if (eq .Values.es.lifecyle.enabled true) }}
-        lifecyle:
-          policy_property_name: {{ .Values.es.lifecyle.policyPropertyName }}
+        {{- if (eq .Values.es.lifecycle.enabled true) }}
+        lifecycle:
+          policy_property_name: {{ .Values.es.lifecycle.policyPropertyName }}
           policies:
-            monitor: {{ .Values.es.lifecyle.policies.monitor }}
-            request: {{ .Values.es.lifecyle.policies.request }}
-            health: {{ .Values.es.lifecyle.policies.health }}
-            log: {{ .Values.es.lifecyle.policies.log }}
+            monitor: {{ .Values.es.lifecycle.policies.monitor }}
+            request: {{ .Values.es.lifecycle.policies.request }}
+            health: {{ .Values.es.lifecycle.policies.health }}
+            log: {{ .Values.es.lifecycle.policies.log }}
         {{- end }}
         {{- if (eq .Values.es.security.enabled true) }}
         security:
