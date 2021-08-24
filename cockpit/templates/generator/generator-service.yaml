@@ -1,0 +1,28 @@
+{{- if .Values.generator.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "gravitee.generator.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.generator.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    {{- range $key, $value := .Values.generator.service.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  type: "{{ .Values.generator.service.type }}"
+  ports:
+    - port: {{ .Values.generator.service.externalPort }}
+      targetPort: {{ .Values.generator.service.internalPort }}
+      protocol: TCP
+      name: {{ .Values.generator.name }}
+  selector:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: "{{ .Values.generator.name }}"
+{{- end -}}
