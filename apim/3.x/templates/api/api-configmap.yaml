@@ -139,6 +139,12 @@ data:
         endpoints:
           {{ toYaml . | nindent 10 | trim -}}
         {{- end }}
+        {{- if .Values.es.http }}
+        http:
+          {{- if .Values.es.http.timeout }}
+          timeout: {{ .Values.es.http.timeout }}
+          {{- end }}
+        {{- end }}
         {{- if (eq .Values.es.security.enabled true) }}
         security:
           username: {{ .Values.es.security.username }}
