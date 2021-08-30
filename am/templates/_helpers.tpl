@@ -58,12 +58,16 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Return the apiVersion of ingress.
 */}}
 {{- define "ingress.apiVersion" -}}
-{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" -}}
-    {{- print "networking.k8s.io/v1beta1" -}}
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+  {{- print "networking.k8s.io/v1" }}
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+  {{- print "networking.k8s.io/v1beta1" }}
 {{- else -}}
-    {{- print "extensions/v1beta1" -}}
+  {{- print "extensions/v1beta1" }}
+{{- end }}
 {{- end -}}
-{{- end -}}
+
+
 
 {{/*
 Create initContainers for downloading plugins ext plugin-ext
