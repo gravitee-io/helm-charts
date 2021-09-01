@@ -2,6 +2,13 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.18
+
+- [X] Fix alert-engine WS connection
+- [X] Configure ES timeout
+- [X] Fix typos in ES reporter lifecycle definitions
+- Update gravitee.io APIM v3.10.0
+
 ### 3.1.17
 
 - [X] Fix issues with HTTP Bridge configuration

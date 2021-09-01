@@ -334,6 +334,7 @@ data:
       alert-engine-connector-ws:
         enabled: true
       alert-engine:
+        enabled: true
         ws:
           discovery: true
           {{- with .Values.alerts.endpoints }}
