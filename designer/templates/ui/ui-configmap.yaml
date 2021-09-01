@@ -16,7 +16,11 @@ data:
   gzip-types: "*"
   constants.json: |
     {
+      {{- if .Values.ui.api_url }}
+      "API_URL": "{{ .Values.ui.api_url }}",
+      {{- else }}
       "API_URL": "https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}",
+      {{- end }}
       "GRAVITEE_ENABLED": true,
       "GRAVITEE_MANAGEMENT_UI_URL": "{{ .Values.apim.console.url }}"
     }
