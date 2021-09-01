@@ -255,6 +255,8 @@ es:
       request: my_policy ## ILM policy for the gravitee-request-* indexes
       health: my_policy ## ILM policy for the gravitee-health-* indexes
       log: my_policy ## ILM policy for the gravitee-log-* indexes
+    # http:
+      # timeout: 10000
   ssl:
     enabled: false
     # keystore:
