@@ -1,78 +1,97 @@
 [[graviteeio-api-management-helm-chart]]
 == Gravitee.io API Management Helm Chart
 
-*Chart supported versions: 3.0.x and higher*
+*Chart supported versions: 3.0.x and higher*. 
 
 === Components
 
 This chart will deploy the following:
 
-* Gravitee Management API
-* Gravitee Management UI
-* Gravitee Portal UI
-* Gravitee Gateway
-* MongoDB replica-set (optional dependency)
-* Elasticsearch cluster (optional dependency)
+* Gravitee Management API.
+* Gravitee Management UI.
+* Gravitee Portal UI.
+* Gravitee Gateway.
+* MongoDB replica set  or PostgresSQL (optional dependency).
+* Elasticsearch Cluster (optional dependency).
 
-=== Installing
+=== 1. Install The Gravitee Helm Chart Repo
 
-* Add the Gravitee.io helm charts repo
+* Add the official Gravitee.io Helm chart repo: 
 +
 ....
 $ helm repo add graviteeio https://helm.gravitee.io
 ....
-* Install it
-+
-....
-$ helm install --name graviteeio-apim3x graviteeio/apim3
-....
 
-=== Create a chart archive
 
-To package this chart directory into a chart archive, run:
+=== 2. Create The Configuration File & Set Custom Values 
+Before you continue installing the Helm chart, create a `values.yml` configuration file and set any applicable custom values in it. 
 
-....
-$ helm package .
-....
 
-=== Installing the Chart
-
-To install the chart from the Helm repository with the release name
-`+graviteeio-apim3x+`:
-
-[source,bash]
 ----
-$ helm install --name graviteeio-apim3x graviteeio/apim3
+# Management console version
+ui:
+  image:
+    tag: 3.10.0
+
+# Gateway version
+gateway:
+  image:
+    tag: 3.10.0
+    
+# Portal version
+portal:
+  image:
+    tag: 3.10.0
+
+# Management API version
+api:
+  image:
+    tag: 3.10.0
+
+# gateway proxy configuration
+# (remove '/gateway' prefix from URL before sending request)
+gateway:
+  ingress:
+    path: /gateway/(.*)
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
+
+# ES endpoint
+es:
+  endpoints:
+    - http://elastic-elasticsearch-data.default.svc.cluster.local:9200
 ----
 
-*Note:* If you're using Helm 3, the name parameter is no more valid.
-Please check
-https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace[https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace]
 
-To install the chart using the chart archive, run:
+==== PostgresSQL Setup 
+For PostgrestSQL, use the information below in `values.yml` and replace the `username`, `password`, 
+`URL` and `database name` with details for your specific instance. 
 
-....
-$ helm install apim3-3.0.0.tgz
-....
+----
+jdbc:
+  driver: https://jdbc.postgresql.org/download/postgresql-42.2.23.jar
+  url: jdbc:postgresql://postgres-apim-postgresql:5432/graviteeapim
+  username: postgres
+  password: P@ssw0rd
+management:
+  type: jdbc
+----
 
-=== Configuration
+The following tables list the configurable parameters of the Gravitee chart and their default values.
 
-The following tables list the configurable parameters of the Gravitee
-chart and their default values.
+==== **Shared Configuration**
 
-==== Shared configuration
-
-To configure common features such as:
+Use the parameter details below to configure common features such as:
 
 * chaos testing (see
 https://github.com/kubernetes/charts/tree/master/stable/chaoskube[chaoskube]
-chart)
+chart).
 * configuration database (see
 https://github.com/kubernetes/charts/tree/master/stable/mongodb-replicaset[mongodb-replicaset]
-chart)
+chart).
 * logs database (see
-https://github.com/helm/charts/tree/master/stable/elasticsearch[elastichsearch]
-chart)
+https://github.com/helm/charts/tree/master/stable/elasticsearch[elasticsearch]
+chart).
 
 [cols=",,",options="header",]
 |===
@@ -82,13 +101,30 @@ chart)
 |`+ldap.enabled+` |Enable LDAP login |false
 |===
 
-==== Mongo
 
-===== MongoDB connections
+
+=== 3. Configure  Optional Dependencies 
+
+Specify each parameter using the `+--set key=value[,key=value]+`
+argument to `+helm install+`.
+
+Alternatively, a YAML file that specifies the values for the parameters
+can be provided while installing the chart. For example,
+
+[source,bash]
+----
+$ helm install --name my-release -f values.yaml gravitee
+----
+
+____
+*Tip*: You can use the default values.yml
+____
+
+==== MongoDB Connections
 
 There are three ways to configure MongoDB connections.
 
-The most simple is to provide the
+1. The easiest way is to provide the
 https://docs.mongodb.com/manual/reference/connection-string/[MongoDB
 URI].
 
@@ -98,7 +134,7 @@ URI].
 |`+mongo.uri+` |Mongo URI |`+null+`
 |===
 
-If no `+mongo.uri+` is provided, you can provide a `+mongo.servers+` raw
+2. If no `+mongo.uri+` is provided, you can provide a `+mongo.servers+` raw
 definition in combination with `+mongo.dbname+`, plus eventual
 authentication configuration:
 
@@ -117,16 +153,16 @@ mongo:
     password:
 ----
 
-If neither `+mongo.uri+` or `+mongo.servers+` are provided, you have to
-define the following configuration options:
+3. If neither `+mongo.uri+` or `+mongo.servers+` are provided, **you must
+define the following configuration options**:
 
 [cols=",,",options="header",]
 |===
 |Parameter |Description |Default
-|`+mongo.rsEnabled+` |Whether Mongo replicaset is enabled or not
+|`+mongo.rsEnabled+` |Whether Mongo replica set is enabled or not
 |`+true+`
 
-|`+mongo.rs+` |Mongo replicaset name |`+rs0+`
+|`+mongo.rs+` |Mongo replica set name |`+rs0+`
 
 |`+mongo.dbhost+` |Mongo host address |`+mongo-mongodb-replicaset+`
 
@@ -141,7 +177,7 @@ define the following configuration options:
 |`+mongo.auth.password+` |Mongo DB password |`+null+`
 |===
 
-===== Other keys
+===== Other Keys
 
 [cols=",,",options="header",]
 |===
@@ -150,18 +186,37 @@ define the following configuration options:
 |`+mongo.socketKeepAlive+` |Enable keep alive for socket |`+false+`
 |===
 
-==== Mongo ReplicaSet
+==== Mongo Replica Set
 
 [cols=",,",options="header",]
 |===
 |Parameter |Description |Default
-|`+mongodb-replicaset.enabled+` |Enable deployment of Mongo replicaset
+|`+mongodb-replicaset.enabled+` |Enable deployment of Mongo replica set
 |`+false+`
 |===
 
 See
 https://github.com/helm/charts/tree/master/stable/mongodb-replicaset[MongoDB
-replicaset] for detailed documentation on helm chart.
+replica set] for detailed documentation on Helm chart.
+
+
+==== PostgreSQL Database (via JDBC Connection) 
+To install a new PostgresSQL database, use the command below and update the `username`, `password`, and `databasename` parameters: 
+----
+helm install --set postgresqlUsername=postgres --set postgresqlPassword=P@ssw0rd 
+--set postgresqlDatabase=graviteeapim postgres-apim bitnami/postgresql
+----
+
+NOTE: When you install APIM, it automatically uses the default value for the host and runs on apim.example.com. To change this default value to a specific host name for your APIM installation, you must modify the `gateway.ingress.hosts` parameter (listed in the link:/apim/3.x/apim_installguide_kubernetes.html#gravitee_gateway[Gravitee Gateway table] below) in the `values.yml` configuration file. 
+
+Check that PostgreSQL pod is up and running before proceeding. 
+
+----
+$ kubectl get pods
+NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
+postgres-apim-postgresql-0                1/1     Running      0           98s
+----
+
 
 ==== Elasticsearch
 
@@ -197,7 +252,7 @@ pfx) |`+null+`
 |`+[http://elastic-elasticsearch-client.default.svc.cluster.local:9200]+`
 |===
 
-==== Elasticsearch cluster
+==== Elasticsearch Cluster
 
 [cols=",,",options="header",]
 |===
@@ -208,7 +263,39 @@ pfx) |`+null+`
 
 See
 https://github.com/helm/charts/tree/master/stable/elasticsearch[Elasticsearch]
-for detailed documentation on optional requirements helm chart.
+for detailed documentation on optional requirements Helm chart.
+
+
+=== 4. Install The Gravitee Helm Chart
+
+To install the chart from the Helm repository with the release name
+`+graviteeio-apim3x+`, run:
+
+[source,bash]
+----
+$ helm install --name graviteeio-apim3x graviteeio/apim3
+----
+
+
+*Note:* If you're using Helm 3, this name parameter is no longer valid. Instead, please 
+https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace[check here] for details. 
+
+
+=== Create A Chart Archive
+
+To package this chart directory into a chart archive, run:
+
+....
+$ helm package .
+....
+
+
+To install the chart using the chart archive, run:
+
+....
+$ helm install apim3-3.0.0.tgz
+....
+
 
 ==== Gravitee UI
 
@@ -498,14 +585,15 @@ K8 pod] |`+OnFailure+`
 deployment strategy type] |`+RollingUpdate+`
 
 |`+api.updateStrategy.rollingUpdate.maxUnavailable+` |If
-api.updateStrategy.type is set to `+RollingUpdate+`, make sure to set a
-value here or your Deployment can have 100% unavailability by default.
-The Deployment controller will stop the bad rollout automatically, and
-will stop scaling up the new ReplicaSet. This depends on the
-rollingUpdate parameters (maxUnavailable specifically) that you have
-specified. Kubernetes by default sets the value to 1 and spec.replicas
-to 1 so if you haven’t cared about setting those parameters, your
-Deployment can have 100% unavailability by default! |`+1+`
+api.updateStrategy.type is set to `+RollingUpdate+`, **you must set a value here
+or your deployment can default to 100% unavailability.**
+
+The deployment controller will stop the bad rollout automatically and
+will stop scaling up the new replica set. This depends on the
+`rollingUpdate` parameters (specifically on `maxUnavailable`) that you have
+specified. By default, Kubernetes sets the value to 1 and sets spec.replicas
+to 1, **so if you don't set those parameters, your
+deployment can have 100% unavailability by default!** |`+1+`
 
 |`+api.replicaCount+` |How many replicas for the API pod |`+1+`
 
@@ -744,20 +832,8 @@ https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycl
 command definition |`+null+`
 |===
 
-Specify each parameter using the `+--set key=value[,key=value]+`
-argument to `+helm install+`.
 
-Alternatively, a YAML file that specifies the values for the parameters
-can be provided while installing the chart. For example,
 
-[source,bash]
-----
-$ helm install --name my-release -f values.yaml gravitee
-----
-
-____
-*Tip*: You can use the default values.yaml
-____
 
 == OpenShift
 
