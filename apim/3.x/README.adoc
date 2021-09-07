@@ -13,6 +13,7 @@ Installing APIM on Kubernetes is easy with the help of our Helm Chart. **This He
 
 === Prerequisites
 
+. https://kubernetes.io/docs/tasks/tools/#kubectl[Kubectl]. 
 . https://helm.sh/docs/intro/install/[Helm v3].
 . MongoDB or PostgreSQL. (Not to worry, this Helm Chart will deploy these.)
 . Elasticsearch. (This Helm Chart will also deploy this.)
@@ -27,13 +28,6 @@ Add the Gravitee.io Helm charts repo using the commmand below:
 $ helm repo add graviteeio https://helm.gravitee.io
 ....
 
-=== Create A Chart Archive
-
-To package this chart directory into a chart archive, run:
-
-....
-$ helm package .
-....
 
 === Installing the Chart
 
@@ -44,13 +38,23 @@ Now, install the chart from the Helm repo with the release name
 
 [source,bash]
 ----
-$ helm install --name graviteeio-apim3x graviteeio/apim3
+helm install graviteeio-apim3x graviteeio/apim3
 ----
 
 NOTE: If you choose to modify `values.yml` the configuration file, be sure to run the following command to 
-include the updated config file in this installation: **`$ helm install --name graviteeio-apim3x graviteeio/apim3 -f values.yaml`.**
+include the updated config file in this installation: **`$ helm install graviteeio-apim3x graviteeio/apim3 -f values.yaml`.**
 
-To install the chart using the chart archive, run:
+
+=== Create A Chart Archive
+
+You can also package this chart directory into a chart archive by running:
+
+....
+$ helm package .
+....
+
+
+Now, to install the chart using the chart archive, run:
 
 ....
 $ helm install apim3-3.0.0.tgz
@@ -66,12 +70,14 @@ can be provided while installing the chart. For example,
 
 [source,bash]
 ----
-$ helm install --name my-release -f values.yaml gravitee
+$ helm install my-release -f values.yaml gravitee
 ----
 
 ____
 *Tip*: You can use the default values.yaml.
 ____
+
+NOTE: When you install APIM, it automatically uses the default values from the 'values.yml` config file which can be modified using the parameters in the tables the end of this page. For example, you can change the default value of host name from `apim.exmaple.com` to your specific host name by searching through our documentation and replacing the values you want to modify.
 
 
 === Configuration
@@ -194,9 +200,8 @@ helm install --set postgresqlUsername=postgres --set postgresqlPassword=P@ssw0rd
 --set postgresqlDatabase=graviteeapim postgres-apim bitnami/postgresql
 ----
 
-NOTE: When you install APIM, it automatically uses the default value for the host and runs on `apim.example.com`. To use a specific host name, search through our documentation and replace any values in the `values.yml` configuration file that use the default value of `apim.example.com`. 
 
-Check that PostgreSQL pod is up and running before proceeding. 
+Check that PostgreSQL pod is up and running before proceeding by running `kubectl get pods` as indicated below. 
 
 ----
 $ kubectl get pods
