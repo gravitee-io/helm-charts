@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io Alert Engine](https://github.com/gravitee-io/helm-charts/tree/master/ae) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.1.20
+
+- [X] Update Hazelcast configuration
+- Update gravitee.io AE v1.4.0
+
 ### 1.1.19
 
 - [X] Fix Deployment issue

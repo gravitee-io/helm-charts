@@ -84,12 +84,13 @@ data:
             <multi-threading-enabled>true</multi-threading-enabled>
         </topic>
 
+        <!-- Keep the queue config for backward compatibility -->
         <queue name="channel_*">
             <backup-count>0</backup-count>
             <async-backup-count>1</async-backup-count>
         </queue>
 
-        <reliable-topic name="channel_replies">
+        <reliable-topic name="channel_*">
             <read-batch-size>10</read-batch-size>
         </reliable-topic>
 
