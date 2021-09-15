@@ -32,7 +32,7 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 1
+      maxUnavailable:  "{{ .Values.portal.maxUnavailable }}:{{ default 1 }}"
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ template "gravitee.name" . }}

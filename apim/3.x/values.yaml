@@ -659,6 +659,10 @@ gateway:
   #    type: jks # Supports jks, pem, pkcs12
   #    path: ${gravitee.home}/security/truststore.jks
   #    password: secret
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
   replicaCount: 1
   # sharding_tags:
   # tenant:
@@ -868,6 +872,10 @@ gateway:
 portal:
   enabled: true
   name: portal
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
   replicaCount: 1
   image:
     repository: graviteeio/apim-portal-ui
@@ -1012,6 +1020,10 @@ ui:
     analytics:
       enabled: false
       trackingId: ""
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
   replicaCount: 1
   image:
     repository: graviteeio/apim-management-ui

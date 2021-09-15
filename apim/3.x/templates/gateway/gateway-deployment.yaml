@@ -35,7 +35,7 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 1
+      maxUnavailable:  "{{ .Values.gateway.updateStrategy.rollingUpdate.maxUnavailable }}"
   {{- end }}
   {{- if not .Values.gateway.autoscaling.enabled }}
   replicas: {{ .Values.gateway.replicaCount }}
