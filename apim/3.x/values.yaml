@@ -7,6 +7,16 @@ chaos:
 graviteeRepoAuth:
   enabled: true
 
+# Some k8s environments have no direct internet access.
+# Users of harbor with dockerhub-cache will want to enable this to get the image path like:
+# my.harbor.host.tld/dockerhub-cache/<repo>/<image>
+harbor:
+  enabled: false
+  repository:
+    host: my.harbor.host.tld
+    path: dockerhub-cache
+    official: library  # official docker containers (like alpine) are in the library repo when using dockerhub-cache.
+
 inMemoryAuth:
   enabled: true
   allowEmailInSearchResults: false
@@ -15,7 +25,7 @@ inMemoryAuth:
 jwtSecret: myJWT4Gr4v1t33_S3cr3t
 
 # Define extra inMemory users here or disable the default ones here
-# By default, admin user will be added. If you want to remove the default admin turn the followong boolean to false. 
+# By default, admin user will be added. If you want to remove the default admin turn the followong boolean to false.
 adminAccountEnable: true
 # Default password "admin", use bcrypt ($2a$ version) to generate a new one
 adminPasswordBcrypt: $2a$10$Ihk05VSds5rUSgMdsMVi9OKMIx2yUvMz7y9VP3rJmQeizZLrhLMyq
@@ -184,7 +194,7 @@ jdbc:
   # the version of the gravitee-repository-jdbc (only required for apim versions < 3.5.0)
 #  repositoryVersion: 3.3.0
   username:
-  password: 
+  password:
   liquibase: true
   schema: public
   pool:
@@ -391,7 +401,7 @@ api:
       runAsNonRoot: true
 
   livenessProbe:
-    tcpSocket:  
+    tcpSocket:
       port: http
     initialDelaySeconds: 30
     periodSeconds: 30
@@ -470,7 +480,7 @@ api:
 #          annotations:
 #            kubernetes.io/ingress.class: nginx
 #            nginx.ingress.kubernetes.io/rewrite-target: /_$1
-        service: 
+        service:
 #       If you choose to enable this service, you'll need to expose the technical api
 #       on an accessible host outside of the pod: api.http.services.core.http.host
           enabled: false
@@ -617,7 +627,7 @@ gateway:
       runAsNonRoot: true
 
   livenessProbe:
-    tcpSocket:  
+    tcpSocket:
       port: http
     initialDelaySeconds: 30
     periodSeconds: 30
@@ -668,11 +678,11 @@ gateway:
       # host:
       # port:
       # password:
-  management: 
+  management:
     http:
-      # url: 
-      # username: 
-      # pssword: 
+      # url:
+      # username:
+      # pssword:
       # ssl:
       #   trustall: true
       #   verifyHostname: true
@@ -712,7 +722,7 @@ gateway:
 #          annotations:
 #            kubernetes.io/ingress.class: nginx
 #            nginx.ingress.kubernetes.io/rewrite-target: /_$1
-      service: 
+      service:
 #       If you choose to enable this service, you'll need to expose the technical api
 #       on an accessible host outside of the pod: api.http.services.core.http.host
         enabled: false
@@ -912,7 +922,7 @@ portal:
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
-            
+
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
 
@@ -1058,7 +1068,7 @@ ui:
     failureThreshold: 3
 
   podAnnotations: {}
-    # iam.amazonaws.com/role: es-cluster 
+    # iam.amazonaws.com/role: es-cluster
 
   # How long to wait for APIM Console pods to stop gracefully
   terminationGracePeriod: 30

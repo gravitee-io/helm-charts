@@ -84,18 +84,22 @@ spec:
       {{- if .Values.gateway.additionalPlugins -}}
         {{- $plugins = concat $plugins .Values.gateway.additionalPlugins -}}
       {{- end -}}
-    
+
       {{- if eq .Values.management.type "redis"  -}}
         {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-%s.zip"  (.Values.redis.repositoryVersion | default .Values.gateway.image.tag | default .Chart.AppVersion ) -}}
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
-    
+
       {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins -}}
       {{- if or .Values.gateway.extraInitContainers $plugins .Values.jdbc.driver }}
       initContainers:
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: get-repository-jdbc-ext
+          {{- if (eq .Values.harbor.enabled true) }}
+          image: "{{ .Values.harbor.repository.host }}/{{ .Values.harbor.repository.path }}/{{ .Values.harbor.repository.official }}/alpine"
+          {{- else }}
           image: 'alpine'
+          {{- end }}
           command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  {{ .Values.jdbc.driver }}"]
           securityContext: {{ toYaml ( .Values.gateway.securityContext | default .Values.gateway.deployment.securityContext ) | nindent 12 }}
           volumeMounts:
@@ -107,13 +111,17 @@ spec:
         {{- tpl . $ | nindent 8 }}
         {{- end }}
       {{- end }}
-      {{- if .Values.gateway.services.kubeController.enabled }}          
+      {{- if .Values.gateway.services.kubeController.enabled }}
       serviceAccount: {{ .Values.gateway.services.kubeController.serviceAccount | default "default" }}
       serviceAccountName: {{ .Values.gateway.services.kubeController.serviceAccount | default "default" }}
       {{- end }}
       containers:
         - name: {{ template "gravitee.gateway.fullname" . }}
+          {{- if (eq .Values.harbor.enabled true) }}
+          image: "{{ .Values.harbor.repository.host }}/{{ .Values.harbor.repository.path }}/{{ .Values.gateway.image.repository }}:{{ default .Chart.AppVersion .Values.gateway.image.tag }}"
+          {{- else }}
           image: "{{ .Values.gateway.image.repository }}:{{ default .Chart.AppVersion .Values.gateway.image.tag }}"
+          {{- end }}
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
           securityContext: {{ toYaml ( .Values.gateway.securityContext | default .Values.gateway.deployment.securityContext ) | nindent 12 }}
           ports:

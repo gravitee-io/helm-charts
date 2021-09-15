@@ -79,7 +79,11 @@ spec:
     {{- end }}
       containers:
         - name: {{ template "gravitee.ui.fullname" . }}
+          {{- if (eq .Values.harbor.enabled true) }}
+          image: "{{ .Values.harbor.repository.host }}/{{ .Values.harbor.repository.path }}/{{ .Values.ui.image.repository }}:{{ default .Chart.AppVersion .Values.ui.image.tag }}"
+          {{- else }}
           image: "{{ .Values.ui.image.repository }}:{{ default .Chart.AppVersion .Values.ui.image.tag }}"
+          {{- end }}
           imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
           securityContext: {{ toYaml ( .Values.ui.securityContext | default .Values.ui.deployment.securityContext ) | nindent 12 }}
           env:
