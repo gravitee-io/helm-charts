@@ -116,13 +116,15 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- end }}
 {{- if .pluginsToRemove }}
 - name: delete-plugins
-  image: 'alpine'
-  command: ['sh', '-c', "cd /opt/{{ .appName }}/plugins {{- range $key := .pluginsToRemove -}}
+  command: ['sh', '-c', "cd /tmp/plugins {{- range $key := .pluginsToRemove -}}
     {{ printf " && rm -f %s-*.zip" $key }}
   {{- end -}}"]
   securityContext:
     runAsUser: 1001
     runAsNonRoot: true
+  volumeMounts:
+    - name: graviteeio-apim-plugins
+      mountPath: /tmp/plugins
 {{- end }}
 {{- end -}}
 
@@ -130,8 +132,12 @@ Create initContainers for downloading plugins ext plugin-ext
 Create volumeMounts for plugins
 */}}
 {{- define "deployment.pluginVolumeMounts" -}}
-{{- if or .plugins .extPlugins }}
+{{- if .plugins }}
 - name: graviteeio-apim-plugins
+  mountPath: /opt/{{ .appName }}/plugins
+{{- end }}
+{{- if or .plugins .extPlugins }}
+- name: graviteeio-apim-plugins-ext
   mountPath: /opt/{{ .appName }}/plugins-ext
 {{- end }}
 {{- $appName := .appName -}}
@@ -145,8 +151,12 @@ Create volumeMounts for plugins
 Create volumes for plugins
 */}}
 {{- define "deployment.pluginVolumes" -}}
-{{- if or .plugins .extPlugins }}
+{{- if or .plugins }}
 - name: graviteeio-apim-plugins
+  emptyDir: {}
+{{- end }}
+{{- if or .plugins .extPlugins }}
+- name: graviteeio-apim-plugins-ext
   emptyDir: {}
 {{- end }}
 {{- range $key, $_ := .extPlugins }}
