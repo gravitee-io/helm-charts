@@ -27,10 +27,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.generator.replicaCount }}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
+  strategy: {{ toYaml .Values.generator.deployment.strategy | nindent 4 }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ template "gravitee.name" . }}

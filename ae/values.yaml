@@ -83,6 +83,10 @@ engine:
     securityContext:
       runAsUser: 1001
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   # How long to wait for Alert Engine pods to stop gracefully
   terminationGracePeriod: 30

@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.6.1
+
+- [X] Configure deployment strategy
+- Update gravitee.io Cockpit v3.11.1
+
 ### 1.6.0
 
 - Add swagger generator url and api key configuration
