@@ -169,6 +169,10 @@ api:
     securityContext:
       runAsUser: 1001
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   livenessProbe:
     tcpSocket:  
@@ -391,6 +395,10 @@ ui:
       runAsUser: 101
       runAsGroup: 101
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   livenessProbe:
     httpGet:
@@ -518,6 +526,10 @@ generator:
     securityContext:
       runAsUser: 1001
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   env: []
   #   - name: ENV_VARIABLE

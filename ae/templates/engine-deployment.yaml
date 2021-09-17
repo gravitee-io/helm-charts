@@ -32,10 +32,7 @@ spec:
     type: RollingUpdate
   {{- end }}
   {{- if eq .Values.engine.type "Deployment" }}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
+  strategy: {{ toYaml .Values.engine.deployment.strategy | nindent 4 }}
   {{- end }}
   {{- if not .Values.engine.autoscaling.enabled }}
   replicas: {{ .Values.engine.replicaCount }}

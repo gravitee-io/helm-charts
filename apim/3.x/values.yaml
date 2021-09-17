@@ -345,6 +345,7 @@ alerts:
 
 management:
   type: mongodb
+  url: your_public_ui_url
 
 ratelimit:
   type: mongodb
@@ -389,6 +390,10 @@ api:
     securityContext:
       runAsUser: 1001
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   livenessProbe:
     tcpSocket:  
@@ -615,6 +620,10 @@ gateway:
     securityContext:
       runAsUser: 1001
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   livenessProbe:
     tcpSocket:  
@@ -896,6 +905,10 @@ portal:
       runAsUser: 101
       runAsGroup: 101
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   livenessProbe:
     httpGet:
@@ -1040,6 +1053,10 @@ ui:
       runAsUser: 101
       runAsGroup: 101
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   livenessProbe:
     httpGet:

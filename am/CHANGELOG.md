@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.28
+
+- [X] Configure deployment strategy
+- Update gravitee.io AM v3.11.0
+
 ### 1.0.27
 
 - [X] Make Management API entrypoint configurable using `api.http.api.entrypoint` value
