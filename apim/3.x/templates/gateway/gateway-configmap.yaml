@@ -241,7 +241,7 @@ data:
       # and management UI
       sync:
         # Synchronization is done each 5 seconds
-        cron: '*/5 * * * * *'
+        cron: {{ .Values.gateway.services.bridge.sync.cron | default '*/5 * * * * *' }}
 
       # Service used to store and cache api-keys from the management repository to avoid direct repository communication
       # while serving requests.
