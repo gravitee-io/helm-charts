@@ -772,6 +772,9 @@ gateway:
       prometheus:
         enabled: true
 
+    sync:
+      cron: "*/5 * * * * *"
+
   # handlers:
   #   request:
   #     transaction:

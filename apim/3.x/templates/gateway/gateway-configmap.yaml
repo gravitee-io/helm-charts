@@ -236,12 +236,8 @@ data:
       kubernetes:
         enabled: {{ .Values.gateway.services.kubeController.enabled | default false }}
       {{- end }}
-      # Synchronization daemon used to keep the gateway state in sync with the configuration from the management repository
-      # Be aware that, by disabling it, the gateway will not be sync with the configuration done through management API
-      # and management UI
-      sync:
-        # Synchronization is done each 5 seconds
-        cron: '*/5 * * * * *'
+
+      sync: {{ toYaml .Values.gateway.services.sync | nindent 8 }}
 
       # Service used to store and cache api-keys from the management repository to avoid direct repository communication
       # while serving requests.
