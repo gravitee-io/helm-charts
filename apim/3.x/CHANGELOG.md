@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.21
+
+- [X] Configure gateway sync service from ConfigMap
+
 ### 3.1.20
 
 - [X] Configure deployment strategy
