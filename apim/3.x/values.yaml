@@ -807,6 +807,7 @@ gateway:
     # pullSecrets:
     #   - name: gravitee_secrets
   env: []
+  initContainerEnv: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
   #   - name: ENV_VARIABLE_WITH_FROM
