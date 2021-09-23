@@ -93,10 +93,6 @@ spec:
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: get-repository-jdbc-ext
           image: 'alpine'
-          {{- if .Values.gateway.initContainerEnv }}
-          env:
-{{ toYaml ( .Values.gateway.initContainerEnv ) | indent 12 }}
-          {{- end }}
           command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  {{ .Values.jdbc.driver }}"]
           securityContext: {{ toYaml ( .Values.gateway.securityContext | default .Values.gateway.deployment.securityContext ) | nindent 12 }}
           volumeMounts:
