@@ -345,6 +345,7 @@ alerts:
 
 management:
   type: mongodb
+  url: your_public_ui_url
 
 ratelimit:
   type: mongodb
@@ -389,6 +390,10 @@ api:
     securityContext:
       runAsUser: 1001
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   livenessProbe:
     tcpSocket:  
@@ -435,6 +440,8 @@ api:
   #         key: SPECIAL_LEVEL
   additionalPlugins:
 #    - https://path_to_plugin
+  removePlugins:
+#    - filename_of_plugin_without_version_and_extension
   ssl:
     enabled: false
   #  keystore:
@@ -613,6 +620,10 @@ gateway:
     securityContext:
       runAsUser: 1001
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   livenessProbe:
     tcpSocket:  
@@ -643,6 +654,9 @@ gateway:
 
   additionalPlugins:
 #    - https://path_to_plugin
+  removePlugins:
+#    - filename_of_plugin_without_version_and_extension
+
   ssl:
     enabled: false
   #  keystore:
@@ -757,6 +771,9 @@ gateway:
       enabled: false
       prometheus:
         enabled: true
+
+    sync:
+      cron: "*/5 * * * * *"
 
   # handlers:
   #   request:
@@ -891,6 +908,10 @@ portal:
       runAsUser: 101
       runAsGroup: 101
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   livenessProbe:
     httpGet:
@@ -1035,6 +1056,10 @@ ui:
       runAsUser: 101
       runAsGroup: 101
       runAsNonRoot: true
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
 
   livenessProbe:
     httpGet:
