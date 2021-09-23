@@ -87,12 +87,12 @@ spec:
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
     
-      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins "initContainerEnv" .Values.gateway.initContainerEnv -}}
+      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins "initContainerEnv" .Values.gateway.initContainerEnv "initContainerImage" .Values.gateway.initContainerImage -}}
       {{- if or .Values.gateway.extraInitContainers $plugins .Values.jdbc.driver }}
       initContainers:
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: get-repository-jdbc-ext
-          image: 'alpine'
+          image: {{ .Values.gateway.initContainerImage }}
           {{- if .Values.gateway.initContainerEnv }}
           env:
 {{ toYaml ( .Values.gateway.initContainerEnv ) | indent 12 }}

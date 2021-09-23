@@ -815,6 +815,7 @@ gateway:
   #       configMapKeyRef:
   #         name: special-config
   #         key: SPECIAL_LEVEL
+  initContainerImage: alpine
   service:
     type: ClusterIP
     externalPort: 82
