@@ -679,6 +679,9 @@ gateway:
       # password:
   management: 
     http:
+      # proxy:
+      #   host: proxy.com
+      #   port: 3128
       # url: 
       # username: 
       # pssword: 
@@ -806,7 +809,11 @@ gateway:
     pullPolicy: Always
     # pullSecrets:
     #   - name: gravitee_secrets
+    initContainerRepository: alpine
+    # initContainerPullSecret:
+    #   - name: gravitee_secrets
   env: []
+  initContainerEnv: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
   #   - name: ENV_VARIABLE_WITH_FROM
@@ -887,6 +894,7 @@ portal:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
+
 
   deployment:
     # Annotations to apply to the deployment

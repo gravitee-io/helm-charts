@@ -87,12 +87,20 @@ spec:
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
     
-      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins -}}
+      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins "initContainerEnv" .Values.gateway.initContainerEnv "initContainerRepository" .Values.gateway.image.initContainerRepository -}}
       {{- if or .Values.gateway.extraInitContainers $plugins .Values.jdbc.driver }}
       initContainers:
+        {{- if .Values.gateway.image.initContainerPullSecret }}
+          imagePullSecrets:
+            - name: {{ .Values.gateway.image.initContainerPullSecret }}
+        {{- end }}
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: get-repository-jdbc-ext
-          image: 'alpine'
+          image: {{ .Values.gateway.image.initContainerRepository }}
+          {{- if .Values.gateway.initContainerEnv }}
+          env:
+{{ toYaml ( .Values.gateway.initContainerEnv ) | indent 12 }}
+          {{- end }}
           command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  {{ .Values.jdbc.driver }}"]
           securityContext: {{ toYaml ( .Values.gateway.securityContext | default .Values.gateway.deployment.securityContext ) | nindent 12 }}
           volumeMounts:
