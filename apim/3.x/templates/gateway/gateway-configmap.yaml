@@ -80,8 +80,9 @@ data:
       {{- else if (eq .Values.management.type "http") }}
       http:
         {{- if .Values.gateway.management.http.proxy }}
-          host: {{ .Values.gateway.management.http.proxy.host }}
-          port: {{ .Values.gateway.management.http.proxy.port }}
+          proxy:
+            host: {{ .Values.gateway.management.http.proxy.host }}
+            port: {{ .Values.gateway.management.http.proxy.port }}
         {{- end }}
         url: {{ .Values.gateway.management.http.url }}
         keepAlive: true
