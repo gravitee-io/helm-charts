@@ -92,7 +92,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- define "deployment.pluginInitContainers" -}}
 {{- if .plugins }}
 - name: get-plugins
-  image: {{ .initContainerImage }}
+  image: {{ .initContainerRepository }}
   {{- if .initContainerEnv }}
   env:
 {{ toYaml ( .initContainerEnv ) | indent 4 }}
@@ -109,7 +109,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- end }}
 {{- range $key, $url := .extPlugins }}
 - name: get-{{ $key }}-ext
-  image: {{ .initContainerImage }}
+  image: {{ .initContainerRepository }}
   {{- if .initContainerEnv }}
   env:
 {{ toYaml ( .initContainerEnv ) | indent 4 }}
@@ -124,7 +124,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- end }}
 {{- if .pluginsToRemove }}
 - name: delete-plugins
-  image: {{ .initContainerImage }}
+  image: {{ .initContainerRepository }}
   {{- if .initContainerEnv }}
   env:
 {{ toYaml ( .initContainerEnv ) | indent 4 }}

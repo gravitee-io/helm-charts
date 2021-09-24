@@ -806,6 +806,9 @@ gateway:
     pullPolicy: Always
     # pullSecrets:
     #   - name: gravitee_secrets
+    initContainerRepository: alpine
+    # initContainerPullSecret:
+    #   - name: gravitee_secrets
   env: []
   initContainerEnv: []
   #   - name: ENV_VARIABLE
@@ -815,7 +818,6 @@ gateway:
   #       configMapKeyRef:
   #         name: special-config
   #         key: SPECIAL_LEVEL
-  initContainerImage: alpine
   service:
     type: ClusterIP
     externalPort: 82
@@ -889,6 +891,7 @@ portal:
     pullPolicy: Always
   # pullSecrets:
   #   - name: gravitee_secrets
+
 
   deployment:
     # Annotations to apply to the deployment
