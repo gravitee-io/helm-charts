@@ -55,7 +55,7 @@ data:
 
     {{- if .Values.generator.enabled }}
     swaggerGenerator:
-      url: http://{{ template "gravitee.generator.fullname" . }}:{{ .Values.generator.service.externalPort }}
+      url: http://{{ template "gravitee.generator.fullname" . }}:{{ .Values.generator.service.externalPort }}/
       apiKey: {{ .Values.generator.apiKey }}
     {{- end }}
 
