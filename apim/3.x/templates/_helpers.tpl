@@ -87,12 +87,19 @@ Return the apiVersion of ingress.
 {{- end -}}
 
 {{/*
+Create image / tag for initContainers
+*/}}
+{{- define "gravitee.initContainers.image" -}}
+{{- print .Values.initContainers.image ":" .Values.initContainers.tag -}}
+{{- end -}}
+
+{{/*
 Create initContainers for downloading plugins ext plugin-ext
 */}}
 {{- define "deployment.pluginInitContainers" -}}
 {{- if .plugins }}
 - name: get-plugins
-  image: {{ .initContainerRepository }}
+  image: "{{ .initContainersImage }}"
   {{- if .initContainerEnv }}
   env:
 {{ toYaml ( .initContainerEnv ) | indent 4 }}
@@ -109,7 +116,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- end }}
 {{- range $key, $url := .extPlugins }}
 - name: get-{{ $key }}-ext
-  image: {{ .initContainerRepository }}
+  image: "{{ .initContainersImage }}"
   {{- if .initContainerEnv }}
   env:
 {{ toYaml ( .initContainerEnv ) | indent 4 }}
@@ -124,7 +131,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- end }}
 {{- if .pluginsToRemove }}
 - name: delete-plugins
-  image: {{ .initContainerRepository }}
+  image: "{{ .initContainersImage }}"
   {{- if .initContainerEnv }}
   env:
 {{ toYaml ( .initContainerEnv ) | indent 4 }}

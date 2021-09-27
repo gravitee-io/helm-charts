@@ -1160,3 +1160,7 @@ ui:
     # - name: extra-volume
     #   mountPath: /mnt/volume
     #   readOnly: true
+
+initContainers:
+  image: alpine
+  tag: latest

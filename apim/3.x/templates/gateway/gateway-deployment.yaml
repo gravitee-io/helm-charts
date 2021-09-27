@@ -1,4 +1,5 @@
 {{- if .Values.gateway.enabled -}}
+{{- $initContainersImage := include "gravitee.initContainers.image" . -}}
 apiVersion: apps/v1
 kind: {{ .Values.gateway.type }}
 metadata:
@@ -86,9 +87,9 @@ spec:
         {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-%s.zip"  (.Values.redis.repositoryVersion | default .Values.gateway.image.tag | default .Chart.AppVersion ) -}}
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
-    
-      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins "initContainerEnv" .Values.gateway.initContainerEnv "initContainerRepository" .Values.gateway.image.initContainerRepository -}}
-      {{- if or .Values.gateway.extraInitContainers $plugins .Values.jdbc.driver }}
+
+      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins "initContainerEnv" .Values.gateway.initContainerEnv "initContainersImage" $initContainersImage -}}      
+{{- if or .Values.gateway.extraInitContainers $plugins .Values.jdbc.driver }}
       initContainers:
         {{- if .Values.gateway.image.initContainerPullSecret }}
           imagePullSecrets:
@@ -96,7 +97,7 @@ spec:
         {{- end }}
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: get-repository-jdbc-ext
-          image: {{ .Values.gateway.image.initContainerRepository }}
+          image: "{{ $initContainersImage }}"
           {{- if .Values.gateway.initContainerEnv }}
           env:
 {{ toYaml ( .Values.gateway.initContainerEnv ) | indent 12 }}

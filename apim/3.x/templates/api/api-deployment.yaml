@@ -1,4 +1,5 @@
 {{- if .Values.api.enabled -}}
+{{- $initContainersImage := include "gravitee.initContainers.image" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -78,12 +79,12 @@ spec:
         {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-%s.zip"  (.Values.redis.repositoryVersion | default .Values.api.image.tag | default .Chart.AppVersion ) -}}
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
-      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-management-api" "pluginsToRemove" .Values.api.removePlugins -}}
+      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-management-api" "pluginsToRemove" .Values.api.removePlugins "initContainersImage" $initContainersImage -}}
       {{- if or .Values.api.extraInitContainers $plugins .Values.jdbc.driver }}
       initContainers:
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: get-repository-jdbc-ext
-          image: 'alpine'
+          image: "{{ $initContainersImage }}"
           command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  {{ .Values.jdbc.driver }}"]
           securityContext: {{ toYaml ( .Values.api.securityContext | default .Values.api.deployment.securityContext ) | nindent 12 }}
           volumeMounts:
