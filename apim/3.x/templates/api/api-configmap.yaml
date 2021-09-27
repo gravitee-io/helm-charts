@@ -36,10 +36,8 @@ data:
     management:
       {{- if .Values.management.url }}
       url: {{ .Values.management.url}}
-      {{- else }}
-        {{- if .Values.ui.ingress.enabled }}
-        url: https://{{ index .Values.ui.ingress.hosts 0 }}{{ regexFind "/[a-zA-Z]+" .Values.ui.ingress.path }}/
-        {{- end }}
+      {{- else if .Values.ui.ingress.enabled }}
+      url: https://{{ index .Values.ui.ingress.hosts 0 }}{{ regexFind "/[a-zA-Z]+" .Values.ui.ingress.path }}/
       {{- end }}
       type: {{ .Values.management.type | default "mongodb" }}
       {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
