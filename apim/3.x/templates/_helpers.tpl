@@ -87,12 +87,19 @@ Return the apiVersion of ingress.
 {{- end -}}
 
 {{/*
+Create image / tag for initContainers
+*/}}
+{{- define "gravitee.initContainers.image" -}}
+{{- print .Values.initContainers.image ":" .Values.initContainers.tag -}}
+{{- end -}}
+
+{{/*
 Create initContainers for downloading plugins ext plugin-ext
 */}}
 {{- define "deployment.pluginInitContainers" -}}
 {{- if .plugins }}
 - name: get-plugins
-  image: ".Values.initContainers.image:.Values.initContainers.tag"
+  image: "{{ .initContainersImage }}"
   command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins {{- range $url := .plugins -}}
     {{ printf " && wget %s" $url }}
   {{- end -}}"]
@@ -105,7 +112,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- end }}
 {{- range $key, $url := .extPlugins }}
 - name: get-{{ $key }}-ext
-  image: ".Values.initContainers.image:.Values.initContainers.tag"
+  image: "{{ .initContainersImage }}"
   command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget {{ $url }}"]
   securityContext:
     runAsUser: 1001
@@ -116,7 +123,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- end }}
 {{- if .pluginsToRemove }}
 - name: delete-plugins
-  image: ".Values.initContainers.image:.Values.initContainers.tag"
+  image: "{{ .initContainersImage }}"
   command: ['sh', '-c', "cd /opt/{{ .appName }}/plugins {{- range $key := .pluginsToRemove -}}
     {{ printf " && rm -f %s-*.zip" $key }}
   {{- end -}}"]
