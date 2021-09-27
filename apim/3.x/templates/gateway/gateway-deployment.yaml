@@ -1,4 +1,5 @@
 {{- if .Values.gateway.enabled -}}
+{{- $initContainersImage := include "gravitee.initContainers.image" . -}}
 apiVersion: apps/v1
 kind: {{ .Values.gateway.type }}
 metadata:
@@ -87,12 +88,12 @@ spec:
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
     
-      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins -}}
+      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins "initContainersImage" $initContainersImage -}}
       {{- if or .Values.gateway.extraInitContainers $plugins .Values.jdbc.driver }}
       initContainers:
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: get-repository-jdbc-ext
-          image: "{{ .Values.initContainers.image }}:{{ .Values.initContainers.tag }}"
+          image: "{{ $initContainersImage }}"
           command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  {{ .Values.jdbc.driver }}"]
           securityContext: {{ toYaml ( .Values.gateway.securityContext | default .Values.gateway.deployment.securityContext ) | nindent 12 }}
           volumeMounts:
