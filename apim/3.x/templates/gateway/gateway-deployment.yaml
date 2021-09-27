@@ -92,8 +92,8 @@ spec:
 {{- if or .Values.gateway.extraInitContainers $plugins .Values.jdbc.driver }}
       initContainers:
         {{- if .Values.initContainers.imagePullSecret }}
-          imagePullSecrets:
-            - name: {{ .Values.initContainers.imagePullSecret }}
+        imagePullSecrets:
+          - name: {{ .Values.initContainers.imagePullSecret }}
         {{- end }}
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: get-repository-jdbc-ext
