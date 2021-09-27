@@ -92,7 +92,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- define "deployment.pluginInitContainers" -}}
 {{- if .plugins }}
 - name: get-plugins
-  image: 'alpine'
+  image: ".Values.initContainers.image:.Values.initContainers.tag"
   command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins {{- range $url := .plugins -}}
     {{ printf " && wget %s" $url }}
   {{- end -}}"]
@@ -105,7 +105,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- end }}
 {{- range $key, $url := .extPlugins }}
 - name: get-{{ $key }}-ext
-  image: 'alpine'
+  image: ".Values.initContainers.image:.Values.initContainers.tag"
   command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget {{ $url }}"]
   securityContext:
     runAsUser: 1001
@@ -116,7 +116,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- end }}
 {{- if .pluginsToRemove }}
 - name: delete-plugins
-  image: 'alpine'
+  image: ".Values.initContainers.image:.Values.initContainers.tag"
   command: ['sh', '-c', "cd /opt/{{ .appName }}/plugins {{- range $key := .pluginsToRemove -}}
     {{ printf " && rm -f %s-*.zip" $key }}
   {{- end -}}"]

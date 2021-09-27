@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.22
+
+- [X] Configure init containers image repository and tag
+- Update gravitee.io APIM v3.11.1
+
 ### 3.1.21
 
 - [X] Configure gateway sync service from ConfigMap
