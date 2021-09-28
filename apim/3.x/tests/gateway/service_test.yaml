@@ -1,0 +1,24 @@
+suite: Test API Gateway default Service
+templates:
+  - "gateway/gateway-service.yaml"
+  - "gateway/gateway-configmap.yaml"
+tests:
+  - it: Check default service
+    template: gateway/gateway-service.yaml
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - contains:
+          path: spec.ports
+          content:
+            port: 82
+            targetPort: 8082
+            protocol: TCP
+            name: gateway
