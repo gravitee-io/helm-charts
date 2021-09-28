@@ -120,6 +120,7 @@ spec:
           {{- end }}
           livenessProbe: {{ toYaml .Values.engine.livenessProbe | nindent 12 }}
           readinessProbe: {{ toYaml .Values.engine.readinessProbe | nindent 12 }}
+          startupProbe: {{ toYaml .Values.engine.startupProbe | nindent 12 }}
           resources: {{ toYaml .Values.engine.resources | nindent 12 }}
           volumeMounts:
             - name: config

@@ -163,3 +163,22 @@ engine:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+
+  livenessProbe:
+    tcpSocket:
+      port: http # Same as engine.service.internalPortName
+    periodSeconds: 10
+    failureThreshold: 5
+
+  readinessProbe:
+    tcpSocket:
+      port: http # Same as engine.service.internalPortName
+    periodSeconds: 5
+    failureThreshold: 3
+
+  startupProbe:
+    tcpSocket:
+      port: http # Same as engine.service.internalPortName
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    failureThreshold: 20
