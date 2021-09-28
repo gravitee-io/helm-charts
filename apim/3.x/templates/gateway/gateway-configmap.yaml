@@ -173,7 +173,7 @@ data:
 
     {{- if .Values.gateway.system}}
     system:
-      {{ toYaml .Values.gateway.system | indent 6 }}
+{{ toYaml .Values.gateway.system | indent 6 }}
     {{- end }}
 
 
