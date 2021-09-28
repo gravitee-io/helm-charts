@@ -171,6 +171,12 @@ data:
     # Allow only a single-value
     tenant: {{ .Values.gateway.tenant }}  
 
+    {{- if .Values.gateway.system}}
+    system:
+      {{ toYaml .Values.gateway.system | indent 6 }}
+    {{- end }}
+
+
     # Reporters configuration (used to store reporting monitoring data, request metrics, healthchecks and others...
     # All reporters are enabled by default. To stop one of them, you have to add the property 'enabled: false'
     reporters:
@@ -219,6 +225,7 @@ data:
 {{ toYaml $value | indent 8 }}      
       {{- end }}
       {{- end }}
+
 
     services:
       core:
