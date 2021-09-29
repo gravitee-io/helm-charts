@@ -34,7 +34,9 @@ tests:
           content:
             name: get-repository-jdbc-ext
             image: "alpine:latest"
+            imagePullPolicy: Always
             command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.22/mysql-connector-java-8.0.22.jar"]
+            env: []
             securityContext:
               runAsNonRoot: true
               runAsUser: 1001
@@ -55,7 +57,9 @@ tests:
           content:
             name: get-repository-jdbc-ext
             image: "alpine:latest"
+            imagePullPolicy: Always
             command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  https://url/where/to/download/driver"]
+            env: []
             securityContext:
               runAsNonRoot: true
               runAsUser: 1001
@@ -71,14 +75,16 @@ tests:
       jdbc:
         driver: "https://url/where/to/download/driver"
       initContainers:
-        image: "some.harbor.local/dockerhub-cache/library/alpine"
+        image: "some.harbor.local/dockerhub-cache/library/alpine:latest"
     asserts:
       - contains:
           path: spec.template.spec.initContainers
           content:
             name: get-repository-jdbc-ext
+            imagePullPolicy: Always
             image: "some.harbor.local/dockerhub-cache/library/alpine:latest"
             command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  https://url/where/to/download/driver"]
+            env: []
             securityContext:
               runAsNonRoot: true
               runAsUser: 1001

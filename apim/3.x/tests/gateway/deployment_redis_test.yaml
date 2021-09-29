@@ -33,7 +33,9 @@ tests:
           content:
             name: get-plugins
             image: "alpine:latest"
+            imagePullPolicy: Always
             command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-apim-repository-redis-3.11.1.zip"]
+            env: []
             securityContext:
               runAsNonRoot: true
               runAsUser: 1001
