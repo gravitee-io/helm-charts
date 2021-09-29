@@ -87,49 +87,33 @@ Return the apiVersion of ingress.
 {{- end -}}
 
 {{/*
-Create image / tag for initContainers
-*/}}
-{{- define "gravitee.initContainers.image" -}}
-{{- print .Values.initContainers.image ":" .Values.initContainers.tag -}}
-{{- end -}}
-
-{{/*
 Create initContainers for downloading plugins ext plugin-ext
 */}}
 {{- define "deployment.pluginInitContainers" -}}
 {{- if .plugins }}
 - name: get-plugins
-  image: "{{ .initContainersImage }}"
+  {{- toYaml .initContainers | nindent 2 }}
   command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins {{- range $url := .plugins -}}
     {{ printf " && wget %s" $url }}
   {{- end -}}"]
-  securityContext:
-    runAsUser: 1001
-    runAsNonRoot: true
   volumeMounts:
     - name: graviteeio-apim-plugins
       mountPath: /tmp/plugins
 {{- end }}
 {{- range $key, $url := .extPlugins }}
 - name: get-{{ $key }}-ext
-  image: "{{ .initContainersImage }}"
+  {{- toYaml .initContainers | nindent 2 }}
   command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget {{ $url }}"]
-  securityContext:
-    runAsUser: 1001
-    runAsNonRoot: true
   volumeMounts:
     - name: graviteeio-apim-{{ $key }}-ext
       mountPath: /tmp/plugins-ext
 {{- end }}
 {{- if .pluginsToRemove }}
 - name: delete-plugins
-  image: "{{ .initContainersImage }}"
+  {{- toYaml .initContainers | nindent 2 }}
   command: ['sh', '-c', "cd /opt/{{ .appName }}/plugins {{- range $key := .pluginsToRemove -}}
     {{ printf " && rm -f %s-*.zip" $key }}
   {{- end -}}"]
-  securityContext:
-    runAsUser: 1001
-    runAsNonRoot: true
 {{- end }}
 {{- end -}}
 

@@ -83,6 +83,11 @@ data:
         keepAlive: true
         idleTimeout: 30000
         connectTimeout: 10000
+        {{- if .Values.gateway.management.http.proxy }}
+        proxy:
+          host: {{ .Values.gateway.management.http.proxy.host }}
+          port: {{ .Values.gateway.management.http.proxy.port }}
+        {{- end }}
         authentication:
           basic:
             username: {{ .Values.gateway.management.http.username }}
@@ -166,6 +171,11 @@ data:
     # Allow only a single-value
     tenant: {{ .Values.gateway.tenant }}  
 
+    {{- if .Values.gateway.system}}
+    system:
+{{ toYaml .Values.gateway.system | indent 6 }}
+    {{- end }}
+    
     # Reporters configuration (used to store reporting monitoring data, request metrics, healthchecks and others...
     # All reporters are enabled by default. To stop one of them, you have to add the property 'enabled: false'
     reporters:

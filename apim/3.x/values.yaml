@@ -681,7 +681,10 @@ gateway:
     http:
       # url: 
       # username: 
-      # pssword: 
+      # password:
+      # proxy:
+      #   host: proxy.com
+      #   port: 3128
       # ssl:
       #   trustall: true
       #   verifyHostname: true
@@ -699,6 +702,7 @@ gateway:
       #   type: http
       #   username:
       #   password:
+  # system: {}
   services:
     core:
       http:
@@ -1154,5 +1158,9 @@ ui:
     #   readOnly: true
 
 initContainers:
-  image: alpine
-  tag: latest
+  image: alpine:latest
+  imagePullPolicy: Always
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
+  env: []
