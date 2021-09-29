@@ -681,7 +681,10 @@ gateway:
     http:
       # url: 
       # username: 
-      # pssword: 
+      # password:
+      # proxy:
+      #   host: proxy.com
+      #   port: 3128
       # ssl:
       #   trustall: true
       #   verifyHostname: true
@@ -699,6 +702,7 @@ gateway:
       #   type: http
       #   username:
       #   password:
+  # system: {}
   services:
     core:
       http:

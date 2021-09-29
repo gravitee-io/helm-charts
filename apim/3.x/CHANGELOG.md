@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 ### 3.1.25
 
 - [X] Extended configuration for init containers
+- [X] Support proxy at hybrid gateway level and system level
 
 ### 3.1.24
 
