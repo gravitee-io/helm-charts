@@ -1154,5 +1154,9 @@ ui:
     #   readOnly: true
 
 initContainers:
-  image: alpine
-  tag: latest
+  image: alpine:latest
+  imagePullPolicy: Always
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
+  env: []
