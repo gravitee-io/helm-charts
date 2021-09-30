@@ -1,5 +1,6 @@
 {{- if .Values.gateway.enabled -}}
 {{- $initContainers := .Values.initContainers -}}
+{{- $rateLimitPlugin := include "ratelimit.plugin" . -}}
 apiVersion: apps/v1
 kind: {{ .Values.gateway.type }}
 metadata:
@@ -83,9 +84,8 @@ spec:
         {{- $plugins = concat $plugins .Values.gateway.additionalPlugins -}}
       {{- end -}}
     
-      {{- if eq .Values.ratelimit.type "redis"  -}}
-        {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-apim-repository-redis-%s.zip"  (.Values.redis.repositoryVersion | default .Values.gateway.image.tag | default .Chart.AppVersion ) -}}
-        {{- $plugins = append $plugins $url -}}
+      {{- if eq .Values.ratelimit.type "redis"  -}}       
+        {{- $plugins = append $plugins $rateLimitPlugin -}}
       {{- end -}}
 
       {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins "initContainers" $initContainers -}}
