@@ -119,7 +119,9 @@ Create initContainers for downloading plugins ext plugin-ext
 
 {{- define "ratelimit.plugin" -}}
 {{- $version := (.Values.redis.repositoryVersion | default .Values.gateway.image.tag | default .Chart.AppVersion ) -}}
-{{- if $version | semverCompare "<=3.5.18" -}}
+{{- if eq $version "nightly" -}}
+  {{- printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-%s.zip" (.Values.redis.repositoryVersion | default .Chart.AppVersion) -}}
+{{- else if $version | semverCompare "<=3.5.18" -}}
   {{- printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-%s.zip" $version -}}
 {{- else -}}
   {{- printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-%s.zip" $version -}}

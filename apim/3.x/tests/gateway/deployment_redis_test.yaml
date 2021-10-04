@@ -83,3 +83,47 @@ tests:
             volumeMounts:
             - name: graviteeio-apim-plugins
               mountPath: /tmp/plugins
+
+
+  - it: Check redis plugin with nightly version
+    template: gateway/gateway-deployment.yaml
+    set:
+      ratelimit:
+        type: "redis"
+      gateway:
+        image:
+          tag: nightly
+        ratelimit:
+          redis:
+            host: localhost
+      redis:
+        repositoryVersion: 3.11.0
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[1].name
+          value: graviteeio-apim-plugins
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[1].mountPath
+          value: /opt/graviteeio-gateway/plugins-ext
+      - equal:
+          path: spec.template.spec.volumes[1].name
+          value: graviteeio-apim-plugins
+      - equal:
+          path: spec.template.spec.volumes[1].emptyDir
+          value: {}
+      - contains:
+          path: spec.template.spec.initContainers
+          content:
+            name: get-plugins
+            image: "alpine:latest"
+            imagePullPolicy: Always
+            command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-3.11.0.zip"]
+            env: []
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1001
+            volumeMounts:
+            - name: graviteeio-apim-plugins
+              mountPath: /tmp/plugins
