@@ -128,6 +128,7 @@ spec:
             {{- end }}
           {{- end }}
           livenessProbe: {{ toYaml .Values.api.livenessProbe | nindent 12 }}
+          startupProbe: {{ toYaml .Values.gateway.livenessProbe | nindent 12 }}
           readinessProbe: {{ toYaml .Values.api.readinessProbe | nindent 12 }}
           resources: {{ toYaml .Values.api.resources | nindent 12 }}
           volumeMounts:

@@ -771,6 +771,7 @@ gateway:
       #     - secretName: chart-example-tls
       #       hosts:
       #         - chart-example.local
+      # cron: */5 * * * * *
     metrics:
       enabled: false
       prometheus:

@@ -246,7 +246,6 @@ data:
       kubernetes:
         enabled: {{ .Values.gateway.services.kubeController.enabled | default false }}
       {{- end }}
-
       sync: {{ toYaml .Values.gateway.services.sync | nindent 8 }}
 
       # Service used to store and cache api-keys from the management repository to avoid direct repository communication
