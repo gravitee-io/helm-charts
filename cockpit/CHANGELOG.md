@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 ### 1.6.2
 
 - Set default compatibleVersions
+- Update gravitee.io Cockpit v3.12.2
 
 ### 1.6.1
 
