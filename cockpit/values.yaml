@@ -258,10 +258,10 @@ api:
 #      recipient:
 
   controller:
-#    compatibleVersions:
-#      apim:
-#      am:
-#      connector:
+    compatibleVersions:
+      apim: "3.6.2"
+      am: "3.7.0"
+      connector: "1.2.0"
     ws:
       enabled: true
       port: 8062
