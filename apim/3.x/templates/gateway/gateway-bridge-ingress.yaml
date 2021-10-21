@@ -4,7 +4,8 @@
 {{- $serviceGWName := include "gravitee.gateway.fullname" . -}}
 {{- $serviceGWPort := .Values.gateway.services.bridge.service.externalPort -}}
 {{- $ingressPath   := .Values.gateway.services.bridge.ingress.path -}}
-apiVersion: {{ template "ingress.apiVersion" . }}
+{{- $apiVersion := include "ingress.apiVersion" . -}}
+apiVersion: {{ $apiVersion }}
 kind: Ingress
 metadata:
   name: {{ template "gravitee.gateway.fullname" . }}-bridge
@@ -21,15 +22,28 @@ metadata:
     {{- end }}
 spec:
   rules:
-    {{- range $host := .Values.gateway.services.bridge.ingress.hosts }}
-    - host: {{ $host }}
-      http:
-        paths:
-          - path: {{ $ingressPath }}
-            backend:
-              serviceName: {{ $serviceGWName }}
-              servicePort: {{ $serviceGWPort }}
-    {{- end -}}
+  {{- range $host := .Values.gateway.services.bridge.ingress.hosts }}
+  {{- if (eq $apiVersion "networking.k8s.io/v1") }}
+  - host: {{ $host }}
+    http:
+      paths:
+        - pathType: Prefix
+          path: {{ $ingressPath }}
+          backend:
+            service:
+              name: {{ $serviceGWName }}
+              port:
+                number: {{ $serviceGWPort }}
+  {{ else }} # Just for backward compatibility, K8S < 1.19
+  - host: {{ $host }}
+    http:
+      paths:
+        - path: {{ $ingressPath }}
+          backend:
+            serviceName: {{ $serviceGWName }}
+            servicePort: {{ $serviceGWPort }}
+  {{- end -}}
+  {{- end -}}
   {{- if .Values.gateway.services.bridge.ingress.tls }}
   tls:
 {{ toYaml .Values.gateway.services.bridge.ingress.tls | indent 4 }}
