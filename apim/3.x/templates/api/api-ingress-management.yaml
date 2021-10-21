@@ -22,7 +22,6 @@ metadata:
 spec:
   rules:
   {{- range $host := .Values.api.ingress.management.hosts }}
-  {{- if (eq $apiVersion "networking.k8s.io/v1") }}
   - host: {{ $host }}
     http:
       paths:
