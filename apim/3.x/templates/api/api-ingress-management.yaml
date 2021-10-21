@@ -26,22 +26,18 @@ spec:
   - host: {{ $host }}
     http:
       paths:
-        - pathType: Prefix
-          path: {{ $ingressPath }}
-          backend:
-            service:
-              name: {{ $serviceAPIName }}
-              port:
-                number: {{ $serviceAPIPort }}
-  {{ else }} # Just for backward compatibility, K8S < 1.19
-  - host: {{ $host }}
-    http:
-      paths:
-        - path: {{ $ingressPath }}
-          backend:
-            serviceName: {{ $serviceAPIName }}
-            servicePort: {{ $serviceAPIPort }}
-  {{- end -}}
+      - pathType: Prefix
+        path: {{ $ingressPath }}
+        backend:
+          {{- if (eq $apiVersion "networking.k8s.io/v1") }}
+          service:
+            name: {{ $serviceAPIName }}
+            port:
+              number: {{ $serviceAPIPort }}
+          {{ else }}
+          serviceName: {{ $serviceAPIName }}
+          servicePort: {{ $serviceAPIPort }}
+          {{- end -}}
   {{- end -}}
   {{- if .Values.api.ingress.management.tls }}
   tls:
