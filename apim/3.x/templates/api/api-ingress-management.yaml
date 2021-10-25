@@ -3,7 +3,8 @@
 {{- $serviceAPIName := include "gravitee.api.fullname" . -}}
 {{- $serviceAPIPort := .Values.api.service.externalPort -}}
 {{- $ingressPath   := .Values.api.ingress.management.path -}}
-apiVersion: {{ template "ingress.apiVersion" . }}
+{{- $apiVersion := include "ingress.apiVersion" . -}}
+apiVersion: {{ $apiVersion }}
 kind: Ingress
 metadata:
   name: {{ template "gravitee.api.fullname" . }}-management
@@ -20,15 +21,23 @@ metadata:
     {{- end }}
 spec:
   rules:
-    {{- range $host := .Values.api.ingress.management.hosts }}
-    - host: {{ $host }}
-      http:
-        paths:
-          - path: {{ $ingressPath }}
-            backend:
-              serviceName: {{ $serviceAPIName }}
-              servicePort: {{ $serviceAPIPort }}
-    {{- end -}}
+  {{- range $host := .Values.api.ingress.management.hosts }}
+  - host: {{ $host }}
+    http:
+      paths:
+      - pathType: Prefix
+        path: {{ $ingressPath }}
+        backend:
+          {{- if (eq $apiVersion "networking.k8s.io/v1") }}
+          service:
+            name: {{ $serviceAPIName }}
+            port:
+              number: {{ $serviceAPIPort }}
+          {{ else }}
+          serviceName: {{ $serviceAPIName }}
+          servicePort: {{ $serviceAPIPort }}
+          {{- end -}}
+  {{- end -}}
   {{- if .Values.api.ingress.management.tls }}
   tls:
 {{ toYaml .Values.api.ingress.management.tls | indent 4 }}
