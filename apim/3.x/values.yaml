@@ -428,8 +428,7 @@ api:
     repository: graviteeio/apim-management-api
     # tag: 3.0.2
     pullPolicy: Always
-    # pullSecrets:
-    #   - name: gravitee_secrets
+    # pullSecrets: gravitee_secrets
   env: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
@@ -808,8 +807,7 @@ gateway:
     repository: graviteeio/apim-gateway
     # tag: 3.0.2
     pullPolicy: Always
-    # pullSecrets:
-    #   - name: gravitee_secrets
+    # pullSecrets: gravitee_secrets
   env: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
@@ -890,8 +888,7 @@ portal:
     repository: graviteeio/apim-portal-ui
     # tag: 3.0.2
     pullPolicy: Always
-  # pullSecrets:
-  #   - name: gravitee_secrets
+    # pullSecrets: gravitee_secrets
 
   deployment:
     # Annotations to apply to the deployment
@@ -1038,8 +1035,7 @@ ui:
     repository: graviteeio/apim-management-ui
     # tag: 3.0.2
     pullPolicy: Always
-  # pullSecrets:
-  #   - name: gravitee_secrets
+    # pullSecrets: gravitee_secrets
 
   deployment:
     # Annotations to apply to the deployment
