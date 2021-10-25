@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.28
+
+- [X] Support Ingress kubernetes >= 1.22.x
+- Update gravitee.io APIM v3.11.2
+
 ### 3.1.27
 
 - [X] Manage redis repository plugin for nightly tag
