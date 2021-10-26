@@ -1,0 +1,27 @@
+{{- if .Values.ui.enabled -}}
+{{- if .Values.ui.podDisruptionBudget.enabled -}}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "gravitee.ui.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.ui.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  {{- if .Values.ui.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.ui.podDisruptionBudget.maxUnavailable }}
+  {{ end -}}
+  {{- if .Values.ui.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ .Values.ui.podDisruptionBudget.minAvailable }}
+  {{ end -}}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "gravitee.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "{{ .Values.ui.name }}"
+{{- end -}}
+{{- end -}}

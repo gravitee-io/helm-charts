@@ -412,6 +412,9 @@ api:
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
 
+  podDisruptionBudget: 
+    enabled: false
+
   # How long to wait for APIM Management API pods to stop gracefully
   terminationGracePeriod: 30
 
@@ -643,6 +646,9 @@ gateway:
 
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
+
+  podDisruptionBudget: 
+    enabled: false
 
   # How long to wait for APIM Gateway pods to stop gracefully
   terminationGracePeriod: 30
@@ -934,6 +940,9 @@ portal:
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
 
+  podDisruptionBudget: 
+    enabled: false
+
   # How long to wait for APIM Portal pods to stop gracefully
   terminationGracePeriod: 30
 
@@ -1080,6 +1089,9 @@ ui:
 
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster 
+
+  podDisruptionBudget: 
+    enabled: false
 
   # How long to wait for APIM Console pods to stop gracefully
   terminationGracePeriod: 30

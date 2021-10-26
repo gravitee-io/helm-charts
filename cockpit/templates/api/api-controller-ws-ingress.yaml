@@ -24,7 +24,8 @@ spec:
   - host: {{ $host }}
     http:
       paths:
-      - path: {{ $ingressPath }}
+      - pathType: Prefix
+        path: {{ $ingressPath }}
         backend:
           {{- if (eq $apiVersion "networking.k8s.io/v1") }}
           service:
