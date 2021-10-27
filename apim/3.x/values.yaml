@@ -838,7 +838,6 @@ gateway:
     maxReplicas: 3
     targetAverageUtilization: 50
     targetMemoryAverageUtilization: 80
-    annotations: {}
   ingress:
     enabled: true
     path: /gateway
