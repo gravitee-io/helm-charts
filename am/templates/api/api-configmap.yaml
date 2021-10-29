@@ -135,6 +135,15 @@ data:
             users:
               admin: {{ .Values.api.http.services.core.http.authentication.password | default "adminadmin"}}
 
+      {{- if .Values.api.http.services.metrics.enabled }}
+      metrics:
+        enabled: {{ .Values.api.http.services.metrics.enabled }}
+        {{- if .Values.api.http.services.metrics.prometheus }}
+        prometheus:
+{{ toYaml .Values.api.http.services.metrics.prometheus | indent 10 }}
+        {{- end }}
+      {{- end }}
+      
     # SMTP configuration used to send mails
     email:
       enabled: {{ .Values.smtp.enabled }}
