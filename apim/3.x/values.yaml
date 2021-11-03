@@ -1,6 +1,25 @@
 # Default values for gravitee.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+apim:
+  name: apim
+  # Whether this chart should self-manage its service account, role, and associated role binding.
+  managedServiceAccount: true
+
+  # Custom service account override that the pod will use
+  serviceAccount: ""
+
+  clusterRoleRules:
+    - apiGroups:
+        - ""
+      resources:
+        - configmaps
+        - secrets
+      verbs:
+        - get
+        - list
+        - watch
+        
 chaos:
   enabled: false
 

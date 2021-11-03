@@ -135,3 +135,15 @@ Create initContainers for downloading jdbc drivers
       mountPath: /tmp/plugins-ext
 {{- end }}
 {{- end -}}
+
+{{/*
+Use the fullname if the serviceAccount value is not set
+*/}}
+{{- define "am.serviceAccount" -}}
+{{- if .Values.am.serviceAccount }}
+{{- .Values.am.serviceAccount -}}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
