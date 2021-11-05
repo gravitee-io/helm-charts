@@ -1,0 +1,55 @@
+suite: Test API Gateway default deployment
+templates:
+  - "gateway/gateway-deployment.yaml"
+  - "gateway/gateway-configmap.yaml"
+tests:
+  - it: Check default readinessProbe with syncApi disabled
+    template: gateway/gateway-deployment.yaml
+    asserts:
+      - isEmpty:
+          # It should not contain httpGet if apiSync is not defined
+          path: spec.template.spec.containers[0].readinessProbe.httpGet
+      - isEmpty:
+          # It should not contain apiSync property
+          path: spec.template.spec.containers[0].readinessProbe.apiSync
+      - equal:
+          # Default is to define a classical tcpSocket probe
+          path: spec.template.spec.containers[0].readinessProbe.tcpSocket.port
+          value: http
+
+  - it: Check default readinessProbe with syncApi enabled
+    template: gateway/gateway-deployment.yaml
+    set:
+      gateway:
+        readinessProbe:
+          apiSync: true
+    asserts:
+      - isEmpty:
+          # It should not contain httpGet if apiSync is enabled
+          path: spec.template.spec.containers[0].readinessProbe.tcpSocket
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.httpGet.port
+          value: 18082
+
+  - it: Check custom readinessProbe
+    template: gateway/gateway-deployment.yaml
+    set:
+      gateway:
+        readinessProbe:
+          httpGet:
+            path: /_node/sync
+            port: 18082
+            scheme: HTTPS
+            httpHeaders:
+                - name: Authorization
+                  value: my_password
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.httpGet.path
+          value: /_node/sync
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.httpGet.port
+          value: 18082
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.httpGet.scheme
+          value: HTTPS
