@@ -14,7 +14,7 @@ tests:
           of: apps/v1
       - equal:
           path: spec.template.spec.containers[0].image
-          value: graviteeio/apim-gateway:3.11.1
+          value: graviteeio/apim-gateway:3.11.2
       - isEmpty:
           # It should not contain environment variable by default
           path: spec.template.spec.containers[0].env
@@ -34,7 +34,7 @@ tests:
           of: Deployment
       - equal:
           path: spec.template.spec.containers[0].image
-          value: graviteeio/apim-gateway:3.11.1
+          value: graviteeio/apim-gateway:3.11.2
       - equal:
           path: spec.template.spec.containers[0].volumeMounts[1].name
           value: graviteeio-apim-repository-jdbc-ext
