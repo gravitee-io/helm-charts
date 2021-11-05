@@ -168,13 +168,13 @@ spec:
                 - name: Authorization
                   value: {{ print "Basic "}}{{print "admin:" .Values.gateway.services.core.http.authentication.password | b64enc }}
               {{- end }}
-            {{- else }}
-            tcpSocket:
-              port: {{ .Values.gateway.service.internalPort }}
-            {{- end }}
             initialDelaySeconds: {{ .Values.gateway.readinessProbe.initialDelaySeconds | default 5 }}
             failureThreshold: {{ .Values.gateway.readinessProbe.failureThreshold | default 3 }}
             periodSeconds: {{ .Values.gateway.readinessProbe.periodSeconds | default 30 }}
+            {{- else }}
+            {{- $readinessProbe := unset (.Values.gateway.readinessProbe | deepCopy) "apiSync" -}}
+            {{ toYaml $readinessProbe | nindent 12 }}
+            {{- end }}
           resources: {{ toYaml .Values.gateway.resources | nindent 12 }}
           volumeMounts:
             - name: config
