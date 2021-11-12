@@ -1,0 +1,21 @@
+suite: Test API Gateway deployment with startupProbe
+templates:
+  - "gateway/gateway-deployment.yaml"
+  - "gateway/gateway-configmap.yaml"
+tests:
+  - it: Check default startupProbe with Kubernetes >= 1.18-0
+    template: gateway/gateway-deployment.yaml
+    set:
+      gateway:
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: liveness-port
+          failureThreshold: 30
+          periodSeconds: 10
+    capabilities:
+      KubeVersion: "1.18-0"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].startupProbe.httpGet.path
+          value: /healthz
