@@ -15,6 +15,9 @@ metadata:
       {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+  {{- if .Values.gateway.service.loadBalancerIP }}
+  loadBalancerIP: "{{ .Values.gateway.service.loadBalancerIP }}"
+  {{- end }}
   type: "{{ .Values.gateway.service.type }}"
   ports:
     - port: {{ .Values.gateway.service.externalPort }}
