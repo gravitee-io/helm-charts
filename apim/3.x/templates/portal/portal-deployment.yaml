@@ -104,6 +104,9 @@ spec:
           {{- end }}
           livenessProbe: {{ toYaml .Values.portal.livenessProbe | nindent 12 }}
           readinessProbe: {{ toYaml .Values.portal.readinessProbe | nindent 12 }}
+          {{- if and (.Values.portal.startupProbe) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+          startupProbe: {{ toYaml .Values.portal.startupProbe | nindent 12 }}
+          {{- end }}
           resources: {{ toYaml .Values.portal.resources | nindent 12 }}
           volumeMounts:
             - name: config

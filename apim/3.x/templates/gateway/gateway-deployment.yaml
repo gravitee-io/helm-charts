@@ -175,6 +175,9 @@ spec:
             {{- $readinessProbe := unset (.Values.gateway.readinessProbe | deepCopy) "apiSync" -}}
             {{ toYaml $readinessProbe | nindent 12 }}
             {{- end }}
+          {{- if and (.Values.gateway.startupProbe) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+          startupProbe: {{ toYaml .Values.gateway.startupProbe | nindent 12 }}
+          {{- end }}
           resources: {{ toYaml .Values.gateway.resources | nindent 12 }}
           volumeMounts:
             - name: config
