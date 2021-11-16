@@ -141,6 +141,9 @@ data:
         endpoints:
           {{ toYaml . | nindent 10 | trim -}}
         {{- end }}
+        {{- if .Values.es.index_mode }}
+        index_mode: {{ .Values.es.index_mode }}
+        {{- end }}
         {{- if .Values.es.http }}
         http:
           {{- if .Values.es.http.timeout }}

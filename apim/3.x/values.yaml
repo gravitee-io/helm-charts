@@ -243,6 +243,7 @@ es:
   # authentication will be provided for the
   # elastic search cluster
   # https://docs.gravitee.io/apim_installguide_repositories_elasticsearch.html#management_api_configuration
+  index_mode: daily # Index mode normal (daily index) vs ILM (managed by ILM)
   security:
     enabled: false
     username: example
