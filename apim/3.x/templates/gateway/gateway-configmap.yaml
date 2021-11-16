@@ -186,6 +186,9 @@ data:
         endpoints:
           {{ toYaml . | nindent 10 | trim -}}
         {{- end }}
+        {{- if .Values.es.index_mode }}
+        index_mode: {{ .Values.es.index_mode }}
+        {{- end }}
         {{- if (eq .Values.es.lifecycle.enabled true) }}
         lifecycle:
           policy_property_name: {{ .Values.es.lifecycle.policyPropertyName }}
