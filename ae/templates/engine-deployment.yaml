@@ -97,9 +97,9 @@ spec:
               containerPort: {{ .Values.engine.service.internalPort }}
           {{- if .Values.engine.env }}
           env:
-            - name: "gravitee.processors.alert-engine-processor-useragent.enabled"
+            - name: "gravitee_processors_alertengineprocessoruseragent_enabled"
               value: "false"
-            - name: "gravitee.processors.alert-engine-processor-geoip.enabled"
+            - name: "gravitee_processors_alertengineprocessorgeoip_enabled"
               value: "false"
 {{- if .Values.engine.env | default .Values.engine.deployment.extraEnvs }}
 {{ toYaml ( .Values.engine.env | default .Values.engine.deployment.extraEnvs ) | indent 12 }}
