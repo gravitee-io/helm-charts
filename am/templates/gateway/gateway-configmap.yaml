@@ -149,6 +149,21 @@ data:
               path: {{ .Values.gateway.services.core.http.ssl.keystore.path }}
           {{- end }}
 
+      # Gateway monitoring service.
+      # This service retrieves metrics like os / process / jvm metrics.
+      monitoring:
+        delay: 5000
+        unit: MILLISECONDS
+    
+      {{- if .Values.gateway.services.metrics.enabled }}
+      metrics:
+        enabled: {{ .Values.gateway.services.metrics.enabled }}
+        {{- if .Values.gateway.services.metrics.prometheus }}
+        prometheus:
+{{ toYaml .Values.gateway.services.metrics.prometheus | indent 10 }}
+        {{- end }}
+      {{- end }}
+
     jwt:
       secret: {{ .Values.gateway.jwt.secret }}
       kid: {{ .Values.gateway.jwt.kid | default "default-gravitee-AM-key" }}
