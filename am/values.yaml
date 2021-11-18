@@ -207,6 +207,10 @@ api:
 #    api:
 #      entrypoint: /management
     services:
+      metrics:
+        enabled: false
+        prometheus:
+          enabled: true
       core:
         http:
           port: 18093
@@ -406,6 +410,10 @@ gateway:
         enabled: false
   #         type: ClusterIP
   #         externalPort: 18082
+    metrics:
+      enabled: false
+      prometheus:
+        enabled: true
   jwt:
     secret: s3cR3t4grAv1t3310AMS1g1ingDftK3y
     kid: default-gravitee-AM-key
