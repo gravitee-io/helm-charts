@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 ### 3.1.31
 
 - [X] Add support for ILM managed indexes
+- [X] Remove the empty override of 'if-match' header
 
 ### 3.1.30 
 
