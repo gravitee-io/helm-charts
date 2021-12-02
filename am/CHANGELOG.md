@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.31
+
+- [X] Allow to override init containers for additional plugins
+- Update gravitee.io AM v3.14.0
+
 ### 1.0.30
 
 - [X] Allow to configure metrics endpoint in the configmap template for AM Gateway & API 
