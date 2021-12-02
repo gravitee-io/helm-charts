@@ -73,24 +73,18 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- define "deployment.pluginInitContainers" -}}
 {{- if .plugins }}
 - name: get-plugins
-  image: 'alpine'
+  {{- toYaml .initContainers | nindent 2 }}
   command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins {{- range $url := .plugins -}}
     {{ printf " && wget %s" $url }}
   {{- end -}}"]
-  securityContext:
-    runAsUser: 1001
-    runAsNonRoot: true
   volumeMounts:
     - name: graviteeio-am-plugins
       mountPath: /tmp/plugins
 {{- end }}
 {{- range $key, $url := .extPlugins }}
 - name: get-{{ $key }}-ext
-  image: 'alpine'
+  {{- toYaml .initContainers | nindent 2 }}
   command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget {{ $url }}"]
-  securityContext:
-    runAsUser: 1001
-    runAsNonRoot: true
   volumeMounts:
     - name: graviteeio-am-{{ $key }}-ext
       mountPath: /tmp/plugins-ext

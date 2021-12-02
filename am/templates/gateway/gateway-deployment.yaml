@@ -1,4 +1,5 @@
 {{- if .Values.gateway.enabled -}}
+{{- $initContainers := .Values.initContainers -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -74,7 +75,7 @@ spec:
       {{- if .Values.gateway.additionalPlugins -}}
         {{- $plugins = concat $plugins .Values.gateway.additionalPlugins -}}
       {{- end -}}
-      {{- $pluginParams := dict "plugins" $plugins "jdbcDrivers" .Values.jdbc.drivers "securityContext" .Values.api.securityContext "appName" "graviteeio-am-gateway" -}}
+      {{- $pluginParams := dict "plugins" $plugins "jdbcDrivers" .Values.jdbc.drivers "securityContext" .Values.api.securityContext "appName" "graviteeio-am-gateway" "initContainers" $initContainers -}}
       {{- if or .Values.gateway.extraInitContainers $plugins .Values.jdbc.drivers }}
       initContainers:
         {{- if and .Values.jdbc.drivers (eq .Values.management.type "jdbc") }}
