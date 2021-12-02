@@ -37,4 +37,5 @@ data:
 
     MONGO_URI={{ .Values.mongo.uri }}
     HOST=0.0.0.0
+    NODE_ENV=production
 {{- end -}}
