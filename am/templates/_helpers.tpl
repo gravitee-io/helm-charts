@@ -126,12 +126,10 @@ Create initContainers for downloading jdbc drivers
 {{- define "deployment.jdbcDriverInitContainers" -}}
 {{- if .jdbcDrivers }}
 - name: get-jdbc-ext
-  image: 'alpine'
+  {{- toYaml .initContainers | nindent 2 }}
   command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext {{- range $url := .jdbcDrivers -}}
     {{ printf " && wget %s" $url }}
   {{- end -}}"]
-  securityContext:
-{{ toYaml .securityContext | trim | indent 4 }}
   volumeMounts:
     - name: graviteeio-am-jdbc-ext
       mountPath: /tmp/plugins-ext
