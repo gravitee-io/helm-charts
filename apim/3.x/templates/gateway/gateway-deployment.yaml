@@ -36,6 +36,9 @@ spec:
   {{- if eq .Values.gateway.type "Deployment" }}
   strategy: {{ toYaml .Values.gateway.deployment.strategy | nindent 4 }}
   {{- end }}
+  {{- if .Values.gateway.deployment.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.gateway.deployment.revisionHistoryLimit }}
+  {{- end }}
   {{- if not .Values.gateway.autoscaling.enabled }}
   replicas: {{ .Values.gateway.replicaCount }}
   {{- end }}

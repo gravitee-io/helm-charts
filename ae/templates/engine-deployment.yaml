@@ -37,6 +37,9 @@ spec:
   {{- if not .Values.engine.autoscaling.enabled }}
   replicas: {{ .Values.engine.replicaCount }}
   {{- end }}
+  {{- if .Values.engine.deployment.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.engine.deployment.revisionHistoryLimit }}
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ template "gravitee.name" . }}

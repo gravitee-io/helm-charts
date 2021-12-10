@@ -29,6 +29,9 @@ spec:
   {{- if not .Values.api.autoscaling.enabled }}
   replicas: {{ .Values.api.replicaCount }}
   {{- end }}
+  {{- if .Values.api.deployment.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.api.deployment.revisionHistoryLimit }}
+  {{- end }}
   strategy: {{ toYaml .Values.api.deployment.strategy | nindent 12 }}
   selector:
     matchLabels:
