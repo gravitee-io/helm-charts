@@ -189,6 +189,9 @@ data:
         {{- if .Values.es.index_mode }}
         index_mode: {{ .Values.es.index_mode }}
         {{- end }}
+        pipeline:
+          plugins:
+            ingest: {{ .Values.es.pipeline.plugins.ingest }}
         {{- if (eq .Values.es.lifecycle.enabled true) }}
         lifecycle:
           policy_property_name: {{ .Values.es.lifecycle.policyPropertyName }}
