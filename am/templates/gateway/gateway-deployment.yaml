@@ -27,6 +27,9 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
+  {{- if .Values.gateway.deployment.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.gateway.deployment.revisionHistoryLimit }}
+  {{- end }}
   {{- if not .Values.gateway.autoscaling.enabled }}
   replicas: {{ .Values.gateway.replicaCount }}
   {{- end }} 

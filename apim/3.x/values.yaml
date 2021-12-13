@@ -243,7 +243,7 @@ es:
   # authentication will be provided for the
   # elastic search cluster
   # https://docs.gravitee.io/apim_installguide_repositories_elasticsearch.html#management_api_configuration
-  index_mode: daily # Index mode normal (daily index) vs ILM (managed by ILM)
+  index_mode: daily # Index mode normal (daily index) vs ILM (managed by ILM)
   security:
     enabled: false
     username: example
@@ -272,6 +272,9 @@ es:
     #     - /path/to/key2
   endpoints:
     - http://graviteeio-apim-elasticsearch-client.default.svc.cluster.local:9200
+  pipeline:
+    plugins:
+      ingest: geoip, user_agent # geoip and user_agent plugins are enabled by default
 
 elasticsearch:
   enabled: false
@@ -395,6 +398,7 @@ api:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    # revisionHistoryLimit: 10
 
   livenessProbe:
     tcpSocket:  
@@ -624,6 +628,7 @@ gateway:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    # revisionHistoryLimit: 10
 
   livenessProbe:
     tcpSocket:  
@@ -914,6 +919,7 @@ portal:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    # revisionHistoryLimit: 10
 
   livenessProbe:
     httpGet:
@@ -1061,7 +1067,8 @@ ui:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
-
+    # revisionHistoryLimit: 10
+    
   livenessProbe:
     httpGet:
       path: /

@@ -130,19 +130,20 @@ See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongo
 
 ### Elasticsearch
 
-| Parameter                  | Description                                       | Default                                                                |
-| ---------------------------| ------------------------------------------------- | ---------------------------------------------------------------------- |
-| `es.security.enabled`      | Elasticsearch username and password enabled       | false                                                                  |
-| `es.security.username`     | Elasticsearch username                            | `example`                                                              |
-| `es.security.password`     | Elasticsearch password                            | `example`                                                              |
-| `es.tls.enabled`           | Elasticsearch TLS enabled                         | false                                                                  |
-| `es.tls.keystore.type`     | Elasticsearch TLS keystore type (jks, pem or pfx) | `null`                                                                 |
-| `es.tls.keystore.path`     | Elasticsearch TLS keystore path (jks, pfx)        | `null`                                                                 |
-| `es.tls.keystore.password` | Elasticsearch TLS keystore password (jks, pfx)    | `null`                                                                 |
-| `es.tls.keystore.certs`    | Elasticsearch TLS certs (only pems)               | `null`                                                                 |
-| `es.tls.keystore.keys`     | Elasticsearch TLS keys (only pems)                | `null`                                                                 |
-| `es.index`                 | Elasticsearch index                               | `gravitee`                                                             |
-| `es.endpoints`             | Elasticsearch endpoint array                      | `[http://elastic-elasticsearch-client.default.svc.cluster.local:9200]` |
+| Parameter                    | Description                                       | Default                                                                |
+|------------------------------|---------------------------------------------------|------------------------------------------------------------------------|
+| `es.security.enabled`        | Elasticsearch username and password enabled       | false                                                                  |
+| `es.security.username`       | Elasticsearch username                            | `example`                                                              |
+| `es.security.password`       | Elasticsearch password                            | `example`                                                              |
+| `es.tls.enabled`             | Elasticsearch TLS enabled                         | false                                                                  |
+| `es.tls.keystore.type`       | Elasticsearch TLS keystore type (jks, pem or pfx) | `null`                                                                 |
+| `es.tls.keystore.path`       | Elasticsearch TLS keystore path (jks, pfx)        | `null`                                                                 |
+| `es.tls.keystore.password`   | Elasticsearch TLS keystore password (jks, pfx)    | `null`                                                                 |
+| `es.tls.keystore.certs`      | Elasticsearch TLS certs (only pems)               | `null`                                                                 |
+| `es.tls.keystore.keys`       | Elasticsearch TLS keys (only pems)                | `null`                                                                 |
+| `es.index`                   | Elasticsearch index                               | `gravitee`                                                             |
+| `es.endpoints`               | Elasticsearch endpoint array                      | `[http://elastic-elasticsearch-client.default.svc.cluster.local:9200]` |
+| `es.pipeline.plugins.ingest` | Elasticsearch pipeline ingest plugins             | `geoip, user_agent`                                                    |
 
 ### Elasticsearch cluster
 
