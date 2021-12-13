@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 ### 3.1.32
 
 - [X] Add support for revisionHistoryLimit
+- [X] Add support for ES reporter ingest plugins configuration
 - Update gravitee.io APIM v3.11.3
 
 ### 3.1.31
