@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io Alert Engine](https://github.com/gravitee-io/helm-charts/tree/master/ae) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.1.25
+
+- Add support for revisionHistoryLimit
+- Update gravitee.io AE v1.5.1
+
 ### 1.1.24
 
 - Update processor env var to remove hyphens

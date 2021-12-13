@@ -156,6 +156,7 @@ api:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    # revisionHistoryLimit: 10
 
   livenessProbe:
     tcpSocket:  
@@ -343,6 +344,7 @@ gateway:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    # revisionHistoryLimit: 10
 
   livenessProbe:
     tcpSocket:  
@@ -541,6 +543,7 @@ ui:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    # revisionHistoryLimit: 10
 
   livenessProbe:
     httpGet:
