@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.33
+
+- Make app.kubernetes.io/version label consistent
+- Add quotes to version to fix #6450
+
 ### 3.1.32
 
 - [X] Add support for revisionHistoryLimit
