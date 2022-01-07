@@ -87,7 +87,7 @@ spec:
         {{- $plugins = concat $plugins .Values.gateway.additionalPlugins -}}
       {{- end -}}
     
-      {{- if eq .Values.ratelimit.type "redis"  -}}       
+      {{- if and (eq .Values.ratelimit.type "redis") $rateLimitPlugin  -}}       
         {{- $plugins = append $plugins $rateLimitPlugin -}}
       {{- end -}}
 
