@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.34
+
+- Make app.kubernetes.io/version label consistent
+- Add quotes to version to fix #6450
+
 ### 1.0.33
 
 - [X] Add support for revisionHistoryLimit
