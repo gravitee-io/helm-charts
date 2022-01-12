@@ -62,7 +62,7 @@ spec:
         {{- end }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "api.serviceAccount" . }}
+      serviceAccountName: {{ template "cookpit.serviceAccount" . }}
       affinity: {{ toYaml .Values.api.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.api.deployment.nodeSelector | nindent 8 }}
       tolerations: {{ toYaml .Values.api.deployment.tolerations | nindent 8 }}

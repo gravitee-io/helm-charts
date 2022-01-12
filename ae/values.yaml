@@ -40,9 +40,12 @@ engine:
         - pods
         - nodes
         - services
+        - configmaps
+        - secrets
       verbs:
         - get
         - list
+        - watch
 
   ssl:
     enabled: false
