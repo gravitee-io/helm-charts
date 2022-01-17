@@ -8,7 +8,9 @@ This file documents all notable changes to [Gravitee.io Access Management 3.x](h
 - [X] Add quotes to version to fix #6450
 - [X] Add ServiceAccount to all deployments
 - Update gravitee.io AM v3.15.0
-- Improve AM Gateway readinessProbe configuration
+- [X] Ensure file doesn't exist before downloading it
+- [X] Improve AM Gateway readinessProbe configuration
+
 
 ### 1.0.33
 

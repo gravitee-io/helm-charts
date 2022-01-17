@@ -79,7 +79,7 @@ Create initContainers for downloading plugins ext plugin-ext
 - name: get-plugins
   image: 'alpine'
   command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins {{- range $url := .plugins -}}
-    {{ printf " && wget %s" $url }}
+    {{ printf " && ( rm "}} {{regexFind "[^/]+$" $url}} {{ printf " 2>/dev/null || true ) && wget %s" $url }}
   {{- end -}}"]
   securityContext:
     runAsUser: 1001
@@ -91,7 +91,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- range $key, $url := .extPlugins }}
 - name: get-{{ $key }}-ext
   image: 'alpine'
-  command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget {{ $url }}"]
+  command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && ( rm {{regexFind "[^/]+$" $url}} || true ) && wget {{ $url }}"]
   securityContext:
     runAsUser: 1001
     runAsNonRoot: true

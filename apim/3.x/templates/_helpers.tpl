@@ -96,7 +96,7 @@ Create initContainers for downloading plugins ext plugin-ext
 - name: get-plugins
   {{- toYaml .initContainers | nindent 2 }}
   command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins {{- range $url := .plugins -}}
-    {{ printf " && wget %s" $url }}
+    {{ printf " && ( rm "}} {{regexFind "[^/]+$" $url}} {{ printf " 2>/dev/null || true ) && wget %s" $url }}
   {{- end -}}"]
   volumeMounts:
     - name: graviteeio-apim-plugins
@@ -105,7 +105,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- range $key, $url := .extPlugins }}
 - name: get-{{ $key }}-ext
   {{- toYaml .initContainers | nindent 2 }}
-  command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget {{ $url }}"]
+  command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && ( rm {{regexFind "[^/]+$" $url}} || true ) && wget {{ $url }}"]
   volumeMounts:
     - name: graviteeio-apim-{{ $key }}-ext
       mountPath: /tmp/plugins-ext

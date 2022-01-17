@@ -34,7 +34,7 @@ tests:
             name: get-plugins
             image: "alpine:latest"
             imagePullPolicy: Always
-            command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-3.11.3.zip"]
+            command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins && ( rm  gravitee-apim-repository-redis-3.11.3.zip  2>/dev/null || true ) && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-3.11.3.zip"]
             env: []
             securityContext:
               runAsNonRoot: true
@@ -75,7 +75,7 @@ tests:
             name: get-plugins
             image: "alpine:latest"
             imagePullPolicy: Always
-            command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-3.2.0.zip"]
+            command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins && ( rm  gravitee-repository-redis-3.2.0.zip  2>/dev/null || true ) && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-3.2.0.zip"]
             env: []
             securityContext:
               runAsNonRoot: true
@@ -119,7 +119,7 @@ tests:
             name: get-plugins
             image: "alpine:latest"
             imagePullPolicy: Always
-            command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-3.11.0.zip"]
+            command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins && ( rm  gravitee-apim-repository-redis-3.11.0.zip  2>/dev/null || true ) && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-3.11.0.zip"]
             env: []
             securityContext:
               runAsNonRoot: true
@@ -160,7 +160,7 @@ tests:
                   name: get-plugins
                   image: "alpine:latest"
                   imagePullPolicy: Always
-                  command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-3.11.3.zip"]
+                  command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins && ( rm  gravitee-apim-repository-redis-3.11.3.zip  2>/dev/null || true ) && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-3.11.3.zip"]
                   env: []
                   securityContext:
                       runAsNonRoot: true
