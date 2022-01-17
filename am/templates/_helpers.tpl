@@ -75,7 +75,7 @@ Create initContainers for downloading plugins ext plugin-ext
 - name: get-plugins
   {{- toYaml .initContainers | nindent 2 }}
   command: ['sh', '-c', "mkdir -p /tmp/plugins && cd /tmp/plugins {{- range $url := .plugins -}}
-    {{ printf " && wget %s" $url }}
+    {{ printf " && ( rm "}} {{regexFind "[^/]+$" $url}} {{ printf " 2>/dev/null || true ) && wget %s" $url }}
   {{- end -}}"]
   volumeMounts:
     - name: graviteeio-am-plugins
@@ -84,7 +84,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- range $key, $url := .extPlugins }}
 - name: get-{{ $key }}-ext
   {{- toYaml .initContainers | nindent 2 }}
-  command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget {{ $url }}"]
+  command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && ( rm {{regexFind "[^/]+$" $url}} || true ) && wget {{ $url }}"]
   volumeMounts:
     - name: graviteeio-am-{{ $key }}-ext
       mountPath: /tmp/plugins-ext
@@ -128,7 +128,7 @@ Create initContainers for downloading jdbc drivers
 - name: get-jdbc-ext
   {{- toYaml .initContainers | nindent 2 }}
   command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext {{- range $url := .jdbcDrivers -}}
-    {{ printf " && wget %s" $url }}
+    {{ printf " && ( rm "}} {{regexFind "[^/]+$" $url}} {{ printf " 2>/dev/null || true ) && wget %s" $url }}
   {{- end -}}"]
   volumeMounts:
     - name: graviteeio-am-jdbc-ext

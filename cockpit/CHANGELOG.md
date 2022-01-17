@@ -8,6 +8,7 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 - [X] Add quotes to version to fix #6450
 - [X] Add ServiceAccount to all deployments
 - Update gravitee.io Cockpit v3.15.0
+- [X] Ensure file doesn't exist before downloading it
 
 ### 1.6.5
 
