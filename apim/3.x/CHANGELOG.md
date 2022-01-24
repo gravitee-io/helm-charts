@@ -4,6 +4,8 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 
 ### 3.1.33
 
+- Disable old classloader to enable the new one by default (since v3.15)
+- Add support for kubernetes certificate configuration
 - Make app.kubernetes.io/version label consistent
 - Add quotes to version to fix #6450
 

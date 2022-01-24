@@ -370,7 +370,12 @@ data:
       alert-engine-connector-ws:
         enabled: false
     {{- end }}
-        
+
+    # Old class loader behavior, false by default
+    classloader:
+      legacy:
+        enabled: {{ .Values.gateway.classloader.legacy.enabled }}
+
   {{- if .Values.gateway.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
