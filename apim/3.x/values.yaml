@@ -818,6 +818,10 @@ gateway:
 #      port: 8379
 #    file:
 
+  classloader:
+    legacy:
+      enabled: false
+
   # DEPRECATED: This part will be removed shortly in favor of gateway.policy (see below)
   apiKey:
     header: X-Gravitee-Api-Key
