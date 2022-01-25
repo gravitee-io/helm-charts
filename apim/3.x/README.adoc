@@ -116,7 +116,7 @@ To install MongoDB via Helm command, run the following:
 
 There are three ways to configure MongoDB connections.
 
-1. The simplest way is to provide the
+. The simplest way is to provide the
 https://docs.mongodb.com/manual/reference/connection-string/[MongoDB
 URI].
 
@@ -127,7 +127,7 @@ URI].
 |===
 
 [start=2] 
-2. If no `+mongo.uri+` is provided, you can provide a `+mongo.servers+` raw
+. If no `+mongo.uri+` is provided, you can provide a `+mongo.servers+` raw
 definition in combination with `+mongo.dbname+`, plus eventual
 authentication configuration:
 
@@ -147,7 +147,7 @@ mongo:
 ----
 
 [start=3]
-3. If neither `+mongo.uri+` or `+mongo.servers+` are provided, you must
+. If neither `+mongo.uri+` or `+mongo.servers+` are provided, you must
 define the following configuration options:
 
 [cols=",,",options="header",]
