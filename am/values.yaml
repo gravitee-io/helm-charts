@@ -178,7 +178,7 @@ api:
     # revisionHistoryLimit: 10
 
   livenessProbe:
-    tcpSocket:  
+    tcpSocket:
       port: http
     initialDelaySeconds: 30
     periodSeconds: 30
@@ -318,6 +318,13 @@ api:
 gateway:
   enabled: true
   name: gateway
+
+  http:
+    maxHeaderSize: 8192
+    maxChunkSize: 8192
+    maxInitialLineLength: 4096
+    maxFormAttributeSize: 2048
+
   logging:
     debug: false
     stdout:
@@ -336,7 +343,7 @@ gateway:
     graviteeSourceLevel: DEBUG
     jettyLevel: WARN
   reloadOnConfigChange: true
-  
+
   liquibase:
     enabled: false
 
@@ -366,7 +373,7 @@ gateway:
     # revisionHistoryLimit: 10
 
   livenessProbe:
-    tcpSocket:  
+    tcpSocket:
       port: http
     initialDelaySeconds: 30
     periodSeconds: 30
@@ -388,7 +395,7 @@ gateway:
   # This is the PriorityClass settings as defined in
   # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   priorityClassName: ""
-  
+
   additionalPlugins:
 #    - https://path_to_plugin
   ssl:
@@ -581,7 +588,7 @@ ui:
     failureThreshold: 3
 
   podAnnotations: {}
-    # iam.amazonaws.com/role: es-cluster 
+    # iam.amazonaws.com/role: es-cluster
 
   # How long to wait for AM Console pods to stop gracefully
   terminationGracePeriod: 30

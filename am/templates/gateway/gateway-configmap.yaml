@@ -20,6 +20,10 @@ data:
     #  tcpKeepAlive: true
     #  compressionSupported: false
     #  instances: 0
+      maxHeaderSize: {{ .Values.gateway.http.maxHeaderSize }}
+      maxChunkSize: {{ .Values.gateway.http.maxChunkSize }}
+      maxInitialLineLength: {{ .Values.gateway.http.maxInitialLineLength }}
+      maxFormAttributeSize: {{ .Values.gateway.http.maxFormAttributeSize }}
       alpn: true
       {{- if .Values.gateway.ssl.enabled }}
       secured: true
@@ -41,10 +45,10 @@ data:
           password: {{ .Values.gateway.ssl.truststore.password | quote }}
         {{- end }}
       {{- end }}
-    
+
     liquibase:
       enabled: {{ .Values.gateway.liquibase.enabled }}
-  
+
     management:
       type: {{ .Values.management.type | default "mongodb" }}
       {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
@@ -154,7 +158,7 @@ data:
       monitoring:
         delay: 5000
         unit: MILLISECONDS
-    
+
       {{- if .Values.gateway.services.metrics.enabled }}
       metrics:
         enabled: {{ .Values.gateway.services.metrics.enabled }}
@@ -209,7 +213,7 @@ data:
     {{- else }}
       url: https://{{index .Values.gateway.ingress.hosts 0 }}{{ .Values.gateway.ingress.path }}
     {{- end }}
-    
+
     # User management configuration
     user:
       # Password complexity validation policy
