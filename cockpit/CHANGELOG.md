@@ -4,8 +4,10 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 
 ### 1.6.6
 
-- Make app.kubernetes.io/version label consistent
-- Add quotes to version to fix #6450
+- [X] Make app.kubernetes.io/version label consistent
+- [X] Add quotes to version to fix #6450
+- [X] Add ServiceAccount to all deployments
+- Update gravitee.io Cockpit v3.15.0
 
 ### 1.6.5
 
