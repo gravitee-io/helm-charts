@@ -168,23 +168,3 @@ tests:
                   volumeMounts:
                       - name: graviteeio-apim-plugins
                         mountPath: /tmp/plugins
-
-  - it: Check redis plugin is not downloaded with APIM >= 3.15
-    template: gateway/gateway-deployment.yaml
-    set:
-        ratelimit:
-            type: "redis"
-        gateway:
-            image:
-                tag: master-latest
-            ratelimit:
-                redis:
-                    host: localhost
-        redis:
-          repositoryVersion: 3.15.0
-    asserts:
-        - hasDocuments:
-              count: 1
-        - isEmpty:
-              # It should not contain htinitContainers
-              path: spec.template.spec.initContainers
