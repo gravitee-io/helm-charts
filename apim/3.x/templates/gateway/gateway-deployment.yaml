@@ -8,7 +8,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.gateway.image.tag }}
+    app.kubernetes.io/version: {{ .Values.gateway.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.gateway.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -71,6 +71,7 @@ spec:
         {{- end }}
         {{- end }}
     spec:
+      serviceAccountName: {{ template "apim.serviceAccount" . }}
       affinity: {{ toYaml .Values.gateway.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.gateway.deployment.nodeSelector | nindent 8 }}
       tolerations: {{ toYaml .Values.gateway.deployment.tolerations | nindent 8 }}

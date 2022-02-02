@@ -1,0 +1,13 @@
+{{- if .Values.cookpit.managedServiceAccount }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "cookpit.serviceAccount" . }}-cluster-role
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: "{{ .Values.cookpit.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules: {{ toYaml .Values.cookpit.clusterRoleRules | nindent 2 -}}
+{{- end -}}

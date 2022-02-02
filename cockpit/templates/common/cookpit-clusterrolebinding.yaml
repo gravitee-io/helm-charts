@@ -1,20 +1,20 @@
-{{- if .Values.api.managedServiceAccount }}
+{{- if .Values.cookpit.managedServiceAccount }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "api.serviceAccount" . }}-cluster-role-binding
+  name: {{ template "cookpit.serviceAccount" . }}-cluster-role-binding
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
-    app.kubernetes.io/component: "{{ .Values.api.name }}"
+    app.kubernetes.io/component: "{{ .Values.cookpit.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 roleRef:
   kind: ClusterRole
-  name: {{ template "api.serviceAccount" . }}-cluster-role
+  name: {{ template "cookpit.serviceAccount" . }}-cluster-role
   apiGroup: rbac.authorization.k8s.io
 subjects:
 - kind: ServiceAccount
-  name: {{ template "api.serviceAccount" . }}
+  name: {{ template "cookpit.serviceAccount" . }}
   namespace: {{ .Release.Namespace }}
 {{- end -}}

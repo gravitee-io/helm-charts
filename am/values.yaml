@@ -1,6 +1,25 @@
 # Default values for Gravitee.io Access Management.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+am:
+  name: am
+  # Whether this chart should self-manage its service account, role, and associated role binding.
+  managedServiceAccount: true
+
+  # Custom service account override that the pod will use
+  serviceAccount: ""
+
+  clusterRoleRules:
+    - apiGroups:
+        - ""
+      resources:
+        - configmaps
+        - secrets
+      verbs:
+        - get
+        - list
+        - watch
+        
 chaos:
   enabled: false
 
@@ -159,7 +178,7 @@ api:
     # revisionHistoryLimit: 10
 
   livenessProbe:
-    tcpSocket:  
+    tcpSocket:
       port: http
     initialDelaySeconds: 30
     periodSeconds: 30
@@ -175,7 +194,7 @@ api:
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
 
-  # How long to wait for APIM Management API pods to stop gracefully
+  # How long to wait for AM Management API pods to stop gracefully
   terminationGracePeriod: 30
 
   # This is the PriorityClass settings as defined in
@@ -299,6 +318,13 @@ api:
 gateway:
   enabled: true
   name: gateway
+
+  http:
+    maxHeaderSize: 8192
+    maxChunkSize: 8192
+    maxInitialLineLength: 4096
+    maxFormAttributeSize: 2048
+
   logging:
     debug: false
     stdout:
@@ -317,7 +343,7 @@ gateway:
     graviteeSourceLevel: DEBUG
     jettyLevel: WARN
   reloadOnConfigChange: true
-  
+
   liquibase:
     enabled: false
 
@@ -347,7 +373,7 @@ gateway:
     # revisionHistoryLimit: 10
 
   livenessProbe:
-    tcpSocket:  
+    tcpSocket:
       port: http
     initialDelaySeconds: 30
     periodSeconds: 30
@@ -363,13 +389,13 @@ gateway:
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
 
-  # How long to wait for APIM Management API pods to stop gracefully
+  # How long to wait for AM Management API pods to stop gracefully
   terminationGracePeriod: 30
 
   # This is the PriorityClass settings as defined in
   # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   priorityClassName: ""
-  
+
   additionalPlugins:
 #    - https://path_to_plugin
   ssl:
@@ -562,9 +588,9 @@ ui:
     failureThreshold: 3
 
   podAnnotations: {}
-    # iam.amazonaws.com/role: es-cluster 
+    # iam.amazonaws.com/role: es-cluster
 
-  # How long to wait for APIM Console pods to stop gracefully
+  # How long to wait for AM Console pods to stop gracefully
   terminationGracePeriod: 30
 
   # This is the PriorityClass settings as defined in

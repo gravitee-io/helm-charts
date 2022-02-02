@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.gateway.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.gateway.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -28,8 +28,15 @@ data:
           {{- if .Values.gateway.ssl.keystore.type }}
           type: {{ .Values.gateway.ssl.keystore.type }}
           {{- end }}
+          {{- if .Values.gateway.ssl.keystore.path }}
           path: {{ .Values.gateway.ssl.keystore.path }}
+          {{- end }}
+          {{- if .Values.gateway.ssl.keystore.password }}
           password: {{ .Values.gateway.ssl.keystore.password | quote }}
+          {{- end }}
+          {{- if .Values.gateway.ssl.keystore.kubernetes }}
+          kubernetes: {{ .Values.gateway.ssl.keystore.kubernetes }}
+          {{- end }}
         clientAuth: {{ .Values.gateway.ssl.clientAuth }}
         {{- if .Values.gateway.ssl.truststore }}
         truststore:
@@ -363,7 +370,12 @@ data:
       alert-engine-connector-ws:
         enabled: false
     {{- end }}
-        
+
+    # Old class loader behavior, false by default
+    classloader:
+      legacy:
+        enabled: {{ .Values.gateway.classloader.legacy.enabled }}
+
   {{- if .Values.gateway.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
