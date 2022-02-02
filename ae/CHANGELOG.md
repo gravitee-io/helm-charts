@@ -6,6 +6,7 @@ This file documents all notable changes to [Gravitee.io Alert Engine](https://gi
 
 - Make app.kubernetes.io/version label consistent
 - Add quotes to version to fix #6450
+- Update gravitee.io AE v1.6.0
 
 ### 1.1.25
 
