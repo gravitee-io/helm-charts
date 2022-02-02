@@ -3,7 +3,7 @@ name: apim3
 # When the version is modified, make sure the artifacthub.io/changes list is updated
 # Also update CHANGELOG.md
 version: 3.1.33
-appVersion: 3.11.3
+appVersion: 3.15.1
 description: Official Gravitee.io Helm chart for API Management 3.x
 home: https://gravitee.io
 sources:
@@ -23,3 +23,4 @@ annotations:
     - Make app.kubernetes.io/version label consistent
     - Add quotes to version to fix #6450
     - Add ServiceAccount to all deployments
+    - Disable old classloader to enable the new one by default (since v3.15)
