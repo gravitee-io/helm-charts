@@ -114,6 +114,30 @@ spec:
             - name: GRAVITEE_PLUGINS_PATH_1
               value: '${gravitee.home}/plugins-ext'
             {{- end }}
+            {{- if .Values.cockpit.enabled }}
+            - name: gravitee_cockpit_enabled
+              value: "true"
+            - name: gravitee_cockpit_url
+              value: {{ .Values.cockpit.url }}
+            - name: gravitee_cockpit_ws_endpoints_0
+              value: {{ .Values.cockpit.controller }}
+            - name: gravitee_cockpit_keystore_type
+              value: pkcs12
+            - name: gravitee_cockpit_keystore_path
+              value: /opt/graviteeio-management-api/cockpit/keystore.p12
+            - name: gravitee_cockpit_keystore_password
+              {{- toYaml .Values.cockpit.keystore.password | nindent 14}}
+            {{- if .Values.cockpit.truststore }}
+            - name: gravitee_cockpit_truststore_type
+              value: pkcs12
+            - name: gravitee_cockpit_truststore_path
+              value: /opt/graviteeio-management-api/cockpit/truststore.p12
+            - name: gravitee_cockpit_truststore_password
+              {{- toYaml .Values.cockpit.truststore.password | nindent 14}}
+            {{- end }}
+            - name: gravitee_cockpit_ssl_verifyHostname
+              value: "{{ .Values.cockpit.ssl.verifyHostname }}"
+            {{- end }}
 {{- if .Values.api.env | default .Values.api.deployment.extraEnvs }}
 {{ toYaml ( .Values.api.env | default .Values.api.deployment.extraEnvs ) | indent 12 }}
 {{- end }}
@@ -150,6 +174,11 @@ spec:
             - name: graviteeio-apim-repository-jdbc-ext
               mountPath: /opt/graviteeio-management-api/plugins/ext/repository-jdbc
           {{- end }}
+          {{- if .Values.cockpit.enabled }}
+            - name: gravitee-cockpit-certificates
+              mountPath: /opt/graviteeio-management-api/cockpit
+              readOnly: true
+          {{- end }}
           {{- include "deployment.pluginVolumeMounts" $pluginParams | indent 12 }}
           {{- with .Values.api.extraVolumeMounts }}
           {{- tpl . $ | nindent 12 }}
@@ -170,6 +199,11 @@ spec:
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: graviteeio-apim-repository-jdbc-ext
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.cockpit.enabled }}
+        - name: gravitee-cockpit-certificates
+          secret:
+            secretName: gravitee-cockpit-certificates
         {{- end }}
         {{- include "deployment.pluginVolumes" $pluginParams | indent 8 }}
         {{- with .Values.api.extraVolumes }}
