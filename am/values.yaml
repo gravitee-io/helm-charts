@@ -373,16 +373,19 @@ gateway:
     # revisionHistoryLimit: 10
 
   livenessProbe:
-    tcpSocket:
+    tcpSocket:  
       port: http
     initialDelaySeconds: 30
     periodSeconds: 30
     failureThreshold: 3
 
   readinessProbe:
+    # use the node endpoint as readinessProbe to test the domain synchronization
+    # in this case, the gateway.services.core.http.host must be defined to the Pod IP or 0.0.0.0
+    domainSync: false
     tcpSocket:
       port: http
-    initialDelaySeconds: 30
+    initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
 
