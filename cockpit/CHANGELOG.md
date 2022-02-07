@@ -2,12 +2,16 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.6.7
+- Fix typo in ServiceAccount resources
+
 ### 1.6.6
 
 - [X] Make app.kubernetes.io/version label consistent
 - [X] Add quotes to version to fix #6450
 - [X] Add ServiceAccount to all deployments
 - Update gravitee.io Cockpit v3.15.0
+- [X] Ensure file doesn't exist before downloading it
 
 ### 1.6.5
 
