@@ -133,9 +133,9 @@ Create volumes for plugins
 {{/*
 Use the fullname if the serviceAccount value is not set
 */}}
-{{- define "cookpit.serviceAccount" -}}
-{{- if .Values.cookpit.serviceAccount }}
-{{- .Values.cookpit.serviceAccount -}}
+{{- define "cockpit.serviceAccount" -}}
+{{- if .Values.cockpit.serviceAccount }}
+{{- .Values.cockpit.serviceAccount -}}
 {{- else }}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
