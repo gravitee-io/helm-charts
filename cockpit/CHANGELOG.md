@@ -4,6 +4,7 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 
 ### 1.6.8
 - Fix swagger generator default image name
+- Update to Cockpit v3.16.0
  
 ### 1.6.7
 - Fix typo in ServiceAccount resources
