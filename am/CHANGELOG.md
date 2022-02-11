@@ -2,15 +2,17 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.35
+
+- [X] Ensure additional jar doesn't exist before downloading it
+- [X] Improve AM Gateway readinessProbe configuration
+
 ### 1.0.34
 
 - [X] Make app.kubernetes.io/version label consistent
 - [X] Add quotes to version to fix #6450
 - [X] Add ServiceAccount to all deployments
 - Update gravitee.io AM v3.15.0
-- [X] Ensure file doesn't exist before downloading it
-- [X] Improve AM Gateway readinessProbe configuration
-
 
 ### 1.0.33
 
