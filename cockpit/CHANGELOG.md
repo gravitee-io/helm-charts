@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.6.9
+
+- [X] Ensure additional jar doesn't exist before downloading it
+
 ### 1.6.8
 - Fix swagger generator default image name
 - Update to Cockpit v3.16.0
@@ -15,7 +19,6 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 - [X] Add quotes to version to fix #6450
 - [X] Add ServiceAccount to all deployments
 - Update gravitee.io Cockpit v3.15.0
-- [X] Ensure file doesn't exist before downloading it
 
 ### 1.6.5
 
