@@ -1,0 +1,339 @@
+#
+# Copyright (C) 2015 The Gravitee team (http://gravitee.io)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: gravitee-services.gravitee.io
+spec:
+  group: gravitee.io
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                  default: true
+                  description: allow to disable all services defined in the services section
+                gateway:
+                  type: object
+                  properties:
+                    namespace:
+                      type: string
+                      default: default
+                      description: Namespace where the GraviteeGateway is defined
+                    name:
+                      type: string
+                      description: The GraviteeGateway name
+                services:
+                  type: object
+                  additionalProperties:
+                    type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                      type:
+                        type: string
+                        description: "Type of API
+                        * api: API fully managed by the Controller through CRDs
+                        "
+                        default: "api"
+                        enum: ["api"]
+                      authenticationReference:
+                        description: Reference to a Policy definition used to authenticate the client application. (ignored if authentication field is present)
+                        type: object
+                        properties:
+                          namespace:
+                            type: string
+                            default: default
+                            description: Namespace where the CustomResource is defined
+                          resource:
+                            type: string
+                            description: The CustomResource name
+                          name:
+                            type: string
+                            description: The name of the policy used to authenticate application as defined into the CustomResource
+                        required: ["name", "resource"]
+                      authentication:
+                        description: Policy definition used to authenticate the client application.
+                        type: object
+                        properties:
+                          policy:
+                            type: string
+                            description: Policy Plugin identifier (jwt, key_less...)
+                          configuration:
+                            type: object
+                            description: Map containing the policy configuration (map structure based on the kind of plugin)
+                            x-kubernetes-preserve-unknown-fields: true
+                        required: ["policy"]
+                      cors:
+                        type: object
+                        description: " Definition of the CORS settings using following properties:
+                      * accessControlAllowOrigin : Array[String]
+                      * accessControlAllowOriginRegex : Array[String]
+                      * accessControlExposeHeaders: Array[String]
+                      * accessControlMaxAge : Integer
+                      * accessControlAllowCredentials : Boolean
+                      * accessControlAllowMethods : Array[String]
+                      * accessControlAllowHeaders : Array[String]
+                      * errorStatusCode : Integer
+                        "
+                        additionalProperties: true
+                      resourceReferences:
+                        type: array
+                        default: [ ]
+                        items:
+                          type: object
+                          properties:
+                            namespace:
+                              type: string
+                              default: "default"
+                              description: Namespace where the CustomResource is defined
+                            resource:
+                              type: string
+                              description: The CustomResource name
+                            name:
+                              type: string
+                              description: The name of resource plugin into the CustomResource
+                          required: [ "name", "resource" ]
+                      resources:
+                        type: object
+                        additionalProperties:
+                          type: object
+                          properties:
+                            resource:
+                              type: string
+                              description: resource plugin id (oauth2, oauth2-am-resource...)
+                            configuration:
+                              type: object
+                              description: Map containing the pluging configuration (map structure based on the kind of plugin)
+                              x-kubernetes-preserve-unknown-fields: true
+                          required: [ "resource", "configuration" ]
+                      vhosts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            host:
+                              type: string
+                            path:
+                              type: string
+                            enabled:
+                              type: boolean
+                        minItems: 1
+                      paths:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            prefix:
+                              type: string
+                            rules:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  methods:
+                                    type: array
+                                    items:
+                                      type: string
+                                  # if policy & policy-ref are defined, policy is used because more specific
+                                  policyReference:
+                                    type: object
+                                    properties:
+                                      namespace:
+                                        type: string
+                                        default: default
+                                        description: Namespace where the CustomResource is defined, take namespace of the gravitee-service custom resource if missing
+                                      resource:
+                                        type: string
+                                        description: The CustomResource name
+                                      name:
+                                        type: string
+                                        description: The name of security policy into the CustomResource
+                                  policy:
+                                    type: string
+                                    description: Plugin identifier (jwt, rate-limit...)
+                                  configuration:
+                                    type: object
+                                    description: Map containing the pluging configuration (map structure based on the kind of plugin)
+                                    x-kubernetes-preserve-unknown-fields: true
+                      endpoints:
+                        type: object
+                        additionalProperties:
+                          type: object
+                          properties:
+                            loadBalancing:
+                              type: string
+                              default: round-robin
+                              enum: ["round-robin", "random", "weighted-round-robin", "weighted-random"]
+                            backendServices:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    enum: ["kubernetes"]
+                                    description: "type of service (currently only 'kubernetes' is defined)"
+                                  protocol:
+                                    type: string
+                                    enum: ["HTTP", "HTTPS", "GRPC"]
+                                  namespace:
+                                    type: string
+                                    description: "namespace of the service (default: current namespace)"
+                                  name:
+                                    type: string
+                                    description: "name of the kubernetes service"
+                                  port:
+                                    type: integer
+                                    fomat: int32
+                                  target:
+                                    type: string
+                                  weight:
+                                    type: integer
+                                    fomat: int32
+                                  configuration:
+                                    type: object
+                                    properties:
+                                      httpClient:
+                                        type: object
+                                        description: "
+                                          HttpClient configuration to apply for the backend service client:
+                                            * connectTimeout: 5000
+                                            * idleTimeout: 60000
+                                            * keepAlive: true
+                                            * readTimeout: 10000
+                                            * pipelining: false
+                                            * maxConcurrentConnections: 100
+                                            * useCompression: true
+                                            * followRedirects: false
+                                          "
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      httpSslOptions:
+                                        type: object
+                                        description: "
+                                           HttpClient SSL options to apply for the backend service client:
+                                             * trustAll: false
+                                             * hostnameVerifier: false
+                                             * trustStore:
+                                                 type: PEM
+                                                 content: <secret name>
+                                             * keyStore:
+                                                 type: PEM
+                                                 certContent: <secret name>
+                                                 keyContent: <secret name>
+                                          "
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      httpProxy:
+                                        type: object
+                                        description: HttpProxy options
+                                        x-kubernetes-preserve-unknown-fields: true
+                            configuration:
+                              type: object
+                              properties:
+                                httpClient:
+                                  type: object
+                                  description: "
+                                    HttpClient configuration to apply for the backend service client:
+                                      * connectTimeout: 5000
+                                      * idleTimeout: 60000
+                                      * keepAlive: true
+                                      * readTimeout: 10000
+                                      * pipelining: false
+                                      * maxConcurrentConnections: 100
+                                      * useCompression: true
+                                      * followRedirects: false
+                                    "
+                                  x-kubernetes-preserve-unknown-fields: true
+                                httpSslOptions:
+                                  type: object
+                                  description: "
+                                     HttpClient SSL options to apply for the backend service client:
+                                       * trustAll: false
+                                       * hostnameVerifier: false
+                                       * trustStore:
+                                           type: PEM
+                                           content: <secret name>
+                                       * keyStore:
+                                           type: PEM
+                                           certContent: <secret name>
+                                           keyContent: <secret name>
+                                    "
+                                  x-kubernetes-preserve-unknown-fields: true
+                                httpProxy:
+                                  type: object
+                                  description: HttpProxy options
+                                  x-kubernetes-preserve-unknown-fields: true
+
+                    required: [ "vhosts", "paths", "endpoints" ]
+            status:
+              type: object
+              properties:
+                services:
+                  type: integer
+                  format: int32
+                  description: Number of services definition provided by the resource
+                enabledServices:
+                  type: integer
+                  format: int32
+                  description: Number of services enabled
+                integration:
+                  type: object
+                  properties:
+                    observedGeneration:
+                      type: integer
+                      format: int64
+                      description: The generation of the resource
+                    state:
+                      type: string
+                      description: The integration state of the resource
+                    message:
+                      type: string
+                      description: Additional data about the state
+      subresources:
+        status: { }
+      additionalPrinterColumns:
+        - name: State
+          type: string
+          description: The integration state of the resource
+          jsonPath: .status.integration.state
+        - name: Message
+          type: string
+          description: Additional data about the state (may be empty)
+          jsonPath: .status.integration.message
+        - name: Enabled
+          type: string
+          description: Number of services definition enabled (may be empty)
+          jsonPath: .status.enabledServices
+        - name: Services
+          type: string
+          description: Number of services definition provided by the resource (may be empty)
+          jsonPath: .status.services
+  scope: Namespaced
+  names:
+    plural: gravitee-services
+    singular: gravitee-service
+    kind: GraviteeServices
+    shortNames:
+    - giosvc

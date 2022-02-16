@@ -1,0 +1,63 @@
+{{- if .Values.gkc.enabled -}}
+apiVersion: apps/v1
+kind: {{ .Values.gkc.type }}
+metadata:
+  name: {{ template "gravitee.gkc.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.gkc.image.tag | default .Chart.AppVersion | quote }}
+    app.kubernetes.io/component: "{{ .Values.gkc.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    {{- if .Values.gkc.deamonset.labels }}
+    {{- range $key, $value := .Values.gkc.deamonset.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- else }}
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: "{{ .Values.gkc.name }}"
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ template "gravitee.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: "{{ .Values.gkc.name }}"
+        {{- if .Values.gkc.deamonset.labels }}
+        {{- range $key, $value := .Values.gkc.deamonset.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- else }}
+        {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ template "apim.serviceAccount" . }}
+      affinity: {{ toYaml .Values.gkc.deamonset.affinity | nindent 8 }}
+      nodeSelector: {{ toYaml .Values.gkc.deamonset.nodeSelector | nindent 8 }}
+      tolerations: {{ toYaml .Values.gkc.deamonset.tolerations | nindent 8 }}
+      {{- if .Values.gkc.priorityClassName }}
+      priorityClassName: {{ .Values.gateway.priorityClassName  }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.gkc.terminationGracePeriod }}
+      {{- if .Values.gkc.image.pullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.gkc.image.pullSecrets }}
+      {{- end }}
+      containers:
+        - name: {{ template "gravitee.gkc.fullname" . }}
+          image: "{{ .Values.gkc.image.repository }}:{{ default .Chart.AppVersion .Values.gkc.image.tag }}"
+          imagePullPolicy: {{ .Values.gkc.image.pullPolicy }}
+          securityContext: {{ toYaml ( .Values.gkc.securityContext | default .Values.gkc.deamonset.securityContext ) | nindent 12 }}
+          livenessProbe: {{ toYaml .Values.gkc.livenessProbe | nindent 12 }}
+          readinessProbe: {{ toYaml .Values.gkc.readinessProbe | nindent 12 }}
+          startupProbe: {{ toYaml .Values.gkc.startupProbe | nindent 12 }}
+          resources: {{ toYaml .Values.gkc.resources | nindent 12 }}
+{{- end }}

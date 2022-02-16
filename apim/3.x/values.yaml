@@ -13,13 +13,41 @@ apim:
     - apiGroups:
         - ""
       resources:
-        - configmaps
         - secrets
       verbs:
         - get
         - list
         - watch
-        
+    - apiGroups:
+        - "networking.k8s.io"
+      resources:
+        - ingresses
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - ""
+      resources:
+        - configmaps
+        - events
+      verbs:
+        - get
+        - list
+        - watch
+        - create
+        - update
+        - delete
+    - apiGroups:
+        - "gravitee.io"
+      resources:
+        - gravitee-services
+        - gravitee-plugins
+        - gravitee-gateways
+      verbs:
+        - get
+        - list
+        - watch
 chaos:
   enabled: false
 
@@ -907,6 +935,30 @@ gateway:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+
+gkc:
+  enabled: true
+  type: DaemonSet
+  name: gkc
+  reloadOnConfigChange: true
+  deamonset:
+    annotations: {}
+    labels: {}
+    affinity: {}
+    nodeSelector: {}
+    tolerations: []
+    securityContext:
+      runAsUser: 1001
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+  image:
+    repository: graviteeio/gkc
+#    tag: latest
+    pullPolicy: Always
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
 
 portal:
   enabled: true

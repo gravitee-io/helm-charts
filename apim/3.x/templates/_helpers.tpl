@@ -31,6 +31,21 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create a default fully qualified gravitee controller name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "gravitee.gkc.fullname" -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-%s" .Values.fullnameOverride .Values.gkc.name | trunc 63 | trimSuffix "-" -}}
+{{- else if contains $name .Release.Name -}}
+{{- printf "%s-%s" .Release.Name .Values.gkc.name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s-%s" .Release.Name $name .Values.gkc.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified gateway name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
