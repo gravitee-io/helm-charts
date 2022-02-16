@@ -265,7 +265,7 @@ data:
         </network>
     </hazelcast>
 
-  {{- if .Values.api.logging.debug }}
+
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
 
@@ -319,5 +319,4 @@ data:
             </root>
 
         </configuration>
-  {{- end }}
 {{- end -}}
