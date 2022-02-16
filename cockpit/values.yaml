@@ -125,7 +125,6 @@ api:
   enabled: true
   name: api
   logging:
-    debug: false
     stdout:
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
     file:
@@ -138,7 +137,7 @@ api:
             <maxHistory>30</maxHistory>
         </rollingPolicy>
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%n"
-    graviteeLevel: DEBUG
+    graviteeLevel: INFO
     jettyLevel: INFO
   restartPolicy: OnFailure
   reloadOnConfigChange: true
