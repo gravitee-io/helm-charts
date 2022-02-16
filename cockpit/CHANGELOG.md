@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 ### 1.6.9
 
 - [X] Ensure additional jar doesn't exist before downloading it
+- [X] Define additional loggers in logback configuration
 
 ### 1.6.8
 - Fix swagger generator default image name
