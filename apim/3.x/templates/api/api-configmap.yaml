@@ -342,13 +342,13 @@ data:
       secret: {{ .Values.jwtSecret }}
       {{- if .Values.jwt }}
       # Allows to define the end of validity of the token in seconds (default 604800 = a week)
-      #expire-after: 604800
+      expire-after: {{ .Values.jwt.expireAfter | default 604800 }}
       # Allows to define the end of validity of the token in seconds for email registration (default 86400 = a day)
-      #email-registration-expire-after: 86400
+      email-registration-expire-after: {{ .Values.jwt.emailRegistrationExpireAfter | default 86400 }}
       # Allows to define issuer (default gravitee-management-auth)
-      #issuer: gravitee-management-auth
+      issuer: {{ .Values.jwt.issuer | default "gravitee-management-auth" }}
       # Allows to define cookie context path (default /)
-      #cookie-path: /
+      cookie-path: {{ ((.Values.jwt.cookie).path) | default "/" }}
       # Allows to define cookie domain (default "")
       {{- if .Values.jwt.cookie }}
       cookie-domain: {{ .Values.jwt.cookie.domain }}
@@ -356,7 +356,7 @@ data:
       cookie-domain: {{ index .Values.ui.ingress.hosts 0 }}
       {{- end }}
       # Allows to define if cookie secure only (default false)
-      #cookie-secure: true
+      cookie-secure: {{ ((.Values.jwt.cookie).secure) | default false }}
       {{- end }}
 
     swagger:
