@@ -2,14 +2,13 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
-### 3.1.35
-
-- [X] Ease the integration of Gravitee.io Cockpit
-- Update gravitee.io APIM v3.15.2
-
 ### 3.1.34
 
-- [X] Ensure additional jar doesn't exist before downloading it
+- Ease the integration of Gravitee.io Cockpit
+- Ensure additional jar doesn't exist before downloading it
+- Handle JWT attributes in APIM Management API configmap
+
+- Update Gravitee.io APIM v3.15.2
 
 ### 3.1.33
 
