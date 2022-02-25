@@ -1,0 +1,94 @@
+version: 2.1
+
+jobs:
+  lint-charts:
+    docker:
+      - image: quay.io/helmpack/chart-testing:v3.1.1
+    steps:
+      - checkout
+      - run:
+          command: ct lint --config tests/kind/ct.yaml
+
+  helm-unittests:
+    docker:
+      - image: cimg/base:2021.04
+    resource_class: small
+    steps:
+      - checkout
+      - run:
+          name: Install Helm
+          command: |
+            curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+            helm version
+      - run:
+          name: Install Helm Unittest
+          command: |
+            helm plugin install https://github.com/quintush/helm-unittest
+      - run:
+          name: Run Helm Linter
+          command: |
+            helm lint apim/apim3
+            helm lint am
+            helm lint cockpit
+            helm lint ae
+      - run:
+          name: Run APIM unit tests
+          command: |
+            helm unittest -3 -f 'tests/**/*.yaml' apim/apim3
+      - run:
+          name: Run AM unit tests
+          command: |
+            helm unittest -3 -f 'tests/*.yaml' am
+
+  helm-chart-testing:
+    machine:
+      image: 'ubuntu-2004:202101-01'
+    resource_class: medium
+    environment:
+      CLUSTER_NAME: chart-testing
+      NODE_K8S_VERSION: v1.20.2@sha256:8f7ea6e7642c0da54f04a7ee10431549c0257315b3a634f6ef2fecaaedb19bab
+      KIND_VERSION: v0.11.1
+      WAIT_FOR_CONTROLPLANE: 60s
+    steps:
+      - checkout
+      - run:
+          name: Install Helm
+          command: |
+            curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+            helm version
+      - run:
+          name: Install Kubectl
+          command: |
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            ./kubectl version --client=true
+      - run:
+          name: Install Charts
+          command: tests/kind/e2e-kind.sh
+#          name: Install Kind
+#          command: |
+#            curl -Lo ./kind https://kind.sigs.k8s.io/dl/${KIND_VERSION}/kind-linux-amd64
+#            chmod +x ./kind
+#            ./kind --version
+#      - run:
+#          name: Create Kind Cluster
+#          command: |
+#            echo 'Delete existing cluster'
+#            ./kind delete cluster --name "$CLUSTER_NAME" > /dev/null 2>&1 || true
+
+#            echo 'Create new Kind cluster'
+#            ./kind create cluster --name "$CLUSTER_NAME" --kubeconfig $HOME/$CLUSTER_NAME.kubeconfig --config tests/kind/kind-config.yaml --image "kindest/node:$NODE_K8S_VERSION" --wait $WAIT_FOR_CONTROLPLANE
+
+#            cat $HOME/$CLUSTER_NAME.kubeconfig
+
+#            ./kubectl cluster-info --context kind-chart-testing --kubeconfig $HOME/$CLUSTER_NAME.kubeconfig
+
+workflows:
+  build_branch: 
+    jobs:
+      - lint-charts
+      - helm-unittests
+      - helm-chart-testing
+#      - run_integration_tests:
+#          requires:
+#            - run_helm_tests
