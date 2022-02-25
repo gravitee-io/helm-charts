@@ -1169,7 +1169,9 @@ ui:
     runAsNonRoot: true
   ingress:
     enabled: true
-    path: /console(/|$)(.*)
+    basePath: /console
+    # this will be appended to the `basePath`, to create a regex for the `nginx.ingress.kubernetes.io/rewrite-target`
+    pathRegex: (/|$)(.*)
     # Used to create an Ingress record.
     hosts:
       - apim.example.com
