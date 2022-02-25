@@ -79,8 +79,36 @@ jobs:
             -   store_test_results:
                     path: apim-result.xml
 
+    lint-charts:
+        parameters:
+          folder:
+            type: string
+            default: ''
+            description: The name of the folder where lint will be executed
+        docker:
+            -   image: cimg/base:stable
+        resource_class: small
+        steps:
+            - checkout
+            -   helm/install-helm-client:
+                    version: v3.7.1
+            -   lint:
+                  folder: << parameters.folder >>
+
 workflows:
     test-charts:
         jobs:
-            - test-am-charts
-            - test-apim-charts
+            - test-am-charts:
+                name: AM - Lint & Test
+            - test-apim-charts:
+                name: APIM - Lint & Test
+            - lint-charts:
+                name: AE - Lint
+                folder: ae
+            - lint-charts:
+                name: Cockpit - Lint
+                folder: cockpit
+            - lint-charts:
+                name: Designer - Lint
+                folder: designer
+
