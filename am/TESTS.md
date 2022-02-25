@@ -1,13 +1,13 @@
 ## How to run tests
 
-First install `unittest` helm plugin 
+First, install `unittest` helm plugin 
 
-```
-$ helm plugin install https://github.com/quintush/helm-unittest
+```shell
+helm plugin install https://github.com/quintush/helm-unittest
 ```
 
-On `am` directory, run :
+Inside `am` directory, run:
 
-```
->am$ helm unittest .
+```shell
+helm unittest .
 ```
