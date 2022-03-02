@@ -4,7 +4,12 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 
 ### 3.1.34
 
-- [X] Ensure additional jar doesn't exist before downloading it
+- Ease the integration of Gravitee.io Cockpit
+- Ensure additional jar doesn't exist before downloading it
+- Handle JWT attributes in APIM Management API configmap
+- Add an option to disable the newsletter popup
+
+- Update Gravitee.io APIM v3.15.2
 
 ### 3.1.33
 

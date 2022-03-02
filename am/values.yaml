@@ -115,6 +115,28 @@ management:
 oauth2:
   type: mongodb
 
+# Support for Gravitee.io Cockpit (cockpit.gravitee.io)
+cockpit:
+  enabled: false
+  keystore: 
+    value: "base64 encoded value of the keystore provided by Cockpit (required)"
+    password:
+      #value: "keystores password provided by Cockpit"
+      #valueFrom: 
+        #secretKeyRef:
+        #configMapKeyRef:
+  #truststore: 
+    #value: base64 encoded value of the truststore provided by Cockpit (optional)
+    #password:
+      #value: "truststore password provided by Cockpit"
+      #valueFrom: 
+        #secretKeyRef:
+        #configMapKeyRef:
+  url: https://cockpit.gravitee.io
+  controller: https://cockpit-controller.gravitee.io
+  ssl:
+    verifyHostname: true
+
 api:
   enabled: true
   name: management-api
