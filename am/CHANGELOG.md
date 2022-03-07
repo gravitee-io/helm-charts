@@ -6,6 +6,9 @@ This file documents all notable changes to [Gravitee.io Access Management 3.x](h
 
 - [X] Ease the integration of Gravitee.io Cockpit
 - [X] Allow configuration of cookie properties
+- [X] Introduce values to enable and configure notification about domain certificates expiry 
+- [X] Allow to configure ssl.trust and ssl.protocols through the values.yaml
+
 
 ### 1.0.35
 

@@ -144,6 +144,57 @@ data:
         {{- end }}
       {{- end }}
       
+  {{- if .Values.api.services }}
+    {{- if .Values.api.services.notifier }}
+      notifier:
+{{ toYaml .Values.api.services.notifier | indent 8 }}
+    {{- end }}
+    {{- if .Values.api.services.certificate }}
+      certificate:
+        enabled: {{ .Values.api.services.certificate.enabled | default true}}
+        {{- if .Values.api.services.certificate.enabled }}
+        cronExpression: {{ .Values.api.services.certificate.cronExpression | default "0 0 5 * * *" }}
+        expiryThresholds: {{ .Values.api.services.certificate.expiryThresholds | default "20,15,10,5,1" }}
+          {{- if .Values.api.services.certificate.expiryEmailSubject }}
+        expiryEmailSubject: {{ .Values.api.services.certificate.expiryEmailSubject | quote }}
+          {{- end }}
+        {{- end }}
+    {{- end }}
+  {{- end }}
+
+    notifiers:
+      email: 
+        enabled: {{ .Values.api.notifiers.email.enabled }}
+        {{- if or .Values.api.notifiers.email.enabled .Values.smtp.enabled }}
+        host: {{ .Values.api.notifiers.email.host | default .Values.smtp.host }}
+        subject: {{ .Values.api.notifiers.email.subject | default .Values.smtp.subject | quote }}
+        port: {{ .Values.api.notifiers.email.port | default .Values.smtp.port }}
+        from: {{ .Values.api.notifiers.email.from | default .Values.smtp.from }}
+        {{- if or .Values.api.notifiers.email.username .Values.api.notifiers.email.password }}
+        username: {{ .Values.api.notifiers.email.username }}
+        password: {{ .Values.api.notifiers.email.password }}
+        {{- else if or .Values.smtp.username .Values.smtp.password }}
+        username: {{ .Values.smtp.username }}
+        password: {{ .Values.smtp.password }}
+        {{- end }}
+        startTLSEnabled: {{ .Values.api.notifiers.email.startTLSEnabled | default .Values.smtp.properties.starttlsEnable }}
+        {{- if .Values.api.notifiers.email.sslTrustAll }}
+        sslTrustAll: {{ .Values.api.notifiers.email.sslTrustAll }}
+        {{- else if eq (.Values.smtp.properties.sslTrust | default "") "*" }}
+        sslTrustAll: true
+        {{- else }}
+        sslTrustAll: false
+        {{- end }}
+        {{- if .Values.api.notifiers.email.sslKeyStore }}
+        sslKeyStore: {{ .Values.api.notifiers.email.sslKeyStore }}
+        {{- end }}
+        {{- if .Values.api.notifiers.email.sslKeyStorePassword }}
+        sslKeyStorePassword: {{ .Values.api.notifiers.email.sslKeyStorePassword }}
+        {{- end }}
+        {{- end }}
+      ui:
+        enabled: {{ .Values.api.notifiers.ui.enabled }}
+    
     # SMTP configuration used to send mails
     email:
       enabled: {{ .Values.smtp.enabled }}
@@ -161,6 +212,12 @@ data:
         starttls.enable: {{ .Values.smtp.properties.starttlsEnable }}
         {{- if .Values.smtp.properties.localhost }}
         localhost: {{ .Values.smtp.properties.localhost }}
+        {{- end }}
+        {{- if .Values.smtp.properties.sslTrust }}
+        ssl.trust: {{ .Values.smtp.properties.sslTrust }}
+        {{- end }}
+        {{- if .Values.smtp.properties.sslProtocols }}
+        ssl.protocols: {{ .Values.smtp.properties.sslProtocols }}
         {{- end }}
       {{- end }}
 
