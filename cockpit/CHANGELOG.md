@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 ### 1.6.10
 
 - [X] Fix default plan attributes
+- [X] Add API Designer default model creation limit
 
 ### 1.6.9
 

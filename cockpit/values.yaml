@@ -355,14 +355,17 @@ api:
       maxEnvs: 2
       isDefault: 'true'
       dataRetentionDuration: 1
+      maxDesignerModelsCount: 1
     medium:
       name: 'Medium'
       maxEnvs: 4
       dataRetentionDuration: 30
+      maxDesignerModelsCount: 1
     large:
       name: 'Large'
       maxEnvs: -1
       dataRetentionDuration: 182
+      maxDesignerModelsCount: 1
   services:
     healthCheckPurge:
       cron: "0 0 0 */1 * *"
