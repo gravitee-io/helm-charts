@@ -354,20 +354,23 @@ api:
       name: 'Small'
       maxEnvs: 2
       isDefault: 'true'
-      healthCheckRetentionDuration: 1
+      dataRetentionDuration: 1
+      maxDesignerModelsCount: 1
     medium:
       name: 'Medium'
       maxEnvs: 4
-      healthCheckRetentionDuration: 30
+      dataRetentionDuration: 30
+      maxDesignerModelsCount: 1
     large:
       name: 'Large'
       maxEnvs: -1
-      healthCheckRetentionDuration: 182
+      dataRetentionDuration: 182
+      maxDesignerModelsCount: 1
   services:
     healthCheckPurge:
       cron: "0 0 0 */1 * *"
       onPremise:
-        healthCheckRetentionDuration: -1
+        dataRetentionDuration: -1
 
 ui:
   enabled: true
