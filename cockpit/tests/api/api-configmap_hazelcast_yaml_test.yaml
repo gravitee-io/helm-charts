@@ -1,0 +1,95 @@
+suite: Cockpit - API - ConfigMap hazelcast.yaml config
+templates:
+  - "api/api-configmap.yaml"
+tests:
+  - it: should generate nothing when api is disabled
+    template: api/api-configmap.yaml
+    set:
+      api:
+        enabled: false
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should apply labels
+    template: api/api-configmap.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: metadata
+          value:
+            name: my-cockpit-api
+            labels:
+              app.kubernetes.io/name: cockpit
+              app.kubernetes.io/instance: my-cockpit
+              app.kubernetes.io/version: 1.0.0-app
+              app.kubernetes.io/component: api
+              app.kubernetes.io/managed-by: Helm
+              helm.sh/chart: cockpit-1.0.0-chart
+
+  - it: should apply default hazelcast configuration
+    template: api/api-configmap.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: data.[hazelcast.xml]
+          value: |
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hazelcast xmlns="http://www.hazelcast.com/schema/config"
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                       xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                       http://www.hazelcast.com/schema/config/hazelcast-config-4.2.xsd">
+                <cluster-name>graviteeio-cockpit</cluster-name>
+                <properties>
+                    <property name="hazelcast.discovery.enabled">true</property>
+                    <property name="hazelcast.max.wait.seconds.before.join">3</property>
+                    <property name="hazelcast.member.list.publish.interval.seconds">5</property>
+                    <property name="hazelcast.socket.client.bind.any">false</property>
+                </properties>
+
+                <queue name="commands-*">
+                    <backup-count>0</backup-count>
+                    <async-backup-count>1</async-backup-count>
+                </queue>
+
+                <map name="cockpit.channels.*">
+                    <backup-count>0</backup-count>
+                    <async-backup-count>1</async-backup-count>
+                </map>
+
+                <reliable-topic name="cockpit.primaryChannels">
+                    <read-batch-size>10</read-batch-size>
+                </reliable-topic>
+
+                <cp-subsystem>
+                    <cp-member-count>0</cp-member-count>
+                </cp-subsystem>
+
+                <network>
+                    <join>
+                        <multicast enabled="false"/>
+                        <tcp-ip enabled="false"/>
+                        <kubernetes enabled="true">
+                            <namespace>unittest</namespace>
+                            <service-name>my-cockpit-api</service-name>
+                        </kubernetes>
+                    </join>
+                </network>
+            </hazelcast>
