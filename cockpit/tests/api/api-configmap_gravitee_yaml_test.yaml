@@ -78,6 +78,7 @@ tests:
                 cron: 0 0 0 */1 * *
                 onPremise:
                   dataRetentionDuration: -1
+         
             reCaptcha:
               enabled: false
   
@@ -240,6 +241,7 @@ tests:
                 cron: 0 0 0 */1 * *
                 onPremise:
                   dataRetentionDuration: -1
+
             reCaptcha:
               enabled: false
             
@@ -381,6 +383,7 @@ tests:
                 cron: 0 0 0 */1 * *
                 onPremise:
                   dataRetentionDuration: -1
+ 
             reCaptcha:
               enabled: false
             
@@ -529,6 +532,7 @@ tests:
                 cron: 0 0 0 */1 * *
                 onPremise:
                   dataRetentionDuration: -1
+            
             reCaptcha:
               enabled: false
             
@@ -674,6 +678,7 @@ tests:
             http:
               api:
                 entrypoint: my-entrypoint
+            
             reCaptcha:
               enabled: false
             
@@ -819,6 +824,7 @@ tests:
                 cron: 0 0 0 */1 * *
                 onPremise:
                   dataRetentionDuration: -1
+            
             reCaptcha:
               enabled: true
               minScore: "0.5"

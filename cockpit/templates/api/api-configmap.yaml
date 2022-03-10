@@ -109,11 +109,10 @@ data:
         entrypoint: {{ .Values.api.http.api.entrypoint }}
     {{- end }}
 
-    {{- if .Values.api.reCaptcha.enabled }}
     reCaptcha:
+    {{- if .Values.api.reCaptcha.enabled }}
 {{ toYaml .Values.api.reCaptcha | indent 6 }}
     {{ else }}
-    reCaptcha:
       enabled: false
     {{- end }}
 
