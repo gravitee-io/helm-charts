@@ -1,0 +1,65 @@
+suite: Cockpit - Generator - ConfigMap config
+templates:
+  - "generator/generator-configmap.yaml"
+tests:
+  - it: should generate nothing when generator is disabled
+    template: generator/generator-configmap.yaml
+    set:
+      generator:
+        enabled: false
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should apply labels
+    template: generator/generator-configmap.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: metadata
+          value:
+            name: my-cockpit-swagger-generator
+            labels:
+              app.kubernetes.io/name: cockpit
+              app.kubernetes.io/instance: my-cockpit
+              app.kubernetes.io/version: 1.0.0-app
+              app.kubernetes.io/component: swagger-generator
+              app.kubernetes.io/managed-by: Helm
+              helm.sh/chart: cockpit-1.0.0-chart
+
+  - it: should generate default configuration
+    template: generator/generator-configmap.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - matchRegex:
+          path: data.[env.props]
+          pattern: "HOST=0.0.0.0"
+      - matchRegex:
+          path: data.[env.props]
+          pattern: "PORT=3003"
+      - matchRegex:
+          path: data.[env.props]
+          pattern: "APIZR_API_KEY_VALUE=api_key_value"
+      - matchRegex:
+          path: data.[env.props]
+          pattern: "LICENSE_KEY=license_value"
+      - matchRegex:
+          path: data.[env.props]
+          pattern: "LICENSE_EXPIRATION=license_expiration_date"
