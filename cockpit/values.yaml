@@ -286,7 +286,7 @@ api:
 #           - chart-example.local
         tls:
           - hosts:
-              - cockpit.example.com
+              - cockpit-controller.example.com
             secretName: api-custom-cert
       service:
         enabled: true
