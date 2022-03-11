@@ -1,0 +1,135 @@
+suite: Cockpit - API - ingress config
+templates:
+  - "api/api-ingress.yaml"
+tests:
+  - it: should generate nothing when api is disabled
+    template: api/api-ingress.yaml
+    set:
+      api:
+        enabled: false
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should generate nothing when ingress is disabled
+    template: api/api-ingress.yaml
+    set:
+      api:
+        enabled: true
+        ingress:
+          enabled: false
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should apply labels
+    template: api/api-ingress.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/component: api
+            app.kubernetes.io/instance: my-cockpit
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cockpit
+            app.kubernetes.io/version: 1.0.0-app
+            helm.sh/chart: cockpit-1.0.0-chart
+
+  - it: should apply default ingress configuration
+    template: api/api-ingress.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: extensions/v1beta1
+      - equal:
+          path: metadata.name
+          value: my-cockpit-api
+      - equal:
+          path: metadata.annotations
+          value:
+            kubernetes.io/ingress.class: nginx
+            nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+            nginx.ingress.kubernetes.io/eventsource: "true"
+            nginx.ingress.kubernetes.io/proxy-read-timeout: "21600"
+      - equal:
+          path: spec
+          value:
+            rules:
+              - host: cockpit.example.com
+                http:
+                  paths:
+                  - backend:
+                      serviceName: my-cockpit-api
+                      servicePort: 8063
+                    path: /management
+                    pathType: Prefix
+            tls:
+              - hosts:
+                  - cockpit.example.com
+                secretName: api-custom-cert
+
+  - it: should support Kubernetes 1.22 version
+    template: api/api-ingress.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    capabilities:
+      apiVersions:
+        - networking.k8s.io/v1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - equal:
+          path: metadata.name
+          value: my-cockpit-api
+      - equal:
+          path: metadata.annotations
+          value:
+            kubernetes.io/ingress.class: nginx
+            nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+            nginx.ingress.kubernetes.io/eventsource: "true"
+            nginx.ingress.kubernetes.io/proxy-read-timeout: "21600"
+      - equal:
+          path: spec
+          value:
+            rules:
+              - host: cockpit.example.com
+                http:
+                  paths:
+                    - backend:
+                        service:
+                          name: my-cockpit-api
+                          port:
+                            number: 8063
+                      path: /management
+                      pathType: Prefix
+            tls:
+              - hosts:
+                  - cockpit.example.com
+                secretName: api-custom-cert
