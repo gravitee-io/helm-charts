@@ -1,0 +1,65 @@
+suite: Cockpit - UI - ConfigMap config
+templates:
+  - "ui/ui-configmap.yaml"
+tests:
+  - it: should generate nothing when ui is disabled
+    template: ui/ui-configmap.yaml
+    set:
+      ui:
+        enabled: false
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should apply labels
+    template: ui/ui-configmap.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: metadata
+          value:
+            name: my-cockpit-ui
+            labels:
+              app.kubernetes.io/name: cockpit
+              app.kubernetes.io/instance: my-cockpit
+              app.kubernetes.io/version: 1.0.0-app
+              app.kubernetes.io/component: ui
+              app.kubernetes.io/managed-by: Helm
+              helm.sh/chart: cockpit-1.0.0-chart
+
+  - it: should generate default configuration
+    template: ui/ui-configmap.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: data.use-gzip
+          value: "true"
+      - equal:
+          path: data.gzip-level
+          value: "5"
+      - equal:
+          path: data.gzip-types
+          value: "*"
+      - matchRegex:
+          path: data.[config.json]
+          pattern: "\"baseURL\": \"https://cockpit.example.com/management\""
+      - matchRegex:
+          path: data.[config.json]
+          pattern: "\"loaderURL\": \"assets/images/gravitee-loader.gif\""
