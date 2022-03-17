@@ -125,7 +125,7 @@ spec:
               containerPort: {{ .Values.gateway.services.bridge.service.internalPort }}
             {{- end }}
             {{- if and .Values.gateway.services.core.http.enabled (or .Values.gateway.services.kubeController.enabled .Values.gateway.readinessProbe.apiSync) }}
-            - name: {{ .Values.gateway.name }}-hook
+            - name: {{ .Values.gateway.name }}-techapi
               containerPort: {{ .Values.gateway.services.core.http.port | default "18082" }}
             {{- end }}
           env:

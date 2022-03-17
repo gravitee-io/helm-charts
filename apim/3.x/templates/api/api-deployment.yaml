@@ -108,7 +108,7 @@ spec:
             - name: {{ .Values.api.service.internalPortName }}
               containerPort: {{ .Values.api.service.internalPort }}
             {{- if .Values.api.http.services.core.http.enabled }}
-            - name: {{ .Values.api.name }}-hook
+            - name: {{ .Values.api.name }}-techapi
               containerPort: {{ .Values.api.http.services.core.http.port | default "18083" }}
             {{- end }}
           env:

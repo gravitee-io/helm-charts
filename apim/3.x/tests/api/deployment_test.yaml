@@ -78,6 +78,11 @@ tests:
           value:
             - name: http
               containerPort: 8083
-            - name: api-hook
+            - name: api-techapi
               containerPort: 20202
+      - matchRegex:
+          path: spec.template.spec.containers[0].ports[1].name
+          # There is a k8s limitation that port names must be 15 characters or less
+          pattern: ^.{0,15}$
+
 
