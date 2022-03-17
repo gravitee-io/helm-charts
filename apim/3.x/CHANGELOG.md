@@ -6,6 +6,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 
 - Set default entrypoint for Portal Try-it and cURL to the url of the gateway
 - Set console `api` and `ui` urls automatically based on ingress values 
+- Expose technical API of the management API
 
 ### 3.1.34
 
