@@ -113,7 +113,7 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- if .pluginsToRemove }}
 - name: delete-plugins
   {{- toYaml .initContainers | nindent 2 }}
-  command: ['sh', '-c', "cd /opt/{{ .appName }}/plugins {{- range $key := .pluginsToRemove -}}
+  command: ['sh', '-c', "cd {{ .homeRoot }}{{ .homePath }}/plugins {{- range $key := .pluginsToRemove -}}
     {{ printf " && rm -f %s-*.zip" $key }}
   {{- end -}}"]
 {{- end }}
@@ -136,12 +136,12 @@ Create volumeMounts for plugins
 {{- define "deployment.pluginVolumeMounts" -}}
 {{- if or .plugins .extPlugins }}
 - name: graviteeio-apim-plugins
-  mountPath: /opt/{{ .appName }}/plugins-ext
+  mountPath: {{ .homeRoot }}{{ .homePath }}/plugins-ext
 {{- end }}
-{{- $appName := .appName -}}
+{{- $homePath := .homePath -}}
 {{- range $key, $_ := .extPlugins }}
 - name: graviteeio-apim-{{ $key }}-ext
-  mountPath: /opt/{{ $appName }}/plugins-ext/ext/{{ $key }}
+  mountPath: {{ .homeRoot }}{{ $homePath }}/plugins-ext/ext/{{ $key }}
 {{- end }}
 {{- end -}}
 

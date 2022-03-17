@@ -1,0 +1,48 @@
+suite: Test Gateway is well configured with custom home directory
+templates:
+  - "gateway/gateway-deployment.yaml"
+  - "gateway/gateway-configmap.yaml"
+
+tests:
+  - it: Set Gateway home properly
+    template: gateway/gateway-deployment.yaml
+    set:
+      graviteeHomeRoot: /custom-root
+      management:
+        type: jdbc
+      jdbc:
+        url: jdbc:mysql://localhost:3306/gravitee
+        driver: https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.22/mysql-connector-java-8.0.22.jar
+      gateway:
+        homePath: /custom-graviteeio-gateway
+        logging:
+          debug: true
+        additionalPlugins:
+          - https://download.gravitee.io/aplugin.zip
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts
+          value:
+            - name: config
+              mountPath: /custom-root/custom-graviteeio-gateway/config/gravitee.yml
+              subPath: gravitee.yml
+            - name: config
+              mountPath: /custom-root/custom-graviteeio-gateway/config/logback.xml
+              subPath: logback.xml
+            - name: graviteeio-apim-repository-jdbc-ext
+              mountPath: /custom-root/custom-graviteeio-gateway/plugins/ext/repository-jdbc
+            - name: graviteeio-apim-plugins
+              mountPath: /custom-root/custom-graviteeio-gateway/plugins-ext
+      - equal:
+          path: spec.template.spec.containers[0].env
+          value:
+            - name: GRAVITEE_PLUGINS_PATH_0
+              value: '${gravitee.home}/plugins'
+            - name: GRAVITEE_PLUGINS_PATH_1
+              value: '${gravitee.home}/plugins-ext'
+            - name: GRAVITEE_HOME
+              value: /custom-root/custom-graviteeio-gateway

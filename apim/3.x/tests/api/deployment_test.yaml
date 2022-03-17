@@ -20,6 +20,8 @@ tests:
           value:
             - name: portal.entrypoint
               value: https://apim.example.com/gateway
+            - name: GRAVITEE_HOME
+              value: /opt/graviteeio-management-api
       - isEmpty:
           # It should not contain init containers by default
           path: spec.template.spec.initContainers

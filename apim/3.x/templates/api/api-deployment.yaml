@@ -83,7 +83,7 @@ spec:
         {{- $url := printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-%s.zip"  (.Values.redis.repositoryVersion | default .Values.api.image.tag | default .Chart.AppVersion ) -}}
         {{- $plugins = append $plugins $url -}}
       {{- end -}}
-      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-management-api" "pluginsToRemove" .Values.api.removePlugins "initContainers" $initContainers -}}
+      {{- $pluginParams := dict "plugins" $plugins "homeRoot" .Values.graviteeHomeRoot "homePath" .Values.api.homePath "pluginsToRemove" .Values.api.removePlugins "initContainers" $initContainers -}}
       {{- if or .Values.api.extraInitContainers $plugins .Values.jdbc.driver }}
       initContainers:
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
@@ -124,14 +124,14 @@ spec:
             - name: gravitee_cockpit_keystore_type
               value: pkcs12
             - name: gravitee_cockpit_keystore_path
-              value: /opt/graviteeio-management-api/cockpit/keystore.p12
+              value: {{ .Values.graviteeHomeRoot }}{{ .Values.api.homePath }}/cockpit/keystore.p12
             - name: gravitee_cockpit_keystore_password
               {{- toYaml .Values.cockpit.keystore.password | nindent 14}}
             {{- if .Values.cockpit.truststore }}
             - name: gravitee_cockpit_truststore_type
               value: pkcs12
             - name: gravitee_cockpit_truststore_path
-              value: /opt/graviteeio-management-api/cockpit/truststore.p12
+              value: {{ .Values.graviteeHomeRoot }}{{ .Values.api.homePath }}/cockpit/truststore.p12
             - name: gravitee_cockpit_truststore_password
               {{- toYaml .Values.cockpit.truststore.password | nindent 14}}
             {{- end }}
@@ -142,6 +142,8 @@ spec:
             - name: portal.entrypoint
               value: "https://{{ index .Values.gateway.ingress.hosts 0 }}{{ .Values.gateway.ingress.path }}"
             {{- end }}
+            - name: GRAVITEE_HOME
+              value: {{ .Values.graviteeHomeRoot }}{{ .Values.api.homePath }}
 {{- if .Values.api.env | default .Values.api.deployment.extraEnvs }}
 {{ toYaml ( .Values.api.env | default .Values.api.deployment.extraEnvs ) | indent 12 }}
 {{- end }}
@@ -167,20 +169,20 @@ spec:
           resources: {{ toYaml .Values.api.resources | nindent 12 }}
           volumeMounts:
             - name: config
-              mountPath: /opt/graviteeio-management-api/config/gravitee.yml
+              mountPath: {{ .Values.graviteeHomeRoot }}{{ .Values.api.homePath }}/config/gravitee.yml
               subPath: gravitee.yml
           {{- if .Values.api.logging.debug }}
             - name: config
-              mountPath: /opt/graviteeio-management-api/config/logback.xml
+              mountPath: {{ .Values.graviteeHomeRoot }}{{ .Values.api.homePath }}/config/logback.xml
               subPath: logback.xml
           {{- end }}
           {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
             - name: graviteeio-apim-repository-jdbc-ext
-              mountPath: /opt/graviteeio-management-api/plugins/ext/repository-jdbc
+              mountPath: {{ .Values.graviteeHomeRoot }}{{ .Values.api.homePath }}/plugins/ext/repository-jdbc
           {{- end }}
           {{- if .Values.cockpit.enabled }}
             - name: gravitee-cockpit-certificates
-              mountPath: /opt/graviteeio-management-api/cockpit
+              mountPath: {{ .Values.graviteeHomeRoot }}{{ .Values.api.homePath }}/cockpit
               readOnly: true
           {{- end }}
           {{- include "deployment.pluginVolumeMounts" $pluginParams | indent 12 }}

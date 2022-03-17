@@ -42,6 +42,9 @@ adminEmail:
 adminFirstName:
 adminLastName:
 
+# Define the root folder in which the Management API and the Gateway will be deployed
+graviteeHomeRoot: /opt
+
 extraInMemoryUsers: |
   - user:
     username: user
@@ -398,6 +401,8 @@ cockpit:
 api:
   enabled: true
   name: api
+  # Define the path at which the Management API will be deployed, it will be concatenated with `graviteeHomeRoot`
+  homePath: /graviteeio-management-api
   logging:
     debug: false
     stdout:
@@ -630,6 +635,8 @@ gateway:
   enabled: true
   type: Deployment
   name: gateway
+  # Define the path at which the Gateway will be deployed, it will be concatenated with `graviteeHomeRoot`
+  homePath: /graviteeio-gateway
   logging:
     debug: false
     stdout:

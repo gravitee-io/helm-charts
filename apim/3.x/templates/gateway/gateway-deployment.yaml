@@ -92,7 +92,7 @@ spec:
         {{- $plugins = append $plugins $rateLimitPlugin -}}
       {{- end -}}
 
-      {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins "initContainers" $initContainers -}}
+      {{- $pluginParams := dict "plugins" $plugins "homeRoot" .Values.graviteeHomeRoot "homePath" .Values.gateway.homePath "pluginsToRemove" .Values.gateway.removePlugins "initContainers" $initContainers -}}
       {{- if or .Values.gateway.extraInitContainers $plugins .Values.jdbc.driver }}
       initContainers:
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
@@ -141,6 +141,8 @@ spec:
             - name: KUBERNETES_AUTH_TRYSERVICEACCOUNT
               value: "true"
             {{- end }}
+            - name: GRAVITEE_HOME
+              value: {{ .Values.graviteeHomeRoot }}{{ .Values.gateway.homePath }}
 {{- if .Values.gateway.env | default .Values.gateway.deployment.extraEnvs }}
 {{ toYaml ( .Values.gateway.env | default .Values.gateway.deployment.extraEnvs ) | indent 12 }}
 {{- end }}
@@ -185,16 +187,16 @@ spec:
           resources: {{ toYaml .Values.gateway.resources | nindent 12 }}
           volumeMounts:
             - name: config
-              mountPath: /opt/graviteeio-gateway/config/gravitee.yml
+              mountPath: {{ .Values.graviteeHomeRoot }}{{ .Values.gateway.homePath}}/config/gravitee.yml
               subPath: gravitee.yml
           {{- if .Values.gateway.logging.debug }}
             - name: config
-              mountPath: /opt/graviteeio-gateway/config/logback.xml
+              mountPath: {{ .Values.graviteeHomeRoot }}{{ .Values.gateway.homePath}}/config/logback.xml
               subPath: logback.xml
           {{- end }}
           {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
             - name: graviteeio-apim-repository-jdbc-ext
-              mountPath: /opt/graviteeio-gateway/plugins/ext/repository-jdbc
+              mountPath: {{ .Values.graviteeHomeRoot }}{{ .Values.gateway.homePath}}/plugins/ext/repository-jdbc
           {{- end }}
           {{- include "deployment.pluginVolumeMounts" $pluginParams | indent 12 }}
           {{- with .Values.gateway.extraVolumeMounts }}

@@ -7,7 +7,9 @@ tests:
   - it: Check that volumes are defined
     template: gateway/gateway-deployment.yaml
     set:
+        graviteeHomeRoot: /opt
         gateway:
+            homePath: /graviteeio-gateway
             additionalPlugins:
             - https://d.g.io/toto.zip
     asserts:
