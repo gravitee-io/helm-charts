@@ -181,6 +181,10 @@ See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongo
 | gateway.enabled | bool | `true` |  |
 | gateway.image.pullPolicy | string | `"Always"` |  |
 | gateway.image.repository | string | `"graviteeio/am-gateway"` |  |
+|gateway.http.cookie.secure |bool |`false` |  |
+|gateway.http.cookie.sameSite |string |`"Lax"` |  |
+|gateway.http.cookie.session.name |string |`"GRAVITEE_IO_AM_SESSION"` |  |
+|gateway.http.cookie.session.timeout |int |`1800000` |  |
 | gateway.ingress.annotations."kubernetes.io/app-root" | string | `"/auth"` |  |
 | gateway.ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
 | gateway.ingress.annotations."kubernetes.io/rewrite-target" | string | `"/auth"` |  |
