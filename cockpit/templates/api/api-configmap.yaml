@@ -109,11 +109,10 @@ data:
         entrypoint: {{ .Values.api.http.api.entrypoint }}
     {{- end }}
 
-    {{- if .Values.api.reCaptcha.enabled }}
     reCaptcha:
+    {{- if .Values.api.reCaptcha.enabled }}
 {{ toYaml .Values.api.reCaptcha | indent 6 }}
     {{ else }}
-    reCaptcha:
       enabled: false
     {{- end }}
 
@@ -123,7 +122,6 @@ data:
 {{ toYaml .Values.api.controller.compatibleVersions | indent 8 }}
       {{- end }}
 
-    # SMTP configuration used to send mails
     email:
       enabled: {{ .Values.smtp.enabled }}
       {{- if .Values.smtp.enabled }} 
@@ -147,28 +145,14 @@ data:
 
     jwt:
       secret: {{ .Values.api.jwt.secret }}
-      # Allows to define the end of validity of the token in seconds (default 604800 = a week)
-      #expire-after: 604800
-      # Allows to define issuer (default gravitee-cockpit-auth)
-      #issuer: gravitee-cockpit-auth
-      # Allows to define cookie context path (default /)
-      #cookie-path: /
-      # Allows to define cookie domain (default "")
-      #cookie-domain: .gravitee.io
-      # Allows to define if cookie secure only (default false)
-      #cookie-secure: true
 
     platform:
       admin:
-        # Password value: adminadmin
         password: {{ .Values.api.platform.admin.password }}
 
     certificates:
-      # The default secret to use to protect passwords of generated account keystores (WARN: need to be changed).
       secret: QdjshTRmurH3YtzFCrYATkSG8H65xwah
-      # The principal used to generate account certificates.
       principal: 'EMAILADDRESS=contact@graviteesource.com, CN={accountId}, OU=Cockpit, O=GraviteeSource, L=Lille, ST=France, C=FR'
-      # Expiration delay in second (default 31536000 == 1 year)
       expire-after: 31536000
       key:
         alg: RSA
@@ -178,11 +162,11 @@ data:
 
     endpoints:
       loginPath: "/auth/cockpit?token={token}"
-      apim: # Default API Management endpoint to use to configure account when created
+      apim:
         name: "GraviteeAPIManagement"
         ui: "http://localhost:3000"
         api: "http://localhost:8083/management"
-      am: # Default Access Management endpoint to use to configure account when created
+      am:
         name: "GraviteeAccessManagement"
         ui: "http://localhost:4200"
         api: "http://localhost:8093/management"

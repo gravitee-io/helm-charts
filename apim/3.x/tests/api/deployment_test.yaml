@@ -57,3 +57,32 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].volumeMounts[1].mountPath
           value: /opt/graviteeio-management-api/plugins/ext/repository-jdbc
+
+  - it: Set containerPort with custom port if core service is enabled
+    template: api/api-deployment.yaml
+    set:
+      api:
+        http:
+          services:
+            core:
+              http:
+                enabled: true
+                port: 20202
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].ports
+          value:
+            - name: http
+              containerPort: 8083
+            - name: api-techapi
+              containerPort: 20202
+      - matchRegex:
+          path: spec.template.spec.containers[0].ports[1].name
+          # There is a k8s limitation that port names must be 15 characters or less
+          pattern: ^.{0,15}$
+
+

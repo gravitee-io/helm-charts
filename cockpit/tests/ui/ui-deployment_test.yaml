@@ -1,0 +1,173 @@
+suite: Cockpit - UI - deployment config
+templates:
+  - "ui/ui-deployment.yaml"
+  - "ui/ui-configmap.yaml"
+tests:
+  - it: should generate nothing when api is disabled
+    template: ui/ui-deployment.yaml
+    set:
+      ui:
+        enabled: false
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should apply labels
+    template: ui/ui-deployment.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/component: ui
+            app.kubernetes.io/instance: my-cockpit
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cockpit
+            app.kubernetes.io/version: 1.0.0-app
+            helm.sh/chart: cockpit-1.0.0-chart
+
+  - it: should generate default deployment config
+    template: ui/ui-deployment.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - isEmpty:
+          path: metadata.annotations
+      - equal:
+          path: spec.strategy
+          value:
+            type: RollingUpdate
+            rollingUpdate:
+              maxUnavailable: 1
+      - equal:
+          path: spec.selector
+          value:
+            matchLabels:
+              app.kubernetes.io/component: ui
+              app.kubernetes.io/instance: my-cockpit
+              app.kubernetes.io/name: cockpit
+      - equal:
+          path: spec.template.metadata
+          value:
+            annotations:
+              chaos.alpha.kubernetes.io/enabled: "false"
+              checksum/config: 48bb5dc69ddd7276d50d90b716445c123b12e45cd65caf543b7e9c947f4b72b5
+            labels:
+              app.kubernetes.io/component: ui
+              app.kubernetes.io/instance: my-cockpit
+              app.kubernetes.io/name: cockpit
+      - equal:
+          path: spec.template.spec
+          value:
+            affinity: {}
+            containers:
+            - env:
+              - name: MGMT_API_URL
+                value: https://cockpit.example.com/management/
+              envFrom: []
+              image: graviteeio/cockpit-management-ui:1.0.0-app
+              imagePullPolicy: Always
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /
+                  port: http
+                initialDelaySeconds: 10
+                periodSeconds: 30
+              name: my-cockpit-ui
+              ports:
+              - containerPort: 8080
+                name: http
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /
+                  port: http
+                initialDelaySeconds: 10
+                periodSeconds: 30
+              resources:
+                limits:
+                  cpu: 100m
+                  memory: 128Mi
+                requests:
+                  cpu: 50m
+                  memory: 64Mi
+              securityContext:
+                runAsGroup: 101
+                runAsNonRoot: true
+                runAsUser: 101
+              volumeMounts:
+              - mountPath: /usr/share/nginx/html/assets/config.json
+                name: config
+                subPath: config.json
+            nodeSelector: {}
+            serviceAccountName: my-cockpit-cockpit
+            terminationGracePeriodSeconds: 30
+            tolerations: []
+            volumes:
+              - configMap:
+                  name: my-cockpit-ui
+                name: config
+
+  - it: should configure replicas if autoscaling is disabled
+    template: ui/ui-deployment.yaml
+    set:
+      ui:
+        autoscaling:
+          enabled: false
+        replicaCount: 2
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.replicas
+          value: 2
+
+  - it: should configure revisionHistoryLimit
+    template: ui/ui-deployment.yaml
+    set:
+      ui:
+        deployment:
+          revisionHistoryLimit: 10
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.revisionHistoryLimit
+          value: 10

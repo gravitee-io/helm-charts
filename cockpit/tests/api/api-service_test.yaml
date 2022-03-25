@@ -1,0 +1,123 @@
+suite: Cockpit - API - service config
+templates:
+  - "api/api-service.yaml"
+tests:
+  - it: should generate nothing when api is disabled
+    template: api/api-service.yaml
+    set:
+      api:
+        enabled: false
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should apply labels
+    template: api/api-service.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/component: api
+            app.kubernetes.io/instance: my-cockpit
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cockpit
+            app.kubernetes.io/version: 1.0.0-app
+            helm.sh/chart: cockpit-1.0.0-chart
+
+  - it: should apply default service configuration
+    template: api/api-service.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: metadata.name
+          value: my-cockpit-api
+      - isEmpty:
+          path: metadata.annotations
+      - equal:
+          path: spec
+          value:
+            type: ClusterIP
+            ports:
+              - port: 8063
+                targetPort: 8063
+                protocol: TCP
+                name: api
+              - port: 8062
+                targetPort: 8062
+                protocol: TCP
+                name: api-ws-controller
+            selector:
+              app.kubernetes.io/component: api
+              app.kubernetes.io/instance: my-cockpit
+              app.kubernetes.io/name: cockpit
+
+  - it: should activate technical service configuration
+    template: api/api-service.yaml
+    set:
+      api:
+        http:
+          services:
+            core:
+              http:
+                enabled: true
+                port: 18063
+              service:
+                enabled: true
+                externalPort: 18063
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: metadata.name
+          value: my-cockpit-api
+      - isEmpty:
+          path: metadata.annotations
+      - equal:
+          path: spec
+          value:
+            type: ClusterIP
+            ports:
+              - port: 8063
+                targetPort: 8063
+                protocol: TCP
+                name: api
+              - port: 8062
+                targetPort: 8062
+                protocol: TCP
+                name: api-ws-controller
+              - port: 18063
+                targetPort: 18063
+                protocol: TCP
+                name: api-technical
+            selector:
+              app.kubernetes.io/component: api
+              app.kubernetes.io/instance: my-cockpit
+              app.kubernetes.io/name: cockpit
