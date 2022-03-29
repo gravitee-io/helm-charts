@@ -82,7 +82,7 @@ tests:
             affinity: {}
             containers:
             - env:
-              - name: MGMT_API_URL
+              - name: API_URL
                 value: https://cockpit.example.com/management/
               envFrom: []
               image: graviteeio/cockpit-management-ui:1.0.0-app
