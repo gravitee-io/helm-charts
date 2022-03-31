@@ -1,6 +1,5 @@
 {{- if .Values.gateway.enabled -}}
 {{- $initContainers := .Values.initContainers -}}
-{{- $rateLimitPlugin := include "ratelimit.plugin" . -}}
 apiVersion: apps/v1
 kind: {{ .Values.gateway.type }}
 metadata:
@@ -88,7 +87,8 @@ spec:
         {{- $plugins = concat $plugins .Values.gateway.additionalPlugins -}}
       {{- end -}}
     
-      {{- if eq .Values.ratelimit.type "redis"  -}}       
+      {{- if eq .Values.ratelimit.type "redis"  -}}
+        {{- $rateLimitPlugin := include "ratelimit.plugin" . -}}
         {{- $plugins = append $plugins $rateLimitPlugin -}}
       {{- end -}}
 
