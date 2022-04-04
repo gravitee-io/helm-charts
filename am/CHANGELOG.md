@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Access Management 3.x](h
 ### 1.0.36
 
 - [X] Ease the integration of Gravitee.io Cockpit
+- [X] Allow configuration of cookie properties
 
 ### 1.0.35
 

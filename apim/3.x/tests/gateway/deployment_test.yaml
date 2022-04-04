@@ -22,6 +22,29 @@ tests:
           # It should not contain init containers by default
           path: spec.template.spec.initContainers
 
+  - it: Check deploy specific APIM version
+    template: gateway/gateway-deployment.yaml
+    set:
+      gateway:
+        image:
+          tag: 3.17
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - isAPIVersion:
+          of: apps/v1
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: graviteeio/apim-gateway:3.17
+      - isEmpty:
+          # It should not contain environment variable by default
+          path: spec.template.spec.containers[0].env
+      - isEmpty:
+          # It should not contain init containers by default
+          path: spec.template.spec.initContainers
+
   - it: Check deployment with revisionHistoryLimit
     template: gateway/gateway-deployment.yaml
     set:
@@ -86,4 +109,3 @@ tests:
           path: spec.template.spec.containers[0].ports[1].name
           # There is a k8s limitation that port names must be 15 characters or less
           pattern: ^.{0,15}$
-

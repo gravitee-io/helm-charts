@@ -275,6 +275,14 @@ replicaset] for detailed documentation on helm chart.
 
 |gateway.image.repository |string |`+"graviteeio/am-gateway"+` |
 
+|gateway.http.cookie.secure |bool |`+false+` |
+
+|gateway.http.cookie.sameSite |string |`+"Lax"+` |
+
+|gateway.http.cookie.session.name |string |`+"GRAVITEE_IO_AM_SESSION"+` |
+
+|gateway.http.cookie.session.timeout |int |`+1800000+` |
+
 |gateway.ingress.annotations."kubernetes.io/app-root" |string
 |`+"/auth"+` |
 

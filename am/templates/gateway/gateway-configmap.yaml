@@ -15,6 +15,16 @@ data:
     # Gateway HTTP server
     http:
       port: {{ .Values.gateway.service.internalPort }}
+    {{- if .Values.gateway.http.cookie }}
+      cookie:
+        secure: {{ .Values.gateway.http.cookie.secure | default false }}
+        sameSite: {{ .Values.gateway.http.cookie.sameSite | default "Lax" }}
+        {{- if .Values.gateway.http.cookie.session }}
+        session: 
+          name: {{ .Values.gateway.http.cookie.session.name | default "GRAVITEE_IO_AM_SESSION" }}
+          timeout: {{ .Values.gateway.http.cookie.session.timeout | default 1800000 }}
+        {{- end }}
+    {{- end }}
       host: 0.0.0.0
     #  idleTimeout: 0
     #  tcpKeepAlive: true
