@@ -221,6 +221,11 @@ data:
         ssl.protocols: {{ .Values.smtp.properties.sslProtocols }}
         {{- end }}
       {{- end }}
+    
+    {{- if .Values.userManagement }}
+    user:
+{{ toYaml .Values.userManagement | indent 6 }}
+    {{- end }}
 
     # Gateway entry point used in emails
     gateway:
@@ -230,33 +235,50 @@ data:
       url: https://{{index .Values.gateway.ingress.hosts 0 }}{{ .Values.gateway.ingress.path }}
     {{- end }}
 
+   {{- if .Values.userManagement }}
     # User management configuration
     user:
-      # Password complexity validation policy
-      # Applications should enforce password complexity rules to discourage easy to guess passwords.
-      # Passwords should require a minimum level of complexity that makes sense for the application and its user population.
-      #password:
-      #  policy:
-      #    pattern: ^(?=\s*\S).*$ # Regex pattern for password validation (default to ^(?=\s*\S).*$ (non empty string))
-                                  # Example : ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$
-                                  # ^                # start-of-string
-                                  #(?=.*[0-9])       # a digit must occur at least once
-                                  #(?=.*[a-z])       # a lower case letter must occur at least once
-                                  #(?=.*[A-Z])       # an upper case letter must occur at least once
-                                  #(?=.*[@#$%^&+=])  # a special character must occur at least once
-                                  #(?=\S+$)          # no whitespace allowed in the entire string
-                                  #.{8,}             # anything, at least eight places though
-                                  #$                 # end-of-string
+    {{- if .Values.userManagement.email }}
+      email:
+{{ toYaml .Values.userManagement.email | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.password }}
+      password:
+{{ toYaml .Values.userManagement.password | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.name }}
+      name:
+{{ toYaml .Values.userManagement.name | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.username }}
+      username:
+{{ toYaml .Values.userManagement.username | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.registration }}
       registration:
-        email:
-          #subject: New user registration
-        token:
-          #expire-after: 86400 # the end of validity of the token in seconds for registration email (default 86400 = a day)
+{{ toYaml .Values.userManagement.registration | indent 8 }}
+    {{- end }}
+      
+    {{- if .Values.userManagement.resetPassword }}
       resetPassword:
-        email:
-          #subject: Please reset your password
-        token:
-          #expire-after: 86400 # the end of validity of the token in seconds for reset password email (default 86400 = a day)
+{{ toYaml .Values.userManagement.resetPassword | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.blockedAccount }}      
+      blockedAccount:
+{{ toYaml .Values.userManagement.blockedAccount | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.mfaChallenge }}
+      mfaChallenge:
+{{ toYaml .Values.userManagement.mfaChallenge | indent 8 }}
+    {{- end }}
+
+    {{- end }}
 
     {{- if or .Values.gateway.handlers }}
     handlers:
