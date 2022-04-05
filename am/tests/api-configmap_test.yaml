@@ -111,3 +111,37 @@ tests:
       - matchRegex:
           path: data.[gravitee.yml]
           pattern: "[ ]{4}sslKeyStorePassword: mypassword"
+
+
+  - it: should have custom settings for user management
+    set:
+      userManagement.resetPassword.token: 300
+      userManagement.mfaChallenge.token: 360
+      userManagement.password.policy.pattern: testpattern
+      userManagement.email.policy.pattern: testemailpattern
+      userManagement.name.policy.pattern: testnamepattern
+      userManagement.username.policy.pattern: testusernamepattern
+
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}token: 300"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}token: 360"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}pattern: testpattern"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}pattern: testemailpattern"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}pattern: testnamepattern"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}pattern: testusernamepattern"
