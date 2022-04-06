@@ -14,7 +14,6 @@ data:
   gravitee.yml: |
     # Gateway HTTP server
     http:
-      port: {{ .Values.gateway.service.internalPort }}
     {{- if .Values.gateway.http.cookie }}
       cookie:
         secure: {{ .Values.gateway.http.cookie.secure | default false }}
@@ -25,6 +24,23 @@ data:
           timeout: {{ .Values.gateway.http.cookie.session.timeout | default 1800000 }}
         {{- end }}
     {{- end }}
+    {{- if .Values.gateway.http.csrf }}
+      csrf:
+    {{ toYaml .Values.gateway.http.csrf | nindent 8 -}}
+    {{- end }}
+    {{- if .Values.gateway.http.csp }}
+      csp:
+    {{ toYaml .Values.gateway.http.csp | nindent 8 -}}
+    {{- end }}
+    {{- if .Values.gateway.http.cors }}
+      cors:
+    {{ toYaml .Values.gateway.http.cors | nindent 8 -}}
+    {{- end }}
+    {{- if .Values.gateway.http.xframe }}
+      xframe:
+    {{ toYaml .Values.gateway.http.xframe | nindent 8 -}}
+    {{- end }}
+      port: {{ .Values.gateway.service.internalPort }}
       host: 0.0.0.0
     #  idleTimeout: 0
     #  tcpKeepAlive: true
