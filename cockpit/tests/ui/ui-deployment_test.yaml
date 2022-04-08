@@ -121,6 +121,7 @@ tests:
                 name: config
                 subPath: config.json
             nodeSelector: {}
+            topologySpreadConstraints: {}
             serviceAccountName: my-cockpit-cockpit
             terminationGracePeriodSeconds: 30
             tolerations: []

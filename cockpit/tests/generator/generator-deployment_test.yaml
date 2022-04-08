@@ -115,6 +115,7 @@ tests:
                 name: config
                 subPath: env.props
             nodeSelector: {}
+            topologySpreadConstraints: {}
             serviceAccountName: my-cockpit-cockpit
             terminationGracePeriodSeconds: 30
             tolerations: []

@@ -6,6 +6,9 @@ templates:
 tests:
   - it: Check that volumes are defined
     template: gateway/gateway-deployment.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 3.15.2
     set:
       ratelimit:
         type: "redis"
@@ -130,6 +133,9 @@ tests:
 
   - it: Check redis plugin with latest version of image (should be 3.15.2)
     template: gateway/gateway-deployment.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 3.15.2
     set:
         ratelimit:
             type: "redis"

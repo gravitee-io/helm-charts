@@ -6,6 +6,9 @@ templates:
 tests:
   - it: Check that volumes are defined
     template: gateway/gateway-deployment.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 3.15.2
     set:
         management:
             type: "jdbc"
