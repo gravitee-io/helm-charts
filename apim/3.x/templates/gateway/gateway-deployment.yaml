@@ -70,7 +70,9 @@ spec:
         {{- end }}
         {{- end }}
     spec:
+      {{- if .Values. apim.managedServiceAccount }}
       serviceAccountName: {{ template "apim.serviceAccount" . }}
+      {{- end }}
       affinity: {{ toYaml .Values.gateway.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.gateway.deployment.nodeSelector | nindent 8 }}
       tolerations: {{ toYaml .Values.gateway.deployment.tolerations | nindent 8 }}
