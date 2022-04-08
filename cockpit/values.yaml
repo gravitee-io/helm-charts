@@ -177,6 +177,7 @@ api:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: {}
 
   livenessProbe:
     tcpSocket:  
@@ -406,6 +407,7 @@ ui:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: {}
 
   livenessProbe:
     httpGet:
@@ -537,6 +539,7 @@ generator:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: {}
 
   env: []
   #   - name: ENV_VARIABLE
