@@ -12,9 +12,32 @@ metadata:
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 data:
   gravitee.yml: |
-    {{- if .Values.api.ssl.enabled }}
     jetty:
-      secured: true
+      host: {{ .Values.api.http.host | default "0.0.0.0" }}
+      port: {{ .Values.api.http.port | default 8093 }}
+      idleTimeout: {{ .Values.api.http.idleTimeout | default 30000 }}
+      acceptors: {{ .Values.api.http.acceptors | default -1 }}
+      selectors: {{ .Values.api.http.selectors | default -1 }}
+      statistics: {{ .Values.api.http.statistics | default false }}
+      outputBufferSize: {{ .Values.api.http.outputBufferSize | default 32768 }}
+      requestHeaderSize: {{ .Values.api.http.requestHeaderSize | default 8192 }}
+      responseHeaderSize: {{ .Values.api.http.responseHeaderSize | default 8192 }}
+      {{- if .Values.api.http.pool }}
+      pool:
+        minThreads: {{ .Values.api.http.pool.minThreads | default 10 }}
+        maxThreads: {{ .Values.api.http.pool.maxThreads | default 200 }}
+        idleTimeout: {{ .Values.api.http.pool.idleTimeout  | default 60000 }}
+        queueSize: {{ .Values.api.http.pool.queueSize | default 6000 }}
+      {{ end }}
+      {{- if .Values.api.http.accesslog }}
+      accesslog:
+        enabled: {{ .Values.api.http.accesslog.enabled | default true }}
+        {{- if .Values.api.http.path }}
+        path: {{ .Values.api.http.accesslog.path }}
+        {{ end }}
+      {{ end }}
+      secured: {{ .Values.api.ssl.enabled | default false }}
+      {{- if .Values.api.ssl.enabled }}
       ssl:
         keystore:
           {{- if .Values.api.ssl.keystore.type }}
@@ -31,7 +54,7 @@ data:
           path: {{ .Values.api.ssl.truststore.path }}
           password: {{ .Values.api.ssl.truststore.password | quote }}
         {{- end }}
-    {{- end }}
+      {{- end }}
     
     {{- if and .Values.api.http .Values.api.http.api }}
     http:

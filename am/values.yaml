@@ -237,18 +237,38 @@ api:
 
   additionalPlugins:
 #    - https://path_to_plugin
+
   ssl:
     enabled: false
-  #  keystore:
-  #    type: jks # Supports jks, pem, pkcs12
-  #    path: ${gravitee.home}/security/keystore.jks
-  #    password: secret
+    #keystore:
+    #  type: jks # Supports jks, pem, pkcs12
+    #  path: ${gravitee.home}/security/keystore.jks
+    #  password: secret
     clientAuth: false
-  #  truststore:
-  #    type: jks # Supports jks, pem, pkcs12
-  #    path: ${gravitee.home}/security/truststore.jks
-  #    password: secret
+    #truststore:
+    #  type: jks # Supports jks, pem, pkcs12
+    #  path: ${gravitee.home}/security/truststore.jks
+    #  password: secret
   http:
+    #host: 0.0.0.0
+    #port: 8093
+    #idleTimeout: 30000
+    #acceptors: -1
+    #selectors: -1
+    #pool:
+      #minThreads: 10
+      #maxThreads: 200
+      #idleTimeout: 60000
+      #queueSize: 6000
+    #jmx: false
+    #statistics: false
+    #accesslog:
+      #enabled: true
+      #path: ${gravitee.home}/logs/gravitee_accesslog_yyyy_mm_dd.log
+    #secured: false
+    #outputBufferSize: 32768
+    #requestHeaderSize: 8192
+    #responseHeaderSize: 8192
 #    api:
 #      entrypoint: /management
     services:
