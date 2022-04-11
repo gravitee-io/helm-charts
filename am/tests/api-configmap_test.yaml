@@ -145,3 +145,129 @@ tests:
       - matchRegex:
           path: data.[gravitee.yml]
           pattern: "[ ]{6}pattern: testusernamepattern"
+
+
+  - it: should have default settings for jetty
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}host: 0\\.0\\.0\\.0"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}port: 8093"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}acceptors: -1"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}selectors: -1"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}statistics: false"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}secured: false"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}outputBufferSize: 32768"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}requestHeaderSize: 8192"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}responseHeaderSize: 8192"
+
+  - it: should have custom settings for jetty
+    set:
+      api.http.host: https://gravitee.io
+      api.http.secured: true
+      api.http.port: 12345
+      api.http.idleTimeout: 256
+      api.http.acceptors: 24
+      api.http.selectors: 42
+      api.http.statistics: true
+      api.http.outputBufferSize: 65535
+      api.http.requestHeaderSize: 32768
+      api.http.responseHeaderSize: 33768
+      api.http.pool.minThreads: 25
+      api.http.pool.maxThreads: 253
+      api.http.pool.idleTimeout: 65535
+      api.http.pool.queueSize: 12300
+      api.ssl.enabled: true
+      api.ssl.keystore.type: jks
+      api.ssl.keystore.path: /keystore/path
+      api.ssl.keystore.password: keystorePassword
+      api.ssl.clientAuth: true
+      api.ssl.truststore.type: pem
+      api.ssl.truststore.path: /truststore/path
+      api.ssl.truststore.password: truststorePassword
+
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}host: https://gravitee.io"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}port: 12345"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}acceptors: 24"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}selectors: 42"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}statistics: true"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}secured: true"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}outputBufferSize: 65535"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}requestHeaderSize: 32768"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}responseHeaderSize: 33768"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}minThreads: 25"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}maxThreads: 253"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}idleTimeout: 65535"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}queueSize: 12300"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}clientAuth: true"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}type: jks"      
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}path: /keystore/path"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}password: \\\"keystorePassword\\\""
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}type: pem"      
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}path: /truststore/path"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}password: \\\"truststorePassword\\\""
