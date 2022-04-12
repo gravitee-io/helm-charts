@@ -69,6 +69,9 @@ spec:
         {{- end }}
         {{- end }}
     spec:
+      {{- if .Values.engine.managedServiceAccount }}
+      serviceAccountName: {{ template "engine.serviceAccount" . }}
+      {{- end }}
       serviceAccountName: {{ template "engine.serviceAccount" . }}
       affinity: {{ toYaml .Values.engine.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.engine.deployment.nodeSelector | nindent 8 }}
