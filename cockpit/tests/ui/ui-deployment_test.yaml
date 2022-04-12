@@ -121,7 +121,6 @@ tests:
                 name: config
                 subPath: config.json
             nodeSelector: {}
-            serviceAccountName: my-cockpit-cockpit
             terminationGracePeriodSeconds: 30
             tolerations: []
             volumes:
