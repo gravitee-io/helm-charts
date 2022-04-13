@@ -25,3 +25,7 @@ annotations:
   artifacthub.io/changes: |
     - Ease the integration of Gravitee.io Cockpit
     - Allow configuration of cookie properties
+    - Introduce values to enable and configure notification about domain certificates expiry
+    - Allow to configure ssl.trust and ssl.protocols through the values.yaml
+    - Allow to configure user management settings (resetPassword token TTL, username pattern...) in the values.yaml
+    - Allow to define gateway http section through values instead of environment variables (csp, xframe, cors, csrf)

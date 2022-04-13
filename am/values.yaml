@@ -34,6 +34,8 @@ smtp:
   properties:
     auth: true
     starttlsEnable: false
+    #sslTrust: smtp.example.com
+    #sslProtocols: TLSv1.2
     #localhost: am.example.com
 
 mongo:
@@ -272,7 +274,7 @@ api:
 #       on an accessible host outside of the pod: api.http.services.core.http.host
           enabled: false
 #         type: ClusterIP
-#         externalPort: 18083
+#         externalPort: 18083      
   jwt:
     secret: s3cR3t4grAv1t3310AMS1g1ingDftK3y
     kid: default-gravitee-AM-key
@@ -336,6 +338,37 @@ api:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+
+  services:
+    notifier:
+      enabled: true
+      tryAvoidDuplicateNotification: true
+
+    certificate:
+      enabled: true
+      # frequency on which the notifier mechanism will test
+      # if new notifications need to be send
+      # default: 0 0 5 * * * (every day at 5am)
+      cronExpression: 0 0 5 * * *
+      # send notification if certificate is going to expire in less than 20 days, then 15 days before...
+      expiryThresholds: 20,15,10,5,1
+      # Subject of the email send by the email notifier
+      expiryEmailSubject: "Certificate will expire soon"
+
+  notifiers:
+    email:
+      enabled: false
+      #host: smtp.example.com
+      #port: 25
+      #from: info@example.com
+      #username: info@example.com
+      #password: example.com
+      #startTLSEnabled: false
+      #sslTrustAll: false
+      #sslKeyStore: /path/to/keystore
+      #sslKeyStorePassword: changeme
+    ui:
+      enabled: true
 
 gateway:
   enabled: true

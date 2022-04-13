@@ -25,7 +25,7 @@ tests:
           of: v1
       - equal:
           path: metadata.name
-          value: gravitee-cockpit-certificates
+          value:  RELEASE-NAME-apim3-api-cockpit-certificates
       - equal:
           path: data
           value:
