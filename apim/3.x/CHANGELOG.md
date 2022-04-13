@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.37
+
+- Add template to APIM Cockpit secret name
+
 ### 3.1.36
 
 - Fix deploy gateway specific version with default ratelimit
