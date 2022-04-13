@@ -211,7 +211,7 @@ spec:
         {{- if .Values.cockpit.enabled }}
         - name: gravitee-cockpit-certificates
           secret:
-            secretName: gravitee-cockpit-certificates
+            secretName: {{ template "gravitee.api.fullname" . }}-cockpit-certificates
         {{- end }}
         {{- include "deployment.pluginVolumes" $pluginParams | indent 8 }}
         {{- with .Values.api.extraVolumes }}
