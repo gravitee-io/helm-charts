@@ -1,5 +1,6 @@
 {{- if .Values.gateway.enabled -}}
 {{- $initContainers := .Values.initContainers -}}
+{{- $serviceAccount := include "apim.serviceAccount" . -}}
 apiVersion: apps/v1
 kind: {{ .Values.gateway.type }}
 metadata:
@@ -70,7 +71,9 @@ spec:
         {{- end }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "apim.serviceAccount" . }}
+      {{- if $serviceAccount }}
+      serviceAccountName: {{ $serviceAccount }}
+      {{ end }}
       affinity: {{ toYaml .Values.gateway.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.gateway.deployment.nodeSelector | nindent 8 }}
       topologySpreadConstraints: {{ toYaml .Values.gateway.deployment.topologySpreadConstraints | nindent 8 }}
