@@ -1,4 +1,5 @@
 {{- if .Values.engine.enabled -}}
+{{- $serviceAccount := include "engine.serviceAccount" . -}}
 apiVersion: apps/v1
 kind: {{ .Values.engine.type }}
 metadata:
@@ -69,7 +70,9 @@ spec:
         {{- end }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "engine.serviceAccount" . }}
+      {{- if $serviceAccount }}
+      serviceAccountName: {{ $serviceAccount }}
+      {{ end }}
       affinity: {{ toYaml .Values.engine.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.engine.deployment.nodeSelector | nindent 8 }}
       topologySpreadConstraints: {{ toYaml .Values.engine.deployment.topologySpreadConstraints | nindent 8 }}

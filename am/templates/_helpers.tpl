@@ -140,7 +140,7 @@ Create initContainers for downloading jdbc drivers
 Use the fullname if the serviceAccount value is not set
 */}}
 {{- define "am.serviceAccount" -}}
-{{- if .Values.am.serviceAccount }}
+{{- if not .Values.am.managedServiceAccount }}
 {{- .Values.am.serviceAccount -}}
 {{- else }}
 {{- $name := default .Chart.Name .Values.nameOverride -}}

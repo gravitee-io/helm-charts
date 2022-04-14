@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.40
+
+- [X] Fix ignoring the managedServiceAccount in the deployment files
+
 ### 3.1.39
 
 - [X] Set default array for topologySpreadConstraints

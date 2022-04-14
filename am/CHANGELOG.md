@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.38
+
+- [X] Fix ignoring the managedServiceAccount in the deployment files
+
 ### 1.0.37
 
 - [X] Set default array for topologySpreadConstraints
