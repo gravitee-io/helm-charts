@@ -72,6 +72,7 @@ spec:
       serviceAccountName: {{ template "engine.serviceAccount" . }}
       affinity: {{ toYaml .Values.engine.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.engine.deployment.nodeSelector | nindent 8 }}
+      topologySpreadConstraints: {{ toYaml .Values.engine.deployment.topologySpreadConstraints | nindent 8 }}
       tolerations: {{ toYaml .Values.engine.deployment.tolerations | nindent 8 }}
       {{- if .Values.engine.priorityClassName }}
       priorityClassName: {{ .Values.engine.priorityClassName  }}

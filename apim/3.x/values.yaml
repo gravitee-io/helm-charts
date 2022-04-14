@@ -439,6 +439,7 @@ api:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: {}
     # revisionHistoryLimit: 10
 
   livenessProbe:
@@ -670,6 +671,7 @@ gateway:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: {}
     # revisionHistoryLimit: 10
 
   livenessProbe:
@@ -965,6 +967,7 @@ portal:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: {}
     # revisionHistoryLimit: 10
 
   livenessProbe:
@@ -1113,6 +1116,7 @@ ui:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: {}
     # revisionHistoryLimit: 10
     
   livenessProbe:

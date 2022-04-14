@@ -122,6 +122,7 @@ tests:
                 name: config
                 subPath: logback.xml
             nodeSelector: {}
+            topologySpreadConstraints: {}
             serviceAccountName: my-cockpit-cockpit
             terminationGracePeriodSeconds: 30
             tolerations: []
