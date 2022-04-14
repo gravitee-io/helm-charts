@@ -122,3 +122,33 @@ tests:
               - configMap:
                   name: my-cockpit-swagger-generator
                 name: config
+
+  - it: Deploy with managed ServiceAccount
+    template: generator/generator-deployment.yaml
+    set:
+      cockpit:
+        managedServiceAccount: true
+        serviceAccount: "test-sa"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: "RELEASE-NAME-cockpit"
+
+  - it: Deploy with custom ServiceAccount
+    template: generator/generator-deployment.yaml
+    set:
+      cockpit:
+        managedServiceAccount: false
+        serviceAccount: "test-sa"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: "test-sa"

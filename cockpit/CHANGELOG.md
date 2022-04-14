@@ -4,7 +4,7 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 
 ### 1.6.12
 
-- Fix ignoring the apim.managedServiceAccount in deployment files
+- Fix ignoring the cockpit.managedServiceAccount in deployment files
 
 ### 1.6.11
 
