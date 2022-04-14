@@ -1,0 +1,48 @@
+suite: Test Alert Engine default deployment
+templates:
+  - "engine-deployment.yaml"
+  - "engine-configmap.yaml"
+tests:
+  - it: Deploy with managed ServiceAccount
+    template: engine-deployment.yaml
+    set:
+      engine:
+        managedServiceAccount: true
+        serviceAccount: "test-sa"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: "RELEASE-NAME-ae"
+
+  - it: Deploy with custom ServiceAccount
+    template: engine-deployment.yaml
+    set:
+      engine:
+        managedServiceAccount: false
+        serviceAccount: "test-sa"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: "test-sa"
+  - it: Deploy without ServiceAccount
+    template: engine-deployment.yaml
+    set:
+      engine:
+        managedServiceAccount: false
+        serviceAccount: ""
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: null

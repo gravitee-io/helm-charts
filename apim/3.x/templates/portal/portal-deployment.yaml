@@ -57,7 +57,6 @@ spec:
         {{- end }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "apim.serviceAccount" . }}
       affinity: {{ toYaml .Values.portal.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.portal.deployment.nodeSelector | nindent 8 }}
       topologySpreadConstraints: {{ toYaml .Values.portal.deployment.topologySpreadConstraints | nindent 8 }}
