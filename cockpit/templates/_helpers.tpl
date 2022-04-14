@@ -134,7 +134,7 @@ Create volumes for plugins
 Use the fullname if the serviceAccount value is not set
 */}}
 {{- define "cockpit.serviceAccount" -}}
-{{- if .Values.cockpit.serviceAccount }}
+{{- if not .Values.cockpit.managedServiceAccount }}
 {{- .Values.cockpit.serviceAccount -}}
 {{- else }}
 {{- $name := default .Chart.Name .Values.nameOverride -}}

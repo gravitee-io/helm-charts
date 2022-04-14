@@ -69,11 +69,7 @@ spec:
         {{- end }}
         {{- end }}
     spec:
-      {{- if .Values.engine.managedServiceAccount }}
       serviceAccountName: {{ template "engine.serviceAccount" . }}
-      {{ else }}
-      serviceAccountName: {{ .Values.engine.serviceAccount }}
-      {{- end }}
       affinity: {{ toYaml .Values.engine.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.engine.deployment.nodeSelector | nindent 8 }}
       tolerations: {{ toYaml .Values.engine.deployment.tolerations | nindent 8 }}
