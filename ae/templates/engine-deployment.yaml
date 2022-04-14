@@ -102,6 +102,10 @@ spec:
           ports:
             - name: {{ .Values.engine.service.internalPortName }}
               containerPort: {{ .Values.engine.service.internalPort }}
+            {{- if .Values.engine.services.core.http.enabled }}
+            - name: {{ .Values.engine.name }}-techapi
+              containerPort: {{ .Values.engine.services.core.http.port | default "18072" }}
+            {{- end }}
           {{- if .Values.engine.env }}
           env:
             - name: "gravitee_processors_alertengineprocessoruseragent_enabled"
