@@ -64,7 +64,6 @@ spec:
         {{- end }}
     spec:
       serviceAccountName: {{ template "am.serviceAccount" . }}
-      {{- end }}
       affinity: {{ toYaml .Values.api.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.api.deployment.nodeSelector | nindent 8 }}
       tolerations: {{ toYaml .Values.api.deployment.tolerations | nindent 8 }}
