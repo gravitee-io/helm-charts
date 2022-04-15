@@ -24,6 +24,12 @@ spec:
     - port: 5701
       name: {{ .Values.engine.name }}-hz
       protocol: TCP
+    {{- if .Values.engine.services.core.service.enabled }}
+    - port: {{ .Values.engine.services.core.service.externalPort }}
+      targetPort: {{ .Values.engine.services.core.http.port }}
+      protocol: TCP
+      name: {{ .Values.engine.name }}-techapi
+    {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

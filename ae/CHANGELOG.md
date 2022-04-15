@@ -2,6 +2,13 @@
 
 This file documents all notable changes to [Gravitee.io Alert Engine](https://github.com/gravitee-io/helm-charts/tree/master/ae) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.1.30
+
+- [X] Add support for Technical API
+- [X] Add support for envFrom
+
+- Update gravitee.io AE v1.6.1
+
 ### 1.1.29
 
 - [X] Fix ignoring the managedServiceAccount in the deployment files

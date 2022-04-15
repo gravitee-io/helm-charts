@@ -102,16 +102,15 @@ spec:
           ports:
             - name: {{ .Values.engine.service.internalPortName }}
               containerPort: {{ .Values.engine.service.internalPort }}
-          {{- if .Values.engine.env }}
+            {{- if .Values.engine.services.core.http.enabled }}
+            - name: {{ .Values.engine.name }}-techapi
+              containerPort: {{ .Values.engine.services.core.http.port | default "18072" }}
+            {{- end }}
           env:
-            - name: "gravitee_processors_alertengineprocessoruseragent_enabled"
-              value: "false"
-            - name: "gravitee_processors_alertengineprocessorgeoip_enabled"
-              value: "false"
 {{- if .Values.engine.env | default .Values.engine.deployment.extraEnvs }}
 {{ toYaml ( .Values.engine.env | default .Values.engine.deployment.extraEnvs ) | indent 12 }}
 {{- end }}
-          {{- end }}
+          envFrom: {{ toYaml .Values.engine.deployment.envFrom | nindent 12 }}
           {{- if .Values.engine.lifecycle }}
           lifecycle:
             {{- if .Values.engine.lifecycle.postStart }}
