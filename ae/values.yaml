@@ -90,7 +90,7 @@ engine:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
-    topologySpreadConstraints: {}
+    topologySpreadConstraints: []
     # revisionHistoryLimit: 10
 
   # How long to wait for Alert Engine pods to stop gracefully
@@ -100,7 +100,11 @@ engine:
   # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   priorityClassName: ""
 
-  env: []
+  env:
+    - name: "gravitee_processors_alertengineprocessoruseragent_enabled"
+      value: "false"
+    - name: "gravitee_processors_alertengineprocessorgeoip_enabled"
+      value: "false"
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
   #   - name: ENV_VARIABLE_WITH_FROM

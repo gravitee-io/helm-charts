@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Alert Engine](https://gi
 ### 1.1.30
 
 - [X] Add support for Technical API
+- [X] Add support for envFrom
 
 - Update gravitee.io AE v1.6.1
 
