@@ -183,6 +183,34 @@ replicaset] for detailed documentation on helm chart.
 
 |api.http.services.core.service.enabled |bool |`+false+` |
 
+|api.http.host |string |`+"0.0.0.0"+` |
+
+|api.http.port |bool |`+8093+` |
+
+|api.http.idleTimeout |int |`+30000+` |
+
+|api.http.acceptors |int |`+-1+` |
+
+|api.http.selectors |int |`+-1+` |
+
+|api.http.outputBufferSize |int |`+32768+` |
+
+|api.http.requestHeaderSize |int |`+8192+` |
+
+|api.http.responseHeaderSize |int |`+8192+` |
+
+|api.http.pool.minThreads |int |`+10+` |
+
+|api.http.pool.maxThreads |int |`+200+` |
+
+|api.http.pool.idleTimeout |int |`+60000+` |
+
+|api.http.pool.queueSize |int |`+6000+` |
+
+|api.http.pool.accesslog.enabled |boolean |`+true+` |
+
+|api.http.pool.accesslog.path |string |`+${gravitee.home}/logs/gravitee_accesslog_yyyy_mm_dd.log}+` |
+
 |api.image.pullPolicy |string |`+"Always"+` |
 
 |api.image.repository |string |`+"graviteeio/am-management-api"+` |
