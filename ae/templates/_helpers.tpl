@@ -21,7 +21,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "gravitee.engine.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-%s" .Values.fullnameOverride .Values.engine.name | trunc 63 | trimSuffix "-" -}}
+{{- else if contains $name .Release.Name -}}
 {{- printf "%s-%s" .Release.Name .Values.engine.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s-%s" .Release.Name $name .Values.engine.name | trunc 63 | trimSuffix "-" -}}
