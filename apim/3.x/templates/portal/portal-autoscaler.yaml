@@ -1,5 +1,4 @@
-{{- if .Values.portal.enabled -}}
-{{- if .Values.portal.autoscaling.enabled }}
+{{- if and (.Values.portal.enabled) (.Values.portal.autoscaling.enabled) -}}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -19,15 +18,14 @@ spec:
   minReplicas: {{ .Values.portal.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.portal.autoscaling.maxReplicas }}
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      targetAverageUtilization: {{ .Values.portal.autoscaling.targetAverageUtilization }}
 {{- if .Values.portal.autoscaling.targetMemoryAverageUtilization }}
   - type: Resource
     resource:
       name: memory
       targetAverageUtilization: {{ .Values.portal.autoscaling.targetMemoryAverageUtilization }}
-{{- end -}}
-{{- end -}}
+{{- end }}
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: {{ .Values.portal.autoscaling.targetAverageUtilization }}
 {{- end -}}
