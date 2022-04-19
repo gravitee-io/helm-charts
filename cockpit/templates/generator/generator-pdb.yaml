@@ -1,0 +1,25 @@
+{{- if and (.Values.generator.enabled) (.Values.generator.pdb.enabled) -}}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "gravitee.generator.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.generator.image.tag | default .Chart.AppVersion | quote }}
+    app.kubernetes.io/component: "{{ .Values.generator.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  {{- if .Values.generator.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.generator.pdb.maxUnavailable }}
+  {{ end -}}
+  {{- if .Values.generator.pdb.minAvailable }}
+  minAvailable: {{ .Values.generator.pdb.minAvailable }}
+  {{ end -}}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "gravitee.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: "{{ .Values.generator.name }}"
+{{- end -}}
