@@ -7,12 +7,12 @@
 apiVersion: {{ $apiVersion }}
 kind: Ingress
 metadata:
-  name: {{ template "gravitee.api.fullname" . }}-technical
+  name: {{ template "gravitee.engine.fullname" . }}-technical
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Values.engine.image.tag | default .Chart.AppVersion | quote }}
-    app.kubernetes.io/component: "{{ .Values.api.name }}"
+    app.kubernetes.io/component: "{{ .Values.engine.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
   annotations:
