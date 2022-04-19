@@ -1,0 +1,47 @@
+suite: Cockpit - API - PDB
+templates:
+  - "api/api-pdb.yaml"
+tests:
+  - it: should generate nothing when API is disabled
+    template: api/api-pdb.yaml
+    set:
+      api:
+        enabled: false
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should generate PDB when API is enabled and PDB is enabled
+    template: api/api-pdb.yaml
+    set:
+      api:
+        pdb:
+          enabled: true
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: PodDisruptionBudget
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/component: api
+            app.kubernetes.io/instance: my-cockpit
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: cockpit
+            app.kubernetes.io/version: 1.0.0-app
+            helm.sh/chart: cockpit-1.0.0-chart
+      - equal:
+          path: spec.maxUnavailable
+          value: 50%
+      - isEmpty:
+          path: spec.minAvailable
