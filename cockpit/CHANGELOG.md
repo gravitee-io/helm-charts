@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.6.15
+
+- [X] Reorder HPA resources to avoid outofsync state with ArgoCD
+
 ### 1.6.14
 
 - [X] Fix ignoring the managedServiceAccount in the deployment files
