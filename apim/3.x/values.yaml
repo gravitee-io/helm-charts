@@ -456,6 +456,11 @@ api:
     periodSeconds: 30
     failureThreshold: 3
 
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
+
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
 
@@ -690,6 +695,11 @@ gateway:
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
 
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
@@ -985,7 +995,12 @@ portal:
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
-            
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
+       
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
 
@@ -1134,6 +1149,11 @@ ui:
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
 
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster 

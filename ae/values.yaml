@@ -192,6 +192,11 @@ engine:
     periodSeconds: 5
     failureThreshold: 20
 
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
+
   services:
     core:
       http:
