@@ -32,7 +32,7 @@ data:
       {{- if .Values.api.http.accesslog }}
       accesslog:
         enabled: {{ .Values.api.http.accesslog.enabled | default true }}
-        {{- if .Values.api.http.path }}
+        {{- if .Values.api.http.accesslog.path }}
         path: {{ .Values.api.http.accesslog.path }}
         {{ end }}
       {{ end }}
