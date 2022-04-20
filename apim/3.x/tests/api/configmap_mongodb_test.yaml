@@ -77,3 +77,39 @@ tests:
                      *   sslEnabled: true\n
                      *   socketKeepAlive: true\n
                      *   uri: mongodb://username:password@graviteeio-apim-mongodb-replicaset:27117/dbname\\?&replicaSet=rs0&authSource=authSource&connectTimeoutMS=2000"
+  - it: Set mongo keystore attributes with provided values
+    template: api/api-configmap.yaml
+    set:
+      mongo:
+        keystore:
+          path: '/path/to/keystore.p12'
+          type: 'pkcs12'
+          password: 'keystorePassword'
+          keyPassword: 'keyPassword'
+    asserts:
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: " * mongodb:\n
+                    (.|\n)*\n
+                     *   keystore:\n
+                     *     keyPassword: keyPassword\n
+                     *     password: keystorePassword\n
+                     *     path: /path/to/keystore.p12\n
+                     *     type: pkcs12"
+  - it: Set mongo truststore attributes with provided values
+    template: api/api-configmap.yaml
+    set:
+      mongo:
+        truststore:
+          path: '/path/to/truststore.jks'
+          type: 'jks'
+          password: 'truststorePassword'
+    asserts:
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: " * mongodb:\n
+                    (.|\n)*\n
+                     *   truststore:\n
+                     *     password: truststorePassword\n
+                     *     path: /path/to/truststore.jks\n
+                     *     type: jks"
