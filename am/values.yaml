@@ -39,6 +39,9 @@ smtp:
     #localhost: am.example.com
 
 mongo:
+  uriSecret: # allow to use a secret as mongodb connection string
+    name:
+    key: 
   # uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
   # servers: |
   #   - host: mongo1

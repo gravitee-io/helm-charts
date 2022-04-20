@@ -79,6 +79,9 @@ data:
       type: {{ .Values.management.type | default "mongodb" }}
       {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
       mongodb:
+        {{- if and .Values.mongodb.uriSecret.name .Values.mongodb.uriSecret.key }}
+        # uri connection string is provided with a secret
+        {{- else }}
         sslEnabled: {{ .Values.mongo.sslEnabled }}
         socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
         {{- if .Values.mongo.uri }}
@@ -98,6 +101,7 @@ data:
         {{- end }}
         {{- else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
+        {{- end }}
         {{- end }}
       {{- else if (eq .Values.management.type "jdbc") }}
       jdbc:
@@ -120,6 +124,9 @@ data:
       type: {{ .Values.oauth2.type | default "mongodb" }}
       {{- if or (eq .Values.oauth2.type "mongodb") (kindIs "invalid" .Values.oauth2.type) }}
       mongodb:
+        {{- if and .Values.mongodb.uriSecret.name .Values.mongodb.uriSecret.key }}
+        # uri connection string is provided with a secret
+        {{- else }}
         sslEnabled: {{ .Values.mongo.sslEnabled }}
         socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
         {{- if .Values.mongo.uri }}
@@ -139,6 +146,7 @@ data:
         {{- end }}
         {{- else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
+        {{- end }}
         {{- end }}
       {{- else if (eq .Values.oauth2.type "jdbc") }}
       jdbc:

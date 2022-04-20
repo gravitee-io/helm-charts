@@ -89,6 +89,14 @@ URI].
 |`+mongo.uri+` |Mongo URI |`+null+`
 |===
 
+You can externalize mogodb uri in a k8s secret
+[cols=",,",options="header",]
+|===
+|Parameter |Description |Default
+|`+mongo.uriSecret.name+` |k8s secrect containing the uri |`+null+`
+|`+mongo.uriSecret.key+` |k8s secrect key containing the uri |`+null+`
+|===
+
 If no `+mongo.uri+` is provided, you can provide a `+mongo.servers+` raw
 definition in combination with `+mongo.dbname+`, plus eventual
 authentication configuration:
