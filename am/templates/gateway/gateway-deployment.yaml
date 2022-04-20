@@ -103,17 +103,17 @@ spec:
             - name: {{ .Values.gateway.service.internalPortName }}
               containerPort: {{ .Values.gateway.service.internalPort }}
           env:
-            {{- if and .Values.mongodb.uriSecret.name .Values.mongodb.uriSecret.key }}
+            {{- if and .Values.mongo.uriSecret.name .Values.mongo.uriSecret.key }}
             - name: gravitee_management_mongodb_uri
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.mongodb.uriSecret.name }}
-                  key: {{ .Values.mongodb.uriSecret.key }}
+                  name: {{ .Values.mongo.uriSecret.name }}
+                  key: {{ .Values.mongo.uriSecret.key }}
             - name: gravitee_oauth2_mongodb_uri
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.mongodb.uriSecret.name }}
-                  key: {{ .Values.mongodb.uriSecret.key }}
+                  name: {{ .Values.mongo.uriSecret.name }}
+                  key: {{ .Values.mongo.uriSecret.key }}
             {{- end }}
             {{- if $plugins }}
             - name: GRAVITEE_PLUGINS_PATH_0
