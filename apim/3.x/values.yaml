@@ -220,6 +220,9 @@ redis:
   port: 6379
 #  password: 'mysecretpassword'
 #  timeout: 2000
+  # By default, the Helm will create init containers for downloading and mouting the Redis plugin as an init container. 
+  # Set to false if you're looking to manage Redis plugin by yourself
+  download: true
 #  repositoryVersion: 3.3.0
 
 mongodb-replicaset:

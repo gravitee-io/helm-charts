@@ -92,8 +92,10 @@ spec:
       {{- end -}}
     
       {{- if eq .Values.ratelimit.type "redis"  -}}
-        {{- $rateLimitPlugin := include "ratelimit.plugin" . -}}
-        {{- $plugins = append $plugins $rateLimitPlugin -}}
+        {{- $redisPlugin := include "redis.plugin" . -}}
+        {{- if $redisPlugin -}}
+          {{- $plugins = append $plugins $redisPlugin -}}
+        {{- end -}}  
       {{- end -}}
 
       {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins "initContainers" $initContainers -}}

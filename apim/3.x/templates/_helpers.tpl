@@ -119,14 +119,16 @@ Create initContainers for downloading plugins ext plugin-ext
 {{- end }}
 {{- end -}}
 
-{{- define "ratelimit.plugin" -}}
-{{- $version := (.Values.redis.repositoryVersion | default .Values.gateway.image.tag | default .Chart.AppVersion ) -}}
-{{- if or (eq "nightly" $version) (contains "latest" $version) -}}
-  {{- printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-%s.zip" (.Values.redis.repositoryVersion | default .Chart.AppVersion) -}}
-{{- else if $version | semverCompare "<=3.5.18" -}}
-  {{- printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-%s.zip" $version -}}
-{{- else -}}
-  {{- printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-%s.zip" $version -}}
+{{- define "redis.plugin" -}}
+{{- if .Values.redis.download -}}
+  {{- $version := (.Values.redis.repositoryVersion | default .Values.gateway.image.tag | default .Chart.AppVersion ) -}}
+  {{- if or (eq "nightly" $version) (contains "latest" $version) -}}
+    {{- printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-%s.zip" (.Values.redis.repositoryVersion | default .Chart.AppVersion) -}}
+  {{- else if $version | semverCompare "<=3.5.18" -}}
+    {{- printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-%s.zip" $version -}}
+  {{- else -}}
+    {{- printf "https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-apim-repository-redis/gravitee-apim-repository-redis-%s.zip" $version -}}
+  {{- end -}}
 {{- end -}}
 {{- end -}}
 
