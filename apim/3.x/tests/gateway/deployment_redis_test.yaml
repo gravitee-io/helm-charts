@@ -174,3 +174,78 @@ tests:
                   volumeMounts:
                       - name: graviteeio-apim-plugins
                         mountPath: /tmp/plugins
+
+  - it: Check redis plugin to not download
+    template: gateway/gateway-deployment.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    release:
+      name: my-apim
+      namespace: unittest
+    set:
+        ratelimit:
+            type: "redis"
+        gateway:
+            ratelimit:
+                redis:
+                    host: localhost
+        redis:
+          download: false
+    asserts:
+        - hasDocuments:
+              count: 1
+        - equal:
+            path: spec.template.spec
+            value:
+              serviceAccountName: my-apim-apim3
+              affinity:
+                {}
+              nodeSelector:
+                {}
+              topologySpreadConstraints:
+                []
+              tolerations:
+                []
+              terminationGracePeriodSeconds: 30
+              initContainers:
+              containers:
+                - name: my-apim-apim3-gateway
+                  image: "graviteeio/apim-gateway:1.0.0-app"
+                  imagePullPolicy: Always
+                  securityContext:
+                    runAsNonRoot: true
+                    runAsUser: 1001
+                  ports:
+                    - name: http
+                      containerPort: 8082
+                  env:
+                  envFrom:
+                    []
+                  livenessProbe:
+                    failureThreshold: 3
+                    initialDelaySeconds: 30
+                    periodSeconds: 30
+                    tcpSocket:
+                      port: http
+                  readinessProbe:
+                    failureThreshold: 3
+                    initialDelaySeconds: 10
+                    periodSeconds: 30
+                    tcpSocket:
+                      port: http
+                  resources:
+                    limits:
+                      cpu: 500m
+                      memory: 512Mi
+                    requests:
+                      cpu: 200m
+                      memory: 256Mi
+                  volumeMounts:
+                    - name: config
+                      mountPath: /opt/graviteeio-gateway/config/gravitee.yml
+                      subPath: gravitee.yml
+              volumes:
+                - name: config
+                  configMap:
+                    name: my-apim-apim3-gateway
