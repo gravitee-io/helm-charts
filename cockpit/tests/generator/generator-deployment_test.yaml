@@ -129,7 +129,7 @@ tests:
     set:
       cockpit:
         managedServiceAccount: true
-        serviceAccount: "test-sa"
+        serviceAccount: ""
     asserts:
       - hasDocuments:
           count: 1
@@ -153,6 +153,7 @@ tests:
       - equal:
           path: spec.template.spec.serviceAccountName
           value: "test-sa"
+
   - it: Deploy without ServiceAccount
     template: generator/generator-deployment.yaml
     set:
@@ -167,3 +168,18 @@ tests:
       - equal:
           path: spec.template.spec.serviceAccountName
           value: null
+
+  - it: Deploy with managed custom ServiceAccount
+    template: generator/generator-deployment.yaml
+    set:
+      cockpit:
+        managedServiceAccount: true
+        serviceAccount: "test-sa"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: "test-sa"

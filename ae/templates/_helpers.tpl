@@ -47,7 +47,7 @@ Return the apiVersion of ingress.
 Use the fullname if the serviceAccount value is not set
 */}}
 {{- define "engine.serviceAccount" -}}
-{{- if not .Values.engine.managedServiceAccount }}
+{{- if or (not .Values.engine.managedServiceAccount) (and .Values.engine.managedServiceAccount .Values.engine.serviceAccount) }}
 {{- .Values.engine.serviceAccount -}}
 {{- else }}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
