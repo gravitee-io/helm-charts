@@ -523,6 +523,7 @@ api:
             password: adminadmin
         ingress:
           enabled: false
+          #ingressClassName: nginx
 #          path: /management/_(.*)
 #          hosts:
 #            - apim.example.com
@@ -585,6 +586,7 @@ api:
         kubernetes.io/ingress.class: nginx
         nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_pass_header if-match;\n"
         # kubernetes.io/tls-acme: "true"
+      #ingressClassName: nginx
       #tls:
         # Secrets must be manually created in the namespace.
         # - secretName: chart-example-tls
@@ -604,6 +606,7 @@ api:
         kubernetes.io/ingress.class: nginx
         nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
         # kubernetes.io/tls-acme: "true"
+      #ingressClassName: nginx
       #tls:
         # Secrets must be manually created in the namespace.
         # - secretName: chart-example-tls
@@ -781,6 +784,7 @@ gateway:
             path: "/p12/keystore"
       ingress:
         enabled: false
+        #ingressClassName: nginx
 #          path: /management/_(.*)
 #          hosts:
 #            - apim.example.com
@@ -816,6 +820,7 @@ gateway:
       #   internalPort: 18092
       # ingress:
       #   enabled: false
+      #   ingressClassName: nginx
       #   path: /gateway/_bridge
       #   # Used to create an Ingress record.
       #   hosts:
@@ -914,6 +919,7 @@ gateway:
       nginx.ingress.kubernetes.io/ssl-redirect: "false"
       # nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
       # kubernetes.io/tls-acme: "true"
+    #ingressClassName: nginx
     #tls:
       # Secrets must be manually created in the namespace.
       # - secretName: chart-example-tls
@@ -1054,6 +1060,7 @@ portal:
       # - secretName: chart-example-tls
       #   hosts:
       #     - chart-example.local
+    #ingressClassName: nginx
     tls:
       - hosts:
           - apim.example.com
@@ -1209,6 +1216,7 @@ ui:
       # - secretName: chart-example-tls
       #   hosts:
       #     - chart-example.local
+    #ingressClassName: nginx
     tls:
       - hosts:
           - apim.example.com

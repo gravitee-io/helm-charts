@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.44
+
+- Introduce `ingressClassName` as optional value/parameter for APIM 3.x helm chart ([7140](https://github.com/gravitee-io/issues/issues/7140))
+
 ### 3.1.43
 
 - [X] Disable automatic download of Redis plugin

@@ -20,6 +20,11 @@ metadata:
       {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
+{{- if .Values.api.ingress.management.ingressClassName -}}
+  ingressClassName: {{ .Values.api.ingress.management.ingressClassName }}
+{{- end }}
+{{- end }}
   rules:
   {{- range $host := .Values.api.ingress.management.hosts }}
   - host: {{ $host }}
