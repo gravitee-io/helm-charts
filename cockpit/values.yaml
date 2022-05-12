@@ -411,7 +411,7 @@ ui:
   livenessProbe:
     httpGet:
       path: /
-      port: http
+      port: ui-http
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
@@ -419,7 +419,7 @@ ui:
   readinessProbe:
     httpGet:
       path: /
-      port: http
+      port: ui-http
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
@@ -458,7 +458,7 @@ ui:
     type: ClusterIP
     externalPort: 8002
     internalPort: 8080
-    internalPortName: http
+    internalPortName: ui-http
   # annotations:
   securityContext:
     runAsUser: 101
@@ -563,6 +563,7 @@ generator:
     type: ClusterIP
     externalPort: 84
     internalPort: 3003
+    internalPortName: generator-http
   # annotations:
   securityContext:
     runAsUser: 1001
@@ -575,15 +576,17 @@ generator:
     targetMemoryAverageUtilization: 80
 
   livenessProbe:
-    tcpSocket:
-      port: 3003
+    httpGet:
+      path: /
+      port: generator-http
     initialDelaySeconds: 15
     periodSeconds: 30
     failureThreshold: 3
 
   readinessProbe:
-    tcpSocket:
-      port: 3003
+    httpGet:
+      path: /
+      port: generator-http
     initialDelaySeconds: 15
     periodSeconds: 30
     failureThreshold: 3

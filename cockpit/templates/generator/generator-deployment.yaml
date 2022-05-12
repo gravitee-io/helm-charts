@@ -85,7 +85,8 @@ spec:
           securityContext:  
 {{ toYaml .Values.generator.securityContext | trim | indent 12 }}
           ports:
-            - containerPort: {{ .Values.generator.service.internalPort }}
+            - name: {{ .Values.generator.service.internalPortName }}
+              containerPort: {{ .Values.generator.service.internalPort }}
           env:
 {{- if .Values.generator.env | default .Values.generator.deployment.extraEnvs }}
 {{ toYaml ( .Values.generator.env | default .Values.generator.deployment.extraEnvs ) | indent 12 }}

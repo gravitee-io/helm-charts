@@ -89,17 +89,20 @@ tests:
                 failureThreshold: 3
                 initialDelaySeconds: 15
                 periodSeconds: 30
-                tcpSocket:
-                  port: 3003
+                httpGet:
+                  path: /
+                  port: generator-http
               name: my-cockpit-swagger-generator
               ports:
               - containerPort: 3003
+                name: generator-http
               readinessProbe:
                 failureThreshold: 3
                 initialDelaySeconds: 15
                 periodSeconds: 30
-                tcpSocket:
-                  port: 3003
+                httpGet:
+                  path: /
+                  port: generator-http
               resources:
                 limits:
                   cpu: 500m

@@ -60,7 +60,7 @@ tests:
             type: ClusterIP
             ports:
               - port: 84
-                targetPort: 3003
+                targetPort: generator-http
                 protocol: TCP
                 name: swagger-generator
             selector:
