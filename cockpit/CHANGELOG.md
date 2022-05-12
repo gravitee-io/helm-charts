@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 ### 1.6.17
 
 - [X] Remove file logger
+- [X] Add missing container ports declaration
 
 ### 1.6.16
 
