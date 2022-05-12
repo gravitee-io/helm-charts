@@ -89,8 +89,7 @@ tests:
                 failureThreshold: 3
                 initialDelaySeconds: 15
                 periodSeconds: 30
-                httpGet:
-                  path: /
+                tcpSocket:
                   port: generator-http
               name: my-cockpit-swagger-generator
               ports:
@@ -100,8 +99,7 @@ tests:
                 failureThreshold: 3
                 initialDelaySeconds: 15
                 periodSeconds: 30
-                httpGet:
-                  path: /
+                tcpSocket:
                   port: generator-http
               resources:
                 limits:
