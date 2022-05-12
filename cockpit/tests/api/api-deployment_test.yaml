@@ -90,17 +90,21 @@ tests:
                 initialDelaySeconds: 30
                 periodSeconds: 30
                 tcpSocket:
-                  port: http
+                  port: api-http
               name: my-cockpit-api
               ports:
               - containerPort: 8063
-                name: http
+                name: api-http
+              - containerPort: 8062
+                name: api-ws
+              - containerPort: 18063
+                name: api-technical
               readinessProbe:
                 failureThreshold: 3
                 initialDelaySeconds: 30
                 periodSeconds: 30
                 tcpSocket:
-                  port: http
+                  port: api-http
               resources:
                 limits:
                   cpu: 500m

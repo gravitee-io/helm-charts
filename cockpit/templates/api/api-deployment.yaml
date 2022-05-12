@@ -99,7 +99,11 @@ spec:
 {{ toYaml .Values.api.securityContext | trim | indent 12 }}
           ports:
             - name: {{ .Values.api.service.internalPortName }}
-              containerPort: {{ .Values.api.service.internalPort }}
+              containerPort: {{ .Values.api.http.port }}
+            - name: {{ .Values.api.controller.ws.service.internalPortName }}
+              containerPort: {{ .Values.api.controller.ws.port }}
+            - name: {{ .Values.api.http.services.core.service.internalPortName }}
+              containerPort: {{ .Values.api.http.services.core.http.port }}
           env:
             {{- if or $plugins $extPlugins }}
             - name: GRAVITEE_PLUGINS_PATH_0

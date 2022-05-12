@@ -17,21 +17,21 @@ metadata:
 spec:
   type: "{{ .Values.api.service.type }}"
   ports:
-    - port: {{ .Values.api.service.externalPort }}
-      targetPort: {{ .Values.api.service.internalPort }}
+    - name: {{ .Values.api.name }}-http
+      port: {{ .Values.api.service.externalPort }}
+      targetPort: {{ .Values.api.service.internalPortName }}
       protocol: TCP
-      name: {{ .Values.api.name }}
     {{- if .Values.api.controller.ws.service.enabled }}
-    - port: {{ .Values.api.controller.ws.service.externalPort }}
-      targetPort: {{ .Values.api.controller.ws.port }}
+    - name: {{ .Values.api.name }}-ws
+      port: {{ .Values.api.controller.ws.service.externalPort }}
+      targetPort: {{ .Values.api.controller.ws.service.internalPortName }}
       protocol: TCP
-      name: {{ .Values.api.name }}-ws-controller
     {{- end }}
     {{- if .Values.api.http.services.core.service.enabled }}
-    - port: {{ .Values.api.http.services.core.service.externalPort }}
-      targetPort: {{ .Values.api.http.services.core.http.port }}
+    - name: {{ .Values.api.name }}-technical
+      port: {{ .Values.api.http.services.core.service.externalPort }}
+      targetPort: {{ .Values.api.http.services.core.service.internalPortName }}
       protocol: TCP
-      name: {{ .Values.api.name }}-technical
     {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
