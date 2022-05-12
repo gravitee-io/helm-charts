@@ -576,16 +576,14 @@ generator:
     targetMemoryAverageUtilization: 80
 
   livenessProbe:
-    httpGet:
-      path: /
+    tcpSocket:
       port: generator-http
     initialDelaySeconds: 15
     periodSeconds: 30
     failureThreshold: 3
 
   readinessProbe:
-    httpGet:
-      path: /
+    tcpSocket:
       port: generator-http
     initialDelaySeconds: 15
     periodSeconds: 30
