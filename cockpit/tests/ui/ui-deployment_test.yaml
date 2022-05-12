@@ -91,18 +91,18 @@ tests:
                 failureThreshold: 3
                 httpGet:
                   path: /
-                  port: http
+                  port: ui-http
                 initialDelaySeconds: 10
                 periodSeconds: 30
               name: my-cockpit-ui
               ports:
               - containerPort: 8080
-                name: http
+                name: ui-http
               readinessProbe:
                 failureThreshold: 3
                 httpGet:
                   path: /
-                  port: http
+                  port: ui-http
                 initialDelaySeconds: 10
                 periodSeconds: 30
               resources:

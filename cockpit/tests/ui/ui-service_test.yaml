@@ -60,7 +60,7 @@ tests:
             type: ClusterIP
             ports:
               - port: 8002
-                targetPort: 8080
+                targetPort: ui-http
                 protocol: TCP
                 name: ui
             selector:
