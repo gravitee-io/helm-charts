@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.6.17
+
+- [X] Remove file logger
+
 ### 1.6.16
 
 - [X] Add support for PodDisruptionBudget

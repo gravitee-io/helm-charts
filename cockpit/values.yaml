@@ -128,15 +128,7 @@ api:
     stdout:
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
     file:
-      enabled: true
-      rollingPolicy: |
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- daily rollover -->
-            <fileNamePattern>${gravitee.management.log.dir}/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!-- keep 30 days' worth of history -->
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%n"
+      enabled: false
     graviteeLevel: INFO
     jettyLevel: INFO
   restartPolicy: OnFailure
