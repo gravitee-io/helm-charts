@@ -60,13 +60,13 @@ tests:
             type: ClusterIP
             ports:
               - port: 8063
-                targetPort: 8063
+                targetPort: api-http
                 protocol: TCP
-                name: api
+                name: api-http
               - port: 8062
-                targetPort: 8062
+                targetPort: api-ws
                 protocol: TCP
-                name: api-ws-controller
+                name: api-ws
             selector:
               app.kubernetes.io/component: api
               app.kubernetes.io/instance: my-cockpit
@@ -106,15 +106,15 @@ tests:
             type: ClusterIP
             ports:
               - port: 8063
-                targetPort: 8063
+                targetPort: api-http
                 protocol: TCP
-                name: api
+                name: api-http
               - port: 8062
-                targetPort: 8062
+                targetPort: api-ws
                 protocol: TCP
-                name: api-ws-controller
+                name: api-ws
               - port: 18063
-                targetPort: 18063
+                targetPort: api-technical
                 protocol: TCP
                 name: api-technical
             selector:

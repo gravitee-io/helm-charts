@@ -17,10 +17,10 @@ metadata:
 spec:
   type: "{{ .Values.generator.service.type }}"
   ports:
-    - port: {{ .Values.generator.service.externalPort }}
-      targetPort: {{ .Values.generator.service.internalPort }}
+    - name: {{ .Values.generator.name }}
+      port: {{ .Values.generator.service.externalPort }}
+      targetPort: {{ .Values.generator.service.internalPortName }}
       protocol: TCP
-      name: {{ .Values.generator.name }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

@@ -71,7 +71,7 @@ tests:
           value:
             annotations:
               chaos.alpha.kubernetes.io/enabled: "false"
-              checksum/config: e5dfc0c664a5e5a4f851890494e988be845c6d014bfaa429985d660e11212550
+              checksum/config: 3ab22194836ffe7245b6c4c637a3d78db3d33bb8c886262bd998e2395ccb2050
             labels:
               app.kubernetes.io/component: api
               app.kubernetes.io/instance: my-cockpit
@@ -90,17 +90,21 @@ tests:
                 initialDelaySeconds: 30
                 periodSeconds: 30
                 tcpSocket:
-                  port: http
+                  port: api-http
               name: my-cockpit-api
               ports:
               - containerPort: 8063
-                name: http
+                name: api-http
+              - containerPort: 8062
+                name: api-ws
+              - containerPort: 18063
+                name: api-technical
               readinessProbe:
                 failureThreshold: 3
                 initialDelaySeconds: 30
                 periodSeconds: 30
                 tcpSocket:
-                  port: http
+                  port: api-http
               resources:
                 limits:
                   cpu: 500m

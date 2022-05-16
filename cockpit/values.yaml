@@ -128,15 +128,7 @@ api:
     stdout:
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
     file:
-      enabled: true
-      rollingPolicy: |
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- daily rollover -->
-            <fileNamePattern>${gravitee.management.log.dir}/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!-- keep 30 days' worth of history -->
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%n"
+      enabled: false
     graviteeLevel: INFO
     jettyLevel: INFO
   restartPolicy: OnFailure
@@ -181,14 +173,14 @@ api:
 
   livenessProbe:
     tcpSocket:  
-      port: http
+      port: api-http
     initialDelaySeconds: 30
     periodSeconds: 30
     failureThreshold: 3
 
   readinessProbe:
     tcpSocket:
-      port: http
+      port: api-http
     initialDelaySeconds: 30
     periodSeconds: 30
     failureThreshold: 3
@@ -233,6 +225,7 @@ api:
     admin:
       password: $2a$10$YCR.gYLmG8TzKSg5TYxdzeJOpMGpEavOCni5sbHukD2qwwZxhuXvO
   http:
+    port: 8063
     services:
       core:
         http:
@@ -252,8 +245,8 @@ api:
 #       If you choose to enable this service, you'll need to expose the technical api
 #       on an accessible host outside of the pod: api.http.services.core.http.host
           enabled: false
-#         type: ClusterIP
-#         externalPort: 18063
+          internalPortName: api-technical
+          externalPort: 18063
 
   reCaptcha:
     enabled: false
@@ -296,13 +289,14 @@ api:
             secretName: api-custom-cert
       service:
         enabled: true
-        type: ClusterIP
         externalPort: 8062
+        internalPortName: api-ws
+
   service:
     type: ClusterIP
     externalPort: 8063
-    internalPort: 8063
-    internalPortName: http
+    internalPortName: api-http
+
   # annotations:
   securityContext:
     runAsUser: 1001
@@ -417,7 +411,7 @@ ui:
   livenessProbe:
     httpGet:
       path: /
-      port: http
+      port: ui-http
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
@@ -425,7 +419,7 @@ ui:
   readinessProbe:
     httpGet:
       path: /
-      port: http
+      port: ui-http
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
@@ -464,7 +458,7 @@ ui:
     type: ClusterIP
     externalPort: 8002
     internalPort: 8080
-    internalPortName: http
+    internalPortName: ui-http
   # annotations:
   securityContext:
     runAsUser: 101
@@ -569,6 +563,7 @@ generator:
     type: ClusterIP
     externalPort: 84
     internalPort: 3003
+    internalPortName: generator-http
   # annotations:
   securityContext:
     runAsUser: 1001
@@ -582,14 +577,14 @@ generator:
 
   livenessProbe:
     tcpSocket:
-      port: 3003
+      port: generator-http
     initialDelaySeconds: 15
     periodSeconds: 30
     failureThreshold: 3
 
   readinessProbe:
     tcpSocket:
-      port: 3003
+      port: generator-http
     initialDelaySeconds: 15
     periodSeconds: 30
     failureThreshold: 3
