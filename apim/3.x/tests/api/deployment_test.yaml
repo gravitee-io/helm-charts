@@ -93,7 +93,7 @@ tests:
     set:
       apim:
         managedServiceAccount: true
-        serviceAccount: "test-sa"
+        serviceAccount: ""
     asserts:
       - hasDocuments:
           count: 1
@@ -133,3 +133,17 @@ tests:
           path: spec.template.spec.serviceAccountName
           value: null
 
+  - it: Deploy with custom managed ServiceAccount
+    template: api/api-deployment.yaml
+    set:
+      apim:
+        managedServiceAccount: true
+        serviceAccount: "test-sa"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: "test-sa"
