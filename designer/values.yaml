@@ -15,7 +15,7 @@ mongo:
   socketKeepAlive: false
   rs: rs0
   rsEnabled: true
-  dbhost: mongo-mongodb-replicaset
+  dbhost: mongo-mongodb-replicaset-headless
   dbname: gravitee
   dbport: 27017
   connectTimeoutMS: 30000
@@ -26,22 +26,17 @@ mongo:
     password:
 
 mongodb-replicaset:
+  initContainers:
   enabled: false
-  replicas: 3
+  architecture: replicaset
+  fullnameOverride: "mongo-mongodb-replicaset"
+  replicaCount: 3
   replicaSetName: rs0
+  image:
+    repository: bitnami/mongodb
+    tag: 5.0.8-debian-10-r20
   auth:
     enabled: false
-    adminUser: username
-    adminPassword: password
-    metricsUser: metrics
-    metricsPassword: password
-    key: keycontent
-    # existingKeySecret:
-    # existingAdminSecret:
-    # existingMetricsSecret:
-  image:
-    repository: mongo
-    tag: 3.6
   resources:
     limits:
       cpu: 500m
@@ -49,13 +44,12 @@ mongodb-replicaset:
     requests:
       cpu: 100m
       memory: 256Mi
-  persistentVolume:
+  persistence:
     enabled: true
-    # storageClass: "-"
+    # storageClass: ""
     accessModes:
       - ReadWriteOnce
     size: 1Gi
-  configmap: {}
 
 apim:
   console:
