@@ -1241,3 +1241,9 @@ initContainers:
     runAsUser: 1001
     runAsNonRoot: true
   env: []
+
+# If enterprise edition is enabled, it creates a Secret named gravitee-license
+# The value of the license must be base64-encoded (required by k8s secrets)
+enterpriseEdition:
+  enabled: false
+  base64License: licenseContentEncodedInBase64

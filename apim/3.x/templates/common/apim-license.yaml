@@ -1,0 +1,8 @@
+{{- if .Values.enterpriseEdition.enabled -}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gravitee-license
+data:
+  license.key: {{ .Values.enterpriseEdition.base64License }}
+{{- end -}}
