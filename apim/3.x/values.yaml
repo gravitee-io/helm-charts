@@ -226,7 +226,6 @@ redis:
 #  repositoryVersion: 3.3.0
 
 mongodb-replicaset:
-  initContainers:
   enabled: false
   architecture: replicaset
   fullnameOverride: "graviteeio-apim-mongodb-replicaset"
