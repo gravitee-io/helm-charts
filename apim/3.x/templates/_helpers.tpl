@@ -165,7 +165,7 @@ Create volumes for plugins
 Use the fullname if the serviceAccount value is not set
 */}}
 {{- define "apim.serviceAccount" -}}
-{{- if not .Values.apim.managedServiceAccount }}
+{{- if or (not .Values.apim.managedServiceAccount) (and .Values.apim.managedServiceAccount .Values.apim.serviceAccount) }}
 {{- .Values.apim.serviceAccount -}}
 {{- else }}
 {{- $name := default .Chart.Name .Values.nameOverride -}}

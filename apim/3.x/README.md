@@ -52,6 +52,20 @@ $ helm install apim3-3.0.0.tgz
 
 The following tables list the configurable parameters of the Gravitee chart and their default values.
 
+You can rely on kubernetes _ConfigMaps_ and _Secrets_ to initialize Gravitee settings since APIM 3.15.0.
+To use this feature, you have to create the ServiceAccount that allows APIM to connect to the Kubernetes API (the helm chart should do it by default) and then you simply have to define your application settings like this:
+
+* for a Secret : `kubernetes://<namespace>/secrets/<my-secret-name>/<my-secret-key>`
+* for a ConfigMap : `kubernetes://<namespace>/configmaps/<my-configmap-name>/<my-configmap-key>`
+
+
+Here is an example for the mongodb uri initialized from the `mongo` secret deployed in the `default` namespace:
+
+```yaml
+mongo:
+  uri: kubernetes://default/secrets/mongo/mongouri
+```
+
 ### Shared configuration
 
 To configure common features such as:
