@@ -231,6 +231,7 @@ mongodb-replicaset:
   fullnameOverride: "graviteeio-apim-mongodb-replicaset"
   replicaCount: 3
   replicaSetName: rs0
+  podAffinityPreset: soft
   image:
     repository: bitnami/mongodb
     tag: 5.0.8-debian-10-r20
