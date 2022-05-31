@@ -36,7 +36,6 @@ tests:
           path: data.[gravitee.yml]
           pattern: "[ ]{6}pattern: testusernamepattern"
 
-
   - it: should have SSL settings for JDBC Backends
     set:
       management.type: jdbc
@@ -85,3 +84,40 @@ tests:
       - matchRegex:
           path: data.[gravitee.yml]
           pattern: "[ ]{2}somevalue: block-duplicate-mfa-rate"
+
+  - it: should set userManagement activity
+    set:
+      userManagement.activity.enabled: true  
+      userManagement.activity.anon.algorithm: SHA512
+      userManagement.activity.anon.salt: someSalt
+      userManagement.activity.retention.time: 12
+      userManagement.activity.retention.unit: WEEKS
+      userManagement.activity.geolocation.variation.latitude: 0.09
+      userManagement.activity.geolocation.variation.longitude: 0.07
+
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}enabled: true"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}algorithm: SHA512"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}salt: someSalt"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}time: 12"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}unit: WEEKS"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}latitude: 0.09"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}longitude: 0.07"

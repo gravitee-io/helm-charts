@@ -333,6 +333,13 @@ httpClient:
 | ui.service.internalPortName | string | `http` |  |
 | ui.service.name | string | `"nginx"` |  |
 | ui.service.type | string | `"ClusterIP"` |  |
+| userManagement.activity.enabled | boolean | `false` | |
+| userManagement.activity.anon.algorithm | enum(`SHA256`, `SHA512`, `NONE`)| `SHA256` | | 
+| userManagement.activity.anon.salt | string | `null` | |
+| userManagement.activity.retention.time | int | `3` | | 
+| userManagement.activity.retention.unit | `enum(java.time.temporal.ChronoUnit)` | `MONTHS` |  |
+| userManagement.activity.geolocation.variation.latitude | double | `0.07` | | 
+| userManagement.activity.geolocation.variation.longitude: | double | `0.07`  | |
 
 
 ## OpenShift
