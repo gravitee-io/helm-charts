@@ -166,8 +166,11 @@ define the following configuration options:
 |===
 
 See
-https://github.com/helm/charts/tree/master/stable/mongodb-replicaset[MongoDB
+https://artifacthub.io/packages/helm/bitnami/mongodb[MongoDB
 replicaset] for detailed documentation on helm chart.
+
+Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running AM locally.
+
 
 [[graviteeio-configuration]]
 ==== Gravitee.io Configuration

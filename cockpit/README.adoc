@@ -20,6 +20,21 @@ Kubernetes: `>=1.16.0-0`
 | https://charts.helm.sh/stable | mongodb-replicaset | ^3.10.1
 |===
 
+==== Mongo ReplicaSet
+
+[cols=",,",options="header",]
+|===
+|Parameter |Description |Default
+|`+mongodb-replicaset.enabled+` |Enable deployment of Mongo replicaset
+|`+false+`
+|===
+
+See
+https://artifacthub.io/packages/helm/bitnami/mongodb[MongoDB
+replicaset] for detailed documentation on helm chart.
+
+Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running Cockpit locally.
+
 ==== Hazelcast
 
 Cockpit embeds Hazelcast to handle installations connections.

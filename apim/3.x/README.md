@@ -140,7 +140,9 @@ If neither `mongo.uri` or `mongo.servers` are provided, you have to define the f
 | ---------------------------- | ------------------------------------- | ------- |
 | `mongodb-replicaset.enabled` | Enable deployment of Mongo replicaset | `false` |
 
-See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongodb-replicaset) for detailed documentation on helm chart.
+See [MongoDB replicaset](https://artifacthub.io/packages/helm/bitnami/mongodb) for detailed documentation on helm chart.
+
+** Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running APIM locally.  
 
 ### Elasticsearch
 
@@ -165,7 +167,9 @@ See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongo
 | ----------------------- | ------------------------------------------ | ------- |
 | `elasticsearch.enabled` | Enable deployment of Elasticsearch cluster | `false` |
 
-See [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch) for detailed documentation on optional requirements helm chart.
+See [Elasticsearch](https://artifacthub.io/packages/helm/elastic/elasticsearch) for detailed documentation on optional requirements helm chart.
+
+** Please be aware that the Elasticsearch installed by Gravitee is NOT recommended in production and it is just for testing purpose and running APIM locally.
 
 ### Gravitee UI
 

@@ -205,8 +205,11 @@ define the following configuration options:
 |===
 
 See
-https://github.com/helm/charts/tree/master/stable/mongodb-replicaset[MongoDB
+https://artifacthub.io/packages/helm/bitnami/mongodb[MongoDB
 replicaset] for detailed documentation on helm chart.
+
+Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running APIM locally.
+
 
 ==== PostgresSQL (via JDBC Connection) 
 To install a new PostgresSQL database, use the command below and update the `username`, `password`, and `databasename` parameters: 
@@ -283,8 +286,11 @@ pfx) |`+null+`
 |===
 
 See
-https://github.com/helm/charts/tree/master/stable/elasticsearch[Elasticsearch]
+https://artifacthub.io/packages/helm/elastic/elasticsearch[Elasticsearch]
 for detailed documentation on optional requirements Helm chart.
+
+Please be aware that the Elasticsearch installed by Gravitee is NOT recommended in production and it is just for testing purpose and running APIM locally.
+
 
 ==== Gravitee UI
 
