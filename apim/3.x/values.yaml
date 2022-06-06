@@ -229,7 +229,6 @@ mongodb-replicaset:
   enabled: false
   architecture: replicaset
   fullnameOverride: "graviteeio-apim-mongodb-replicaset"
-  replicaCount: 1
   replicaSetName: rs0
   podAffinityPreset: soft
   image:
@@ -297,7 +296,6 @@ elasticsearch:
   clusterName: "elasticsearch"
   fullnameOverride: "graviteeio-apim-elasticsearch"
   nodeGroup: "graviteeio-apim-elasticsearch"
-  replicas: 2
   image: "docker.elastic.co/elasticsearch/elasticsearch"
   imageTag: "7.17.3"
   antiAffinity: "soft"

@@ -64,7 +64,6 @@ mongodb-replicaset:
   enabled: false
   architecture: replicaset
   fullnameOverride: "mongo-mongodb-replicaset"
-  replicaCount: 3
   replicaSetName: rs0
   image:
     repository: bitnami/mongodb
@@ -73,7 +72,7 @@ mongodb-replicaset:
     enabled: false
   resources:
     limits:
-      cpu: 500m
+      cpu: 1
       memory: 512Mi
     requests:
       cpu: 100m
