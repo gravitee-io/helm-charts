@@ -229,7 +229,7 @@ mongodb-replicaset:
   enabled: false
   architecture: replicaset
   fullnameOverride: "graviteeio-apim-mongodb-replicaset"
-  replicaCount: 3
+  replicaCount: 1
   replicaSetName: rs0
   podAffinityPreset: soft
   image:
@@ -239,7 +239,7 @@ mongodb-replicaset:
     enabled: false
   resources:
     limits:
-      cpu: 500m
+      cpu: 1
       memory: 512Mi
     requests:
       cpu: 100m
@@ -297,11 +297,13 @@ elasticsearch:
   clusterName: "elasticsearch"
   fullnameOverride: "graviteeio-apim-elasticsearch"
   nodeGroup: "graviteeio-apim-elasticsearch"
-  replicas: 3
+  replicas: 2
   image: "docker.elastic.co/elasticsearch/elasticsearch"
   imageTag: "7.17.3"
   antiAffinity: "soft"
   esJavaOpts: "-Xms512m -Xmx512m"
+  labels:
+    app.kubernetes.io/instance: "graviteeio-apim3x"
   resources:
     limits:
       cpu: "1"
