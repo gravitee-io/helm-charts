@@ -76,6 +76,7 @@ tests:
               app.kubernetes.io/component: ui
               app.kubernetes.io/instance: my-cockpit
               app.kubernetes.io/name: cockpit
+              app.kubernetes.io/version: 1.0.0-app
       - equal:
           path: spec.template.spec
           value:
