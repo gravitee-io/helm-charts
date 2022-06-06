@@ -31,6 +31,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Chart.AppVersion }}
         app.kubernetes.io/component: "{{ .Values.generator.name }}"
     spec:
     {{- if .Values.generator.nodeSelector }}
