@@ -1,6 +1,6 @@
 apiVersion: v1
 name: designer
-version: 1.0.10
+version: 1.0.11
 appVersion: 1.31.4
 description: Official Gravitee.io Helm chart for API Designer
 home: https://gravitee.io
@@ -18,4 +18,4 @@ annotations:
   # List of changes for the release in artifacthub.io
   # https://artifacthub.io/packages/helm/graviteeio/designer?modal=changelog
   artifacthub.io/changes: |
-    - Ensure to run api designer api in production mode
+    - Add version labels on pods

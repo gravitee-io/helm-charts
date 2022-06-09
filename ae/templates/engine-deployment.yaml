@@ -59,6 +59,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Values.engine.image.tag | default .Chart.AppVersion | quote }}
         app.kubernetes.io/component: "{{ .Values.engine.name }}"
         {{- if .Values.engine.deployment.labels }}
         {{- range $key, $value := .Values.engine.deployment.labels }}
