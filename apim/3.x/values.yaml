@@ -286,35 +286,51 @@ es:
     #     - /path/to/key
     #     - /path/to/key2
   endpoints:
-    - http://graviteeio-apim-elasticsearch-headless.default.svc.cluster.local:9200
+    - http://graviteeio-apim-elasticsearch-data.default.svc.cluster.local:9200
   pipeline:
     plugins:
       ingest: geoip, user_agent # geoip and user_agent plugins are enabled by default
 
 elasticsearch:
   enabled: false
-  clusterName: "elasticsearch"
+  name: "elasticsearch"
   fullnameOverride: "graviteeio-apim-elasticsearch"
-  nodeGroup: "graviteeio-apim-elasticsearch"
-  image: "docker.elastic.co/elasticsearch/elasticsearch"
-  imageTag: "7.17.3"
-  antiAffinity: "soft"
-  esJavaOpts: "-Xms512m -Xmx512m"
-  labels:
-    app.kubernetes.io/instance: "graviteeio-apim3x"
-  resources:
-    limits:
-      cpu: "1"
-      memory: "2048Mi"
-    requests:
-      cpu: "25m"
-      memory: "1536Mi"
-  volumeClaimTemplate:
-    accessModes: [ "ReadWriteOnce" ]
-    #  storageClassName: ""
+  image:
+    repository: "bitnami/elasticsearch"
+    tag: "7.17.3"
+  master:
+    replicas: 2
+    persistence:
+      size: 4Gi
+    heapSize:
     resources:
+      limits:
+        cpu: 500m
+        memory: 1024Mi
       requests:
-        storage: 20Gi
+        cpu: 25m
+        memory: 256Mi
+  coordinating:
+    replicas: 2
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1024Mi
+      requests:
+        cpu: 25m
+        memory: 256Mi
+  data:
+    replicas: 2
+    heapSize: 512m
+    resources:
+      limits:
+        cpu: 1
+        memory: 2048Mi
+      requests:
+        cpu: 50m
+        memory: 1024Mi
+    persistence:
+      size: 20Gi
 
 alerts:
   enabled: false

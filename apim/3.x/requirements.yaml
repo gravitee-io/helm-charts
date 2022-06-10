@@ -1,7 +1,7 @@
 dependencies:
   - name: elasticsearch
-    version: ^7.17.3
-    repository: https://helm.elastic.co
+    version: ^17.9.29
+    repository: https://charts.bitnami.com/bitnami
     condition: elasticsearch.enabled
   - name: mongodb
     alias: mongodb-replicaset
