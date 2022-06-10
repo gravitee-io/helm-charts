@@ -302,7 +302,6 @@ elasticsearch:
     replicas: 2
     persistence:
       size: 4Gi
-    heapSize:
     resources:
       limits:
         cpu: 500m
