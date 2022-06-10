@@ -56,3 +56,15 @@ tests:
       - matchRegex:
           path: data.[gravitee.yml]
           pattern: "cookie-secure: true"
+  - it: Set console Pendo analytics attributes with provided values
+    template: api/api-configmap.yaml
+    set:
+      ui:
+        analytics:
+          pendo:
+            enabled: true
+            apiKey: "myPendoKey"
+    asserts:
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "apiKey: myPendoKey"
