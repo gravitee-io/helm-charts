@@ -59,19 +59,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return the apiVersion of ingress.
-*/}}
-{{- define "ingress.apiVersion" -}}
-{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1" -}}
-    {{- print "networking.k8s.io/v1" -}}
-{{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" -}}
-    {{- print "networking.k8s.io/v1beta1" -}}
-{{- else -}}
-    {{- print "extensions/v1beta1" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Create initContainers for downloading plugins ext plugin-ext
 */}}
 {{- define "deployment.pluginInitContainers" -}}
@@ -142,6 +129,7 @@ Use the fullname if the serviceAccount value is not set
 {{- end -}}
 {{- end -}}
 
+
 {{/*
 Return the target Kubernetes version
 */}}
@@ -165,5 +153,44 @@ Return the appropriate apiVersion for poddisruptionbudget.
 {{- print "policy/v1beta1" -}}
 {{- else -}}
 {{- print "policy/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for ingress.
+*/}}
+{{- define "common.capabilities.ingress.apiVersion" -}}
+{{- if semverCompare "<1.14-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "extensions/v1beta1" -}}
+{{- else if semverCompare "<1.19-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "networking.k8s.io/v1beta1" -}}
+{{- else -}}
+{{- print "networking.k8s.io/v1" -}}
+{{- end }}
+{{- end -}}
+
+{{/*
+Returns true if the ingressClassname field is supported
+Usage:
+{{ include "common.ingress.supportsIngressClassname" . }}
+*/}}
+{{- define "common.ingress.supportsIngressClassname" -}}
+{{- if semverCompare "<1.18-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "false" -}}
+{{- else -}}
+{{- print "true" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Renders the annotations for an ingress
+Usage:
+{{ include "common.ingress.annotations.render" ( dict "annotations" .Values.path.to.the.Value "ingressClassName" .Values.path.to.the.Value "context" $) }}
+*/}}
+{{- define "common.ingress.annotations.render" -}}
+{{- range $key, $value := .annotations }}
+{{- if or ( ne $key "kubernetes.io/ingress.class" ) ( not ( and ( $.ingressClassName ) ( include "common.ingress.supportsIngressClassname" $.context ))) }}
+{{ $key }}: {{ $value | quote }}
+{{- end -}}
 {{- end -}}
 {{- end -}}

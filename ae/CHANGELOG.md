@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Alert Engine](https://gi
 ### 1.1.36
 
 - [X] Add version labels on pods
+- [X] Add support for ingressClassName
 
 ### 1.1.35
 

@@ -2,14 +2,12 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
-### 1.6.19
-
-- [X] Add version labels on pods
-
 ### 1.6.18
 
 - [X] Add support for managed ServiceAccounts name provided by user
- 
+- [X] Add version labels on pods
+- [X] Add support for ingressClassName
+
 ### 1.6.17
 
 - [X] Remove file logger

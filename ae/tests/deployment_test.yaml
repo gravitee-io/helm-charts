@@ -64,6 +64,7 @@ tests:
               app.kubernetes.io/component: engine
               app.kubernetes.io/instance: my-ae
               app.kubernetes.io/name: ae
+              app.kubernetes.io/version: 1.0.0-app
       - equal:
           path: spec.template.spec
           value:
