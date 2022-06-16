@@ -235,6 +235,7 @@ api:
             password: adminadmin  
         ingress:
           enabled: false
+          ingressClassName: ""
 #          path: /management/_(.*)
 #          hosts:
 #            - apim.example.com
@@ -270,6 +271,7 @@ api:
       port: 8062
       ingress:
         enabled: true
+        ingressClassName: ""
         # For ssl-passthrough support, the path must be /
         path: /
         hosts:
@@ -309,6 +311,7 @@ api:
     targetMemoryAverageUtilization: 80
   ingress:
     enabled: true
+    ingressClassName: ""
     path: /management
     # Used to create an Ingress record.
     hosts:
@@ -466,6 +469,7 @@ ui:
     runAsNonRoot: true
   ingress:
     enabled: true
+    ingressClassName: ""
     path: /
     # Used to create an Ingress record.
     hosts:

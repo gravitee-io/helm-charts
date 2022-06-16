@@ -56,6 +56,9 @@ tests:
     release:
       name: my-cockpit
       namespace: unittest
+    set:
+      global:
+        kubeVersion: 1.13.0
     asserts:
       - hasDocuments:
           count: 1

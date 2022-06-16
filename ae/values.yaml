@@ -131,6 +131,7 @@ engine:
   ingress:
     enabled: true
     path: /
+    ingressClassName: ""
     # Used to create an Ingress record.
     hosts:
       - ae.example.com
@@ -208,6 +209,7 @@ engine:
           password: adminadmin
       ingress:
         enabled: false
+        ingressClassName: ""
 #          path: /management/_(.*)
 #          hosts:
 #            - ae.example.com
