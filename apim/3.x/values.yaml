@@ -523,6 +523,7 @@ api:
             password: adminadmin
         ingress:
           enabled: false
+          ingressClassName: ""
 #          path: /management/_(.*)
 #          hosts:
 #            - apim.example.com
@@ -578,6 +579,7 @@ api:
     management:
       enabled: true
       path: /management
+      ingressClassName: ""
       # Used to create an Ingress record.
       hosts:
         - apim.example.com
@@ -597,6 +599,7 @@ api:
     portal:
       enabled: true
       path: /portal
+      ingressClassName: ""
       # Used to create an Ingress record.
       hosts:
         - apim.example.com
@@ -781,6 +784,7 @@ gateway:
             path: "/p12/keystore"
       ingress:
         enabled: false
+        ingressClassName: ""
 #          path: /management/_(.*)
 #          hosts:
 #            - apim.example.com
@@ -816,6 +820,7 @@ gateway:
       #   internalPort: 18092
       # ingress:
       #   enabled: false
+      #   ingressClassName: ""
       #   path: /gateway/_bridge
       #   # Used to create an Ingress record.
       #   hosts:
@@ -902,6 +907,7 @@ gateway:
   ingress:
     enabled: true
     path: /gateway
+    ingressClassName: ""
     # Used to create an Ingress record.
     # Multiple hostnames supported
     # - hosts:
@@ -1043,6 +1049,7 @@ portal:
   ingress:
     enabled: true
     path: /
+    ingressClassName: ""
     # Used to create an Ingress record.
     hosts:
       - apim.example.com
@@ -1197,6 +1204,7 @@ ui:
   ingress:
     enabled: true
     path: /console(/|$)(.*)
+    ingressClassName: ""
     # Used to create an Ingress record.
     hosts:
       - apim.example.com

@@ -3,7 +3,7 @@
 {{- $serviceGWName := include "gravitee.engine.fullname" . -}}
 {{- $serviceGWPort := .Values.engine.service.externalPort -}}
 {{- $ingressPath   := .Values.engine.ingress.path -}}
-{{- $apiVersion := include "ingress.apiVersion" . -}}
+{{- $apiVersion := include "common.capabilities.ingress.apiVersion" . -}}
 apiVersion: {{ $apiVersion }}
 kind: Ingress
 metadata:
@@ -16,10 +16,13 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
   annotations:
-    {{- range $key, $value := .Values.engine.ingress.annotations }}
-      {{ $key }}: {{ $value | quote }}
+    {{- if .Values.engine.ingress.annotations }}
+    {{- include "common.ingress.annotations.render" (dict "annotations" .Values.engine.ingress.annotations "ingressClassName" .Values.engine.ingress.ingressClassName "context" $) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if and .Values.engine.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.engine.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
   {{- range $host := .Values.engine.ingress.hosts }}
   - host: {{ $host }}
