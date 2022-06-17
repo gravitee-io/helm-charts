@@ -283,12 +283,14 @@ api:
           enabled: true
       core:
         http:
+          enabled: true
           port: 18093
           host: localhost
           authentication:
             password: adminadmin
         ingress:
           enabled: false
+          ingressClassName: ""
 #          path: /management/_(.*)
 #          hosts:
 #            - am.example.com
@@ -326,6 +328,7 @@ api:
     targetMemoryAverageUtilization: 80
   ingress:
     enabled: true
+    ingressClassName: ""
     path: /management
     # Used to create an Ingress record.
     hosts:
@@ -516,6 +519,7 @@ gateway:
             path: "/p12/keystore"
       ingress:
         enabled: false
+        ingressClassName: ""
       #          path: /management/_(.*)
       #          hosts:
       #            - am.example.com
@@ -581,6 +585,7 @@ gateway:
     targetMemoryAverageUtilization: 80
   ingress:
     enabled: true
+    ingressClassName: ""
     path: /auth
     # Used to create an Ingress record.
     hosts:
@@ -721,6 +726,7 @@ ui:
     runAsNonRoot: true
   ingress:
     enabled: true
+    ingressClassName: ""
     path: /
     # Used to create an Ingress record.
     hosts:

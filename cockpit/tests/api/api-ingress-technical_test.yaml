@@ -3,7 +3,6 @@ templates:
   - "api/api-ingress-technical.yaml"
 tests:
   - it: should generate nothing when api is disabled
-    template: api/api-ingress-technical.yaml
     set:
       api:
         enabled: false
@@ -15,7 +14,6 @@ tests:
           count: 0
 
   - it: should generate nothing when ingress is disabled
-    template: api/api-ingress-technical.yaml
     set:
       api:
         enabled: true
@@ -29,13 +27,106 @@ tests:
           count: 0
 
   - it: should generate default technical ingress configuration
-    template: api/api-ingress-technical.yaml
     release:
       name: my-cockpit
       namespace: unittest
     asserts:
       - hasDocuments:
           count: 0
+
+  - it: Check technical ingress disabled by default
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: Check technical Ingress extensions/v1beta1
+    set:
+      api:
+        http:
+          services:
+            core:
+              http:
+                enabled: true
+              ingress:
+                enabled: true
+      global:
+        kubeVersion: 1.13.0
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: extensions/v1beta1
+      - isEmpty:
+          path: spec.ingressClassName
+
+  - it: Check technical Ingress networking.k8s.io/v1beta1
+    set:
+      api:
+        http:
+          enabled: true
+          services:
+            core:
+              http:
+                enabled: true
+              ingress:
+                enabled: true
+      global:
+        kubeVersion: 1.15.0
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1beta1
+      - isEmpty:
+          path: spec.ingressClassName
+
+  - it: Check technical Ingress networking.k8s.io/v1 without IngressClassName
+    set:
+      api:
+        http:
+          enabled: true
+          services:
+            core:
+              http:
+                enabled: true
+              ingress:
+                enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - isEmpty:
+          path: spec.ingressClassName
+
+  - it: Check technical Ingress networking.k8s.io/v1 with IngressClassName
+    set:
+      api:
+        http:
+          enabled: true
+          services:
+            core:
+              http:
+                enabled: true
+              ingress:
+                enabled: true
+                ingressClassName: nginx
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - equal:
+          path: spec.ingressClassName
+          value: nginx
 
   - it: should apply labels
     template: api/api-ingress-technical.yaml
@@ -80,6 +171,8 @@ tests:
   - it: should apply technical ingress configuration
     template: api/api-ingress-technical.yaml
     set:
+      global:
+        kubeVersion: 1.13.0
       api:
         http:
           services:
