@@ -511,7 +511,8 @@ api:
       enabled: false
       prometheus:
         enabled: true
-
+    bridge:
+      enabled: false
   http:
     services:
       core:

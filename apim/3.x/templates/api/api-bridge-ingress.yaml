@@ -1,0 +1,48 @@
+{{- if .Values.api.enabled -}}
+{{- if .Values.api.services.bridge.enabled -}}
+{{- if .Values.api.services.bridge.ingress.enabled -}}
+{{- $serviceAPIName := include "gravitee.api.fullname" . -}}
+{{- $serviceAPIPort := .Values.api.services.bridge.service.externalPort -}}
+{{- $ingressPath   := .Values.api.services.bridge.ingress.path -}}
+{{- $apiVersion := include "common.capabilities.ingress.apiVersion" . -}}
+apiVersion: {{ $apiVersion }}
+kind: Ingress
+metadata:
+  name: {{ template "gravitee.api.fullname" . }}-bridge
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.api.image.tag | default .Chart.AppVersion | quote }}
+    app.kubernetes.io/component: "{{ .Values.api.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    {{- range $key, $value := .Values.api.services.bridge.ingress.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+  {{- range $host := .Values.api.services.bridge.ingress.hosts }}
+  - host: {{ $host }}
+    http:
+      paths:
+      - pathType: Prefix
+        path: {{ $ingressPath }}
+        backend:
+          {{- if (eq $apiVersion "networking.k8s.io/v1") }}
+          service:
+            name: {{ $serviceAPIName }}
+            port:
+              number: {{ $serviceAPIPort }}
+          {{ else }}
+          serviceName: {{ $serviceAPIName }}
+          servicePort: {{ $serviceAPIPort }}
+          {{- end -}}
+  {{- end -}}
+  {{- if .Values.api.services.bridge.ingress.tls }}
+  tls:
+{{ toYaml .Values.api.services.bridge.ingress.tls | indent 4 }}
+  {{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
