@@ -1,15 +1,15 @@
 suite: Test Management API with Cockpit
 templates:
   - "api/api-deployment.yaml"
-  - "api/api-configmap.yaml"
+  - "api/api-secret.yaml"
 tests:
   - it: Check cockpit deployment
     template: api/api-deployment.yaml
     set:
       cockpit:
         enabled: true
-        keystore: 
-          password: 
+        keystore:
+          password:
             value: my_password
     asserts:
       - hasDocuments:
@@ -42,7 +42,7 @@ tests:
     set:
       cockpit:
         enabled: true
-        keystore: 
+        keystore:
           password:
             valueFrom:
               secretKeyRef:
@@ -82,9 +82,9 @@ tests:
     set:
       cockpit:
         enabled: true
-        keystore: 
+        keystore:
           password:
-            valueFrom: 
+            valueFrom:
               configMapKeyRef:
                 name: special-config
                 key: password-key

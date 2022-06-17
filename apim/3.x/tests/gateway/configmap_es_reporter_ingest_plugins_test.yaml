@@ -1,13 +1,12 @@
 suite: Test config maps properly sets ES reporter ingest plugins
 templates:
-  - "gateway/gateway-configmap.yaml"
+  - "gateway/gateway-secret.yaml"
 
 tests:
-
   - it: Check that ingest plugins takes default values if not set
     asserts:
       - matchRegex:
-          path: data.gravitee\.yml
+          path: stringData.gravitee\.yml
           pattern: "[ ]+ingest: geoip, user_agent\n"
 
   - it: Check that ingest plugins are set with given values
@@ -18,7 +17,7 @@ tests:
             ingest: my-test-ingest-plugin, another-plugin
     asserts:
       - matchRegex:
-          path: data.gravitee\.yml
+          path: stringData.gravitee\.yml
           pattern: "[ ]+ingest: my-test-ingest-plugin, another-plugin\n"
 
   - it: Check that ingest plugins are set empty, if user want to disable them
@@ -29,5 +28,5 @@ tests:
             ingest:
     asserts:
       - matchRegex:
-          path: data.gravitee\.yml
+          path: stringData.gravitee\.yml
           pattern: "[ ]+ingest: \n"

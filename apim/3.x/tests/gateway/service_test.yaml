@@ -1,7 +1,7 @@
 suite: Test API Gateway default Service
 templates:
   - "gateway/gateway-service.yaml"
-  - "gateway/gateway-configmap.yaml"
+  - "gateway/gateway-secret.yaml"
 tests:
   - it: Check default service
     template: gateway/gateway-service.yaml

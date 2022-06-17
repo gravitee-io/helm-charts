@@ -1,7 +1,7 @@
 suite: Test API Gateway default deployment
 templates:
   - "gateway/gateway-deployment.yaml"
-  - "gateway/gateway-configmap.yaml"
+  - "gateway/gateway-secret.yaml"
 tests:
   - it: Check default deployment
     template: gateway/gateway-deployment.yaml

@@ -1,7 +1,7 @@
 suite: Test Management API default deployment
 templates:
   - "api/api-deployment.yaml"
-  - "api/api-configmap.yaml"
+  - "api/api-secret.yaml"
 tests:
   - it: Check default deployment
     template: api/api-deployment.yaml

@@ -1,33 +1,33 @@
 suite: Test Management API default configmap
 templates:
-  - "api/api-configmap.yaml"
+  - "api/api-secret.yaml"
 tests:
   - it: Set jwt attributes with default values if not set
-    template: api/api-configmap.yaml
+    template: api/api-secret.yaml
     set:
       jwt:
         key: value
     asserts:
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "expire-after: 604800"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "email-registration-expire-after: 86400"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "issuer: gravitee-management-auth"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "cookie-path: /"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "cookie-domain: apim.example.com"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "cookie-secure: false"
   - it: Set jwt attributes with provided values
-    template: api/api-configmap.yaml
+    template: api/api-secret.yaml
     set:
       jwt:
         expireAfter: 1000
@@ -39,25 +39,25 @@ tests:
           secure: true
     asserts:
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "expire-after: 1000"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "email-registration-expire-after: 2000"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "issuer: gravitee-management-auth-test"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "cookie-path: /test"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "cookie-domain: apim.test"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "cookie-secure: true"
   - it: Set console Pendo analytics attributes with provided values
-    template: api/api-configmap.yaml
+    template: api/api-secret.yaml
     set:
       ui:
         analytics:
@@ -66,5 +66,5 @@ tests:
             apiKey: "myPendoKey"
     asserts:
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: stringData.[gravitee.yml]
           pattern: "apiKey: myPendoKey"

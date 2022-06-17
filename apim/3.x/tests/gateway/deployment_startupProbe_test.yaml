@@ -1,7 +1,7 @@
 suite: Test API Gateway deployment with startupProbe
 templates:
   - "gateway/gateway-deployment.yaml"
-  - "gateway/gateway-configmap.yaml"
+  - "gateway/gateway-secret.yaml"
 tests:
   - it: Check default startupProbe with Kubernetes >= 1.18-0
     template: gateway/gateway-deployment.yaml

@@ -1,7 +1,7 @@
 suite: Test API Gateway deployment with JDBC support
 templates:
   - "gateway/gateway-deployment.yaml"
-  - "gateway/gateway-configmap.yaml"
+  - "gateway/gateway-secret.yaml"
 
 tests:
   - it: Check that volumes are defined
@@ -10,8 +10,8 @@ tests:
       version: 1.0.0-chart
       appVersion: 3.15.2
     set:
-        management:
-            type: "jdbc"
+      management:
+        type: "jdbc"
     asserts:
       - hasDocuments:
           count: 1
@@ -38,14 +38,19 @@ tests:
             name: get-repository-jdbc-ext
             image: "alpine:latest"
             imagePullPolicy: Always
-            command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.22/mysql-connector-java-8.0.22.jar"]
+            command:
+              [
+                "sh",
+                "-c",
+                "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.22/mysql-connector-java-8.0.22.jar",
+              ]
             env: []
             securityContext:
               runAsNonRoot: true
               runAsUser: 1001
             volumeMounts:
-            - name: graviteeio-apim-repository-jdbc-ext
-              mountPath: /tmp/plugins-ext
+              - name: graviteeio-apim-repository-jdbc-ext
+                mountPath: /tmp/plugins-ext
 
   - it: Should run init container to download JDBC driver
     template: gateway/gateway-deployment.yaml
@@ -61,14 +66,19 @@ tests:
             name: get-repository-jdbc-ext
             image: "alpine:latest"
             imagePullPolicy: Always
-            command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  https://url/where/to/download/driver"]
+            command:
+              [
+                "sh",
+                "-c",
+                "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  https://url/where/to/download/driver",
+              ]
             env: []
             securityContext:
               runAsNonRoot: true
               runAsUser: 1001
             volumeMounts:
-            -  name: graviteeio-apim-repository-jdbc-ext
-               mountPath: /tmp/plugins-ext
+              - name: graviteeio-apim-repository-jdbc-ext
+                mountPath: /tmp/plugins-ext
 
   - it: Should override init container default image
     template: gateway/gateway-deployment.yaml
@@ -86,11 +96,16 @@ tests:
             name: get-repository-jdbc-ext
             imagePullPolicy: Always
             image: "some.harbor.local/dockerhub-cache/library/alpine:latest"
-            command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  https://url/where/to/download/driver"]
+            command:
+              [
+                "sh",
+                "-c",
+                "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  https://url/where/to/download/driver",
+              ]
             env: []
             securityContext:
               runAsNonRoot: true
               runAsUser: 1001
             volumeMounts:
-            -  name: graviteeio-apim-repository-jdbc-ext
-               mountPath: /tmp/plugins-ext
+              - name: graviteeio-apim-repository-jdbc-ext
+                mountPath: /tmp/plugins-ext

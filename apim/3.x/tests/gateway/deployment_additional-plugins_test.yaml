@@ -1,7 +1,7 @@
 suite: Test that API Gateway deployment with additional plugins
 templates:
   - "gateway/gateway-deployment.yaml"
-  - "gateway/gateway-configmap.yaml"
+  - "gateway/gateway-secret.yaml"
 
 tests:
   - it: Check that volumes are defined
@@ -10,9 +10,9 @@ tests:
       version: 1.0.0-chart
       appVersion: 3.15.2
     set:
-        gateway:
-            additionalPlugins:
-            - https://d.g.io/toto.zip
+      gateway:
+        additionalPlugins:
+          - https://d.g.io/toto.zip
     asserts:
       - hasDocuments:
           count: 1
@@ -38,10 +38,10 @@ tests:
           value: GRAVITEE_PLUGINS_PATH_0
       - equal:
           path: spec.template.spec.containers[0].env[0].value
-          value: '${gravitee.home}/plugins'
+          value: "${gravitee.home}/plugins"
       - equal:
           path: spec.template.spec.containers[0].env[1].name
           value: GRAVITEE_PLUGINS_PATH_1
       - equal:
           path: spec.template.spec.containers[0].env[1].value
-          value: '${gravitee.home}/plugins-ext'
+          value: "${gravitee.home}/plugins-ext"

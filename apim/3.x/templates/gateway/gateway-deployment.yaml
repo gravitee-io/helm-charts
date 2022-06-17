@@ -52,7 +52,7 @@ spec:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
         {{- if .Values.gateway.reloadOnConfigChange }}
-        checksum/config: {{ include (print $.Template.BasePath "/gateway/gateway-configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/gateway/gateway-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- range $key, $value := .Values.gateway.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
@@ -218,8 +218,8 @@ spec:
       {{- end }}
       volumes:
         - name: config
-          configMap:
-            name: {{ template "gravitee.gateway.fullname" . }}
+          secret:
+            secretName: {{ template "gravitee.gateway.fullname" . }}
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: graviteeio-apim-repository-jdbc-ext
           emptyDir: {}
