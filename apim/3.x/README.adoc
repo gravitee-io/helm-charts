@@ -108,7 +108,7 @@ To configure common features such as:
 https://github.com/kubernetes/charts/tree/master/stable/chaoskube[chaoskube]
 chart).
 * configuration database (see
-https://github.com/kubernetes/charts/tree/master/stable/mongodb-replicaset[mongodb-replicaset]
+https://github.com/bitnami/charts/tree/f1267104df0dd5900be7629c2ad6dbf90655fbc9[mongodb]
 chart).
 * logs database (see
 https://github.com/helm/charts/tree/master/stable/elasticsearch[elastichsearch]
@@ -173,7 +173,7 @@ define the following configuration options:
 
 |`+mongo.rs+` |Mongo replicaset name |`+rs0+`
 
-|`+mongo.dbhost+` |Mongo host address |`+mongo-mongodb-replicaset+`
+|`+mongo.dbhost+` |Mongo host address |`+mongo-mongodb-arbiter-headless+`
 
 |`+mongo.dbport+` |Mongo host port |`+27017+`
 
@@ -200,13 +200,13 @@ define the following configuration options:
 [cols=",,",options="header",]
 |===
 |Parameter |Description |Default
-|`+mongodb-replicaset.enabled+` |Enable deployment of Mongo replicaset
+|`+mongodb.enabled+` |Enable deployment of Mongo replicaset
 |`+false+`
 |===
 
 See
-https://github.com/helm/charts/tree/master/stable/mongodb-replicaset[MongoDB
-replicaset] for detailed documentation on helm chart.
+https://github.com/bitnami/charts/tree/f1267104df0dd5900be7629c2ad6dbf90655fbc9[MongoDB
+] for detailed documentation on helm chart.
 
 ==== PostgresSQL (via JDBC Connection) 
 To install a new PostgresSQL database, use the command below and update the `username`, `password`, and `databasename` parameters: 

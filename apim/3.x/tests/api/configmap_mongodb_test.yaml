@@ -8,7 +8,7 @@ tests:
       mongo:
         sslEnabled: true
         socketKeepAlive: true
-        uri: mongodb://mongo-mongodb-replicaset:27017/gravitee
+        uri: mongodb://mongo-mongodb-arbiter-headless:27017/gravitee
         auth:
           enabled: true
           username: username
@@ -20,7 +20,7 @@ tests:
           pattern: " * mongodb:\n
                      *  sslEnabled: true\n
                      *  socketKeepAlive: true\n
-                     *  uri: mongodb://mongo-mongodb-replicaset:27017/gravitee"
+                     *  uri: mongodb://mongo-mongodb-arbiter-headless:27017/gravitee"
   - it: Set common value and servers
     template: api/api-configmap.yaml
     set:
@@ -61,7 +61,7 @@ tests:
         sslEnabled: true
         socketKeepAlive: true
         rsEnabled: true
-        dbhost: graviteeio-apim-mongodb-replicaset
+        dbhost: graviteeio-apim-mongodb-arbiter-headless
         dbname: dbname
         dbport: 27117
         connectTimeoutMS: 2000
@@ -76,7 +76,7 @@ tests:
           pattern: " * mongodb:\n
                      *   sslEnabled: true\n
                      *   socketKeepAlive: true\n
-                     *   uri: mongodb://username:password@graviteeio-apim-mongodb-replicaset:27117/dbname\\?&replicaSet=rs0&authSource=authSource&connectTimeoutMS=2000"
+                     *   uri: mongodb://username:password@graviteeio-apim-mongodb-arbiter-headless:27117/dbname\\?&replicaSet=rs0&authSource=authSource&connectTimeoutMS=2000"
   - it: Set mongo keystore attributes with provided values
     template: api/api-configmap.yaml
     set:

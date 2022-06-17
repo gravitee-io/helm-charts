@@ -74,7 +74,7 @@ To configure common features such as:
   [chaoskube](https://github.com/kubernetes/charts/tree/master/stable/chaoskube)
   chart)
 - configuration database (see
-  [mongodb-replicaset](https://github.com/kubernetes/charts/tree/master/stable/mongodb-replicaset)
+  [mongodb](https://github.com/bitnami/charts/tree/f1267104df0dd5900be7629c2ad6dbf90655fbc9)
   chart)
 - logs database (see [elastichsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch)
   chart)
@@ -120,7 +120,7 @@ If neither `mongo.uri` or `mongo.servers` are provided, you have to define the f
 | --------------------- | ------------------------------------------ | -------------------------- |
 | `mongo.rsEnabled`     | Whether Mongo replicaset is enabled or not | `true`                     |
 | `mongo.rs`            | Mongo replicaset name                      | `rs0`                      |
-| `mongo.dbhost`        | Mongo host address                         | `mongo-mongodb-replicaset` |
+| `mongo.dbhost`        | Mongo host address                         | `mongo-mongodb-arbiter-headless`   |
 | `mongo.dbport`        | Mongo host port                            | `27017`                    |
 | `mongo.dbname`        | Mongo DB name                              | `gravitee`                 |
 | `mongo.auth.enabled`  | Enable Mongo DB authentication             | `false`                    |
@@ -138,9 +138,9 @@ If neither `mongo.uri` or `mongo.servers` are provided, you have to define the f
 
 | Parameter                    | Description                           | Default |
 | ---------------------------- | ------------------------------------- | ------- |
-| `mongodb-replicaset.enabled` | Enable deployment of Mongo replicaset | `false` |
+| `mongodb.enabled`            | Enable deployment of Mongo replicaset | `false` |
 
-See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongodb-replicaset) for detailed documentation on helm chart.
+See [MongoDB](https://github.com/bitnami/charts/tree/f1267104df0dd5900be7629c2ad6dbf90655fbc9) for detailed documentation on helm chart.
 
 ### Elasticsearch
 

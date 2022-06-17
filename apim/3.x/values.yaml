@@ -175,8 +175,9 @@ notifiers:
     #   keyStore:
     #   keyStorePassword:
 
+# Possible values for mongodb : https://github.com/bitnami/charts/blob/f1267104df0dd5900be7629c2ad6dbf90655fbc9/bitnami/mongodb/values.yaml
 mongo:
-  # uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
+  # uri: mongodb://mongo-mongodb-arbiter-headless:27017/gravitee?connectTimeoutMS=30000
   # servers: |
   #   - host: mongo1
   #     port: 27017
@@ -225,37 +226,31 @@ redis:
   download: true
 #  repositoryVersion: 3.3.0
 
-mongodb-replicaset:
+#https://github.com/bitnami/charts/blob/f1267104df0dd5900be7629c2ad6dbf90655fbc9/bitnami/mongodb/values.yaml
+mongodb:
   enabled: false
-  replicas: 3
+  ## replicaCount Number of MongoDB(&reg;) nodes (only when `architecture=replicaset`)
+  ## Ignored when mongodb.architecture=standalone
+  replicaCount: 2
+  architecture: replicaset
   replicaSetName: rs0
   auth:
     enabled: false
-    adminUser: username
-    adminPassword: password
-    metricsUser: metrics
-    metricsPassword: password
-    key: keycontent
-    # existingKeySecret:
-    # existingAdminSecret:
-    # existingMetricsSecret:
-  image:
-    repository: mongo
-    tag: 3.6
   resources:
     limits:
-      cpu: 500m
-      memory: 512Mi
+      cpu: 1000m
+      memory: 1024Mi
     requests:
-      cpu: 100m
+      cpu: 50m
       memory: 256Mi
-  persistentVolume:
+  livenessProbe:
+    timeoutSeconds: 10
+  readinessProbe:
+    timeoutSeconds: 10
+  persistence:
     enabled: true
     # storageClass: "-"
-    accessModes:
-      - ReadWriteOnce
     size: 1Gi
-  configmap: {}
 
 es:
   enabled: true
