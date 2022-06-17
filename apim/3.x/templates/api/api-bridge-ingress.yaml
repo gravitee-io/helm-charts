@@ -17,26 +17,29 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
   annotations:
-    {{- range $key, $value := .Values.api.services.bridge.ingress.annotations }}
-      {{ $key }}: {{ $value | quote }}
+    {{- if .Values.api.services.bridge.ingress.annotations }}
+    {{- include "common.ingress.annotations.render" (dict "annotations" .Values.api.services.bridge.ingress.annotations "ingressClassName" .Values.api.services.bridge.ingress.ingressClassName "context" $) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if and .Values.api.services.bridge.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.api.services.bridge.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
   {{- range $host := .Values.api.services.bridge.ingress.hosts }}
-  - host: {{ $host }}
-    http:
-      paths:
-      - pathType: Prefix
-        path: {{ $ingressPath }}
-        backend:
+    - host: {{ $host }}
+      http:
+        paths:
+          - pathType: Prefix
+            path: {{ $ingressPath }}
+            backend:
           {{- if (eq $apiVersion "networking.k8s.io/v1") }}
-          service:
-            name: {{ $serviceAPIName }}
-            port:
-              number: {{ $serviceAPIPort }}
+              service:
+                name: {{ $serviceAPIName }}
+                port:
+                  number: {{ $serviceAPIPort }}
           {{ else }}
-          serviceName: {{ $serviceAPIName }}
-          servicePort: {{ $serviceAPIPort }}
+              serviceName: {{ $serviceAPIName }}
+              servicePort: {{ $serviceAPIPort }}
           {{- end -}}
   {{- end -}}
   {{- if .Values.api.services.bridge.ingress.tls }}
