@@ -1,5 +1,6 @@
 {{- if and (.Values.generator.enabled) (.Values.generator.autoscaling.enabled) -}}
-apiVersion: autoscaling/v2beta1
+{{- $apiVersion := include "common.capabilities.autoscaling.apiVersion" . -}}
+apiVersion: {{ $apiVersion }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "gravitee.generator.fullname" . }}
@@ -22,10 +23,22 @@ spec:
   - type: Resource
     resource:
       name: memory
+      {{- if (eq $apiVersion "autoscaling/v2") }}
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.generator.autoscaling.targetMemoryAverageUtilization }}
+      {{ else }}
       targetAverageUtilization: {{ .Values.generator.autoscaling.targetMemoryAverageUtilization }}
+      {{- end -}}
 {{- end }}
   - type: Resource
     resource:
       name: cpu
+      {{- if (eq $apiVersion "autoscaling/v2") }}
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.generator.autoscaling.targetAverageUtilization }}
+      {{ else }}
       targetAverageUtilization: {{ .Values.generator.autoscaling.targetAverageUtilization }}
+      {{- end -}}
 {{- end -}}
