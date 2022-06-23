@@ -103,6 +103,42 @@ data:
             users:
               admin: {{ .Values.api.http.services.core.http.authentication.password | default "adminadmin"}}
 
+      {{- if .Values.api.services.bridge.enabled }}
+      bridge:
+        http:
+          enabled: true
+          port: {{ .Values.api.services.bridge.service.internalPort | default 18092}}
+          host: {{ .Values.api.services.bridge.host | default "localhost" }}
+          authentication:
+            type: basic
+            {{- if .Values.api.services.bridge.username }}
+            users:
+              {{ .Values.api.services.bridge.username }}: {{ .Values.api.services.bridge.password }}
+            {{- end }}
+          {{- if .Values.api.services.bridge.ssl }}
+          secured: {{ .Values.api.services.bridge.ssl.enabled | default false }}
+          alpn: true
+          ssl:
+            {{- if .Values.api.services.bridge.ssl.keystore}}
+            keystore:
+              {{- if .Values.api.services.bridge.ssl.keystore.type }}
+              type: {{ .Values.api.services.bridge.ssl.keystore.type }}
+              {{- end }}
+              path: {{ .Values.api.services.bridge.ssl.keystore.path }}
+              password: {{ .Values.api.services.bridge.ssl.keystore.password | quote }}
+            {{- end }}
+            clientAuth: {{ .Values.api.services.bridge.ssl.clientAuth | default false }}
+            {{- if .Values.api.services.bridge.ssl.truststore }}
+            truststore:
+              {{- if .Values.api.services.bridge.ssl.truststore.type }}
+              type: {{ .Values.api.services.bridge.ssl.truststore.type }}
+              {{- end }}
+              path: {{ .Values.api.services.bridge.ssl.truststore.path }}
+              password: {{ .Values.api.services.bridge.ssl.truststore.password | quote }}
+            {{- end }}
+          {{- end }}
+      {{- end }}
+
       {{- if .Values.api.services.metrics.enabled }}
       metrics:
         enabled: {{ .Values.api.services.metrics.enabled }}

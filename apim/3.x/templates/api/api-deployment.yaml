@@ -113,6 +113,10 @@ spec:
             - name: {{ .Values.api.name }}-techapi
               containerPort: {{ .Values.api.http.services.core.http.port | default "18083" }}
             {{- end }}
+            {{- if .Values.api.services.bridge.enabled }}
+            - name: {{ .Values.api.name }}-bridge
+              containerPort: {{ .Values.api.services.bridge.service.internalPort }}
+            {{- end }}
           env:
             {{- if $plugins }}
             - name: GRAVITEE_PLUGINS_PATH_0
