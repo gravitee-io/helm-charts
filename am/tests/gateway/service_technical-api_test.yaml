@@ -1,18 +1,15 @@
-suite: Test Management API Service with Hybrid Bridge enabled
+suite: Test API Gateway Service with Technical API enabled
 templates:
-  - "api/api-service.yaml"
+  - "gateway/gateway-service.yaml"
 tests:
-  - it: Check bridge service
-    template: api/api-service.yaml
+  - it: Check technical api service
+    template: gateway/gateway-service.yaml
     set:
-      api:
+      gateway:
         services:
-          bridge:
-            enabled: true
+          core:
             service:
-              externalPort: 92
-              internalPort: 18092
-            ingress:
+              externalPort: 18092
               enabled: true
     asserts:
       - hasDocuments:
@@ -27,24 +24,21 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 92
+            port: 18092
             targetPort: 18092
             protocol: TCP
-            name: api-bridge
+            name: gateway-technical
 
-  - it: Check bridge service with appProtocol
-    template: api/api-service.yaml
+  - it: Check technical api service with appProtocol
+    template: gateway/gateway-service.yaml
     set:
-      api:
+      gateway:
         services:
-          bridge:
-            enabled: true
+          core:
             service:
-              externalPort: 92
-              internalPort: 18092
-              appProtocol: http
-            ingress:
+              externalPort: 18092
               enabled: true
+              appProtocol: http
     asserts:
       - hasDocuments:
           count: 1
@@ -58,8 +52,8 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 92
+            port: 18092
             targetPort: 18092
             protocol: TCP
-            name: api-bridge
+            name: gateway-technical
             appProtocol: http

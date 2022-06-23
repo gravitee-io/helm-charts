@@ -19,7 +19,7 @@ tests:
           path: spec.ports
           content:
             port: 82
-            targetPort: 8082
+            targetPort: 8092
             protocol: TCP
             name: gateway
 
@@ -43,7 +43,7 @@ tests:
           path: spec.ports
           content:
             port: 82
-            targetPort: 8082
+            targetPort: 8092
             protocol: TCP
             name: gateway
             appProtocol: http

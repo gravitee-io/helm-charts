@@ -28,3 +28,32 @@ tests:
             targetPort: 18072
             protocol: TCP
             name: engine-techapi
+
+  - it: Check technical api service with appProtocol
+    template: engine-service.yaml
+    set:
+      engine:
+        services:
+          core:
+            service:
+              externalPort: 18072
+              enabled: true
+              appProtocol: http
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - contains:
+          path: spec.ports
+          content:
+            port: 18072
+            targetPort: 18072
+            protocol: TCP
+            name: engine-techapi
+            appProtocol: http

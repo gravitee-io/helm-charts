@@ -20,14 +20,23 @@ spec:
     - port: {{ .Values.engine.service.externalPort }}
       targetPort: {{ .Values.engine.service.internalPort }}
       protocol: TCP
+      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.engine.service.appProtocol }}
+      appProtocol: {{ .Values.engine.service.appProtocol }}
+      {{- end }}
       name: {{ .Values.engine.name }}
     - port: 5701
       name: {{ .Values.engine.name }}-hz
       protocol: TCP
+      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.engine.service.appProtocol }}
+      appProtocol: {{ .Values.engine.service.appProtocol }}
+      {{- end }}
     {{- if .Values.engine.services.core.service.enabled }}
     - port: {{ .Values.engine.services.core.service.externalPort }}
       targetPort: {{ .Values.engine.services.core.http.port }}
       protocol: TCP
+      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.engine.services.core.service.appProtocol }}
+      appProtocol: {{ .Values.engine.services.core.service.appProtocol }}
+      {{- end }}
       name: {{ .Values.engine.name }}-techapi
     {{- end }}
   selector:

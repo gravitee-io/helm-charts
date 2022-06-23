@@ -316,6 +316,7 @@ api:
     externalPort: 83
     internalPort: 8093
     internalPortName: http
+#    appProtocol: http
   # annotations:
   securityContext:
     runAsUser: 1001
@@ -532,6 +533,7 @@ gateway:
         enabled: false
   #         type: ClusterIP
   #         externalPort: 18082
+  #         appProtocol: http
     metrics:
       enabled: false
       prometheus:
@@ -719,6 +721,7 @@ ui:
     externalPort: 8002
     internalPort: 8080
     internalPortName: http
+#    appProtocol: http
     # annotations:
   securityContext:
     runAsUser: 101

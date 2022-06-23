@@ -23,17 +23,26 @@ spec:
     - port: {{ .Values.gateway.service.externalPort }}
       targetPort: {{ .Values.gateway.service.internalPort }}
       protocol: TCP
+      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.gateway.service.appProtocol }}
+      appProtocol: {{ .Values.gateway.service.appProtocol }}
+      {{- end }}
       name: {{ .Values.gateway.name }}
     {{- if .Values.gateway.services.bridge.enabled }}
     - port: {{ .Values.gateway.services.bridge.service.externalPort }}
       targetPort: {{ .Values.gateway.services.bridge.service.internalPort }}
       protocol: TCP
+      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.gateway.services.bridge.service.appProtocol }}
+      appProtocol: {{ .Values.gateway.services.bridge.service.appProtocol }}
+      {{- end }}
       name: {{ .Values.gateway.name }}-bridge
     {{- end }}
     {{- if .Values.gateway.services.core.service.enabled }}
     - port: {{ .Values.gateway.services.core.service.externalPort }}
       targetPort: {{ .Values.gateway.services.core.http.port }}
       protocol: TCP
+      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.gateway.services.core.service.appProtocol }}
+      appProtocol: {{ .Values.gateway.services.core.service.appProtocol }}
+      {{- end }}
       name: {{ .Values.gateway.name }}-technical
     {{- end }}
   selector:

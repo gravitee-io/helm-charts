@@ -1,10 +1,10 @@
-suite: Test API Gateway default Service
+suite: Test API Portal default Service
 templates:
-  - "gateway/gateway-service.yaml"
-  - "gateway/gateway-configmap.yaml"
+  - "portal/portal-service.yaml"
+  - "portal/portal-configmap.yaml"
 tests:
   - it: Check default service
-    template: gateway/gateway-service.yaml
+    template: portal/portal-service.yaml
     asserts:
       - hasDocuments:
           count: 1
@@ -18,15 +18,15 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 82
-            targetPort: 8082
+            port: 8003
+            targetPort: 8080
             protocol: TCP
-            name: gateway
+            name: portal
 
   - it: Check service with appProtocol
-    template: gateway/gateway-service.yaml
+    template: portal/portal-service.yaml
     set:
-      gateway:
+      portal:
         service:
           appProtocol: http
     asserts:
@@ -42,8 +42,8 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 82
-            targetPort: 8082
+            port: 8003
+            targetPort: 8080
             protocol: TCP
-            name: gateway
+            name: portal
             appProtocol: http

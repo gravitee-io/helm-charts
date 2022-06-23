@@ -199,3 +199,16 @@ Usage:
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Returns true if the appProtocol field is supported
+Usage:
+{{ include "common.service.appProtocol" . }}
+*/}}
+{{- define "common.service.supportsAppProtocol" -}}
+{{- if semverCompare "<1.18-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "false" -}}
+{{- else -}}
+{{- print "true" -}}
+{{- end -}}
+{{- end -}}

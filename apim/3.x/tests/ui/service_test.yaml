@@ -1,10 +1,10 @@
-suite: Test API Gateway default Service
+suite: Test API UI default Service
 templates:
-  - "gateway/gateway-service.yaml"
-  - "gateway/gateway-configmap.yaml"
+  - "ui/ui-service.yaml"
+  - "ui/ui-configmap.yaml"
 tests:
   - it: Check default service
-    template: gateway/gateway-service.yaml
+    template: ui/ui-service.yaml
     asserts:
       - hasDocuments:
           count: 1
@@ -18,15 +18,15 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 82
-            targetPort: 8082
+            port: 8002
+            targetPort: 8080
             protocol: TCP
-            name: gateway
+            name: ui
 
   - it: Check service with appProtocol
-    template: gateway/gateway-service.yaml
+    template: ui/ui-service.yaml
     set:
-      gateway:
+      ui:
         service:
           appProtocol: http
     asserts:
@@ -42,8 +42,8 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 82
-            targetPort: 8082
+            port: 8002
+            targetPort: 8080
             protocol: TCP
-            name: gateway
+            name: ui
             appProtocol: http

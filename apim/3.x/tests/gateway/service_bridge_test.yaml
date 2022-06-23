@@ -31,3 +31,35 @@ tests:
             targetPort: 18092
             protocol: TCP
             name: gateway-bridge
+
+  - it: Check bridge service with appProtocol
+    template: gateway/gateway-service.yaml
+    set:
+      gateway:
+        services:
+          bridge:
+            enabled: true
+            service:
+              externalPort: 92
+              internalPort: 18092
+              appProtocol: http
+            ingress:
+              enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - contains:
+          path: spec.ports
+          content:
+            port: 92
+            targetPort: 18092
+            protocol: TCP
+            name: gateway-bridge
+            appProtocol: http
