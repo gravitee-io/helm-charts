@@ -513,6 +513,43 @@ api:
         enabled: true
     bridge:
       enabled: false
+      # host: localhost
+      # username:
+      # password:
+      # ssl:y
+      #  enabled: false
+      #  keystore:
+      #    type: jks # Supports jks, pem, pkcs12
+      #    path: ${gravitee.home}/security/keystore.jks
+      #    password: secret
+      #  clientAuth: false
+      #  truststore:
+      #    type: jks # Supports jks, pem, pkcs12
+      #    path: ${gravitee.home}/security/truststore.jks
+      #    password: secret
+      # service:
+      #   externalPort: 92
+      #   internalPort: 18092
+      # ingress:
+      #   enabled: false
+      #   ingressClassName: ""
+      #   path: /gateway/_bridge
+      #   # Used to create an Ingress record.
+      #   hosts:
+      #     - apim.example.com
+      #   annotations:
+      #     kubernetes.io/ingress.class: nginx
+      #     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      #     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+      #     kubernetes.io/app-root: /gateway
+      #     kubernetes.io/rewrite-target: /gateway
+      #     nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      #     kubernetes.io/tls-acme: "true"
+      #   tls:
+      #     # Secrets must be manually created in the namespace.
+      #     - secretName: chart-example-tls
+      #       hosts:
+      #         - chart-example.local      
   http:
     services:
       core:
