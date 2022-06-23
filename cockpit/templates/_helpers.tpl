@@ -199,9 +199,11 @@ Usage:
 Return the appropriate apiVersion for pod autoscaling.
 */}}
 {{- define "common.capabilities.autoscaling.apiVersion" -}}
-{{- if semverCompare "<v1.22" (include "common.capabilities.kubeVersion" .) -}}
+{{- if semverCompare "<1.12-0" (include "common.capabilities.kubeVersion" .) -}}
 {{- print "autoscaling/v2beta1" -}}
+{{- else if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "autoscaling/v2beta2" -}}
 {{- else -}}
 {{- print "autoscaling/v2" -}}
-{{- end -}}
+{{- end }}
 {{- end -}}

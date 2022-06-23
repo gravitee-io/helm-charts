@@ -64,7 +64,7 @@ tests:
       - isKind:
           of: HorizontalPodAutoscaler
       - isAPIVersion:
-          of: autoscaling/v2beta1
+          of: autoscaling/v2beta2
       - equal:
           path: spec
           value:
@@ -100,10 +100,22 @@ tests:
       - isAPIVersion:
           of: autoscaling/v2
 
-  - it: Check API version autoscaling/v2beta1
+  - it: Check API version autoscaling/v2beta2
     set:
       global:
         kubeVersion: 1.21.0
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HorizontalPodAutoscaler
+      - isAPIVersion:
+          of: autoscaling/v2beta2
+
+  - it: Check API version autoscaling/v2beta1
+    set:
+      global:
+        kubeVersion: 1.11.0
     asserts:
       - hasDocuments:
           count: 1

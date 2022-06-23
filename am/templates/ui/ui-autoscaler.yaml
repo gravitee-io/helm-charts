@@ -23,7 +23,7 @@ spec:
   - type: Resource
     resource:
       name: memory
-      {{- if (eq $apiVersion "autoscaling/v2") }}
+      {{- if (ne $apiVersion "autoscaling/v2beta1") }}
       target:
         type: Utilization
         averageUtilization: {{ .Values.ui.autoscaling.targetMemoryAverageUtilization }}
@@ -34,7 +34,7 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      {{- if (eq $apiVersion "autoscaling/v2") }}
+      {{- if (ne $apiVersion "autoscaling/v2beta1") }}
       target:
         type: Utilization
         averageUtilization: {{ .Values.ui.autoscaling.targetAverageUtilization }}
