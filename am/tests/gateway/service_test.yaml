@@ -22,13 +22,14 @@ tests:
             targetPort: 8092
             protocol: TCP
             name: gateway
+            appProtocol: http
 
-  - it: Check service with appProtocol
+  - it: Check service with custom appProtocol
     template: gateway/gateway-service.yaml
     set:
       gateway:
         service:
-          appProtocol: http
+          appProtocol: http-test
     asserts:
       - hasDocuments:
           count: 1
@@ -46,4 +47,4 @@ tests:
             targetPort: 8092
             protocol: TCP
             name: gateway
-            appProtocol: http
+            appProtocol: http-test

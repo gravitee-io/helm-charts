@@ -28,8 +28,9 @@ tests:
             targetPort: 18082
             protocol: TCP
             name: gateway-technical
+            appProtocol: http
 
-  - it: Check technical api service with appProtocol
+  - it: Check technical api service with custom appProtocol
     template: gateway/gateway-service.yaml
     set:
       gateway:

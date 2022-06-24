@@ -63,17 +63,18 @@ tests:
                 targetPort: generator-http
                 protocol: TCP
                 name: swagger-generator
+                appProtocol: http
             selector:
               app.kubernetes.io/component: swagger-generator
               app.kubernetes.io/instance: my-cockpit
               app.kubernetes.io/name: cockpit
 
-  - it: should apply default service configuration with appProtocol
+  - it: should apply default service configuration with custom appProtocol
     template: generator/generator-service.yaml
     set:
       generator:
         service:
-          appProtocol: http
+          appProtocol: http-test
     release:
       name: my-cockpit
       namespace: unittest
@@ -97,7 +98,7 @@ tests:
               - port: 84
                 targetPort: generator-http
                 protocol: TCP
-                appProtocol: http
+                appProtocol: http-test
                 name: swagger-generator
             selector:
               app.kubernetes.io/component: swagger-generator

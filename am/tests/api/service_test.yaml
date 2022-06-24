@@ -22,13 +22,14 @@ tests:
             targetPort: 8093
             protocol: TCP
             name: management-api
+            appProtocol: http
 
-  - it: Check service with appProtocol
+  - it: Check service with custom appProtocol
     template: api/api-service.yaml
     set:
       api:
         service:
-          appProtocol: http
+          appProtocol: http-test
     asserts:
       - hasDocuments:
           count: 1
@@ -46,4 +47,4 @@ tests:
             targetPort: 8093
             protocol: TCP
             name: management-api
-            appProtocol: http
+            appProtocol: http-test

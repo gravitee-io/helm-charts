@@ -22,8 +22,9 @@ tests:
             targetPort: 8080
             protocol: TCP
             name: portal
+            appProtocol: http
 
-  - it: Check service with appProtocol
+  - it: Check service with custom appProtocol
     template: portal/portal-service.yaml
     set:
       portal:

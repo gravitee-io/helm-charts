@@ -29,8 +29,9 @@ tests:
             targetPort: api-technical
             protocol: TCP
             name: api-technical
+            appProtocol: http
 
-  - it: Check technical api service with appProtocol
+  - it: Check technical api service with custom appProtocol
     template: api/api-service.yaml
     set:
       api:

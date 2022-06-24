@@ -20,16 +20,28 @@ spec:
     - port: {{ .Values.api.service.externalPort }}
       targetPort: {{ .Values.api.service.internalPort }}
       protocol: TCP
-      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.api.service.appProtocol }}
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.api.service.appProtocol }}
       appProtocol: {{ .Values.api.service.appProtocol }}
+      {{ else }}
+      {{ if .Values.api.ssl.enabled }}
+      appProtocol: https
+      {{ else }}
+      appProtocol: http
+      {{ end }}
+      {{ end }}
       {{- end }}
       name: {{ .Values.api.name }}
     {{- if .Values.api.http.services.core.service.enabled }}
     - port: {{ .Values.api.http.services.core.service.externalPort }}
       targetPort: {{ .Values.api.http.services.core.http.port }}
       protocol: TCP
-      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.api.http.services.core.service.appProtocol }}
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.api.http.services.core.service.appProtocol }}
       appProtocol: {{ .Values.api.http.services.core.service.appProtocol }}
+      {{ else }}
+      appProtocol: http
+      {{ end }}
       {{- end }}
       name: {{ .Values.api.name }}-technical
     {{- end }}
@@ -37,8 +49,16 @@ spec:
     - port: {{ .Values.api.services.bridge.service.externalPort }}
       targetPort: {{ .Values.api.services.bridge.service.internalPort }}
       protocol: TCP
-      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.api.services.bridge.service.appProtocol }}
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.api.services.bridge.service.appProtocol }}
       appProtocol: {{ .Values.api.services.bridge.service.appProtocol }}
+      {{ else }}
+      {{ if .Values.api.services.bridge.ssl.enabled }}
+      appProtocol: https
+      {{ else }}
+      appProtocol: http
+      {{ end }}
+      {{ end }}
       {{- end }}
       name: {{ .Values.api.name }}-bridge
     {{- end }}

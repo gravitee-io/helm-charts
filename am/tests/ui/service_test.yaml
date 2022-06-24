@@ -22,13 +22,14 @@ tests:
             targetPort: 8080
             protocol: TCP
             name: management-ui
+            appProtocol: http
 
-  - it: Check service with appProtocol
+  - it: Check service with custom appProtocol
     template: ui/ui-service.yaml
     set:
       ui:
         service:
-          appProtocol: http
+          appProtocol: http-test
     asserts:
       - hasDocuments:
           count: 1
@@ -46,4 +47,4 @@ tests:
             targetPort: 8080
             protocol: TCP
             name: management-ui
-            appProtocol: http
+            appProtocol: http-test

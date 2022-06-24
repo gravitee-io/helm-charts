@@ -20,8 +20,12 @@ spec:
     - port: {{ .Values.portal.service.externalPort }}
       targetPort: {{ .Values.portal.service.internalPort }}
       protocol: TCP
-      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.portal.service.appProtocol }}
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.portal.service.appProtocol }}
       appProtocol: {{ .Values.portal.service.appProtocol }}
+      {{ else}}
+      appProtocol: http
+      {{ end }}
       {{- end }}
       name: {{ .Values.portal.name }}
   selector:

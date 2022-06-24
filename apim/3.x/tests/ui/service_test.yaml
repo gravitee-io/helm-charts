@@ -22,8 +22,9 @@ tests:
             targetPort: 8080
             protocol: TCP
             name: ui
+            appProtocol: http
 
-  - it: Check service with appProtocol
+  - it: Check service with custom appProtocol
     template: ui/ui-service.yaml
     set:
       ui:

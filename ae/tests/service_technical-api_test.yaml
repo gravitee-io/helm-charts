@@ -28,8 +28,9 @@ tests:
             targetPort: 18072
             protocol: TCP
             name: engine-techapi
+            appProtocol: http
 
-  - it: Check technical api service with appProtocol
+  - it: Check technical api service with custom appProtocol
     template: engine-service.yaml
     set:
       engine:
@@ -38,7 +39,7 @@ tests:
             service:
               externalPort: 18072
               enabled: true
-              appProtocol: http
+              appProtocol: http-test
     asserts:
       - hasDocuments:
           count: 1
@@ -56,4 +57,4 @@ tests:
             targetPort: 18072
             protocol: TCP
             name: engine-techapi
-            appProtocol: http
+            appProtocol: http-test

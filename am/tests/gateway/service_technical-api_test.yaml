@@ -28,8 +28,9 @@ tests:
             targetPort: 18092
             protocol: TCP
             name: gateway-technical
+            appProtocol: http
 
-  - it: Check technical api service with appProtocol
+  - it: Check technical api service with custom appProtocol
     template: gateway/gateway-service.yaml
     set:
       gateway:
@@ -38,7 +39,7 @@ tests:
             service:
               externalPort: 18092
               enabled: true
-              appProtocol: http
+              appProtocol: http-test
     asserts:
       - hasDocuments:
           count: 1
@@ -56,4 +57,4 @@ tests:
             targetPort: 18092
             protocol: TCP
             name: gateway-technical
-            appProtocol: http
+            appProtocol: http-test

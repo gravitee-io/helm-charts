@@ -29,8 +29,9 @@ tests:
             targetPort: 18093
             protocol: TCP
             name: management-api-technical
+            appProtocol: http
 
-  - it: Check technical api service with appProtocol
+  - it: Check technical api service with custom appProtocol
     template: api/api-service.yaml
     set:
       api:
@@ -40,7 +41,7 @@ tests:
               service:
                 externalPort: 18093
                 enabled: true
-                appProtocol: http
+                appProtocol: http-test
     asserts:
       - hasDocuments:
           count: 1
@@ -58,4 +59,4 @@ tests:
             targetPort: 18093
             protocol: TCP
             name: management-api-technical
-            appProtocol: http
+            appProtocol: http-test

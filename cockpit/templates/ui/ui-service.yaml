@@ -21,8 +21,12 @@ spec:
       port: {{ .Values.ui.service.externalPort }}
       targetPort: {{ .Values.ui.service.internalPortName }}
       protocol: TCP
-      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.ui.service.appProtocol }}
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.ui.service.appProtocol }}
       appProtocol: {{ .Values.ui.service.appProtocol }}
+      {{ else}}
+      appProtocol: http
+      {{ end }}
       {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}

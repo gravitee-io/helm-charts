@@ -21,16 +21,28 @@ spec:
       port: {{ .Values.api.service.externalPort }}
       targetPort: {{ .Values.api.service.internalPortName }}
       protocol: TCP
-      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.api.service.appProtocol }}
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.api.service.appProtocol }}
       appProtocol: {{ .Values.api.service.appProtocol }}
-      {{- end }}
+      {{ else }}
+      {{ if .Values.api.ssl.enabled }}
+      appProtocol: https
+      {{ else }}
+      appProtocol: http
+      {{ end }}
+      {{ end }}
+      {{ end }}
     {{- if .Values.api.controller.ws.service.enabled }}
     - name: {{ .Values.api.name }}-ws
       port: {{ .Values.api.controller.ws.service.externalPort }}
       targetPort: {{ .Values.api.controller.ws.service.internalPortName }}
       protocol: TCP
-      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.api.controller.ws.service.appProtocol }}
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.api.controller.ws.service.appProtocol }}
       appProtocol: {{ .Values.api.controller.ws.service.appProtocol }}
+      {{ else }}
+      appProtocol: http
+      {{ end }}
       {{- end }}
     {{- end }}
     {{- if .Values.api.http.services.core.service.enabled }}
@@ -38,8 +50,12 @@ spec:
       port: {{ .Values.api.http.services.core.service.externalPort }}
       targetPort: {{ .Values.api.http.services.core.service.internalPortName }}
       protocol: TCP
-      {{- if and (include "common.service.supportsAppProtocol" .)  .Values.api.http.services.core.service.appProtocol }}
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.api.http.services.core.service.appProtocol }}
       appProtocol: {{ .Values.api.http.services.core.service.appProtocol }}
+      {{ else }}
+      appProtocol: http
+      {{ end }}
       {{- end }}
     {{- end }}
   selector:
