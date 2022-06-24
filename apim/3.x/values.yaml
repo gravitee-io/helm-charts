@@ -516,8 +516,8 @@ api:
       # host: localhost
       # username:
       # password:
-      # ssl:
-      #  enabled: false
+      ssl:
+        enabled: false
       #  keystore:
       #    type: jks # Supports jks, pem, pkcs12
       #    path: ${gravitee.home}/security/keystore.jks
@@ -846,8 +846,8 @@ gateway:
       # host: localhost
       # username:
       # password:
-      # ssl:
-      #  enabled: false
+      ssl:
+        enabled: false
       #  keystore:
       #    type: jks # Supports jks, pem, pkcs12
       #    path: ${gravitee.home}/security/keystore.jks
