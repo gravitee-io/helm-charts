@@ -118,6 +118,7 @@ Usage:
 {{- else -}}
 {{- print "true" -}}
 {{- end -}}
+{{- end -}}
 
 {{/*
 Return the appropriate apiVersion for pod autoscaling.
