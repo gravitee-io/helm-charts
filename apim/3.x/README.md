@@ -167,7 +167,7 @@ See [MongoDB replicaset](https://artifacthub.io/packages/helm/bitnami/mongodb) f
 | ----------------------- | ------------------------------------------ | ------- |
 | `elasticsearch.enabled` | Enable deployment of Elasticsearch cluster | `false` |
 
-See [Elasticsearch](https://artifacthub.io/packages/helm/elastic/elasticsearch) for detailed documentation on optional requirements helm chart.
+See [Elasticsearch](https://artifacthub.io/packages/helm/bitnami/elasticsearch) for detailed documentation on optional requirements helm chart.
 
 ** Please be aware that the Elasticsearch installed by Gravitee is NOT recommended in production and it is just for testing purpose and running APIM locally.
 
