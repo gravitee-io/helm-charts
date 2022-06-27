@@ -64,7 +64,7 @@ tests:
       - isKind:
           of: HorizontalPodAutoscaler
       - isAPIVersion:
-          of: autoscaling/v2beta1
+          of: autoscaling/v2beta2
       - equal:
           path: spec
           value:
@@ -78,8 +78,48 @@ tests:
             - type: Resource
               resource:
                 name: memory
-                targetAverageUtilization: 80
+                target:
+                  averageUtilization: 80
+                  type: Utilization
             - type: Resource
               resource:
                 name: cpu
-                targetAverageUtilization: 50
+                target:
+                  averageUtilization: 50
+                  type: Utilization
+
+  - it: Check API version autoscaling/v2
+    set:
+      global:
+        kubeVersion: 1.23.0
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HorizontalPodAutoscaler
+      - isAPIVersion:
+          of: autoscaling/v2
+
+  - it: Check API version autoscaling/v2beta2
+    set:
+      global:
+        kubeVersion: 1.21.0
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HorizontalPodAutoscaler
+      - isAPIVersion:
+          of: autoscaling/v2beta2
+
+  - it: Check API version autoscaling/v2beta1
+    set:
+      global:
+        kubeVersion: 1.11.0
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HorizontalPodAutoscaler
+      - isAPIVersion:
+          of: autoscaling/v2beta1

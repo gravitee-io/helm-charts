@@ -2,9 +2,13 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
-### 3.1.50
+### 3.1.51
 
 - [X] Add support for appProtocol to the services
+
+### 3.1.50
+
+- [X] Add support for autoscaling/v2
 
 ### 3.1.49
 
