@@ -63,10 +63,57 @@ tests:
                 targetPort: api-http
                 protocol: TCP
                 name: api-http
+                appProtocol: http
               - port: 8062
                 targetPort: api-ws
                 protocol: TCP
                 name: api-ws
+                appProtocol: http
+            selector:
+              app.kubernetes.io/component: api
+              app.kubernetes.io/instance: my-cockpit
+              app.kubernetes.io/name: cockpit
+
+  - it: should apply default service configuration with custom appProtocol
+    template: api/api-service.yaml
+    set:
+      api:
+        service:
+          appProtocol: http-test
+        controller:
+          ws:
+            service:
+              appProtocol: http-test
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: metadata.name
+          value: my-cockpit-api
+      - isEmpty:
+          path: metadata.annotations
+      - equal:
+          path: spec
+          value:
+            type: ClusterIP
+            ports:
+              - port: 8063
+                targetPort: api-http
+                protocol: TCP
+                appProtocol: http-test
+                name: api-http
+              - port: 8062
+                targetPort: api-ws
+                protocol: TCP
+                name: api-ws
+                appProtocol: http-test
             selector:
               app.kubernetes.io/component: api
               app.kubernetes.io/instance: my-cockpit
@@ -109,14 +156,17 @@ tests:
                 targetPort: api-http
                 protocol: TCP
                 name: api-http
+                appProtocol: http
               - port: 8062
                 targetPort: api-ws
                 protocol: TCP
                 name: api-ws
+                appProtocol: http
               - port: 18063
                 targetPort: api-technical
                 protocol: TCP
                 name: api-technical
+                appProtocol: http
             selector:
               app.kubernetes.io/component: api
               app.kubernetes.io/instance: my-cockpit

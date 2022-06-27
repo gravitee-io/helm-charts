@@ -118,6 +118,7 @@ engine:
     externalPort: 82
     internalPort: 8072
     internalPortName: http
+    # appProtocol: http
     # annotations:
   securityContext:
     runAsUser: 1001
@@ -222,7 +223,7 @@ engine:
         enabled: false
         externalPort: 72
 #         type: ClusterIP
-
+#        appProtocol: http
     metrics:
       enabled: false
       prometheus:

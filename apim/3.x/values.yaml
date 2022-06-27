@@ -516,8 +516,8 @@ api:
       # host: localhost
       # username:
       # password:
-      # ssl:
-      #  enabled: false
+      ssl:
+        enabled: false
       #  keystore:
       #    type: jks # Supports jks, pem, pkcs12
       #    path: ${gravitee.home}/security/keystore.jks
@@ -530,6 +530,7 @@ api:
       # service:
       #   externalPort: 92
       #   internalPort: 18092
+      #   appProtocol: http
       # ingress:
       #   enabled: false
       #   ingressClassName: ""
@@ -574,6 +575,7 @@ api:
           enabled: false
 #         type: ClusterIP
 #         externalPort: 18083
+#         appProtocol: http
     api:
       entrypoint: /
     client:
@@ -602,6 +604,7 @@ api:
     externalPort: 83
     internalPort: 8083
     internalPortName: http
+#    appProtocol: http
   # annotations:
   # DEPRECATED, please define api.deployment.securityContext instead
   securityContext:
@@ -835,6 +838,7 @@ gateway:
         enabled: false
 #         type: ClusterIP
 #         externalPort: 18082
+#         appProtocol: http
     kubeController:
       enabled: false
     bridge:
@@ -842,8 +846,8 @@ gateway:
       # host: localhost
       # username:
       # password:
-      # ssl:
-      #  enabled: false
+      ssl:
+        enabled: false
       #  keystore:
       #    type: jks # Supports jks, pem, pkcs12
       #    path: ${gravitee.home}/security/keystore.jks
@@ -856,6 +860,7 @@ gateway:
       # service:
       #   externalPort: 92
       #   internalPort: 18092
+      #   appProtocol: http
       # ingress:
       #   enabled: false
       #   ingressClassName: ""
@@ -931,6 +936,7 @@ gateway:
     externalPort: 82
     internalPort: 8082
     internalPortName: http
+#    appProtocol: http
   # annotations:
   # DEPRECATED, please define gateway.deployment.securityContext instead
   securityContext:
@@ -1078,6 +1084,7 @@ portal:
     externalPort: 8003
     internalPort: 8080
     internalPortName: http
+#    appProtocol: http
   # annotations:
   # DEPRECATED, please define portal.deployment.securityContext instead
   securityContext:
@@ -1233,6 +1240,7 @@ ui:
     externalPort: 8002
     internalPort: 8080
     internalPortName: http
+#    appProtocol: http
   # annotations:
   # DEPRECATED, please define ui.deployment.securityContext instead
   securityContext:

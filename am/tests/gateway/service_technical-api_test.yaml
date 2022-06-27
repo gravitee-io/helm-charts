@@ -9,7 +9,7 @@ tests:
         services:
           core:
             service:
-              externalPort: 18082
+              externalPort: 18092
               enabled: true
     asserts:
       - hasDocuments:
@@ -24,8 +24,8 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 18082
-            targetPort: 18082
+            port: 18092
+            targetPort: 18092
             protocol: TCP
             name: gateway-technical
             appProtocol: http
@@ -37,9 +37,9 @@ tests:
         services:
           core:
             service:
-              externalPort: 18082
+              externalPort: 18092
               enabled: true
-              appProtocol: http
+              appProtocol: http-test
     asserts:
       - hasDocuments:
           count: 1
@@ -53,8 +53,8 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 18082
-            targetPort: 18082
+            port: 18092
+            targetPort: 18092
             protocol: TCP
             name: gateway-technical
-            appProtocol: http
+            appProtocol: http-test

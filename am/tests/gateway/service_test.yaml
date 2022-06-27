@@ -1,16 +1,10 @@
-suite: Test API Gateway Service with Technical API enabled
+suite: Test API Gateway default Service
 templates:
   - "gateway/gateway-service.yaml"
+  - "gateway/gateway-configmap.yaml"
 tests:
-  - it: Check technical api service
+  - it: Check default service
     template: gateway/gateway-service.yaml
-    set:
-      gateway:
-        services:
-          core:
-            service:
-              externalPort: 18082
-              enabled: true
     asserts:
       - hasDocuments:
           count: 1
@@ -24,22 +18,18 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 18082
-            targetPort: 18082
+            port: 82
+            targetPort: 8092
             protocol: TCP
-            name: gateway-technical
+            name: gateway
             appProtocol: http
 
-  - it: Check technical api service with custom appProtocol
+  - it: Check service with custom appProtocol
     template: gateway/gateway-service.yaml
     set:
       gateway:
-        services:
-          core:
-            service:
-              externalPort: 18082
-              enabled: true
-              appProtocol: http
+        service:
+          appProtocol: http-test
     asserts:
       - hasDocuments:
           count: 1
@@ -53,8 +43,8 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 18082
-            targetPort: 18082
+            port: 82
+            targetPort: 8092
             protocol: TCP
-            name: gateway-technical
-            appProtocol: http
+            name: gateway
+            appProtocol: http-test

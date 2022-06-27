@@ -1,16 +1,9 @@
-suite: Test Engine Service with Technical API enabled
+suite: Test default Service
 templates:
   - "engine-service.yaml"
 tests:
-  - it: Check technical api service
+  - it: Check default service
     template: engine-service.yaml
-    set:
-      engine:
-        services:
-          core:
-            service:
-              externalPort: 18072
-              enabled: true
     asserts:
       - hasDocuments:
           count: 1
@@ -24,22 +17,18 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 18072
-            targetPort: 18072
+            port: 82
+            targetPort: 8072
             protocol: TCP
-            name: engine-techapi
+            name: engine
             appProtocol: http
 
-  - it: Check technical api service with custom appProtocol
+  - it: Check service with custom appProtocol
     template: engine-service.yaml
     set:
       engine:
-        services:
-          core:
-            service:
-              externalPort: 18072
-              enabled: true
-              appProtocol: http-test
+        service:
+          appProtocol: http-test
     asserts:
       - hasDocuments:
           count: 1
@@ -53,8 +42,8 @@ tests:
       - contains:
           path: spec.ports
           content:
-            port: 18072
-            targetPort: 18072
+            port: 82
+            targetPort: 8072
             protocol: TCP
-            name: engine-techapi
+            name: engine
             appProtocol: http-test
