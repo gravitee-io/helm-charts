@@ -2,7 +2,7 @@
 [[graviteeio-api-management-helm-chart]]
 == Gravitee.io API Management Helm Chart
 
-Installing APIM on Kubernetes is easy with the help of our Helm Chart. **This Helm Chart supports versions: 3.0.x and higher** and will deploy the following: 
+Installing APIM on Kubernetes is easy with the help of our Helm Chart. **This Helm Chart supports versions: 3.0.x and higher** and will deploy the following:
 
 * Gravitee Management API.
 * Gravitee Management UI.
@@ -13,39 +13,50 @@ Installing APIM on Kubernetes is easy with the help of our Helm Chart. **This He
 
 === Prerequisites
 
-. https://kubernetes.io/docs/tasks/tools/#kubectl[Kubectl]. 
+. https://kubernetes.io/docs/tasks/tools/#kubectl[Kubectl].
 . https://helm.sh/docs/intro/install/[Helm v3].
 . MongoDB or PostgreSQL. (Not to worry, this Helm Chart will deploy these.)
 . Elasticsearch. (This Helm Chart will also deploy this.)
 
 
 
-=== Install The Helm Chart Repo
+=== Install the Helm Chart repo
 
-Add the Gravitee.io Helm charts repo using the commmand below: 
+Add the Gravitee.io Helm charts repo using the commmand below:
 
 ....
 $ helm repo add graviteeio https://helm.gravitee.io
 ....
 
 
-=== Installing the Chart
+=== Install the Helm Chart
 
 
 Now, install the chart from the Helm repo with the release name
 
-`+graviteeio-apim3x+`, run:
+`+graviteeio-apim3x+`.
+
+To prevent potential issues in the future, it is best practice to create a separate namespace for your installation in order to prevent the use of the default Kubernetes namespace. The installation command provided immediately below assumes that such best practice is followed, however this is not a mandatory requirement.
+
+To install the Helm Chart using a dedicated namespace (we use `+gravitee-apim+` as an example), run the following command:
+
+[source,bash]
+----
+helm install graviteeio-apim3x graviteeio/apim3 --create-namespace --namespace gravitee-apim
+----
+
+To install the Helm Chart using the default namespace (not recommended), run the following command:
 
 [source,bash]
 ----
 helm install graviteeio-apim3x graviteeio/apim3
 ----
 
-NOTE: If you choose to modify `values.yml` the configuration file, be sure to run the following command to 
-include the updated config file in this installation: **`$ helm install graviteeio-apim3x graviteeio/apim3 -f values.yaml`.**
+NOTE: If you choose to modify the `values.yml` configuration file prior to the installation, make sure to
+include it by adding `-f values.yaml` as an argument. For example: **`$ helm install graviteeio-apim3x graviteeio/apim3 --create-namespace --namespace gravitee-apim -f values.yaml`.**
 
 
-=== Create A Chart Archive
+=== Create a Helm Chart archive
 
 You can also package this chart directory into a chart archive by running:
 
@@ -124,7 +135,7 @@ chart).
 |===
 
 ==== MongoDB
-To install MongoDB via Helm command, run the following: 
+To install MongoDB via Helm command, run the following:
 `helm install mongodb bitnami/mongodb --set auth.rootPassword=r00t`
 
 ===== MongoDB Connections
@@ -141,7 +152,7 @@ URI].
 |`+mongo.uri+` |Mongo URI |`+null+`
 |===
 
-[start=2] 
+[start=2]
 . If no `+mongo.uri+` is provided, you can provide a `+mongo.servers+` raw
 definition in combination with `+mongo.dbname+`, plus eventual
 authentication configuration:
@@ -157,7 +168,7 @@ mongo:
   dbname: gravitee
   auth:
     enabled: false
-    username: 
+    username:
     password:
 ----
 
@@ -208,15 +219,15 @@ See
 https://github.com/helm/charts/tree/master/stable/mongodb-replicaset[MongoDB
 replicaset] for detailed documentation on helm chart.
 
-==== PostgresSQL (via JDBC Connection) 
-To install a new PostgresSQL database, use the command below and update the `username`, `password`, and `databasename` parameters: 
+==== PostgresSQL (via JDBC Connection)
+To install a new PostgresSQL database, use the command below and update the `username`, `password`, and `databasename` parameters:
 ----
-helm install --set postgresqlUsername=postgres --set postgresqlPassword=P@ssw0rd 
+helm install --set postgresqlUsername=postgres --set postgresqlPassword=P@ssw0rd
 --set postgresqlDatabase=graviteeapim postgres-apim bitnami/postgresql
 ----
 
 
-Check that PostgreSQL pod is up and running before proceeding by running `kubectl get pods` as indicated below. 
+Check that PostgreSQL pod is up and running before proceeding by running `kubectl get pods` as indicated below.
 
 ----
 $ kubectl get pods
@@ -225,8 +236,8 @@ postgres-apim-postgresql-0                1/1     Running      0           98s
 ----
 
 
-For PostgrestSQL, use the information below in `values.yml` and replace the `username`, `password`, 
-`URL` and `database name` with details for your specific instance. 
+For PostgrestSQL, use the information below in `values.yml` and replace the `username`, `password`,
+`URL` and `database name` with details for your specific instance.
 
 ----
 jdbc:

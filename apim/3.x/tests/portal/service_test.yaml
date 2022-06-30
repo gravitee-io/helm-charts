@@ -1,0 +1,50 @@
+suite: Test API Portal default Service
+templates:
+  - "portal/portal-service.yaml"
+  - "portal/portal-configmap.yaml"
+tests:
+  - it: Check default service
+    template: portal/portal-service.yaml
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - contains:
+          path: spec.ports
+          content:
+            port: 8003
+            targetPort: 8080
+            protocol: TCP
+            name: portal
+            appProtocol: http
+
+  - it: Check service with custom appProtocol
+    template: portal/portal-service.yaml
+    set:
+      portal:
+        service:
+          appProtocol: http
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - contains:
+          path: spec.ports
+          content:
+            port: 8003
+            targetPort: 8080
+            protocol: TCP
+            name: portal
+            appProtocol: http

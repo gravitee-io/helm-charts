@@ -55,6 +55,21 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Return the target Kubernetes version
+*/}}
+{{- define "common.capabilities.kubeVersion" -}}
+{{- if .Values.global }}
+    {{- if .Values.global.kubeVersion }}
+    {{- .Values.global.kubeVersion -}}
+    {{- else }}
+    {{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
+    {{- end -}}
+{{- else }}
+{{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the apiVersion of ingress.
 */}}
 {{- define "ingress.apiVersion" -}}
@@ -62,5 +77,16 @@ Return the apiVersion of ingress.
     {{- print "networking.k8s.io/v1beta1" -}}
 {{- else -}}
     {{- print "extensions/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for pod autoscaling.
+*/}}
+{{- define "common.capabilities.autoscaling.apiVersion" -}}
+{{- if semverCompare "<v1.22" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "autoscaling/v2beta1" -}}
+{{- else -}}
+{{- print "autoscaling/v2" -}}
 {{- end -}}
 {{- end -}}

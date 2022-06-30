@@ -14,6 +14,8 @@ tests:
               internalPort: 18092
             ingress:
               enabled: true
+            ssl:
+              enabled: false
     asserts:
       - hasDocuments:
           count: 1
@@ -31,3 +33,70 @@ tests:
             targetPort: 18092
             protocol: TCP
             name: gateway-bridge
+            appProtocol: http
+
+  - it: Check bridge service with ssl enabled
+    template: gateway/gateway-service.yaml
+    set:
+      gateway:
+        services:
+          bridge:
+            enabled: true
+            service:
+              externalPort: 92
+              internalPort: 18092
+            ingress:
+              enabled: true
+            ssl:
+              enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - contains:
+          path: spec.ports
+          content:
+            port: 92
+            targetPort: 18092
+            protocol: TCP
+            name: gateway-bridge
+            appProtocol: https
+
+  - it: Check bridge service with custom appProtocol
+    template: gateway/gateway-service.yaml
+    set:
+      gateway:
+        services:
+          bridge:
+            enabled: true
+            service:
+              externalPort: 92
+              internalPort: 18092
+            ingress:
+              enabled: true
+            ssl:
+              enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - contains:
+          path: spec.ports
+          content:
+            port: 92
+            targetPort: 18092
+            protocol: TCP
+            name: gateway-bridge
+            appProtocol: https

@@ -22,3 +22,29 @@ tests:
             targetPort: 8082
             protocol: TCP
             name: gateway
+            appProtocol: http
+
+  - it: Check service with custom appProtocol
+    template: gateway/gateway-service.yaml
+    set:
+      gateway:
+        service:
+          appProtocol: https
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - contains:
+          path: spec.ports
+          content:
+            port: 82
+            targetPort: 8082
+            protocol: TCP
+            name: gateway
+            appProtocol: https

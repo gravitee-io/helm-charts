@@ -248,6 +248,7 @@ api:
           enabled: false
           internalPortName: api-technical
           externalPort: 18063
+#          appProtocol: http
 
   reCaptcha:
     enabled: false
@@ -293,12 +294,13 @@ api:
         enabled: true
         externalPort: 8062
         internalPortName: api-ws
+#        appProtocol: ""
 
   service:
     type: ClusterIP
     externalPort: 8063
     internalPortName: api-http
-
+#    appProtocol: http
   # annotations:
   securityContext:
     runAsUser: 1001
@@ -462,6 +464,7 @@ ui:
     externalPort: 8002
     internalPort: 8080
     internalPortName: ui-http
+#    appProtocol: http
   # annotations:
   securityContext:
     runAsUser: 101
@@ -568,6 +571,7 @@ generator:
     externalPort: 84
     internalPort: 3003
     internalPortName: generator-http
+#    appProtocol: http
   # annotations:
   securityContext:
     runAsUser: 1001

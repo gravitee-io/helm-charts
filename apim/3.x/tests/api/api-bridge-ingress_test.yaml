@@ -1,0 +1,45 @@
+suite: Test Management API Ingress with Hybrid Bridge enabled
+templates:
+  - "api/api-bridge-ingress.yaml"
+tests:
+  - it: Check bridge ingress disabled
+    template: api/api-bridge-ingress.yaml
+    set:
+      api:
+        services:
+          bridge:
+            enabled: false
+            ingress:
+              enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: Check bridge ingress enabled
+    template: api/api-bridge-ingress.yaml
+    set:
+      api:
+        services:
+          bridge:
+            enabled: true
+            service:
+              externalPort: 92
+              internalPort: 18092
+            ingress:
+              enabled: true
+              path: /api/_bridge
+              hosts:
+                - apim.example.com
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - equal:
+          path: spec.rules[0].host
+          value: apim.example.com
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /api/_bridge
