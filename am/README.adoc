@@ -12,21 +12,47 @@ This chart will deploy the following:
 * Gravitee Access Gateway
 * MongoDB replica-set (optional dependency)
 
-=== Installing
+=== Install the Helm Chart repo
 
-* Add the Gravitee.io helm charts repo
-+
+Add the Gravitee.io Helm charts repo using the commmand below:
+
 ....
 $ helm repo add graviteeio https://helm.gravitee.io
 ....
-* Install it
-+
+
+
+=== Install the Helm Chart
+
+
+Now, install the chart from the Helm repo with the release name
+
+`+graviteeio-am+`.
+
+To prevent potential issues in the future, it is best practice to create a separate namespace for your installation in order to prevent the use of the default Kubernetes namespace. The installation command provided immediately below assumes that such best practice is followed, however this is not a mandatory requirement.
+
+To install the Helm Chart using a dedicated namespace (we use `+gravitee-am+` as an example), run the following command:
+
+[source,bash]
+----
+$ helm install graviteeio-am graviteeio/am --create-namespace --namespace gravitee-am
+----
+
+To install the Helm Chart using the default namespace (not recommended), run the following command:
+
+[source,bash]
+----
+$ helm install graviteeio-am graviteeio/am
+----
+
+To install the chart using the chart archive, run:
+
 ....
-$ helm install --name graviteeio-am graviteeio/am
+$ helm install am-1.0.0.tgz
+....
 
-NOTE: If you're using Helm 3, the name parameter is no more valid. Please check https://helm.sh/docs/faq/#release-names-are-now-scoped-to-the-namespace(Helm documentation)
 
-## Create a chart archive
+=== Create a Helm Chart archive
+
 
 ....
 
@@ -36,21 +62,6 @@ To package this chart directory into a chart archive, run:
 $ helm package .
 ....
 
-=== Installing the Chart
-
-To install the chart from the Helm repository with the release name
-`+graviteeio-am+`:
-
-[source,bash]
-----
-$ helm install --name graviteeio-am graviteeio/am
-----
-
-To install the chart using the chart archive, run:
-
-....
-$ helm install am-1.0.0.tgz
-....
 
 === Configuration
 
