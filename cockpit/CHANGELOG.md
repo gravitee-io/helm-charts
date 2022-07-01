@@ -2,16 +2,13 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
-### 1.6.21
+### 1.6.20
 
 - [X] Upgrade Mongodb and Elasticsearch dependencies
 
-### 1.6.20
-
-- [X] Add support for appProtocol to the services
-
 ### 1.6.19
 
+- [X] Add support for appProtocol to the services
 - [X] Add support for autoscaling/v2
 
 ### 1.6.18
