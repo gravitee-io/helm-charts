@@ -220,6 +220,7 @@ https://github.com/bitnami/charts/tree/master/bitnami/mongodb[MongoDB] for detai
 
 Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running APIM locally.
 
+NOTE: You may encounter issues while running this Helm Charts on Apple Silicon M1 (see https://github.com/bitnami/charts/issues/7305). If you want to deploy MongoDB on M1 we encourage you to switch to an other Helm Charts for deploying MongoDB.
 
 ==== PostgresSQL (via JDBC Connection)
 To install a new PostgresSQL database, use the command below and update the `username`, `password`, and `databasename` parameters:
