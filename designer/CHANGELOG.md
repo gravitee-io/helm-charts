@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io API Designer](https://github.com/gravitee-io/helm-charts/tree/master/designer) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.13
+
+- [X] Upgrade Mongodb and Elasticsearch dependencies
+
 ### 1.0.12
 
 - [X] Add support for autoscaling/v2

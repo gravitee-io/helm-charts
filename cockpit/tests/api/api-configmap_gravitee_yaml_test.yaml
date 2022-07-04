@@ -59,7 +59,7 @@ tests:
               mongodb:
                 sslEnabled: false
                 socketKeepAlive: false
-                uri: mongodb://graviteeio-apim-mongodb-replicaset:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
+                uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -222,7 +222,7 @@ tests:
               mongodb:
                 sslEnabled: false
                 socketKeepAlive: false
-                uri: mongodb://graviteeio-apim-mongodb-replicaset:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
+                uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -343,7 +343,7 @@ tests:
     template: api/api-configmap.yaml
     set:
       mongo:
-        uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
+        uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?connectTimeoutMS=30000
     release:
       name: my-cockpit
       namespace: unittest
@@ -364,7 +364,7 @@ tests:
               mongodb:
                 sslEnabled: false
                 socketKeepAlive: false
-                uri: mongodb://mongo-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
+                uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?connectTimeoutMS=30000
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -513,7 +513,7 @@ tests:
               mongodb:
                 sslEnabled: false
                 socketKeepAlive: false
-                uri: mongodb://graviteeio-apim-mongodb-replicaset:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
+                uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -656,7 +656,7 @@ tests:
               mongodb:
                 sslEnabled: false
                 socketKeepAlive: false
-                uri: mongodb://graviteeio-apim-mongodb-replicaset:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
+                uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -805,7 +805,7 @@ tests:
               mongodb:
                 sslEnabled: false
                 socketKeepAlive: false
-                uri: mongodb://graviteeio-apim-mongodb-replicaset:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
+                uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
