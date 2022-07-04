@@ -17,7 +17,7 @@ Kubernetes: `>=1.16.0-0`
 [%header,cols=3*]
 |===
 | Repository | Name | Version
-| https://charts.helm.sh/stable | mongodb-replicaset | ^3.10.1
+| https://charts.bitnami.com/bitnami | mongodb-replicaset | ^3.10.1
 |===
 
 ==== Mongo ReplicaSet
@@ -30,8 +30,7 @@ Kubernetes: `>=1.16.0-0`
 |===
 
 See
-https://artifacthub.io/packages/helm/bitnami/mongodb[MongoDB
-replicaset] for detailed documentation on helm chart.
+https://github.com/bitnami/charts/tree/master/bitnami/mongodb[MongoDB] for detailed documentation on helm chart.
 
 Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running Cockpit locally.
 

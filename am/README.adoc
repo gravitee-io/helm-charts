@@ -91,7 +91,7 @@ To configure common features such as:
 https://github.com/kubernetes/charts/tree/master/stable/chaoskube[chaoskube]
 chart)
 * configuration database (see
-https://github.com/kubernetes/charts/tree/master/stable/mongodb-replicaset[mongodb-replicaset]
+https://github.com/bitnami/charts/tree/master/bitnami/mongodb[mongodb]
 
 [cols=",,",options="header",]
 |===
@@ -177,7 +177,7 @@ define the following configuration options:
 |===
 
 See
-https://artifacthub.io/packages/helm/bitnami/mongodb[MongoDB
+https://github.com/bitnami/charts/tree/master/bitnami/mongodb[MongoDB
 replicaset] for detailed documentation on helm chart.
 
 Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running AM locally.
