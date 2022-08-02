@@ -147,6 +147,10 @@ data:
 {{ toYaml .Values.api.services.metrics.prometheus | indent 10 }}
         {{- end }}
       {{- end }}
+      {{- if .Values.api.services.subscription.enabled }}
+      subscription:
+        {{- toYaml .Values.api.services.subscription | nindent 8 }}
+      {{- end }}
 
     {{- if and .Values.api.http .Values.api.http.client }}
     httpClient:

@@ -521,7 +521,10 @@ api:
       #     # Secrets must be manually created in the namespace.
       #     - secretName: chart-example-tls
       #       hosts:
-      #         - chart-example.local      
+      #         - chart-example.local
+    subscription:
+      enabled: false
+#      pre-expiration-notification-schedule: 15,10,5
   http:
     services:
       core:
