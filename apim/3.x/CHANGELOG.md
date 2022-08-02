@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 ### 3.1.50
 
 - [X] Upgrade Mongodb and Elasticsearch dependencies
+- [X] Handle subscription service configuration
 
 ### 3.1.49
 
