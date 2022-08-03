@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Access Management 3.x](h
 ### 1.0.46
 
 - [X] Upgrade Mongodb and Elasticsearch dependencies
+- [X] Add settings for Backend SSL connection
 
 ### 1.0.45
 
