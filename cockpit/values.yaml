@@ -119,7 +119,8 @@ api:
   name: api
   logging:
     stdout:
-      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+      json: false
+      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%mdc] - %msg%n"
     file:
       enabled: false
     graviteeLevel: INFO

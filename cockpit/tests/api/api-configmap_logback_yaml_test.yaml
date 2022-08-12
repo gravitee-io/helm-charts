@@ -1,0 +1,112 @@
+suite: Cockpit - API - ConfigMap logback.xml config
+templates:
+  - "api/api-configmap.yaml"
+tests:
+  - it: should apply default logback configuration
+    template: api/api-configmap.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: data.[logback.xml]
+          value: |-
+            <?xml version="1.0" encoding="UTF-8"?>
+            <!--
+              ~ Copyright (c) 2015-2016, The Gravitee team (http://www.gravitee.io)
+              ~
+              ~  Licensed under the Apache License, Version 2.0 (the "License");
+              ~  you may not use this file except in compliance with the License.
+              ~  You may obtain a copy of the License at
+              ~
+              ~  http://www.apache.org/licenses/LICENSE-2.0
+              ~
+              ~  Unless required by applicable law or agreed to in writing, software
+              ~  distributed under the License is distributed on an "AS IS" BASIS,
+              ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+              ~  See the License for the specific language governing permissions and
+              ~  limitations under the License.
+              -->
+
+                <configuration>
+
+                    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+                      <encoder>
+                        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%mdc] - %msg%n</pattern>
+                      </encoder>
+                    </appender>
+
+                    <logger name="io.gravitee" level="INFO" />
+                    <logger name="com.graviteesource" level="INFO" />
+                    <logger name="org.eclipse.jetty" level="INFO" />
+
+                    <!-- Strictly speaking, the level attribute is not necessary since -->
+                    <!-- the level of the root level is set to DEBUG by default.       -->
+                    <root level="WARN">
+                        <appender-ref ref="STDOUT" />
+                    </root>
+
+                </configuration>
+
+  - it: should generate logback json enconder when api json is enabled
+    template: api/api-configmap.yaml
+    set:
+      api:
+        logging:
+          stdout:
+            json: true
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: data.[logback.xml]
+          value: |-
+            <?xml version="1.0" encoding="UTF-8"?>
+            <!--
+              ~ Copyright (c) 2015-2016, The Gravitee team (http://www.gravitee.io)
+              ~
+              ~  Licensed under the Apache License, Version 2.0 (the "License");
+              ~  you may not use this file except in compliance with the License.
+              ~  You may obtain a copy of the License at
+              ~
+              ~  http://www.apache.org/licenses/LICENSE-2.0
+              ~
+              ~  Unless required by applicable law or agreed to in writing, software
+              ~  distributed under the License is distributed on an "AS IS" BASIS,
+              ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+              ~  See the License for the specific language governing permissions and
+              ~  limitations under the License.
+              -->
+
+                <configuration>
+
+                    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+                      <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                            <jsonFormatter
+                                    class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                            </jsonFormatter>
+                            <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+                        </layout>
+                      </encoder>
+                    </appender>
+
+                    <logger name="io.gravitee" level="INFO" />
+                    <logger name="com.graviteesource" level="INFO" />
+                    <logger name="org.eclipse.jetty" level="INFO" />
+
+                    <!-- Strictly speaking, the level attribute is not necessary since -->
+                    <!-- the level of the root level is set to DEBUG by default.       -->
+                    <root level="WARN">
+                        <appender-ref ref="STDOUT" />
+                    </root>
+
+                </configuration>

@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 ### 1.6.20
 
 - [X] Upgrade Mongodb and Elasticsearch dependencies
+- [X] Add support for json logging in logback
 
 ### 1.6.19
 
