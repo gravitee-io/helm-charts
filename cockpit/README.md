@@ -321,6 +321,10 @@ Values {#_values}
 | api.log         | string          | `"INFO"`        |                 |
 | ging.jettyLevel |                 |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
+| api             | bool            | `false`         |                 |
+| .logging.stdout |                 |                 |                 |
+| .json           |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
 | api             | string          | `"%d{HH:mm:ss.S |                 |
 | .logging.stdout |                 | SS} [%thread] % |                 |
 | .encoderPattern |                 | -5level %logger |                 |
