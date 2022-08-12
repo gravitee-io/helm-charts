@@ -252,7 +252,6 @@ data:
 
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
-
     <!--
       ~ Copyright (c) 2015-2016, The Gravitee team (http://www.gravitee.io)
       ~
@@ -272,11 +271,9 @@ data:
         <configuration>
 
             <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-                <!-- encoders are assigned the type
-                    ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-                <encoder>
-                    <pattern>{{ .Values.api.logging.stdout.encoderPattern }}</pattern>
-                </encoder>
+              <encoder>
+                <pattern>{{ .Values.api.logging.stdout.encoderPattern }}</pattern>
+              </encoder>
             </appender>
 
             {{- if .Values.api.logging.file.enabled }}
