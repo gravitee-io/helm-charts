@@ -150,6 +150,7 @@ $ helm install cockpit-1.0.0.tgz
 | api.logging.file.rollingPolicy | string | `"<rollingPolicy class=\"ch.qos.logback.core.rolling.TimeBasedRollingPolicy\">\n    <!-- daily rollover -->\n    <fileNamePattern>${gravitee.management.log.dir}/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>\n    <!-- keep 30 days' worth of history -->\n    <maxHistory>30</maxHistory>\n</rollingPolicy>\n"` |
 | api.logging.graviteeLevel | string | `"DEBUG"` |
 | api.logging.jettyLevel | string | `"INFO"` |
+| api.logging.stdout.json | boolean | `false` |
 | api.logging.stdout.encoderPattern | string | `"%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%mdc] - %msg%n"` |
 | api.name | string | `"api"` |
 | api.platform.admin.password | string | `"$2a$10$YCR.gYLmG8TzKSg5TYxdzeJOpMGpEavOCni5sbHukD2qwwZxhuXvO"` |

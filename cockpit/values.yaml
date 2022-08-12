@@ -119,6 +119,7 @@ api:
   name: api
   logging:
     stdout:
+      json: false
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%mdc] - %msg%n"
     file:
       enabled: false
