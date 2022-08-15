@@ -96,9 +96,8 @@ spec:
         - name: {{ template "gravitee.engine.fullname" . }}
           image: "{{ .Values.engine.image.repository }}:{{ default .Chart.AppVersion .Values.engine.image.tag }}"
           imagePullPolicy: {{ .Values.engine.image.pullPolicy }}
-          {{- if .Values.engine.runAsNonRoot -}}
-          securityContext:  
-{{ toYaml .Values.engine.securityContext | trim | indent 12 }}
+          {{- if .Values.engine.runAsNonRoot }}
+          securityContext:  {{ toYaml .Values.engine.securityContext | nindent 12 }}
           {{- end }}
           ports:
             - name: {{ .Values.engine.service.internalPortName }}
