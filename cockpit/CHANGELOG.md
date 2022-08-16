@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.6.21
+
+- [X] Fix json logging to log one message per line
+
 ### 1.6.20
 
 - [X] Upgrade Mongodb and Elasticsearch dependencies
