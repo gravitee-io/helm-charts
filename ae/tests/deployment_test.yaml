@@ -263,7 +263,7 @@ tests:
           of: Deployment
       - isNull:
           path: spec.template.spec.containers[0].securityContext
-  - it: Deploy with custom  SecurityContext
+  - it: Deploy with custom SecurityContext
     template: engine-deployment.yaml
     set:
       engine:
@@ -275,4 +275,7 @@ tests:
           of: Deployment
       - equal:
           path: spec.template.spec.containers[0].securityContext.runAsNonRoot
-          value: true
+          value: true # Use engine.securityContext.runAsNonRoot value
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 1001 # Use engine.securityContext.runAsUser value
