@@ -251,3 +251,31 @@ tests:
       - equal:
           path: spec.template.spec.serviceAccountName
           value: "test-sa"
+  - it: Deploy without custom SecurityContext
+    template: engine-deployment.yaml
+    set:
+      engine:
+        runAsNonRoot: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - isNull:
+          path: spec.template.spec.containers[0].securityContext
+  - it: Deploy with custom SecurityContext
+    template: engine-deployment.yaml
+    set:
+      engine:
+        runAsNonRoot: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true # Use engine.securityContext.runAsNonRoot value
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 1001 # Use engine.securityContext.runAsUser value
