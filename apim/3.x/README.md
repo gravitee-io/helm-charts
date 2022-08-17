@@ -383,3 +383,17 @@ portal:
 ```
 
 By setting the value to `null` for `runAsUser` and `runAsGroup` it forces OpenShift to define the correct values for you while deploying the Helm Chart.
+
+## Run unit tests
+
+Install `unittest` helm plugin
+
+```shell
+helm plugin install https://github.com/quintush/helm-unittest
+```
+
+Inside `apim/3.x` directory, run:
+
+```shell
+helm unittest -3 -f 'tests/**/*.yaml' .
+```

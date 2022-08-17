@@ -665,3 +665,17 @@ Values {#_values}
 +-----------------+-----------------+-----------------+-----------------+
 | `"nginx"`       |                 | ui.service.type | string          |
 +-----------------+-----------------+-----------------+-----------------+
+
+## Run unit tests
+
+Install `unittest` helm plugin
+
+```shell
+helm plugin install https://github.com/quintush/helm-unittest
+```
+
+Inside `cockpit` directory, run:
+
+```shell
+helm unittest -3 -f 'tests/**/*.yaml' .
+```
