@@ -35,3 +35,40 @@ tests:
       - matchRegex:
           path: data.[gravitee.yml]
           pattern: "[ ]{6}pattern: testusernamepattern"
+
+
+  - it: should have SSL settings for JDBC Backends
+    set:
+      management.type: jdbc
+      oauth2.type: jdbc
+      jdbc.sslEnabled: true
+      jdbc.sslMode: verify-ca
+      jdbc.sslServerCert: jdbc-ssl-cert
+      jdbc.trustServerCertificate: true
+      jdbc.disableSslHostnameVerification:  true
+      jdbc.trustStore.path: jdbc-ssl-truststore
+      jdbc.trustStore.password: jdbc-ssl-truststore-pass
+
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}sslEnabled: true"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}sslMode: verify-ca"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}sslServerCert: jdbc-ssl-cert"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}trustServerCertificate: true"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}path: jdbc-ssl-truststore"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}password: jdbc-ssl-truststore-pass"
