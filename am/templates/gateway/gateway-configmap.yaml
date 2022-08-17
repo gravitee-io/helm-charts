@@ -80,6 +80,14 @@ data:
       {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
       mongodb:
         sslEnabled: {{ .Values.mongo.sslEnabled }}
+        {{- if .Values.mongo.keystore }}
+        keystore:
+          {{ toYaml .Values.mongo.keystore | nindent 10 | trim -}}
+        {{- end }}
+        {{- if .Values.mongo.truststore }}
+        truststore:
+          {{ toYaml .Values.mongo.truststore | nindent 10 | trim -}}
+        {{- end }}
         socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
         {{- if .Values.mongo.uri }}
         uri: {{ .Values.mongo.uri }}
@@ -114,6 +122,25 @@ data:
         {{- if .Values.jdbc.pool }}
         {{ toYaml .Values.jdbc.pool | nindent 8 | trim -}}
         {{- end }}
+        {{- if .Values.jdbc.sslEnabled }}
+        sslEnabled: {{ .Values.jdbc.sslEnabled }}
+        {{- end }}
+        {{- if .Values.jdbc.sslMode }}
+        sslMode: {{ .Values.jdbc.sslMode }}
+        {{- end }}
+        {{- if .Values.jdbc.sslServerCert }}
+        sslServerCert: {{ .Values.jdbc.sslServerCert }}
+        {{- end }}
+        {{- if .Values.jdbc.trustServerCertificate }}
+        trustServerCertificate: {{ .Values.jdbc.trustServerCertificate }}
+        {{- end }}
+        {{- if .Values.jdbc.disableSslHostnameVerification }}
+        disableSslHostnameVerification: {{ .Values.jdbc.disableSslHostnameVerification }}
+        {{- end }}
+        {{- if .Values.jdbc.trustStore }}
+        trustStore:
+          {{ toYaml .Values.jdbc.trustStore | nindent 10 | trim -}}
+        {{- end }}
       {{- end }}
 
     oauth2:
@@ -121,6 +148,14 @@ data:
       {{- if or (eq .Values.oauth2.type "mongodb") (kindIs "invalid" .Values.oauth2.type) }}
       mongodb:
         sslEnabled: {{ .Values.mongo.sslEnabled }}
+        {{- if .Values.mongo.keystore }}
+        keystore:
+          {{ toYaml .Values.mongo.keystore | nindent 10 | trim -}}
+        {{- end }}
+        {{- if .Values.mongo.truststore }}
+        truststore:
+          {{ toYaml .Values.mongo.truststore | nindent 10 | trim -}}
+        {{- end }}
         socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
         {{- if .Values.mongo.uri }}
         uri: {{ .Values.mongo.uri }}
@@ -154,6 +189,25 @@ data:
         {{- end }}
         {{- if .Values.jdbc.pool }}
         {{ toYaml .Values.jdbc.pool | nindent 8 | trim -}}
+        {{- end }}
+        {{- if .Values.jdbc.sslEnabled }}
+        sslEnabled: {{ .Values.jdbc.sslEnabled }}
+        {{- end }}
+        {{- if .Values.jdbc.sslMode }}
+        sslMode: {{ .Values.jdbc.sslMode }}
+        {{- end }}
+        {{- if .Values.jdbc.sslServerCert }}
+        sslServerCert: {{ .Values.jdbc.sslServerCert }}
+        {{- end }}
+        {{- if .Values.jdbc.trustServerCertificate }}
+        trustServerCertificate: {{ .Values.jdbc.trustServerCertificate }}
+        {{- end }}
+        {{- if .Values.jdbc.disableSslHostnameVerification }}
+        disableSslHostnameVerification: {{ .Values.jdbc.disableSslHostnameVerification }}
+        {{- end }}
+        {{- if .Values.jdbc.trustStore }}
+        trustStore:
+          {{ toYaml .Values.jdbc.trustStore | nindent 10 | trim -}}
         {{- end }}
       {{- end }}
 

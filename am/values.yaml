@@ -58,6 +58,15 @@ mongo:
     source: admin
     username:
     password:
+#  keystore:
+#    path:                      
+#    type:                      
+#    password:                  
+#    keyPassword:               
+#  truststore:
+#    path:                      
+#    type:                      
+#    password:     
 
 mongodb-replicaset:
   initContainers:
@@ -103,6 +112,14 @@ jdbc:
     maxLifeTime: 30000
     maxAcquireTime: 0
     maxCreateConnectionTime: 0
+#  sslEnabled: false
+#  sslMode: verify-ca
+#  sslServerCert: 
+#  trustServerCertificate:
+#  disableSslHostnameVerification: 
+#  trustStore:
+#    path:
+#    password:
 
 management:
   type: mongodb
