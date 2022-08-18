@@ -407,17 +407,29 @@ data:
     <configuration>
 
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            {{- if .Values.gateway.logging.stdout.json }}
+            <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                    <jsonFormatter
+                            class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                    </jsonFormatter>
+                    <appendLineSeparator>true</appendLineSeparator>
+                    <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+                </layout>
+            </encoder>
+            {{- else }}
             <!-- encoders are assigned the type
                 ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
             <encoder>
                 <pattern>{{ .Values.gateway.logging.stdout.encoderPattern }}</pattern>
             </encoder>
+            {{- end }}
         </appender>
 
         {{- if .Values.gateway.logging.file.enabled }}
         <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${gravitee.home}/logs/gravitee.log</file>
-{{ .Values.gateway.logging.file.rollingPolicy | indent 16 }}
+{{ .Values.gateway.logging.file.rollingPolicy | indent 12 }}
             <encoder>
                 <pattern>{{ .Values.gateway.logging.file.encoderPattern }}</pattern>
             </encoder>
