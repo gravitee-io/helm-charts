@@ -135,3 +135,17 @@ $ helm install --name my-release -f values.yaml gravitee
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Run unit tests
+
+Install `unittest` helm plugin
+
+```shell
+helm plugin install https://github.com/quintush/helm-unittest
+```
+
+Inside `ae` directory, run:
+
+```shell
+helm unittest -3 -f 'tests/*.yaml' .
+```
