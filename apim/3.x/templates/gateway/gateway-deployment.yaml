@@ -104,7 +104,7 @@ spec:
       initContainers:
         {{- if and .Values.jdbc.driver (eq .Values.management.type "jdbc") }}
         - name: get-repository-jdbc-ext
-          {{- toYaml .Values.initContainers | nindent 10 }}
+          {{- include "common.initcontainer.securitycontext" (dict "initContainers" .Values.initContainers "openshift" .Values.openshift) | indent 8}}
           command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext && wget  {{ .Values.jdbc.driver }}"]
           volumeMounts:
             - name: graviteeio-apim-repository-jdbc-ext
@@ -123,7 +123,7 @@ spec:
         - name: {{ template "gravitee.gateway.fullname" . }}
           image: "{{ .Values.gateway.image.repository }}:{{ default .Chart.AppVersion .Values.gateway.image.tag }}"
           imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
-          securityContext: {{ toYaml ( .Values.gateway.securityContext | default .Values.gateway.deployment.securityContext ) | nindent 12 }}
+          securityContext: {{include "common.container.securitycontext" (dict "currentSecurityContext" .Values.gateway.securityContext "defaultSecurityContext" .Values.gateway.deployment.securityContext "openshift" .Values.openshift)| nindent 12}}
           ports:
             - name: {{ .Values.gateway.service.internalPortName }}
               containerPort: {{ .Values.gateway.service.internalPort }}

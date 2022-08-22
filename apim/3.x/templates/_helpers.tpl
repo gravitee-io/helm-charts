@@ -218,10 +218,16 @@ Usage:
 {{ include "common.ingress.annotations.render" ( dict "annotations" .Values.path.to.the.Value "ingressClassName" .Values.path.to.the.Value "context" $) }}
 */}}
 {{- define "common.ingress.annotations.render" -}}
+{{- $openshift := .openshift -}}
 {{- range $key, $value := .annotations }}
 {{- if or ( ne $key "kubernetes.io/ingress.class" ) ( not ( and ( $.ingressClassName ) ( include "common.ingress.supportsIngressClassname" $.context ))) }}
+{{- if not (and (eq $key "kubernetes.io/ingress.class") ($openshift.ingress.generateRoute) ($openshift.enabled)) }}
 {{ $key }}: {{ $value | quote }}
 {{- end -}}
+{{- end -}}
+{{- end -}}
+{{- if ($openshift.enabled) }}
+{{toYaml $openshift.ingress.annotations}}
 {{- end -}}
 {{- end -}}
 
@@ -238,6 +244,7 @@ Usage:
 {{- end -}}
 {{- end -}}
 
+{{/*
 Return the appropriate apiVersion for pod autoscaling.
 */}}
 {{- define "common.capabilities.autoscaling.apiVersion" -}}
@@ -248,4 +255,31 @@ Return the appropriate apiVersion for pod autoscaling.
 {{- else -}}
 {{- print "autoscaling/v2" -}}
 {{- end }}
+{{- end -}}
+
+{{/*
+*/}}
+{{- define "common.container.securitycontext" -}}
+{{- if .openshift.enabled -}}
+  {{ toYaml .openshift.securityContext }}
+{{- else if .currentSecurityContext -}}
+  {{ toYaml .currentSecurityContext }}
+{{- else -}}
+  {{ toYaml .defaultSecurityContext }}
+{{- end }}
+{{- end -}}
+
+{{- define "common.initcontainer.securitycontext" -}}
+{{- $openshift := .openshift -}}
+{{- range $k, $v := .initContainers }}
+{{- if and (eq $k "securityContext") ($openshift.enabled) }}
+  {{ $k }}:{{- toYaml $openshift.securityContext | nindent 4}}
+{{- else -}}
+{{- if kindIs "string" $v }}
+  {{ $k }}: {{ $v }}
+{{- else }}
+  {{ $k }}: {{ toYaml $v| nindent 4 }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}

@@ -17,7 +17,7 @@ metadata:
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
   annotations:
     {{- if .Values.api.ingress.portal.annotations }}
-    {{- include "common.ingress.annotations.render" (dict "annotations" .Values.api.ingress.portal.annotations "ingressClassName" .Values.api.ingress.portal.ingressClassName "context" $) | nindent 4 }}
+    {{- include "common.ingress.annotations.render" (dict "annotations" .Values.api.ingress.portal.annotations "ingressClassName" .Values.api.ingress.portal.ingressClassName "openshift" .Values.openshift "context" $) | nindent 4 }}
     {{- end }}
 spec:
   {{- if and .Values.api.ingress.portal.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}

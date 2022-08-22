@@ -408,7 +408,7 @@ api:
     # - configMapRef:
     #     name: config-secret
     securityContext:
-      runAsUser: 1001
+      runAsUser: 1003
       runAsNonRoot: true
     strategy:
       type: RollingUpdate
@@ -1271,3 +1271,15 @@ initContainers:
     runAsUser: 1001
     runAsNonRoot: true
   env: []
+
+openshift:
+  enabled: false
+  securityContext:
+    runAsUser: null
+    runAsGroup: null
+    runAsNonRoot: true
+  ingress:
+    generateRoute: true
+    annotations:
+      route.openshift.io/termination: "edge"
+
