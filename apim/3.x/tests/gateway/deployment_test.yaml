@@ -175,3 +175,34 @@ tests:
       - equal:
           path: spec.template.spec.serviceAccountName
           value: "test-sa"
+
+  - it: Deploy with long api name
+    template: gateway/gateway-deployment.yaml
+    set:
+      gateway:
+        name: "I-am-a-very-long-name"
+        services:
+          bridge:
+            enabled: true
+            service:
+              externalPort: 92
+              internalPort: 18092
+          core:
+            http:
+              enabled: true
+          kubeController:
+            enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].ports
+          value: 
+            - containerPort: 8082
+              name: http
+            - containerPort: 18092
+              name: I-am-a-v-bridge
+            - containerPort: 18082
+              name: I-am-a-techapi
