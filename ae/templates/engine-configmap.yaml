@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.engine.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.engine.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -45,16 +45,22 @@ data:
     services:
       core:
         http:
-          port: 18072
-          host: localhost
+          enabled: {{ .Values.engine.services.core.http.enabled | default true }}
+          port: {{ .Values.engine.services.core.http.port | default "18072" }}
+          host: {{ .Values.engine.services.core.http.host | default "localhost" }}
           authentication:
-            # authentication type to be used for the core services
-            # - none : to disable authentication
-            # - basic : to use basic authentication
-            # default is "basic"
-            type: basic
+            type: {{ .Values.engine.services.core.http.authentication.type | default "basic" }}
             users:
-              admin: adminadmin
+              admin: {{ .Values.engine.services.core.http.authentication.password | default "adminadmin"}}
+
+      {{- if .Values.engine.services.metrics.enabled }}
+      metrics:
+        enabled: {{ .Values.engine.services.metrics.enabled }}
+        {{- if .Values.engine.services.metrics.prometheus }}
+        prometheus:
+{{ toYaml .Values.engine.services.metrics.prometheus | indent 10 }}
+        {{- end }}
+      {{- end }}
 
     cluster:
       hazelcast:

@@ -1,13 +1,13 @@
-{{- if .Values.generator.enabled -}}
-{{- if .Values.generator.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+{{- if and (.Values.generator.enabled) (.Values.generator.autoscaling.enabled) -}}
+{{- $apiVersion := include "common.capabilities.autoscaling.apiVersion" . -}}
+apiVersion: {{ $apiVersion }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "gravitee.generator.fullname" . }}
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.generator.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.generator.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -19,15 +19,26 @@ spec:
   minReplicas: {{ .Values.generator.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.generator.autoscaling.maxReplicas }}
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      targetAverageUtilization: {{ .Values.generator.autoscaling.targetAverageUtilization }}
 {{- if .Values.generator.autoscaling.targetMemoryAverageUtilization }}
   - type: Resource
     resource:
       name: memory
+      {{- if (ne $apiVersion "autoscaling/v2beta1") }}
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.generator.autoscaling.targetMemoryAverageUtilization }}
+      {{ else }}
       targetAverageUtilization: {{ .Values.generator.autoscaling.targetMemoryAverageUtilization }}
-{{- end -}}
-{{- end -}}
+      {{- end -}}
+{{- end }}
+  - type: Resource
+    resource:
+      name: cpu
+      {{- if (ne $apiVersion "autoscaling/v2beta1") }}
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.generator.autoscaling.targetAverageUtilization }}
+      {{ else }}
+      targetAverageUtilization: {{ .Values.generator.autoscaling.targetAverageUtilization }}
+      {{- end -}}
 {{- end -}}

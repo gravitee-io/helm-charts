@@ -1,6 +1,6 @@
 {{- if .Values.gateway.enabled -}}
 {{- $initContainers := .Values.initContainers -}}
-{{- $rateLimitPlugin := include "ratelimit.plugin" . -}}
+{{- $serviceAccount := include "apim.serviceAccount" . -}}
 apiVersion: apps/v1
 kind: {{ .Values.gateway.type }}
 metadata:
@@ -8,7 +8,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.gateway.image.tag }}
+    app.kubernetes.io/version: {{ .Values.gateway.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.gateway.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -36,6 +36,9 @@ spec:
   {{- if eq .Values.gateway.type "Deployment" }}
   strategy: {{ toYaml .Values.gateway.deployment.strategy | nindent 4 }}
   {{- end }}
+  {{- if .Values.gateway.deployment.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.gateway.deployment.revisionHistoryLimit }}
+  {{- end }}
   {{- if not .Values.gateway.autoscaling.enabled }}
   replicas: {{ .Values.gateway.replicaCount }}
   {{- end }}
@@ -57,6 +60,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.gateway.image.tag }}
         app.kubernetes.io/component: "{{ .Values.gateway.name }}"
         {{- if .Values.gateway.deployment.labels }}
         {{- range $key, $value := .Values.gateway.deployment.labels }}
@@ -68,8 +72,12 @@ spec:
         {{- end }}
         {{- end }}
     spec:
+      {{- if $serviceAccount }}
+      serviceAccountName: {{ $serviceAccount }}
+      {{ end }}
       affinity: {{ toYaml .Values.gateway.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.gateway.deployment.nodeSelector | nindent 8 }}
+      topologySpreadConstraints: {{ toYaml .Values.gateway.deployment.topologySpreadConstraints | nindent 8 }}
       tolerations: {{ toYaml .Values.gateway.deployment.tolerations | nindent 8 }}
       {{- if .Values.gateway.priorityClassName }}
       priorityClassName: {{ .Values.gateway.priorityClassName  }}
@@ -84,8 +92,11 @@ spec:
         {{- $plugins = concat $plugins .Values.gateway.additionalPlugins -}}
       {{- end -}}
     
-      {{- if eq .Values.ratelimit.type "redis"  -}}       
-        {{- $plugins = append $plugins $rateLimitPlugin -}}
+      {{- if eq .Values.ratelimit.type "redis"  -}}
+        {{- $redisPlugin := include "redis.plugin" . -}}
+        {{- if $redisPlugin -}}
+          {{- $plugins = append $plugins $redisPlugin -}}
+        {{- end -}}  
       {{- end -}}
 
       {{- $pluginParams := dict "plugins" $plugins "appName" "graviteeio-gateway" "pluginsToRemove" .Values.gateway.removePlugins "initContainers" $initContainers -}}
@@ -121,7 +132,7 @@ spec:
               containerPort: {{ .Values.gateway.services.bridge.service.internalPort }}
             {{- end }}
             {{- if and .Values.gateway.services.core.http.enabled (or .Values.gateway.services.kubeController.enabled .Values.gateway.readinessProbe.apiSync) }}
-            - name: {{ .Values.gateway.name }}-hook
+            - name: {{ .Values.gateway.name }}-techapi
               containerPort: {{ .Values.gateway.services.core.http.port | default "18082" }}
             {{- end }}
           env:
@@ -169,13 +180,16 @@ spec:
                 - name: Authorization
                   value: {{ print "Basic "}}{{print "admin:" .Values.gateway.services.core.http.authentication.password | b64enc }}
               {{- end }}
-            {{- else }}
-            tcpSocket:
-              port: {{ .Values.gateway.service.internalPort }}
-            {{- end }}
             initialDelaySeconds: {{ .Values.gateway.readinessProbe.initialDelaySeconds | default 5 }}
             failureThreshold: {{ .Values.gateway.readinessProbe.failureThreshold | default 3 }}
             periodSeconds: {{ .Values.gateway.readinessProbe.periodSeconds | default 30 }}
+            {{- else }}
+            {{- $readinessProbe := unset (.Values.gateway.readinessProbe | deepCopy) "apiSync" -}}
+            {{ toYaml $readinessProbe | nindent 12 }}
+            {{- end }}
+          {{- if and (.Values.gateway.startupProbe) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+          startupProbe: {{ toYaml .Values.gateway.startupProbe | nindent 12 }}
+          {{- end }}
           resources: {{ toYaml .Values.gateway.resources | nindent 12 }}
           volumeMounts:
             - name: config

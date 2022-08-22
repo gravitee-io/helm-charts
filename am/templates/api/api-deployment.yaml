@@ -1,4 +1,6 @@
 {{- if .Values.api.enabled -}}
+{{- $initContainers := .Values.initContainers -}}
+{{- $serviceAccount := include "am.serviceAccount" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,7 +8,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.api.image.tag }}
+    app.kubernetes.io/version: {{ .Values.api.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.api.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -26,6 +28,9 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
+  {{- if .Values.api.deployment.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.api.deployment.revisionHistoryLimit }}
+  {{- end }}
   {{- if not .Values.api.autoscaling.enabled }}
   replicas: {{ .Values.api.replicaCount }}
   {{- end }}
@@ -48,6 +53,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Values.api.image.tag | default .Chart.AppVersion | quote }}
         app.kubernetes.io/component: "{{ .Values.api.name }}"
         {{- if .Values.api.deployment.labels }}
         {{- range $key, $value := .Values.api.deployment.labels }}
@@ -59,8 +65,12 @@ spec:
         {{- end }}
         {{- end }}
     spec:
+      {{- if $serviceAccount }}
+      serviceAccountName: {{ $serviceAccount }}
+      {{ end }}
       affinity: {{ toYaml .Values.api.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.api.deployment.nodeSelector | nindent 8 }}
+      topologySpreadConstraints: {{ toYaml .Values.api.deployment.topologySpreadConstraints | nindent 8 }}
       tolerations: {{ toYaml .Values.api.deployment.tolerations | nindent 8 }}
       {{- if .Values.api.priorityClassName }}
       priorityClassName: {{ .Values.api.priorityClassName  }}
@@ -74,7 +84,7 @@ spec:
       {{- if .Values.api.additionalPlugins -}}
         {{- $plugins = concat $plugins .Values.api.additionalPlugins -}}
       {{- end -}}
-      {{- $pluginParams := dict "plugins" $plugins "jdbcDrivers" .Values.jdbc.drivers "securityContext" .Values.api.securityContext "appName" "graviteeio-am-management-api" -}}
+      {{- $pluginParams := dict "plugins" $plugins "jdbcDrivers" .Values.jdbc.drivers "securityContext" .Values.api.securityContext "appName" "graviteeio-am-management-api" "initContainers" $initContainers -}}
       {{- if or .Values.api.extraInitContainers $plugins .Values.jdbc.drivers }}
       initContainers:
         {{- if and .Values.jdbc.drivers (eq .Values.management.type "jdbc") }}
@@ -99,6 +109,30 @@ spec:
               value: '${gravitee.home}/plugins'
             - name: GRAVITEE_PLUGINS_PATH_1
               value: '${gravitee.home}/plugins-ext'
+            {{- end }}
+            {{- if .Values.cockpit.enabled }}
+            - name: gravitee_cockpit_enabled
+              value: "true"
+            - name: gravitee_cockpit_url
+              value: {{ .Values.cockpit.url }}
+            - name: gravitee_cockpit_ws_endpoints_0
+              value: {{ .Values.cockpit.controller }}
+            - name: gravitee_cockpit_keystore_type
+              value: pkcs12
+            - name: gravitee_cockpit_keystore_path
+              value: /opt/graviteeio-am-management-api/cockpit/keystore.p12
+            - name: gravitee_cockpit_keystore_password
+              {{- toYaml .Values.cockpit.keystore.password | nindent 14}}
+            {{- if .Values.cockpit.truststore }}
+            - name: gravitee_cockpit_truststore_type
+              value: pkcs12
+            - name: gravitee_cockpit_truststore_path
+              value: /opt/graviteeio-am-management-api/cockpit/truststore.p12
+            - name: gravitee_cockpit_truststore_password
+              {{- toYaml .Values.cockpit.truststore.password | nindent 14}}
+            {{- end }}
+            - name: gravitee_cockpit_ssl_verifyHostname
+              value: "{{ .Values.cockpit.ssl.verifyHostname }}"
             {{- end }}
 {{- if .Values.api.env | default .Values.api.deployment.extraEnvs }}
 {{ toYaml ( .Values.api.env | default .Values.api.deployment.extraEnvs ) | indent 12 }}
@@ -135,6 +169,11 @@ spec:
             - name: graviteeio-am-jdbc-ext
               mountPath: /opt/graviteeio-am-management-api/plugins/ext/reporter-am-jdbc
           {{- end }}
+          {{- if .Values.cockpit.enabled }}
+            - name: gravitee-cockpit-certificates
+              mountPath: /opt/graviteeio-am-management-api/cockpit
+              readOnly: true
+          {{- end }}
           {{- include "deployment.pluginVolumeMounts" $pluginParams | indent 12 }}
           {{- with .Values.api.extraVolumeMounts }}
           {{- tpl . $ | nindent 12 }}
@@ -150,6 +189,11 @@ spec:
         {{- if and .Values.jdbc.drivers (eq .Values.management.type "jdbc") }}
         - name: graviteeio-am-jdbc-ext
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.cockpit.enabled }}
+        - name: gravitee-cockpit-certificates
+          secret:
+            secretName: gravitee-cockpit-certificates
         {{- end }}
         {{- include "deployment.pluginVolumes" $pluginParams | indent 8 }}
         {{- with .Values.api.extraVolumes }}

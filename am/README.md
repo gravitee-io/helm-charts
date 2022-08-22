@@ -49,6 +49,21 @@ $ helm install am-1.0.0.tgz
 
 The following tables list the configurable parameters of the Gravitee chart and their default values.
 
+You can rely on kubernetes _ConfigMaps_ and _Secrets_ to initialize Gravitee settings since AM 3.15.0.
+To use this feature, you have to create the ServiceAccount that allows AM to connect to the Kubernetes API (the helm chart should do it by default) and then you simply have to define your application settings like this:
+
+* for a Secret : `kubernetes://<namespace>/secrets/<my-secret-name>/<my-secret-key>`
+* for a ConfigMap : `kubernetes://<namespace>/configmaps/<my-configmap-name>/<my-configmap-key>`
+
+
+Here is an example for the mongodb uri initialized from the `mongo` secret deployed in the `default` namespace:
+
+```yaml
+mongo:
+  uri: kubernetes://default/secrets/mongo/mongouri
+```
+
+
 ### Shared configuration
 
 To configure common features such as:
@@ -119,7 +134,9 @@ If neither `mongo.uri` or `mongo.servers` are provided, you have to define the f
 | ---------------------------- | ------------------------------------- | ------- |
 | `mongodb-replicaset.enabled` | Enable deployment of Mongo replicaset | `false` |
 
-See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongodb-replicaset) for detailed documentation on helm chart.
+See [MongoDB replicaset](https://artifacthub.io/packages/helm/bitnami/mongodb) for detailed documentation on helm chart.
+
+** Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running AM locally.
 
 
 ### Gravitee.io Configuration
@@ -181,6 +198,10 @@ See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongo
 | gateway.enabled | bool | `true` |  |
 | gateway.image.pullPolicy | string | `"Always"` |  |
 | gateway.image.repository | string | `"graviteeio/am-gateway"` |  |
+|gateway.http.cookie.secure |bool |`false` |  |
+|gateway.http.cookie.sameSite |string |`"Lax"` |  |
+|gateway.http.cookie.session.name |string |`"GRAVITEE_IO_AM_SESSION"` |  |
+|gateway.http.cookie.session.timeout |int |`1800000` |  |
 | gateway.ingress.annotations."kubernetes.io/app-root" | string | `"/auth"` |  |
 | gateway.ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
 | gateway.ingress.annotations."kubernetes.io/rewrite-target" | string | `"/auth"` |  |
@@ -303,3 +324,24 @@ ui:
 ```
 
 By setting the value to `null` for `runAsUser` and `runAsGroup` it forces OpenShift to define the correct values for you while deploying the Helm Chart.
+
+## Run unit tests
+
+Install `unittest` helm plugin
+
+```shell
+helm plugin install https://github.com/quintush/helm-unittest
+```
+
+Inside `am` directory, run:
+
+```shell
+helm unittest -3 -f 'tests/**/*.yaml' .
+```
+
+The consecutive starts in the previous command matches number of subdirectories between `tests` folder and `yaml` files and runs the tests in the sub folders.
+Run the following command for test files located in the root of the `tests` folder.
+
+```shell
+helm unittest -3 -f 'tests/*.yaml' .
+```

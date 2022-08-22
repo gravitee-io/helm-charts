@@ -2,6 +2,93 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.46
+
+- [X] Upgrade Mongodb and Elasticsearch dependencies
+- [X] Add settings for Backend SSL connection
+
+### 1.0.45
+
+- [X] Add support for autoscaling/v2
+- [X] Add support for appProtocol to the services
+
+- Update gravitee.io AM v3.15.9
+
+### 1.0.44
+
+- [X] Add support for ingressClassName
+
+### 1.0.43
+
+- [X] Add version labels on pods
+
+### 1.0.42
+
+- [X] Add support for managed ServiceAccounts name provided by user
+
+### 1.0.41
+
+- [X] Add support for jetty configuration
+
+### 1.0.40
+
+- [X] Add support for PodDisruptionBudget
+
+### 1.0.39
+
+- [X] Reorder HPA resources to avoid outofsync state with ArgoCD
+
+### 1.0.38
+
+- [X] Fix ignoring the managedServiceAccount in the deployment files
+
+### 1.0.37
+
+- [X] Set default array for topologySpreadConstraints
+
+### 1.0.36
+
+- [X] Ease the integration of Gravitee.io Cockpit
+- [X] Allow configuration of cookie properties
+- [X] Introduce values to enable and configure notification about domain certificates expiry 
+- [X] Allow to configure ssl.trust and ssl.protocols through the values.yaml
+- [X] Allow to configure user management settings (resetPassword token TTL, username pattern...) in the values.yaml
+- [X] Allow to define gateway http section through values instead of environment variables (csp, xframe, cors, csrf)
+- [X] Add support for topologySpreadConstraints
+
+### 1.0.35
+
+- [X] Ensure additional jar doesn't exist before downloading it
+- [X] Improve AM Gateway readinessProbe configuration
+
+### 1.0.34
+
+- [X] Make app.kubernetes.io/version label consistent
+- [X] Add quotes to version to fix #6450
+- [X] Add ServiceAccount to all deployments
+- Update gravitee.io AM v3.15.0
+
+### 1.0.33
+
+- [X] Add support for revisionHistoryLimit
+
+### 1.0.32
+
+- [X] Allow to override init containers for downloading jdbc drivers
+
+### 1.0.31
+
+- [X] Allow to override init containers for additional plugins
+- Update gravitee.io AM v3.14.0
+
+### 1.0.30
+
+- [X] Allow to configure metrics endpoint in the configmap template for AM Gateway & API 
+
+### 1.0.29
+
+- [X] Support Ingress kubernetes >= 1.22.x
+
 ### 1.0.28
 
 - [X] Configure deployment strategy

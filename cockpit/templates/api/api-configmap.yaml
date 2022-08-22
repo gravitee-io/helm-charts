@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.api.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.api.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -109,11 +109,10 @@ data:
         entrypoint: {{ .Values.api.http.api.entrypoint }}
     {{- end }}
 
-    {{- if .Values.api.reCaptcha.enabled }}
     reCaptcha:
+    {{- if .Values.api.reCaptcha.enabled }}
 {{ toYaml .Values.api.reCaptcha | indent 6 }}
     {{ else }}
-    reCaptcha:
       enabled: false
     {{- end }}
 
@@ -123,7 +122,6 @@ data:
 {{ toYaml .Values.api.controller.compatibleVersions | indent 8 }}
       {{- end }}
 
-    # SMTP configuration used to send mails
     email:
       enabled: {{ .Values.smtp.enabled }}
       {{- if .Values.smtp.enabled }} 
@@ -147,28 +145,14 @@ data:
 
     jwt:
       secret: {{ .Values.api.jwt.secret }}
-      # Allows to define the end of validity of the token in seconds (default 604800 = a week)
-      #expire-after: 604800
-      # Allows to define issuer (default gravitee-cockpit-auth)
-      #issuer: gravitee-cockpit-auth
-      # Allows to define cookie context path (default /)
-      #cookie-path: /
-      # Allows to define cookie domain (default "")
-      #cookie-domain: .gravitee.io
-      # Allows to define if cookie secure only (default false)
-      #cookie-secure: true
 
     platform:
       admin:
-        # Password value: adminadmin
         password: {{ .Values.api.platform.admin.password }}
 
     certificates:
-      # The default secret to use to protect passwords of generated account keystores (WARN: need to be changed).
       secret: QdjshTRmurH3YtzFCrYATkSG8H65xwah
-      # The principal used to generate account certificates.
       principal: 'EMAILADDRESS=contact@graviteesource.com, CN={accountId}, OU=Cockpit, O=GraviteeSource, L=Lille, ST=France, C=FR'
-      # Expiration delay in second (default 31536000 == 1 year)
       expire-after: 31536000
       key:
         alg: RSA
@@ -178,11 +162,11 @@ data:
 
     endpoints:
       loginPath: "/auth/cockpit?token={token}"
-      apim: # Default API Management endpoint to use to configure account when created
+      apim:
         name: "GraviteeAPIManagement"
         ui: "http://localhost:3000"
         api: "http://localhost:8083/management"
-      am: # Default Access Management endpoint to use to configure account when created
+      am:
         name: "GraviteeAccessManagement"
         ui: "http://localhost:4200"
         api: "http://localhost:8093/management"
@@ -265,10 +249,9 @@ data:
         </network>
     </hazelcast>
 
-  {{- if .Values.api.logging.debug }}
+
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
-
     <!--
       ~ Copyright (c) 2015-2016, The Gravitee team (http://www.gravitee.io)
       ~
@@ -288,11 +271,21 @@ data:
         <configuration>
 
             <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-                <!-- encoders are assigned the type
-                    ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-                <encoder>
-                    <pattern>{{ .Values.api.logging.stdout.encoderPattern }}</pattern>
-                </encoder>
+              {{- if .Values.api.logging.stdout.json }}
+              <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                    <jsonFormatter
+                            class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                    </jsonFormatter>
+                    <appendLineSeparator>true</appendLineSeparator>
+                    <timestampFormat>yyyy-MM-dd'T'HH:mm:ss.SSSXX</timestampFormat>
+                </layout>
+              </encoder>
+              {{- else }}
+              <encoder>
+                <pattern>{{ .Values.api.logging.stdout.encoderPattern }}</pattern>
+              </encoder>
+              {{- end }}
             </appender>
 
             {{- if .Values.api.logging.file.enabled }}
@@ -308,6 +301,9 @@ data:
             <logger name="io.gravitee" level="{{ .Values.api.logging.graviteeLevel }}" />
             <logger name="com.graviteesource" level="{{ .Values.api.logging.graviteeLevel }}" />
             <logger name="org.eclipse.jetty" level="{{ .Values.api.logging.jettyLevel }}" />
+{{- if .Values.api.logging.additionalLoggers }}
+{{ .Values.api.logging.additionalLoggers | indent 12 }}
+{{- end }}
 
             <!-- Strictly speaking, the level attribute is not necessary since -->
             <!-- the level of the root level is set to DEBUG by default.       -->
@@ -319,5 +315,4 @@ data:
             </root>
 
         </configuration>
-  {{- end }}
 {{- end -}}

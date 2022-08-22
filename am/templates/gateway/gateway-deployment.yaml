@@ -1,4 +1,6 @@
 {{- if .Values.gateway.enabled -}}
+{{- $initContainers := .Values.initContainers -}}
+{{- $serviceAccount := include "am.serviceAccount" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,7 +8,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.gateway.image.tag }}
+    app.kubernetes.io/version: {{ .Values.gateway.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.gateway.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -26,6 +28,9 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
+  {{- if .Values.gateway.deployment.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.gateway.deployment.revisionHistoryLimit }}
+  {{- end }}
   {{- if not .Values.gateway.autoscaling.enabled }}
   replicas: {{ .Values.gateway.replicaCount }}
   {{- end }} 
@@ -48,6 +53,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Values.gateway.image.tag | default .Chart.AppVersion | quote }}
         app.kubernetes.io/component: "{{ .Values.gateway.name }}"
         {{- if .Values.gateway.deployment.labels }}
         {{- range $key, $value := .Values.gateway.deployment.labels }}
@@ -59,8 +65,12 @@ spec:
         {{- end }}
         {{- end }}  
     spec:
+      {{- if $serviceAccount }}
+      serviceAccountName: {{ $serviceAccount }}
+      {{ end }}
       affinity: {{ toYaml .Values.gateway.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.gateway.deployment.nodeSelector | nindent 8 }}
+      topologySpreadConstraints: {{ toYaml .Values.gateway.deployment.topologySpreadConstraints | nindent 8 }}
       tolerations: {{ toYaml .Values.gateway.deployment.tolerations | nindent 8 }}
       {{- if .Values.gateway.priorityClassName }}
       priorityClassName: {{ .Values.gateway.priorityClassName  }}
@@ -74,7 +84,7 @@ spec:
       {{- if .Values.gateway.additionalPlugins -}}
         {{- $plugins = concat $plugins .Values.gateway.additionalPlugins -}}
       {{- end -}}
-      {{- $pluginParams := dict "plugins" $plugins "jdbcDrivers" .Values.jdbc.drivers "securityContext" .Values.api.securityContext "appName" "graviteeio-am-gateway" -}}
+      {{- $pluginParams := dict "plugins" $plugins "jdbcDrivers" .Values.jdbc.drivers "securityContext" .Values.api.securityContext "appName" "graviteeio-am-gateway" "initContainers" $initContainers -}}
       {{- if or .Values.gateway.extraInitContainers $plugins .Values.jdbc.drivers }}
       initContainers:
         {{- if and .Values.jdbc.drivers (eq .Values.management.type "jdbc") }}
@@ -118,7 +128,29 @@ spec:
             {{- end }}
           {{- end }}
           livenessProbe: {{ toYaml .Values.gateway.livenessProbe | nindent 12 }}
-          readinessProbe: {{ toYaml .Values.gateway.readinessProbe | nindent 12 }}
+          readinessProbe:
+            {{- if eq .Values.gateway.readinessProbe.domainSync true }}
+            httpGet:
+              path: /_node/health?probes=security-domain-sync
+              port: {{ .Values.gateway.services.core.http.port | default 18082 }}
+              {{- if eq .Values.gateway.services.core.http.secured true}}
+              scheme: HTTPS
+              {{- end }}
+              {{- if eq .Values.gateway.services.core.http.authentication.type "basic" }}
+              httpHeaders:
+                - name: Authorization
+                  value: {{ print "Basic "}}{{print "admin:" .Values.gateway.services.core.http.authentication.password | b64enc }}
+              {{- end }}
+            initialDelaySeconds: {{ .Values.gateway.readinessProbe.initialDelaySeconds | default 5 }}
+            failureThreshold: {{ .Values.gateway.readinessProbe.failureThreshold | default 3 }}
+            periodSeconds: {{ .Values.gateway.readinessProbe.periodSeconds | default 30 }}
+            {{- else }}
+            {{- $readinessProbe := unset (.Values.gateway.readinessProbe | deepCopy) "domainSync" -}}
+            {{ toYaml $readinessProbe | nindent 12 }}
+            {{- end }}
+          {{- if and (.Values.gateway.startupProbe) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+          startupProbe: {{ toYaml .Values.gateway.startupProbe | nindent 12 }}
+          {{- end }}
           resources: {{ toYaml .Values.gateway.resources | nindent 12 }}
           volumeMounts:
             - name: config

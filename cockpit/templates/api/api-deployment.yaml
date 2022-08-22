@@ -1,4 +1,5 @@
 {{- if .Values.api.enabled -}}
+{{- $serviceAccount := include "cockpit.serviceAccount" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,7 +7,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.api.image.tag }}
+    app.kubernetes.io/version: {{ .Values.api.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.api.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -29,6 +30,9 @@ spec:
   {{- if not .Values.api.autoscaling.enabled }}
   replicas: {{ .Values.api.replicaCount }}
   {{- end }}
+  {{- if .Values.api.deployment.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.api.deployment.revisionHistoryLimit }}
+  {{- end }}
   strategy: {{ toYaml .Values.api.deployment.strategy | nindent 12 }}
   selector:
     matchLabels:
@@ -48,6 +52,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Values.api.image.tag | default .Chart.AppVersion | quote }}
         app.kubernetes.io/component: "{{ .Values.api.name }}"
         {{- if .Values.api.deployment.labels }}
         {{- range $key, $value := .Values.api.deployment.labels }}
@@ -59,9 +64,12 @@ spec:
         {{- end }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "api.serviceAccount" . }}
+      {{- if $serviceAccount }}
+      serviceAccountName: {{ $serviceAccount }}
+      {{ end }}
       affinity: {{ toYaml .Values.api.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.api.deployment.nodeSelector | nindent 8 }}
+      topologySpreadConstraints: {{ toYaml .Values.api.deployment.topologySpreadConstraints | nindent 8 }}
       tolerations: {{ toYaml .Values.api.deployment.tolerations | nindent 8 }}
       {{- if .Values.api.priorityClassName }}
       priorityClassName: {{ .Values.api.priorityClassName  }}
@@ -92,7 +100,11 @@ spec:
 {{ toYaml .Values.api.securityContext | trim | indent 12 }}
           ports:
             - name: {{ .Values.api.service.internalPortName }}
-              containerPort: {{ .Values.api.service.internalPort }}
+              containerPort: {{ .Values.api.http.port }}
+            - name: {{ .Values.api.controller.ws.service.internalPortName }}
+              containerPort: {{ .Values.api.controller.ws.port }}
+            - name: {{ .Values.api.http.services.core.service.internalPortName }}
+              containerPort: {{ .Values.api.http.services.core.http.port }}
           env:
             {{- if or $plugins $extPlugins }}
             - name: GRAVITEE_PLUGINS_PATH_0
@@ -127,11 +139,9 @@ spec:
             - name: config
               mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast.xml
               subPath: hazelcast.xml
-          {{- if .Values.api.logging.debug }}
             - name: config
               mountPath: /opt/gravitee-cockpit-management-api/config/logback.xml
               subPath: logback.xml
-          {{- end }}
           {{- include "deployment.pluginVolumeMounts" $pluginParams | indent 12 }}
           {{- with .Values.api.extraVolumeMounts }}
           {{- tpl . $ | nindent 12 }}

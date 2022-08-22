@@ -1,4 +1,5 @@
 {{- if .Values.generator.enabled -}}
+{{- $serviceAccount := include "cockpit.serviceAccount" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,7 +7,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.generator.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.generator.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -46,6 +47,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Values.generator.image.tag | default .Chart.AppVersion | quote }}
         app.kubernetes.io/component: "{{ .Values.generator.name }}"
         {{- if .Values.generator.deployment.labels }}
         {{- range $key, $value := .Values.generator.deployment.labels }}
@@ -57,8 +59,12 @@ spec:
         {{- end }}
         {{- end }}
     spec:
+      {{- if $serviceAccount }}
+      serviceAccountName: {{ $serviceAccount }}
+      {{ end }}
       affinity: {{ toYaml .Values.generator.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.generator.deployment.nodeSelector | nindent 8 }}
+      topologySpreadConstraints: {{ toYaml .Values.generator.deployment.topologySpreadConstraints | nindent 8 }}
       tolerations: {{ toYaml .Values.generator.deployment.tolerations | nindent 8 }}
       {{- if .Values.generator.priorityClassName }}
       priorityClassName: {{ .Values.generator.priorityClassName  }}
@@ -80,7 +86,8 @@ spec:
           securityContext:  
 {{ toYaml .Values.generator.securityContext | trim | indent 12 }}
           ports:
-            - containerPort: {{ .Values.generator.service.internalPort }}
+            - name: {{ .Values.generator.service.internalPortName }}
+              containerPort: {{ .Values.generator.service.internalPort }}
           env:
 {{- if .Values.generator.env | default .Values.generator.deployment.extraEnvs }}
 {{ toYaml ( .Values.generator.env | default .Values.generator.deployment.extraEnvs ) | indent 12 }}

@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.generator.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.generator.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -17,10 +17,17 @@ metadata:
 spec:
   type: "{{ .Values.generator.service.type }}"
   ports:
-    - port: {{ .Values.generator.service.externalPort }}
-      targetPort: {{ .Values.generator.service.internalPort }}
+    - name: {{ .Values.generator.name }}
+      port: {{ .Values.generator.service.externalPort }}
+      targetPort: {{ .Values.generator.service.internalPortName }}
       protocol: TCP
-      name: {{ .Values.generator.name }}
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.generator.service.appProtocol }}
+      appProtocol: {{ .Values.generator.service.appProtocol }}
+      {{ else }}
+      appProtocol: http
+      {{ end }}
+      {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

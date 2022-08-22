@@ -1,6 +1,25 @@
 # Default values for Gravitee.io Access Management.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+am:
+  name: am
+  # Whether this chart should self-manage its service account, role, and associated role binding.
+  managedServiceAccount: true
+
+  # Custom service account override that the pod will use
+  serviceAccount: ""
+
+  clusterRoleRules:
+    - apiGroups:
+        - ""
+      resources:
+        - configmaps
+        - secrets
+      verbs:
+        - get
+        - list
+        - watch
+        
 chaos:
   enabled: false
 
@@ -15,6 +34,8 @@ smtp:
   properties:
     auth: true
     starttlsEnable: false
+    #sslTrust: smtp.example.com
+    #sslProtocols: TLSv1.2
     #localhost: am.example.com
 
 mongo:
@@ -28,7 +49,7 @@ mongo:
   socketKeepAlive: false
   rs: rs0
   rsEnabled: true
-  dbhost: mongo-mongodb-replicaset
+  dbhost: mongo-mongodb-replicaset-headless
   dbname: gravitee
   dbport: 27017
   connectTimeoutMS: 30000
@@ -37,38 +58,40 @@ mongo:
     source: admin
     username:
     password:
+#  keystore:
+#    path:                      
+#    type:                      
+#    password:                  
+#    keyPassword:               
+#  truststore:
+#    path:                      
+#    type:                      
+#    password:     
 
 mongodb-replicaset:
+  initContainers:
   enabled: false
-  replicas: 3
+  architecture: replicaset
+  fullnameOverride: "mongo-mongodb-replicaset"
   replicaSetName: rs0
+  image:
+    repository: bitnami/mongodb
+    tag: 5.0.8-debian-10-r20
   auth:
     enabled: false
-    adminUser: username
-    adminPassword: password
-    metricsUser: metrics
-    metricsPassword: password
-    key: keycontent
-    # existingKeySecret:
-    # existingAdminSecret:
-    # existingMetricsSecret:
-  image:
-    repository: mongo
-    tag: 3.6
   resources:
     limits:
-      cpu: 500m
+      cpu: 1
       memory: 512Mi
     requests:
       cpu: 100m
       memory: 256Mi
-  persistentVolume:
+  persistence:
     enabled: true
-    # storageClass: "-"
+    # storageClass: ""
     accessModes:
       - ReadWriteOnce
     size: 1Gi
-  configmap: {}
 
 jdbc:
   driver: mysql
@@ -89,12 +112,42 @@ jdbc:
     maxLifeTime: 30000
     maxAcquireTime: 0
     maxCreateConnectionTime: 0
+#  sslEnabled: false
+#  sslMode: verify-ca
+#  sslServerCert: 
+#  trustServerCertificate:
+#  disableSslHostnameVerification: 
+#  trustStore:
+#    path:
+#    password:
 
 management:
   type: mongodb
 
 oauth2:
   type: mongodb
+
+# Support for Gravitee.io Cockpit (cockpit.gravitee.io)
+cockpit:
+  enabled: false
+  keystore: 
+    value: "base64 encoded value of the keystore provided by Cockpit (required)"
+    password:
+      #value: "keystores password provided by Cockpit"
+      #valueFrom: 
+        #secretKeyRef:
+        #configMapKeyRef:
+  #truststore: 
+    #value: base64 encoded value of the truststore provided by Cockpit (optional)
+    #password:
+      #value: "truststore password provided by Cockpit"
+      #valueFrom: 
+        #secretKeyRef:
+        #configMapKeyRef:
+  url: https://cockpit.gravitee.io
+  controller: https://cockpit-controller.gravitee.io
+  ssl:
+    verifyHostname: true
 
 api:
   enabled: true
@@ -156,9 +209,11 @@ api:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: []
+    # revisionHistoryLimit: 10
 
   livenessProbe:
-    tcpSocket:  
+    tcpSocket:
       port: http
     initialDelaySeconds: 30
     periodSeconds: 30
@@ -171,10 +226,15 @@ api:
     periodSeconds: 30
     failureThreshold: 3
 
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
+
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
 
-  # How long to wait for APIM Management API pods to stop gracefully
+  # How long to wait for AM Management API pods to stop gracefully
   terminationGracePeriod: 30
 
   # This is the PriorityClass settings as defined in
@@ -192,29 +252,55 @@ api:
 
   additionalPlugins:
 #    - https://path_to_plugin
+
   ssl:
     enabled: false
-  #  keystore:
-  #    type: jks # Supports jks, pem, pkcs12
-  #    path: ${gravitee.home}/security/keystore.jks
-  #    password: secret
+    #keystore:
+    #  type: jks # Supports jks, pem, pkcs12
+    #  path: ${gravitee.home}/security/keystore.jks
+    #  password: secret
     clientAuth: false
-  #  truststore:
-  #    type: jks # Supports jks, pem, pkcs12
-  #    path: ${gravitee.home}/security/truststore.jks
-  #    password: secret
+    #truststore:
+    #  type: jks # Supports jks, pem, pkcs12
+    #  path: ${gravitee.home}/security/truststore.jks
+    #  password: secret
   http:
+    #host: 0.0.0.0
+    #port: 8093
+    #idleTimeout: 30000
+    #acceptors: -1
+    #selectors: -1
+    #pool:
+      #minThreads: 10
+      #maxThreads: 200
+      #idleTimeout: 60000
+      #queueSize: 6000
+    #jmx: false
+    #statistics: false
+    #accesslog:
+      #enabled: true
+      #path: ${gravitee.home}/logs/gravitee_accesslog_yyyy_mm_dd.log
+    #secured: false
+    #outputBufferSize: 32768
+    #requestHeaderSize: 8192
+    #responseHeaderSize: 8192
 #    api:
 #      entrypoint: /management
     services:
+      metrics:
+        enabled: false
+        prometheus:
+          enabled: true
       core:
         http:
+          enabled: true
           port: 18093
           host: localhost
           authentication:
             password: adminadmin
         ingress:
           enabled: false
+          ingressClassName: ""
 #          path: /management/_(.*)
 #          hosts:
 #            - am.example.com
@@ -226,7 +312,7 @@ api:
 #       on an accessible host outside of the pod: api.http.services.core.http.host
           enabled: false
 #         type: ClusterIP
-#         externalPort: 18083
+#         externalPort: 18083      
   jwt:
     secret: s3cR3t4grAv1t3310AMS1g1ingDftK3y
     kid: default-gravitee-AM-key
@@ -240,6 +326,7 @@ api:
     externalPort: 83
     internalPort: 8093
     internalPortName: http
+#    appProtocol: http
   # annotations:
   securityContext:
     runAsUser: 1001
@@ -252,6 +339,7 @@ api:
     targetMemoryAverageUtilization: 80
   ingress:
     enabled: true
+    ingressClassName: ""
     path: /management
     # Used to create an Ingress record.
     hosts:
@@ -291,9 +379,47 @@ api:
     #   readOnly: true
     #   existingClaim: volume-claim
 
+  services:
+    notifier:
+      enabled: true
+      tryAvoidDuplicateNotification: true
+
+    certificate:
+      enabled: true
+      # frequency on which the notifier mechanism will test
+      # if new notifications need to be send
+      # default: 0 0 5 * * * (every day at 5am)
+      cronExpression: 0 0 5 * * *
+      # send notification if certificate is going to expire in less than 20 days, then 15 days before...
+      expiryThresholds: 20,15,10,5,1
+      # Subject of the email send by the email notifier
+      expiryEmailSubject: "Certificate will expire soon"
+
+  notifiers:
+    email:
+      enabled: false
+      #host: smtp.example.com
+      #port: 25
+      #from: info@example.com
+      #username: info@example.com
+      #password: example.com
+      #startTLSEnabled: false
+      #sslTrustAll: false
+      #sslKeyStore: /path/to/keystore
+      #sslKeyStorePassword: changeme
+    ui:
+      enabled: true
+
 gateway:
   enabled: true
   name: gateway
+
+  http:
+    maxHeaderSize: 8192
+    maxChunkSize: 8192
+    maxInitialLineLength: 4096
+    maxFormAttributeSize: 2048
+
   logging:
     debug: false
     stdout:
@@ -312,7 +438,7 @@ gateway:
     graviteeSourceLevel: DEBUG
     jettyLevel: WARN
   reloadOnConfigChange: true
-  
+
   liquibase:
     enabled: false
 
@@ -339,6 +465,8 @@ gateway:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: []
+    # revisionHistoryLimit: 10
 
   livenessProbe:
     tcpSocket:  
@@ -348,22 +476,30 @@ gateway:
     failureThreshold: 3
 
   readinessProbe:
+    # use the node endpoint as readinessProbe to test the domain synchronization
+    # in this case, the gateway.services.core.http.host must be defined to the Pod IP or 0.0.0.0
+    domainSync: false
     tcpSocket:
       port: http
-    initialDelaySeconds: 30
+    initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
 
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
 
-  # How long to wait for APIM Management API pods to stop gracefully
+  # How long to wait for AM Management API pods to stop gracefully
   terminationGracePeriod: 30
 
   # This is the PriorityClass settings as defined in
   # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   priorityClassName: ""
-  
+
   additionalPlugins:
 #    - https://path_to_plugin
   ssl:
@@ -394,6 +530,7 @@ gateway:
             path: "/p12/keystore"
       ingress:
         enabled: false
+        ingressClassName: ""
       #          path: /management/_(.*)
       #          hosts:
       #            - am.example.com
@@ -406,6 +543,11 @@ gateway:
         enabled: false
   #         type: ClusterIP
   #         externalPort: 18082
+  #         appProtocol: http
+    metrics:
+      enabled: false
+      prometheus:
+        enabled: true
   jwt:
     secret: s3cR3t4grAv1t3310AMS1g1ingDftK3y
     kid: default-gravitee-AM-key
@@ -455,6 +597,7 @@ gateway:
     targetMemoryAverageUtilization: 80
   ingress:
     enabled: true
+    ingressClassName: ""
     path: /auth
     # Used to create an Ingress record.
     hosts:
@@ -533,6 +676,8 @@ ui:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: []
+    # revisionHistoryLimit: 10
 
   livenessProbe:
     httpGet:
@@ -550,10 +695,15 @@ ui:
     periodSeconds: 30
     failureThreshold: 3
 
-  podAnnotations: {}
-    # iam.amazonaws.com/role: es-cluster 
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
 
-  # How long to wait for APIM Console pods to stop gracefully
+  podAnnotations: {}
+    # iam.amazonaws.com/role: es-cluster
+
+  # How long to wait for AM Console pods to stop gracefully
   terminationGracePeriod: 30
 
   # This is the PriorityClass settings as defined in
@@ -581,6 +731,7 @@ ui:
     externalPort: 8002
     internalPort: 8080
     internalPortName: http
+#    appProtocol: http
     # annotations:
   securityContext:
     runAsUser: 101
@@ -588,6 +739,7 @@ ui:
     runAsNonRoot: true
   ingress:
     enabled: true
+    ingressClassName: ""
     path: /
     # Used to create an Ingress record.
     hosts:
@@ -626,3 +778,11 @@ ui:
     # - name: extra-volume
     #   mountPath: /mnt/volume
     #   readOnly: true
+
+initContainers:
+  image: alpine:latest
+  imagePullPolicy: Always
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
+  env: []

@@ -1,6 +1,32 @@
 # Default values for gravitee.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+cockpit:
+  name: cockpit
+  # Whether this chart should self-manage its service account, role, and associated role binding.
+  managedServiceAccount: true
+
+  # Custom service account override that the pod will use
+  serviceAccount: ""
+
+  # Annotations to add to the ServiceAccount that is created if the serviceAccount value isn't set.
+  serviceAccountAnnotations: {}
+
+  clusterRoleRules:
+    - apiGroups:
+        - ""
+      resources:
+        - endpoints
+        - pods
+        - nodes
+        - services
+        - configmaps
+        - secrets
+      verbs:
+        - get
+        - list
+        - watch
+
 chaos:
   enabled: false
 
@@ -53,7 +79,7 @@ mongo:
   socketKeepAlive: false
   rs: rs0
   rsEnabled: true
-  dbhost: graviteeio-apim-mongodb-replicaset
+  dbhost: graviteeio-cockpit-mongodb-replicaset-headless
   dbname: gravitee
   dbport: 27017
   connectTimeoutMS: 30000
@@ -64,79 +90,43 @@ mongo:
     password:
 
 mongodb-replicaset:
+  initContainers:
   enabled: false
-  replicas: 3
+  architecture: replicaset
+  fullnameOverride: "graviteeio-cockpit-mongodb-replicaset"
   replicaSetName: rs0
+  image:
+    repository: bitnami/mongodb
+    tag: 5.0.8-debian-10-r20
   auth:
     enabled: false
-    adminUser: username
-    adminPassword: password
-    metricsUser: metrics
-    metricsPassword: password
-    key: keycontent
-    # existingKeySecret:
-    # existingAdminSecret:
-    # existingMetricsSecret:
-  image:
-    repository: mongo
-    tag: 3.6
   resources:
     limits:
-      cpu: 500m
+      cpu: 1
       memory: 512Mi
     requests:
       cpu: 100m
       memory: 256Mi
-  persistentVolume:
+  persistence:
     enabled: true
-    # storageClass: "-"
+    # storageClass: ""
     accessModes:
       - ReadWriteOnce
     size: 1Gi
-  configmap: {}
 
 api:
   enabled: true
   name: api
   logging:
-    debug: false
     stdout:
-      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+      json: false
+      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%mdc] - %msg%n"
     file:
-      enabled: true
-      rollingPolicy: |
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- daily rollover -->
-            <fileNamePattern>${gravitee.management.log.dir}/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!-- keep 30 days' worth of history -->
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-      encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%n"
-    graviteeLevel: DEBUG
+      enabled: false
+    graviteeLevel: INFO
     jettyLevel: INFO
   restartPolicy: OnFailure
   reloadOnConfigChange: true
-
-  # Whether this chart should self-manage its service account, role, and associated role binding.
-  managedServiceAccount: true
-
-  # Custom service account override that the pod will use
-  serviceAccount: ""
-
-  # Annotations to add to the ServiceAccount that is created if the serviceAccount value isn't set.
-  serviceAccountAnnotations: {}
-
-  clusterRoleRules:
-    - apiGroups:
-        - ""
-      resources:
-        - endpoints
-        - pods
-        - nodes
-        - services
-      verbs:
-        - get
-        - list
 
   updateStrategy:
     rollingUpdate:
@@ -173,20 +163,26 @@ api:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: []
 
   livenessProbe:
     tcpSocket:  
-      port: http
+      port: api-http
     initialDelaySeconds: 30
     periodSeconds: 30
     failureThreshold: 3
 
   readinessProbe:
     tcpSocket:
-      port: http
+      port: api-http
     initialDelaySeconds: 30
     periodSeconds: 30
     failureThreshold: 3
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
 
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
@@ -223,6 +219,7 @@ api:
     admin:
       password: $2a$10$YCR.gYLmG8TzKSg5TYxdzeJOpMGpEavOCni5sbHukD2qwwZxhuXvO
   http:
+    port: 8063
     services:
       core:
         http:
@@ -232,6 +229,7 @@ api:
             password: adminadmin  
         ingress:
           enabled: false
+          ingressClassName: ""
 #          path: /management/_(.*)
 #          hosts:
 #            - apim.example.com
@@ -242,8 +240,9 @@ api:
 #       If you choose to enable this service, you'll need to expose the technical api
 #       on an accessible host outside of the pod: api.http.services.core.http.host
           enabled: false
-#         type: ClusterIP
-#         externalPort: 18063
+          internalPortName: api-technical
+          externalPort: 18063
+#          appProtocol: http
 
   reCaptcha:
     enabled: false
@@ -267,6 +266,7 @@ api:
       port: 8062
       ingress:
         enabled: true
+        ingressClassName: ""
         # For ssl-passthrough support, the path must be /
         path: /
         hosts:
@@ -282,17 +282,19 @@ api:
 #           - chart-example.local
         tls:
           - hosts:
-              - cockpit.example.com
+              - cockpit-controller.example.com
             secretName: api-custom-cert
       service:
         enabled: true
-        type: ClusterIP
         externalPort: 8062
+        internalPortName: api-ws
+#        appProtocol: ""
+
   service:
     type: ClusterIP
     externalPort: 8063
-    internalPort: 8063
-    internalPortName: http
+    internalPortName: api-http
+#    appProtocol: http
   # annotations:
   securityContext:
     runAsUser: 1001
@@ -305,6 +307,7 @@ api:
     targetMemoryAverageUtilization: 80
   ingress:
     enabled: true
+    ingressClassName: ""
     path: /management
     # Used to create an Ingress record.
     hosts:
@@ -350,20 +353,23 @@ api:
       name: 'Small'
       maxEnvs: 2
       isDefault: 'true'
-      healthCheckRetentionDuration: 1
+      dataRetentionDuration: 1
+      maxDesignerModelsCount: 1
     medium:
       name: 'Medium'
       maxEnvs: 4
-      healthCheckRetentionDuration: 30
+      dataRetentionDuration: 30
+      maxDesignerModelsCount: 1
     large:
       name: 'Large'
       maxEnvs: -1
-      healthCheckRetentionDuration: 182
+      dataRetentionDuration: 182
+      maxDesignerModelsCount: 1
   services:
     healthCheckPurge:
       cron: "0 0 0 */1 * *"
       onPremise:
-        healthCheckRetentionDuration: -1
+        dataRetentionDuration: -1
 
 ui:
   enabled: true
@@ -399,11 +405,12 @@ ui:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: []
 
   livenessProbe:
     httpGet:
       path: /
-      port: http
+      port: ui-http
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
@@ -411,10 +418,15 @@ ui:
   readinessProbe:
     httpGet:
       path: /
-      port: http
+      port: ui-http
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
 
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster 
@@ -445,7 +457,8 @@ ui:
     type: ClusterIP
     externalPort: 8002
     internalPort: 8080
-    internalPortName: http
+    internalPortName: ui-http
+#    appProtocol: http
   # annotations:
   securityContext:
     runAsUser: 101
@@ -453,6 +466,7 @@ ui:
     runAsNonRoot: true
   ingress:
     enabled: true
+    ingressClassName: ""
     path: /
     # Used to create an Ingress record.
     hosts:
@@ -501,7 +515,7 @@ generator:
     type: RollingUpdate
   replicaCount: 1
   image:
-    repository: graviteeio/designer-generator
+    repository: graviteeio/cockpit-swagger-generator
     # tag: 1.0.0
     pullPolicy: Always
     # pullSecrets:
@@ -530,6 +544,7 @@ generator:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: []
 
   env: []
   #   - name: ENV_VARIABLE
@@ -549,6 +564,8 @@ generator:
     type: ClusterIP
     externalPort: 84
     internalPort: 3003
+    internalPortName: generator-http
+#    appProtocol: http
   # annotations:
   securityContext:
     runAsUser: 1001
@@ -562,17 +579,22 @@ generator:
 
   livenessProbe:
     tcpSocket:
-      port: 3003
+      port: generator-http
     initialDelaySeconds: 15
     periodSeconds: 30
     failureThreshold: 3
 
   readinessProbe:
     tcpSocket:
-      port: 3003
+      port: generator-http
     initialDelaySeconds: 15
     periodSeconds: 30
     failureThreshold: 3
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
 
   podAnnotations: { }
   # iam.amazonaws.com/role: es-cluster

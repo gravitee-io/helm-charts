@@ -1,0 +1,281 @@
+suite: Test Alert Engine default deployment
+templates:
+  - "engine-deployment.yaml"
+  - "engine-configmap.yaml"
+tests:
+  - it: should apply labels
+    template: engine-deployment.yaml
+    release:
+      name: my-ae
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/component: engine
+            app.kubernetes.io/instance: my-ae
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: ae
+            app.kubernetes.io/version: 1.0.0-app
+            helm.sh/chart: ae-1.0.0-chart
+
+  - it: should generate default deployment config
+    template: engine-deployment.yaml
+    release:
+      name: my-ae
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - isEmpty:
+          path: metadata.annotations
+      - equal:
+          path: spec.strategy
+          value:
+            type: RollingUpdate
+            rollingUpdate:
+              maxUnavailable: 1
+      - equal:
+          path: spec.selector
+          value:
+            matchLabels:
+              app.kubernetes.io/component: engine
+              app.kubernetes.io/instance: my-ae
+              app.kubernetes.io/name: ae
+      - equal:
+          path: spec.template.metadata
+          value:
+            annotations:
+              chaos.alpha.kubernetes.io/enabled: "false"
+              checksum/config: 7964da8972be79688f531d31fddf5bc5bb1e57b5caefd3257d3bf70929a1f693
+            labels:
+              app.kubernetes.io/component: engine
+              app.kubernetes.io/instance: my-ae
+              app.kubernetes.io/name: ae
+              app.kubernetes.io/version: 1.0.0-app
+      - equal:
+          path: spec.template.spec
+          value:
+            affinity: {}
+            containers:
+            - env:
+              - name: "gravitee_processors_alertengineprocessoruseragent_enabled"
+                value: "false"
+              - name: "gravitee_processors_alertengineprocessorgeoip_enabled"
+                value: "false"
+              envFrom: []
+              image: graviteeio/ae-engine:1.0.0-app
+              imagePullPolicy: Always
+              name: my-ae-engine
+              ports:
+              - containerPort: 8072
+                name: http
+              - containerPort: 18072
+                name: engine-techapi
+              readinessProbe:
+                failureThreshold: 3
+                periodSeconds: 5
+                tcpSocket:
+                  port: http
+              startupProbe:
+                failureThreshold: 20
+                initialDelaySeconds: 30
+                periodSeconds: 5
+                tcpSocket:
+                  port: http
+              livenessProbe:
+                failureThreshold: 5
+                periodSeconds: 10
+                tcpSocket:
+                  port: http
+              resources:
+                limits:
+                  cpu: 1000m
+                  memory: 1Gi
+                requests:
+                  cpu: 500m
+                  memory: 512Mi
+              volumeMounts:
+              - mountPath: /opt/graviteeio-alert-engine/config/gravitee.yml
+                name: config
+                subPath: gravitee.yml
+              - mountPath: /opt/graviteeio-alert-engine/config/hazelcast.xml
+                name: config
+                subPath: hazelcast.xml
+            nodeSelector: {}
+            topologySpreadConstraints: []
+            serviceAccountName: my-ae-ae
+            terminationGracePeriodSeconds: 30
+            tolerations: []
+            volumes:
+              - configMap:
+                  name: my-ae-engine
+                name: config
+
+  - it: should configure replicas if autoscaling is disabled
+    template: engine-deployment.yaml
+    set:
+      engine:
+        autoscaling:
+          enabled: false
+        replicaCount: 2
+    release:
+      name: my-ae
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.replicas
+          value: 2
+
+  - it: should configure revisionHistoryLimit
+    template: engine-deployment.yaml
+    set:
+      engine:
+        deployment:
+          revisionHistoryLimit: 10
+    release:
+      name: my-ae
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.revisionHistoryLimit
+          value: 10
+
+  - it: should configure envFrom
+    template: engine-deployment.yaml
+    set:
+      engine:
+        deployment:
+          envFrom:
+            - configMapRef:
+              name: config-secret
+    release:
+      name: my-ae
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].envFrom
+          value: 
+            - configMapRef:
+              name: config-secret
+
+  - it: Deploy with managed ServiceAccount
+    template: engine-deployment.yaml
+    set:
+      engine:
+        managedServiceAccount: true
+        serviceAccount: ""
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: "RELEASE-NAME-ae"
+
+  - it: Deploy with custom ServiceAccount
+    template: engine-deployment.yaml
+    set:
+      engine:
+        managedServiceAccount: false
+        serviceAccount: "test-sa"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: "test-sa"
+
+  - it: Deploy without ServiceAccount
+    template: engine-deployment.yaml
+    set:
+      engine:
+        managedServiceAccount: false
+        serviceAccount: ""
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: null
+
+  - it: Deploy with custom managed ServiceAccount
+    template: engine-deployment.yaml
+    set:
+      engine:
+        managedServiceAccount: true
+        serviceAccount: "test-sa"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: "test-sa"
+  - it: Deploy without custom SecurityContext
+    template: engine-deployment.yaml
+    set:
+      engine:
+        runAsNonRoot: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - isNull:
+          path: spec.template.spec.containers[0].securityContext
+  - it: Deploy with custom SecurityContext
+    template: engine-deployment.yaml
+    set:
+      engine:
+        runAsNonRoot: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true # Use engine.securityContext.runAsNonRoot value
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 1001 # Use engine.securityContext.runAsUser value

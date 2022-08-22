@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.api.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.api.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -37,7 +37,7 @@ data:
       {{- if .Values.management.url }}
       url: {{ .Values.management.url}}
       {{- else if .Values.ui.ingress.enabled }}
-      url: https://{{ index .Values.ui.ingress.hosts 0 }}{{ regexFind "/[a-zA-Z]+" .Values.ui.ingress.path }}/
+      url: https://{{ index .Values.ui.ingress.hosts 0 }}{{ regexFind "/[a-zA-Z-_.~]+" .Values.ui.ingress.path }}/
       {{- end }}
       type: {{ .Values.management.type | default "mongodb" }}
       {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
@@ -58,6 +58,14 @@ data:
         {{- else }}
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
+        {{- if .Values.mongo.keystore }}
+        keystore:
+        {{- toYaml .Values.mongo.keystore | nindent 10 }}
+        {{- end }}
+        {{- if .Values.mongo.truststore }}
+        truststore:
+        {{- toYaml .Values.mongo.truststore | nindent 10 }}
+        {{- end }}
       {{- else if (eq .Values.management.type "jdbc") }}
       jdbc:
         url: {{ .Values.jdbc.url }}
@@ -75,6 +83,15 @@ data:
         {{- end }}
       {{- end }}
 
+    console:
+      api:
+        url: "https://{{index .Values.api.ingress.management.hosts 0 }}{{ .Values.api.ingress.management.path }}"
+      ui:
+        url: "https://{{index .Values.ui.ingress.hosts 0 }}{{ regexFind "/[a-zA-Z]+" .Values.ui.ingress.path }}"
+      {{- if (((.Values.ui).analytics).pendo).enabled }}
+      analytics:
+        {{ toYaml .Values.ui.analytics | indent 8 | trim -}}
+      {{- end }}
     services:
       core:
         http:
@@ -86,6 +103,42 @@ data:
             users:
               admin: {{ .Values.api.http.services.core.http.authentication.password | default "adminadmin"}}
 
+      {{- if .Values.api.services.bridge.enabled }}
+      bridge:
+        http:
+          enabled: true
+          port: {{ .Values.api.services.bridge.service.internalPort | default 18092}}
+          host: {{ .Values.api.services.bridge.host | default "localhost" }}
+          authentication:
+            type: basic
+            {{- if .Values.api.services.bridge.username }}
+            users:
+              {{ .Values.api.services.bridge.username }}: {{ .Values.api.services.bridge.password }}
+            {{- end }}
+          {{- if .Values.api.services.bridge.ssl }}
+          secured: {{ .Values.api.services.bridge.ssl.enabled | default false }}
+          alpn: true
+          ssl:
+            {{- if .Values.api.services.bridge.ssl.keystore}}
+            keystore:
+              {{- if .Values.api.services.bridge.ssl.keystore.type }}
+              type: {{ .Values.api.services.bridge.ssl.keystore.type }}
+              {{- end }}
+              path: {{ .Values.api.services.bridge.ssl.keystore.path }}
+              password: {{ .Values.api.services.bridge.ssl.keystore.password | quote }}
+            {{- end }}
+            clientAuth: {{ .Values.api.services.bridge.ssl.clientAuth | default false }}
+            {{- if .Values.api.services.bridge.ssl.truststore }}
+            truststore:
+              {{- if .Values.api.services.bridge.ssl.truststore.type }}
+              type: {{ .Values.api.services.bridge.ssl.truststore.type }}
+              {{- end }}
+              path: {{ .Values.api.services.bridge.ssl.truststore.path }}
+              password: {{ .Values.api.services.bridge.ssl.truststore.password | quote }}
+            {{- end }}
+          {{- end }}
+      {{- end }}
+
       {{- if .Values.api.services.metrics.enabled }}
       metrics:
         enabled: {{ .Values.api.services.metrics.enabled }}
@@ -93,6 +146,10 @@ data:
         prometheus:
 {{ toYaml .Values.api.services.metrics.prometheus | indent 10 }}
         {{- end }}
+      {{- end }}
+      {{- if .Values.api.services.subscription.enabled }}
+      subscription:
+        {{- toYaml .Values.api.services.subscription | nindent 8 }}
       {{- end }}
 
     {{- if and .Values.api.http .Values.api.http.client }}
@@ -140,6 +197,9 @@ data:
         {{- with .Values.es.endpoints }}
         endpoints:
           {{ toYaml . | nindent 10 | trim -}}
+        {{- end }}
+        {{- if .Values.es.index_mode }}
+        index_mode: {{ .Values.es.index_mode }}
         {{- end }}
         {{- if .Values.es.http }}
         http:
@@ -339,13 +399,13 @@ data:
       secret: {{ .Values.jwtSecret }}
       {{- if .Values.jwt }}
       # Allows to define the end of validity of the token in seconds (default 604800 = a week)
-      #expire-after: 604800
+      expire-after: {{ .Values.jwt.expireAfter | default 604800 }}
       # Allows to define the end of validity of the token in seconds for email registration (default 86400 = a day)
-      #email-registration-expire-after: 86400
+      email-registration-expire-after: {{ .Values.jwt.emailRegistrationExpireAfter | default 86400 }}
       # Allows to define issuer (default gravitee-management-auth)
-      #issuer: gravitee-management-auth
+      issuer: {{ .Values.jwt.issuer | default "gravitee-management-auth" }}
       # Allows to define cookie context path (default /)
-      #cookie-path: /
+      cookie-path: {{ ((.Values.jwt.cookie).path) | default "/" }}
       # Allows to define cookie domain (default "")
       {{- if .Values.jwt.cookie }}
       cookie-domain: {{ .Values.jwt.cookie.domain }}
@@ -353,7 +413,7 @@ data:
       cookie-domain: {{ index .Values.ui.ingress.hosts 0 }}
       {{- end }}
       # Allows to define if cookie secure only (default false)
-      #cookie-secure: true
+      cookie-secure: {{ ((.Values.jwt.cookie).secure) | default false }}
       {{- end }}
 
     swagger:
@@ -386,6 +446,10 @@ data:
     rating :
       enabled: {{ .Values.api.ratingEnabled }}
 
+    # Set the Subscribe to newsletter feature (default value: true)
+    newsletter :
+      enabled: {{ .Values.api.newsletterEnabled }}
+
     # Alert Engine communication
     {{ if .Values.alerts.enabled }}
     alerts:
@@ -413,7 +477,6 @@ data:
   {{- if .Values.api.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
-
     <!--
       ~ Copyright (c) 2015-2016, The Gravitee team (http://www.gravitee.io)
       ~
@@ -429,39 +492,47 @@ data:
       ~  See the License for the specific language governing permissions and
       ~  limitations under the License.
       -->
+      <configuration>
+          <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+              {{- if .Values.api.logging.stdout.json }}
+              <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                  <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                      <jsonFormatter
+                              class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                      </jsonFormatter>
+                      <appendLineSeparator>true</appendLineSeparator>
+                      <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+                  </layout>
+              </encoder>
+              {{- else }}
+              <!-- encoders are assigned the type
+                  ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+              <encoder>
+                  <pattern>{{ .Values.api.logging.stdout.encoderPattern }}</pattern>
+              </encoder>
+               {{- end }}
+          </appender>
+          {{- if .Values.api.logging.file.enabled }}
+          <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+              <file>${gravitee.management.log.dir}/gravitee.log</file>
+{{ .Values.api.logging.file.rollingPolicy | indent 14 }}
+              <encoder>
+                  <pattern>{{ .Values.api.logging.file.encoderPattern }}</pattern>
+              </encoder>
+          </appender>
+          {{- end }}
 
-        <configuration>
+          <logger name="io.gravitee" level="{{ .Values.api.logging.graviteeLevel }}" />
+          <logger name="org.eclipse.jetty" level="{{ .Values.api.logging.jettyLevel }}" />
 
-            <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-                <!-- encoders are assigned the type
-                    ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-                <encoder>
-                    <pattern>{{ .Values.api.logging.stdout.encoderPattern }}</pattern>
-                </encoder>
-            </appender>
-
-            {{- if .Values.api.logging.file.enabled }}
-            <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-                <file>${gravitee.management.log.dir}/gravitee.log</file>
-{{ .Values.api.logging.file.rollingPolicy | indent 16 }}
-                <encoder>
-                    <pattern>{{ .Values.api.logging.file.encoderPattern }}</pattern>
-                </encoder>
-            </appender>
-            {{- end }}
-
-            <logger name="io.gravitee" level="{{ .Values.api.logging.graviteeLevel }}" />
-            <logger name="org.eclipse.jetty" level="{{ .Values.api.logging.jettyLevel }}" />
-
-            <!-- Strictly speaking, the level attribute is not necessary since -->
-            <!-- the level of the root level is set to DEBUG by default.       -->
-            <root level="WARN">
-                <appender-ref ref="STDOUT" />
-                {{- if .Values.api.logging.file.enabled }}
-                <appender-ref ref="FILE" />
-                {{- end }}
-            </root>
-
-        </configuration>
+          <!-- Strictly speaking, the level attribute is not necessary since -->
+          <!-- the level of the root level is set to DEBUG by default.       -->
+          <root level="WARN">
+              <appender-ref ref="STDOUT" />
+              {{- if .Values.api.logging.file.enabled }}
+              <appender-ref ref="FILE" />
+              {{- end }}
+          </root>
+      </configuration>
   {{- end }}
 {{- end -}}

@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.portal.image.tag }}
+    app.kubernetes.io/version: {{ .Values.portal.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.portal.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -46,6 +46,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ default .Chart.AppVersion .Values.portal.image.tag }}
         app.kubernetes.io/component: "{{ .Values.portal.name }}"
         {{- if .Values.portal.deployment.labels }}
         {{- range $key, $value := .Values.portal.deployment.labels }}
@@ -59,6 +60,7 @@ spec:
     spec:
       affinity: {{ toYaml .Values.portal.deployment.affinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.portal.deployment.nodeSelector | nindent 8 }}
+      topologySpreadConstraints: {{ toYaml .Values.portal.deployment.topologySpreadConstraints | nindent 8 }}
       tolerations: {{ toYaml .Values.portal.deployment.tolerations | nindent 8 }}
       {{- if .Values.portal.priorityClassName }}
       priorityClassName: {{ .Values.portal.priorityClassName  }}
@@ -105,6 +107,9 @@ spec:
           livenessProbe: {{ toYaml .Values.portal.livenessProbe | nindent 12 }}
           startupProbe: {{ toYaml .Values.gateway.livenessProbe | nindent 12 }}
           readinessProbe: {{ toYaml .Values.portal.readinessProbe | nindent 12 }}
+          {{- if and (.Values.portal.startupProbe) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+          startupProbe: {{ toYaml .Values.portal.startupProbe | nindent 12 }}
+          {{- end }}
           resources: {{ toYaml .Values.portal.resources | nindent 12 }}
           volumeMounts:
             - name: config

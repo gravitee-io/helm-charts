@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.api.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.api.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -17,21 +17,46 @@ metadata:
 spec:
   type: "{{ .Values.api.service.type }}"
   ports:
-    - port: {{ .Values.api.service.externalPort }}
-      targetPort: {{ .Values.api.service.internalPort }}
+    - name: {{ .Values.api.name }}-http
+      port: {{ .Values.api.service.externalPort }}
+      targetPort: {{ .Values.api.service.internalPortName }}
       protocol: TCP
-      name: {{ .Values.api.name }}
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.api.service.appProtocol }}
+      appProtocol: {{ .Values.api.service.appProtocol }}
+      {{ else }}
+      {{ if .Values.api.ssl.enabled }}
+      appProtocol: https
+      {{ else }}
+      appProtocol: http
+      {{ end }}
+      {{ end }}
+      {{ end }}
     {{- if .Values.api.controller.ws.service.enabled }}
-    - port: {{ .Values.api.controller.ws.service.externalPort }}
-      targetPort: {{ .Values.api.controller.ws.port }}
+    - name: {{ .Values.api.name }}-ws
+      port: {{ .Values.api.controller.ws.service.externalPort }}
+      targetPort: {{ .Values.api.controller.ws.service.internalPortName }}
       protocol: TCP
-      name: {{ .Values.api.name }}-ws-controller
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.api.controller.ws.service.appProtocol }}
+      appProtocol: {{ .Values.api.controller.ws.service.appProtocol }}
+      {{ else }}
+      appProtocol: http
+      {{ end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.api.http.services.core.service.enabled }}
-    - port: {{ .Values.api.http.services.core.service.externalPort }}
-      targetPort: {{ .Values.api.http.services.core.http.port }}
+    - name: {{ .Values.api.name }}-technical
+      port: {{ .Values.api.http.services.core.service.externalPort }}
+      targetPort: {{ .Values.api.http.services.core.service.internalPortName }}
       protocol: TCP
-      name: {{ .Values.api.name }}-technical
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.api.http.services.core.service.appProtocol }}
+      appProtocol: {{ .Values.api.http.services.core.service.appProtocol }}
+      {{ else }}
+      appProtocol: http
+      {{ end }}
+      {{- end }}
     {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}

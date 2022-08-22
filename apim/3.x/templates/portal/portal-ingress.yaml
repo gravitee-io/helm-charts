@@ -3,32 +3,44 @@
 {{- $serviceAPIName := include "gravitee.portal.fullname" . -}}
 {{- $serviceAPIPort := .Values.portal.service.externalPort -}}
 {{- $ingressPath   := .Values.portal.ingress.path -}}
-apiVersion: {{ template "ingress.apiVersion" . }}
+{{- $apiVersion := include "common.capabilities.ingress.apiVersion" . -}}
+apiVersion: {{ $apiVersion }}
 kind: Ingress
 metadata:
   name: {{ template "gravitee.portal.fullname" . }}
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.portal.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.portal.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
   annotations:
-    {{- range $key, $value := .Values.portal.ingress.annotations }}
-      {{ $key }}: {{ $value | quote }}
+    {{- if .Values.portal.ingress.annotations }}
+    {{- include "common.ingress.annotations.render" (dict "annotations" .Values.portal.ingress.annotations "ingressClassName" .Values.portal.ingress.ingressClassName "context" $) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if and .Values.portal.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.portal.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
-    {{- range $host := .Values.portal.ingress.hosts }}
-    - host: {{ $host }}
-      http:
-        paths:
-          - path: {{ $ingressPath }}
-            backend:
-              serviceName: {{ $serviceAPIName }}
-              servicePort: {{ $serviceAPIPort }}
-    {{- end -}}
+  {{- range $host := .Values.portal.ingress.hosts }}
+  - host: {{ $host }}
+    http:
+      paths:
+      - pathType: Prefix
+        path: {{ $ingressPath }}
+        backend:
+          {{- if (eq $apiVersion "networking.k8s.io/v1") }}
+          service:
+            name: {{ $serviceAPIName }}
+            port:
+              number: {{ $serviceAPIPort }}
+          {{ else }}
+          serviceName: {{ $serviceAPIName }}
+          servicePort: {{ $serviceAPIPort }}
+          {{- end -}}
+  {{- end -}}
   {{- if .Values.portal.ingress.tls }}
   tls:
 {{ toYaml .Values.portal.ingress.tls | indent 4 }}

@@ -2,6 +2,23 @@
 
 This file documents all notable changes to [Gravitee.io API Designer](https://github.com/gravitee-io/helm-charts/tree/master/designer) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.13
+
+- [X] Upgrade Mongodb and Elasticsearch dependencies
+
+### 1.0.12
+
+- [X] Add support for autoscaling/v2
+
+### 1.0.11
+
+- [X] Add version labels on pods
+- 
+### 1.0.10
+
+- Ensure to run api designer api in production mode
+- Update gravitee.io Designer v1.31.4
+
 ### 1.0.9
 
 - [X] Add property to configure API url from the UI pod

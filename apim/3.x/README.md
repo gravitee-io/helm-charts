@@ -52,6 +52,20 @@ $ helm install apim3-3.0.0.tgz
 
 The following tables list the configurable parameters of the Gravitee chart and their default values.
 
+You can rely on kubernetes _ConfigMaps_ and _Secrets_ to initialize Gravitee settings since APIM 3.15.0.
+To use this feature, you have to create the ServiceAccount that allows APIM to connect to the Kubernetes API (the helm chart should do it by default) and then you simply have to define your application settings like this:
+
+* for a Secret : `kubernetes://<namespace>/secrets/<my-secret-name>/<my-secret-key>`
+* for a ConfigMap : `kubernetes://<namespace>/configmaps/<my-configmap-name>/<my-configmap-key>`
+
+
+Here is an example for the mongodb uri initialized from the `mongo` secret deployed in the `default` namespace:
+
+```yaml
+mongo:
+  uri: kubernetes://default/secrets/mongo/mongouri
+```
+
 ### Shared configuration
 
 To configure common features such as:
@@ -126,23 +140,26 @@ If neither `mongo.uri` or `mongo.servers` are provided, you have to define the f
 | ---------------------------- | ------------------------------------- | ------- |
 | `mongodb-replicaset.enabled` | Enable deployment of Mongo replicaset | `false` |
 
-See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongodb-replicaset) for detailed documentation on helm chart.
+See [MongoDB replicaset](https://artifacthub.io/packages/helm/bitnami/mongodb) for detailed documentation on helm chart.
+
+** Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running APIM locally.  
 
 ### Elasticsearch
 
-| Parameter                  | Description                                       | Default                                                                |
-| ---------------------------| ------------------------------------------------- | ---------------------------------------------------------------------- |
-| `es.security.enabled`      | Elasticsearch username and password enabled       | false                                                                  |
-| `es.security.username`     | Elasticsearch username                            | `example`                                                              |
-| `es.security.password`     | Elasticsearch password                            | `example`                                                              |
-| `es.tls.enabled`           | Elasticsearch TLS enabled                         | false                                                                  |
-| `es.tls.keystore.type`     | Elasticsearch TLS keystore type (jks, pem or pfx) | `null`                                                                 |
-| `es.tls.keystore.path`     | Elasticsearch TLS keystore path (jks, pfx)        | `null`                                                                 |
-| `es.tls.keystore.password` | Elasticsearch TLS keystore password (jks, pfx)    | `null`                                                                 |
-| `es.tls.keystore.certs`    | Elasticsearch TLS certs (only pems)               | `null`                                                                 |
-| `es.tls.keystore.keys`     | Elasticsearch TLS keys (only pems)                | `null`                                                                 |
-| `es.index`                 | Elasticsearch index                               | `gravitee`                                                             |
-| `es.endpoints`             | Elasticsearch endpoint array                      | `[http://elastic-elasticsearch-client.default.svc.cluster.local:9200]` |
+| Parameter                    | Description                                       | Default                                                                |
+|------------------------------|---------------------------------------------------|------------------------------------------------------------------------|
+| `es.security.enabled`        | Elasticsearch username and password enabled       | false                                                                  |
+| `es.security.username`       | Elasticsearch username                            | `example`                                                              |
+| `es.security.password`       | Elasticsearch password                            | `example`                                                              |
+| `es.tls.enabled`             | Elasticsearch TLS enabled                         | false                                                                  |
+| `es.tls.keystore.type`       | Elasticsearch TLS keystore type (jks, pem or pfx) | `null`                                                                 |
+| `es.tls.keystore.path`       | Elasticsearch TLS keystore path (jks, pfx)        | `null`                                                                 |
+| `es.tls.keystore.password`   | Elasticsearch TLS keystore password (jks, pfx)    | `null`                                                                 |
+| `es.tls.keystore.certs`      | Elasticsearch TLS certs (only pems)               | `null`                                                                 |
+| `es.tls.keystore.keys`       | Elasticsearch TLS keys (only pems)                | `null`                                                                 |
+| `es.index`                   | Elasticsearch index                               | `gravitee`                                                             |
+| `es.endpoints`               | Elasticsearch endpoint array                      | `[http://elastic-elasticsearch-client.default.svc.cluster.local:9200]` |
+| `es.pipeline.plugins.ingest` | Elasticsearch pipeline ingest plugins             | `geoip, user_agent`                                                    |
 
 ### Elasticsearch cluster
 
@@ -150,7 +167,9 @@ See [MongoDB replicaset](https://github.com/helm/charts/tree/master/stable/mongo
 | ----------------------- | ------------------------------------------ | ------- |
 | `elasticsearch.enabled` | Enable deployment of Elasticsearch cluster | `false` |
 
-See [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch) for detailed documentation on optional requirements helm chart.
+See [Elasticsearch](https://artifacthub.io/packages/helm/bitnami/elasticsearch) for detailed documentation on optional requirements helm chart.
+
+** Please be aware that the Elasticsearch installed by Gravitee is NOT recommended in production and it is just for testing purpose and running APIM locally.
 
 ### Gravitee UI
 
@@ -240,6 +259,7 @@ See [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsea
 | `api.user.anonymizeOnDelete`                          | Whether to enable user anonymization on deletion                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `false`                                                                                                                                                     |
 | `api.supportEnabled`                                  | Whether to enable support feature                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | `true`                                                                                                                                                      |
 | `api.ratingEnabled`                                   | Whether to enable API rating feature                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `true`                                                                                                                                                      |
+| `api.newsletterEnabled`                                   | Whether to enable newsletter sign up feature                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | `true`                                                                                                                                                      |
 | `smtp.enabled`                                        | Email sending activation                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | `true`                                                                                                                                                      |
 | `smtp.host`                                           | SMTP server host                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `smtp.example.com`                                                                                                                                          |
 | `smtp.port`                                           | SMTP server port                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `25`                                                                                                                                                        |
@@ -363,3 +383,17 @@ portal:
 ```
 
 By setting the value to `null` for `runAsUser` and `runAsGroup` it forces OpenShift to define the correct values for you while deploying the Helm Chart.
+
+## Run unit tests
+
+Install `unittest` helm plugin
+
+```shell
+helm plugin install https://github.com/quintush/helm-unittest
+```
+
+Inside `apim/3.x` directory, run:
+
+```shell
+helm unittest -3 -f 'tests/**/*.yaml' .
+```

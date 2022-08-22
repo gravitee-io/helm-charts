@@ -197,3 +197,109 @@ $ helm install --name my-release -f values.yaml gravitee
 ____
 *Tip*: You can use the default values.yaml
 ____
+
+==== Recommendations for a production environment
+
+For a production ready environment, we recommend to apply the following settings.
+
+===== Memory
+
+For large environment handling a lot of events we recommend specifying enough memory available for the JVM to be able to process all events in real time.
+
+```yaml
+engine:
+  env:
+     - name: GIO_MIN_MEM
+       value: 1024m
+     - name: GIO_MAX_MEM
+       value: 1024m
+     - name: gravitee_ingesters_ws_compressionSupported
+       value: "true"
+```
+
+You must also adapt the memory request and limit at pod level. When using 1Go at JVM level, we recommend to set 1.5Go at pod level to make sure the pod will not run out of memory and get killed.
+
+```yaml
+  resources:
+    limits:
+      memory: 1.5Gi
+    requests:
+      memory: 1.5Gi
+```
+
+===== CPU
+
+The following default values should be enough in most cases and should allow handling approximately 2000 events per seconds with only 2 pods (see autoscaling section to specify min and max pods).
+
+```yaml
+  resources:
+    limits:
+      cpu: 1000m
+    requests:
+      cpu: 500m
+```
+
+===== Autoscaling
+
+By default, there is only 1 AE pod started (up to 3 pods). To make the system error proofed and handle more events at high throughput, you may configure the autoscaler with a minimum of 2 pods and maybe increase the number of maximum pods.
+
+```yaml
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetAverageUtilization: 50
+    targetMemoryAverageUtilization: null
+```
+
+NOTE: You may also disable the autoscaling based on memory average utilization except if you have a specific metrics server able to calculate the memory used by a JVM running in a container.
+
+===== Readiness and liveness probes
+
+Depending on your usage of AE, you can also fine tune the different probes used by the cluster to determine the current status of each AE pod.
+
+The default values are quite optimized to get a good ratio between fast and reliability.
+
+```yaml
+
+# This probe is use only during startup phase
+startupProbe:
+  tcpSocket:
+    port: http # Same as engine.service.internalPortName
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  failureThreshold: 20
+
+# This probe is used to determine if the pod is still alive.
+livenessProbe:
+  tcpSocket:
+    port: http # Same as engine.service.internalPortName
+  periodSeconds: 10
+  failureThreshold: 5
+
+# This probe is used to determine if the pod can still handle traffic. If not, it will be removed from the service and not reachable until it is ready again.
+readinessProbe:
+  tcpSocket:
+    port: http # Same as engine.service.internalPortName
+  periodSeconds: 5
+  failureThreshold: 3
+```
+
+Depending on the amount of cpu you give to each pod you should be able to change the different settings of the startupProbe such as `initialDelaySeconds`.
+
+TIP: The more processors you have, the faster the server will start, the lower you can set the `initialDelaySeconds` value.
+
+===== Enable compression
+
+To optimise network transfer between Gravitee API Management or Access Management and Alert Engine, it could be useful to enable compression.
+
+IMPORTANT: Compression comes with cpu costs (on both client and server sides). You may balance the choice analyzing cpu cost versus network and response time improvements.
+
+```yaml
+engine:
+  env:
+     - name: gravitee_ingesters_ws_compressionSupported
+       value: "true"
+```
+
+WARNING: make sure `alerts.alert-engine.ws.tryCompression` is set to true on the APIM / AM side

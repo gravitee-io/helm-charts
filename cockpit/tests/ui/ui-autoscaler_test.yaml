@@ -1,0 +1,126 @@
+suite: Cockpit - UI - autoscaler config
+templates:
+  - "ui/ui-autoscaler.yaml"
+tests:
+  - it: should generate nothing when ui is disabled
+    template: ui/ui-autoscaler.yaml
+    set:
+      ui:
+        enabled: false
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should generate nothing when autoscaling is disabled
+    template: ui/ui-autoscaler.yaml
+    set:
+      ui:
+        enabled: true
+        autoscaling:
+          enabled: false
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should apply labels
+    template: ui/ui-autoscaler.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HorizontalPodAutoscaler
+      - equal:
+          path: metadata
+          value:
+            name: my-cockpit-ui
+            labels:
+              app.kubernetes.io/name: cockpit
+              app.kubernetes.io/instance: my-cockpit
+              app.kubernetes.io/version: 1.0.0-app
+              app.kubernetes.io/component: ui
+              app.kubernetes.io/managed-by: Helm
+              helm.sh/chart: cockpit-1.0.0-chart
+
+  - it: should apply default autoscaling configuration
+    template: ui/ui-autoscaler.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HorizontalPodAutoscaler
+      - isAPIVersion:
+          of: autoscaling/v2beta2
+      - equal:
+          path: spec
+          value:
+            scaleTargetRef:
+              apiVersion: apps/v1
+              kind: Deployment
+              name: my-cockpit-ui
+            minReplicas: 1
+            maxReplicas: 3
+            metrics:
+            - type: Resource
+              resource:
+                name: memory
+                target:
+                  averageUtilization: 80
+                  type: Utilization
+            - type: Resource
+              resource:
+                name: cpu
+                target:
+                  averageUtilization: 50
+                  type: Utilization
+
+  - it: Check API version autoscaling/v2
+    set:
+      global:
+        kubeVersion: 1.23.0
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HorizontalPodAutoscaler
+      - isAPIVersion:
+          of: autoscaling/v2
+
+  - it: Check API version autoscaling/v2beta2
+    set:
+      global:
+        kubeVersion: 1.21.0
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HorizontalPodAutoscaler
+      - isAPIVersion:
+          of: autoscaling/v2beta2
+
+  - it: Check API version autoscaling/v2beta1
+    set:
+      global:
+        kubeVersion: 1.11.0
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HorizontalPodAutoscaler
+      - isAPIVersion:
+          of: autoscaling/v2beta1
+

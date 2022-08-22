@@ -17,8 +17,22 @@ Kubernetes: `>=1.16.0-0`
 [%header,cols=3*]
 |===
 | Repository | Name | Version
-| https://charts.helm.sh/stable | mongodb-replicaset | ^3.10.1
+| https://charts.bitnami.com/bitnami | mongodb-replicaset | ^3.10.1
 |===
+
+==== Mongo ReplicaSet
+
+[cols=",,",options="header",]
+|===
+|Parameter |Description |Default
+|`+mongodb-replicaset.enabled+` |Enable deployment of Mongo replicaset
+|`+false+`
+|===
+
+See
+https://github.com/bitnami/charts/tree/master/bitnami/mongodb[MongoDB] for detailed documentation on helm chart.
+
+Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running Cockpit locally.
 
 ==== Hazelcast
 
@@ -136,7 +150,8 @@ $ helm install cockpit-1.0.0.tgz
 | api.logging.file.rollingPolicy | string | `"<rollingPolicy class=\"ch.qos.logback.core.rolling.TimeBasedRollingPolicy\">\n    <!-- daily rollover -->\n    <fileNamePattern>${gravitee.management.log.dir}/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>\n    <!-- keep 30 days' worth of history -->\n    <maxHistory>30</maxHistory>\n</rollingPolicy>\n"` |
 | api.logging.graviteeLevel | string | `"DEBUG"` |
 | api.logging.jettyLevel | string | `"INFO"` |
-| api.logging.stdout.encoderPattern | string | `"%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"` |
+| api.logging.stdout.json | boolean | `false` |
+| api.logging.stdout.encoderPattern | string | `"%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%mdc] - %msg%n"` |
 | api.name | string | `"api"` |
 | api.platform.admin.password | string | `"$2a$10$YCR.gYLmG8TzKSg5TYxdzeJOpMGpEavOCni5sbHukD2qwwZxhuXvO"` |
 | api.reCaptcha.enabled | bool | `false` |
@@ -162,12 +177,12 @@ $ helm install cockpit-1.0.0.tgz
 | authentication.github.clientSecret | string | `nil` |
 | authentication.google.clientId | string | `nil` |
 | authentication.google.clientSecret | string | `nil` |
-| authentication.oidc.clientId | string | `nil` |  |
-| authentication.oidc.clientSecret | string | `nil` |  |
-| authentication.oidc.accessTokenUri | string | `nil` |  |
-| authentication.oidc.userAuthorizationUri | string | `nil` |  |
-| authentication.oidc.userProfileUri | string | `nil` |  |
-| authentication.oidc.wellKnownUri | string | `nil` |  |
+| authentication.oidc.clientId | string | `nil` |
+| authentication.oidc.clientSecret | string | `nil` |
+| authentication.oidc.accessTokenUri | string | `nil` |
+| authentication.oidc.userAuthorizationUri | string | `nil` |
+| authentication.oidc.userProfileUri | string | `nil` |
+| authentication.oidc.wellKnownUri | string | `nil` |
 | chaos.enabled | bool | `false` |
 | mongo.auth.enabled | bool | `false` |
 | mongo.auth.password | string | `nil` |
@@ -238,3 +253,4 @@ $ helm install cockpit-1.0.0.tgz
 | ui.service.internalPortName | string | `"http"` |
 | ui.service.name | string | `"nginx"` |
 | ui.service.type | string | `"ClusterIP"` |
+|===

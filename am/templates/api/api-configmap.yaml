@@ -6,15 +6,38 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.api.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.api.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 data:
   gravitee.yml: |
-    {{- if .Values.api.ssl.enabled }}
     jetty:
-      secured: true
+      host: {{ .Values.api.http.host | default "0.0.0.0" }}
+      port: {{ .Values.api.http.port | default 8093 }}
+      idleTimeout: {{ .Values.api.http.idleTimeout | default 30000 }}
+      acceptors: {{ .Values.api.http.acceptors | default -1 }}
+      selectors: {{ .Values.api.http.selectors | default -1 }}
+      statistics: {{ .Values.api.http.statistics | default false }}
+      outputBufferSize: {{ .Values.api.http.outputBufferSize | default 32768 }}
+      requestHeaderSize: {{ .Values.api.http.requestHeaderSize | default 8192 }}
+      responseHeaderSize: {{ .Values.api.http.responseHeaderSize | default 8192 }}
+      {{- if .Values.api.http.pool }}
+      pool:
+        minThreads: {{ .Values.api.http.pool.minThreads | default 10 }}
+        maxThreads: {{ .Values.api.http.pool.maxThreads | default 200 }}
+        idleTimeout: {{ .Values.api.http.pool.idleTimeout  | default 60000 }}
+        queueSize: {{ .Values.api.http.pool.queueSize | default 6000 }}
+      {{ end }}
+      {{- if .Values.api.http.accesslog }}
+      accesslog:
+        enabled: {{ .Values.api.http.accesslog.enabled | default true }}
+        {{- if .Values.api.http.accesslog.path }}
+        path: {{ .Values.api.http.accesslog.path }}
+        {{ end }}
+      {{ end }}
+      secured: {{ .Values.api.ssl.enabled | default false }}
+      {{- if .Values.api.ssl.enabled }}
       ssl:
         keystore:
           {{- if .Values.api.ssl.keystore.type }}
@@ -31,7 +54,7 @@ data:
           path: {{ .Values.api.ssl.truststore.path }}
           password: {{ .Values.api.ssl.truststore.password | quote }}
         {{- end }}
-    {{- end }}
+      {{- end }}
     
     {{- if and .Values.api.http .Values.api.http.api }}
     http:
@@ -47,6 +70,14 @@ data:
       {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
       mongodb:
         sslEnabled: {{ .Values.mongo.sslEnabled }}
+        {{- if .Values.mongo.keystore }}
+        keystore:
+          {{ toYaml .Values.mongo.keystore | nindent 10 | trim -}}
+        {{- end }}
+        {{- if .Values.mongo.truststore }}
+        truststore:
+          {{ toYaml .Values.mongo.truststore | nindent 10 | trim -}}
+        {{- end }}
         socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
         {{- if .Values.mongo.uri }}
         uri: {{ .Values.mongo.uri }}
@@ -81,6 +112,25 @@ data:
         {{- if .Values.jdbc.pool }}
         {{ toYaml .Values.jdbc.pool | nindent 8 | trim -}}
         {{- end }}
+        {{- if .Values.jdbc.sslEnabled }}
+        sslEnabled: {{ .Values.jdbc.sslEnabled }}
+        {{- end }}
+        {{- if .Values.jdbc.sslMode }}
+        sslMode: {{ .Values.jdbc.sslMode }}
+        {{- end }}
+        {{- if .Values.jdbc.sslServerCert }}
+        sslServerCert: {{ .Values.jdbc.sslServerCert }}
+        {{- end }}
+        {{- if .Values.jdbc.trustServerCertificate }}
+        trustServerCertificate: {{ .Values.jdbc.trustServerCertificate }}
+        {{- end }}
+        {{- if .Values.jdbc.disableSslHostnameVerification }}
+        disableSslHostnameVerification: {{ .Values.jdbc.disableSslHostnameVerification }}
+        {{- end }}
+        {{- if .Values.jdbc.trustStore }}
+        trustStore:
+          {{ toYaml .Values.jdbc.trustStore | nindent 10 | trim -}}
+        {{- end }}
       {{- end }}
 
     oauth2:
@@ -88,6 +138,14 @@ data:
       {{- if or (eq .Values.oauth2.type "mongodb") (kindIs "invalid" .Values.oauth2.type) }}
       mongodb:
         sslEnabled: {{ .Values.mongo.sslEnabled }}
+        {{- if .Values.mongo.keystore }}
+        keystore:
+          {{ toYaml .Values.mongo.keystore | nindent 10 | trim -}}
+        {{- end }}
+        {{- if .Values.mongo.truststore }}
+        truststore:
+          {{ toYaml .Values.mongo.truststore | nindent 10 | trim -}}
+        {{- end }}
         socketKeepAlive: {{ .Values.mongo.socketKeepAlive }}
         {{- if .Values.mongo.uri }}
         uri: {{ .Values.mongo.uri }}
@@ -122,6 +180,25 @@ data:
         {{- if .Values.jdbc.pool }}
         {{ toYaml .Values.jdbc.pool | nindent 8 | trim -}}
         {{- end }}
+        {{- if .Values.jdbc.sslEnabled }}
+        sslEnabled: {{ .Values.jdbc.sslEnabled }}
+        {{- end }}
+        {{- if .Values.jdbc.sslMode }}
+        sslMode: {{ .Values.jdbc.sslMode }}
+        {{- end }}
+        {{- if .Values.jdbc.sslServerCert }}
+        sslServerCert: {{ .Values.jdbc.sslServerCert }}
+        {{- end }}
+        {{- if .Values.jdbc.trustServerCertificate }}
+        trustServerCertificate: {{ .Values.jdbc.trustServerCertificate }}
+        {{- end }}
+        {{- if .Values.jdbc.disableSslHostnameVerification }}
+        disableSslHostnameVerification: {{ .Values.jdbc.disableSslHostnameVerification }}
+        {{- end }}
+        {{- if .Values.jdbc.trustStore }}
+        trustStore:
+          {{ toYaml .Values.jdbc.trustStore | nindent 10 | trim -}}
+        {{- end }}
       {{- end }}
 
     services:
@@ -135,6 +212,66 @@ data:
             users:
               admin: {{ .Values.api.http.services.core.http.authentication.password | default "adminadmin"}}
 
+      {{- if .Values.api.http.services.metrics.enabled }}
+      metrics:
+        enabled: {{ .Values.api.http.services.metrics.enabled }}
+        {{- if .Values.api.http.services.metrics.prometheus }}
+        prometheus:
+{{ toYaml .Values.api.http.services.metrics.prometheus | indent 10 }}
+        {{- end }}
+      {{- end }}
+      
+  {{- if .Values.api.services }}
+    {{- if .Values.api.services.notifier }}
+      notifier:
+{{ toYaml .Values.api.services.notifier | indent 8 }}
+    {{- end }}
+    {{- if .Values.api.services.certificate }}
+      certificate:
+        enabled: {{ .Values.api.services.certificate.enabled | default true}}
+        {{- if .Values.api.services.certificate.enabled }}
+        cronExpression: {{ .Values.api.services.certificate.cronExpression | default "0 0 5 * * *" }}
+        expiryThresholds: {{ .Values.api.services.certificate.expiryThresholds | default "20,15,10,5,1" }}
+          {{- if .Values.api.services.certificate.expiryEmailSubject }}
+        expiryEmailSubject: {{ .Values.api.services.certificate.expiryEmailSubject | quote }}
+          {{- end }}
+        {{- end }}
+    {{- end }}
+  {{- end }}
+
+    notifiers:
+      email: 
+        enabled: {{ .Values.api.notifiers.email.enabled }}
+        {{- if or .Values.api.notifiers.email.enabled .Values.smtp.enabled }}
+        host: {{ .Values.api.notifiers.email.host | default .Values.smtp.host }}
+        subject: {{ .Values.api.notifiers.email.subject | default .Values.smtp.subject | quote }}
+        port: {{ .Values.api.notifiers.email.port | default .Values.smtp.port }}
+        from: {{ .Values.api.notifiers.email.from | default .Values.smtp.from }}
+        {{- if or .Values.api.notifiers.email.username .Values.api.notifiers.email.password }}
+        username: {{ .Values.api.notifiers.email.username }}
+        password: {{ .Values.api.notifiers.email.password }}
+        {{- else if or .Values.smtp.username .Values.smtp.password }}
+        username: {{ .Values.smtp.username }}
+        password: {{ .Values.smtp.password }}
+        {{- end }}
+        startTLSEnabled: {{ .Values.api.notifiers.email.startTLSEnabled | default .Values.smtp.properties.starttlsEnable }}
+        {{- if .Values.api.notifiers.email.sslTrustAll }}
+        sslTrustAll: {{ .Values.api.notifiers.email.sslTrustAll }}
+        {{- else if eq (.Values.smtp.properties.sslTrust | default "") "*" }}
+        sslTrustAll: true
+        {{- else }}
+        sslTrustAll: false
+        {{- end }}
+        {{- if .Values.api.notifiers.email.sslKeyStore }}
+        sslKeyStore: {{ .Values.api.notifiers.email.sslKeyStore }}
+        {{- end }}
+        {{- if .Values.api.notifiers.email.sslKeyStorePassword }}
+        sslKeyStorePassword: {{ .Values.api.notifiers.email.sslKeyStorePassword }}
+        {{- end }}
+        {{- end }}
+      ui:
+        enabled: {{ .Values.api.notifiers.ui.enabled }}
+    
     # SMTP configuration used to send mails
     email:
       enabled: {{ .Values.smtp.enabled }}
@@ -152,6 +289,12 @@ data:
         starttls.enable: {{ .Values.smtp.properties.starttlsEnable }}
         {{- if .Values.smtp.properties.localhost }}
         localhost: {{ .Values.smtp.properties.localhost }}
+        {{- end }}
+        {{- if .Values.smtp.properties.sslTrust }}
+        ssl.trust: {{ .Values.smtp.properties.sslTrust }}
+        {{- end }}
+        {{- if .Values.smtp.properties.sslProtocols }}
+        ssl.protocols: {{ .Values.smtp.properties.sslProtocols }}
         {{- end }}
       {{- end }}
 
@@ -184,33 +327,50 @@ data:
       # Allows to define if cookie secure only (default false)
       cookie-secure: {{ .Values.api.jwt.cookie.secure | default false }}
 
+    {{- if .Values.userManagement }}
     # User management configuration
     user:
-      # Password complexity validation policy
-      # Applications should enforce password complexity rules to discourage easy to guess passwords.
-      # Passwords should require a minimum level of complexity that makes sense for the application and its user population.
-      #password:
-      #  policy:
-      #    pattern: ^(?=\s*\S).*$ # Regex pattern for password validation (default to ^(?=\s*\S).*$ (non empty string))
-                                  # Example : ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$
-                                  # ^                # start-of-string
-                                  #(?=.*[0-9])       # a digit must occur at least once
-                                  #(?=.*[a-z])       # a lower case letter must occur at least once
-                                  #(?=.*[A-Z])       # an upper case letter must occur at least once
-                                  #(?=.*[@#$%^&+=])  # a special character must occur at least once
-                                  #(?=\S+$)          # no whitespace allowed in the entire string
-                                  #.{8,}             # anything, at least eight places though
-                                  #$                 # end-of-string
+    {{- if .Values.userManagement.email }}
+      email:
+{{ toYaml .Values.userManagement.email | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.password }}
+      password:
+{{ toYaml .Values.userManagement.password | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.name }}
+      name:
+{{ toYaml .Values.userManagement.name | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.username }}
+      username:
+{{ toYaml .Values.userManagement.username | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.registration }}
       registration:
-        email:
-          #subject: New user registration
-        token:
-        #expire-after: 86400 # the end of validity of the token in seconds for registration email (default 86400 = a day)
+{{ toYaml .Values.userManagement.registration | indent 8 }}
+    {{- end }}
+      
+    {{- if .Values.userManagement.resetPassword }}
       resetPassword:
-        email:
-          #subject: Please reset your password
-        token:
-        #expire-after: 86400 # the end of validity of the token in seconds for reset password email (default 86400 = a day)
+{{ toYaml .Values.userManagement.resetPassword | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.blockedAccount }}      
+      blockedAccount:
+{{ toYaml .Values.userManagement.blockedAccount | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.userManagement.mfaChallenge }}
+      mfaChallenge:
+{{ toYaml .Values.userManagement.mfaChallenge | indent 8 }}
+    {{- end }}
+
+    {{- end }}
 
     # Gateway entry point used in emails
     gateway:

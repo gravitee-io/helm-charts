@@ -2,6 +2,127 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.51
+
+- [X] Add JSON logging support
+
+### 3.1.50
+
+- [X] Upgrade Mongodb and Elasticsearch dependencies
+- [X] Handle subscription service configuration
+
+### 3.1.49
+
+- [X] Add Bridge service to Management API
+- [X] Add support for autoscaling/v2
+- [X] Add support for appProtocol to the services
+
+- Update Gravitee.io APIM v3.15.10
+
+### 3.1.48
+
+- [X] Add support for ingressClassName
+
+### 3.1.47
+
+- [X] Fix Gateway Service Account for Kube Controller
+
+- Update Gravitee.io APIM v3.15.9
+
+### 3.1.46
+
+- [X] Add support for APIM console Pendo analytics with helm charts
+
+### 3.1.45
+
+- [X] Add support for keystore and truststore in MongoDB configuration
+- [X] Add version labels on pods
+
+### 3.1.44
+
+- [X] Add support for managed ServiceAccounts name provided by user
+
+### 3.1.43
+
+- [X] Disable automatic download of Redis plugin
+
+- Update Gravitee.io APIM v3.15.8
+
+### 3.1.42
+
+- [X] Add support for PodDisruptionBudget
+
+### 3.1.41
+
+- [X] Reorder HPA resources to avoid outofsync state with ArgoCD
+
+### 3.1.40
+
+- [X] Fix ignoring the managedServiceAccount in the deployment files
+
+### 3.1.39
+
+- [X] Set default array for topologySpreadConstraints
+
+### 3.1.38
+
+- [X] Add support for topologySpreadConstraints
+
+- Update Gravitee.io APIM v3.15.7
+
+### 3.1.37
+
+- Add template to APIM Cockpit secret name
+
+### 3.1.36
+
+- Fix deploy gateway specific version with default ratelimit
+ 
+### 3.1.35
+
+- Set default entrypoint for Portal Try-it and cURL to the url of the gateway
+- Set console `api` and `ui` urls automatically based on ingress values 
+- Expose technical API of the management API
+
+### 3.1.34
+
+- Ease the integration of Gravitee.io Cockpit
+- Ensure additional jar doesn't exist before downloading it
+- Handle JWT attributes in APIM Management API configmap
+- Add an option to disable the newsletter popup
+
+- Update Gravitee.io APIM v3.15.2
+
+### 3.1.33
+
+- [X] Disable old classloader to enable the new one by default (since v3.15)
+- [X] Add support for kubernetes certificate configuration
+- [X] Make app.kubernetes.io/version label consistent
+- [X] Add quotes to version to fix #6450
+- Update gravitee.io APIM v3.15.1
+
+### 3.1.32
+
+- [X] Update gravitee.io APIM v3.11.3
+
+### 3.1.31
+
+- [X] Add support for ILM managed indexes
+- [X] Remove the empty override of 'if-match' header
+
+### 3.1.30 
+
+- [X] Add support for startupProbe
+
+### 3.1.29
+
+- [X] Customization of the readinessProbe
+
+### 3.1.28
+
+- [X] Support Ingress kubernetes >= 1.22.x
+- Update gravitee.io APIM v3.11.2
+
 ### 3.1.27
 
 - [X] Manage redis repository plugin for nightly tag

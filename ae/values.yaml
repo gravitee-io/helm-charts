@@ -40,9 +40,12 @@ engine:
         - pods
         - nodes
         - services
+        - configmaps
+        - secrets
       verbs:
         - get
         - list
+        - watch
 
   ssl:
     enabled: false
@@ -87,6 +90,8 @@ engine:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: []
+    # revisionHistoryLimit: 10
 
   # How long to wait for Alert Engine pods to stop gracefully
   terminationGracePeriod: 30
@@ -95,7 +100,11 @@ engine:
   # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   priorityClassName: ""
 
-  env: []
+  env:
+    - name: "gravitee_processors_alertengineprocessoruseragent_enabled"
+      value: "false"
+    - name: "gravitee_processors_alertengineprocessorgeoip_enabled"
+      value: "false"
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
   #   - name: ENV_VARIABLE_WITH_FROM
@@ -109,6 +118,7 @@ engine:
     externalPort: 82
     internalPort: 8072
     internalPortName: http
+    # appProtocol: http
     # annotations:
   securityContext:
     runAsUser: 1001
@@ -122,6 +132,7 @@ engine:
   ingress:
     enabled: true
     path: /
+    ingressClassName: ""
     # Used to create an Ingress record.
     hosts:
       - ae.example.com
@@ -163,3 +174,57 @@ engine:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+
+  livenessProbe:
+    tcpSocket:
+      port: http # Same as engine.service.internalPortName
+    periodSeconds: 10
+    failureThreshold: 5
+
+  readinessProbe:
+    tcpSocket:
+      port: http # Same as engine.service.internalPortName
+    periodSeconds: 5
+    failureThreshold: 3
+
+  startupProbe:
+    tcpSocket:
+      port: http # Same as engine.service.internalPortName
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    failureThreshold: 20
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
+
+  services:
+    core:
+      http:
+        enabled: true
+        port: 18072
+        host: localhost
+        authentication:
+          type: basic
+          password: adminadmin
+      ingress:
+        enabled: false
+        ingressClassName: ""
+#          path: /management/_(.*)
+#          hosts:
+#            - ae.example.com
+#          annotations:
+#            kubernetes.io/ingress.class: nginx
+#            nginx.ingress.kubernetes.io/rewrite-target: /_$1
+      service: 
+#       If you choose to enable this service, you'll need to expose the technical api
+#       on an accessible host outside of the pod: engine.http.services.core.http.host
+        enabled: false
+        externalPort: 72
+#         type: ClusterIP
+#        appProtocol: http
+    metrics:
+      enabled: false
+      prometheus:
+        enabled: true

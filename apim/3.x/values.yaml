@@ -1,6 +1,25 @@
 # Default values for gravitee.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+apim:
+  name: apim
+  # Whether this chart should self-manage its service account, role, and associated role binding.
+  managedServiceAccount: true
+
+  # Custom service account override that the pod will use
+  serviceAccount: ""
+
+  clusterRoleRules:
+    - apiGroups:
+        - ""
+      resources:
+        - configmaps
+        - secrets
+      verbs:
+        - get
+        - list
+        - watch
+        
 chaos:
   enabled: false
 
@@ -167,7 +186,7 @@ mongo:
   socketKeepAlive: false
   rs: rs0
   rsEnabled: true
-  dbhost: graviteeio-apim-mongodb-replicaset
+  dbhost: graviteeio-apim-mongodb-replicaset-headless
   dbname: gravitee
   dbport: 27017
   connectTimeoutMS: 30000
@@ -201,39 +220,35 @@ redis:
   port: 6379
 #  password: 'mysecretpassword'
 #  timeout: 2000
+  # By default, the Helm will create init containers for downloading and mouting the Redis plugin as an init container. 
+  # Set to false if you're looking to manage Redis plugin by yourself
+  download: true
 #  repositoryVersion: 3.3.0
 
 mongodb-replicaset:
   enabled: false
-  replicas: 3
+  architecture: replicaset
+  fullnameOverride: "graviteeio-apim-mongodb-replicaset"
   replicaSetName: rs0
+  podAffinityPreset: soft
+  image:
+    repository: bitnami/mongodb
+    tag: 5.0.8-debian-10-r20
   auth:
     enabled: false
-    adminUser: username
-    adminPassword: password
-    metricsUser: metrics
-    metricsPassword: password
-    key: keycontent
-    # existingKeySecret:
-    # existingAdminSecret:
-    # existingMetricsSecret:
-  image:
-    repository: mongo
-    tag: 3.6
   resources:
     limits:
-      cpu: 500m
+      cpu: 1
       memory: 512Mi
     requests:
       cpu: 100m
       memory: 256Mi
-  persistentVolume:
+  persistence:
     enabled: true
-    # storageClass: "-"
+    # storageClass: ""
     accessModes:
       - ReadWriteOnce
     size: 1Gi
-  configmap: {}
 
 es:
   enabled: true
@@ -243,6 +258,7 @@ es:
   # authentication will be provided for the
   # elastic search cluster
   # https://docs.gravitee.io/apim_installguide_repositories_elasticsearch.html#management_api_configuration
+  index_mode: daily # Index mode normal (daily index) vs ILM (managed by ILM)
   security:
     enabled: false
     username: example
@@ -270,69 +286,50 @@ es:
     #     - /path/to/key
     #     - /path/to/key2
   endpoints:
-    - http://graviteeio-apim-elasticsearch-client.default.svc.cluster.local:9200
+    - http://graviteeio-apim-elasticsearch-data.default.svc.cluster.local:9200
+  pipeline:
+    plugins:
+      ingest: geoip, user_agent # geoip and user_agent plugins are enabled by default
 
 elasticsearch:
   enabled: false
-  cluster:
-    name: "elasticsearch"
-    env:
-      MINIMUM_MASTER_NODES: "2"
-    plugins: []
-
+  name: "elasticsearch"
+  fullnameOverride: "graviteeio-apim-elasticsearch"
   image:
-    repository: "docker.elastic.co/elasticsearch/elasticsearch-oss"
-    tag: "6.7.0"
-  client:
-    name: client
-    replicas: 2
-    heapSize: "512m"
-    # additionalJavaOpts: "-XX:MaxRAM=512m"
-    resources:
-      limits:
-        cpu: "1"
-        memory: "1024Mi"
-      requests:
-        cpu: "25m"
-        memory: "512Mi"
+    repository: "bitnami/elasticsearch"
+    tag: "7.17.3"
   master:
-    name: master
-    replicas: 3
-    heapSize: "512m"
-    # additionalJavaOpts: "-XX:MaxRAM=512m"
-    persistence:
-      enabled: true
-      accessMode: ReadWriteOnce
-      name: data
-      size: "4Gi"
-      # storageClass: "ssd"
-    resources:
-      limits:
-        cpu: "1"
-        memory: "1024Mi"
-      requests:
-        cpu: "25m"
-        memory: "512Mi"
-
-  data:
-    name: data
-    exposeHttp: false
     replicas: 2
-    heapSize: "512m"
-    # additionalJavaOpts: "-XX:MaxRAM=512m"
     persistence:
-      enabled: true
-      accessMode: ReadWriteOnce
-      name: data
-      size: "30Gi"
-      # storageClass: "ssd"
+      size: 4Gi
     resources:
       limits:
-        cpu: "1"
-        memory: "2048Mi"
+        cpu: 500m
+        memory: 1024Mi
       requests:
-        cpu: "25m"
-        memory: "1536Mi"
+        cpu: 25m
+        memory: 256Mi
+  coordinating:
+    replicas: 2
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1024Mi
+      requests:
+        cpu: 25m
+        memory: 256Mi
+  data:
+    replicas: 2
+    heapSize: 512m
+    resources:
+      limits:
+        cpu: 1
+        memory: 2048Mi
+      requests:
+        cpu: 50m
+        memory: 1024Mi
+    persistence:
+      size: 20Gi
 
 alerts:
   enabled: false
@@ -350,12 +347,35 @@ management:
 ratelimit:
   type: mongodb
 
+# Support for Gravitee.io Cockpit (cockpit.gravitee.io)
+cockpit:
+  enabled: false
+  keystore: 
+    value: "base64 encoded value of the keystore provided by Cockpit (required)"
+    password:
+      #value: "keystores password provided by Cockpit"
+      #valueFrom: 
+        #secretKeyRef:
+        #configMapKeyRef:
+  #truststore: 
+    #value: base64 encoded value of the truststore provided by Cockpit (optional)
+    #password:
+      #value: "truststore password provided by Cockpit"
+      #valueFrom: 
+        #secretKeyRef:
+        #configMapKeyRef:
+  url: https://cockpit.gravitee.io
+  controller: https://cockpit-controller.gravitee.io
+  ssl:
+    verifyHostname: true
+
 api:
   enabled: true
   name: api
   logging:
     debug: false
     stdout:
+      json: false
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
     file:
       enabled: true
@@ -394,6 +414,8 @@ api:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: []
+    # revisionHistoryLimit: 10
 
   livenessProbe:
     tcpSocket:  
@@ -408,6 +430,11 @@ api:
     initialDelaySeconds: 30
     periodSeconds: 30
     failureThreshold: 3
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
 
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
@@ -428,8 +455,7 @@ api:
     repository: graviteeio/apim-management-api
     # tag: 3.0.2
     pullPolicy: Always
-    # pullSecrets:
-    #   - name: gravitee_secrets
+    # pullSecrets: gravitee_secrets
   env: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
@@ -457,7 +483,49 @@ api:
       enabled: false
       prometheus:
         enabled: true
-
+    bridge:
+      enabled: false
+      # host: localhost
+      # username:
+      # password:
+      ssl:
+        enabled: false
+      #  keystore:
+      #    type: jks # Supports jks, pem, pkcs12
+      #    path: ${gravitee.home}/security/keystore.jks
+      #    password: secret
+      #  clientAuth: false
+      #  truststore:
+      #    type: jks # Supports jks, pem, pkcs12
+      #    path: ${gravitee.home}/security/truststore.jks
+      #    password: secret
+      # service:
+      #   externalPort: 92
+      #   internalPort: 18092
+      #   appProtocol: http
+      # ingress:
+      #   enabled: false
+      #   ingressClassName: ""
+      #   path: /api/_bridge
+      #   # Used to create an Ingress record.
+      #   hosts:
+      #     - apim.example.com
+      #   annotations:
+      #     kubernetes.io/ingress.class: nginx
+      #     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      #     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+      #     kubernetes.io/app-root: /api
+      #     kubernetes.io/rewrite-target: /api
+      #     nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+      #     kubernetes.io/tls-acme: "true"
+      #   tls:
+      #     # Secrets must be manually created in the namespace.
+      #     - secretName: chart-example-tls
+      #       hosts:
+      #         - chart-example.local
+    subscription:
+      enabled: false
+#      pre-expiration-notification-schedule: 15,10,5
   http:
     services:
       core:
@@ -469,6 +537,7 @@ api:
             password: adminadmin
         ingress:
           enabled: false
+          ingressClassName: ""
 #          path: /management/_(.*)
 #          hosts:
 #            - apim.example.com
@@ -481,6 +550,7 @@ api:
           enabled: false
 #         type: ClusterIP
 #         externalPort: 18083
+#         appProtocol: http
     api:
       entrypoint: /
     client:
@@ -503,11 +573,13 @@ api:
     anynomizeOnDelete: false
   supportEnabled: true
   ratingEnabled: true
+  newsletterEnabled: true
   service:
     type: ClusterIP
     externalPort: 83
     internalPort: 8083
     internalPortName: http
+#    appProtocol: http
   # annotations:
   # DEPRECATED, please define api.deployment.securityContext instead
   securityContext:
@@ -523,12 +595,13 @@ api:
     management:
       enabled: true
       path: /management
+      ingressClassName: ""
       # Used to create an Ingress record.
       hosts:
         - apim.example.com
       annotations:
         kubernetes.io/ingress.class: nginx
-        nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+        nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_pass_header if-match;\n"
         # kubernetes.io/tls-acme: "true"
       #tls:
         # Secrets must be manually created in the namespace.
@@ -542,6 +615,7 @@ api:
     portal:
       enabled: true
       path: /portal
+      ingressClassName: ""
       # Used to create an Ingress record.
       hosts:
         - apim.example.com
@@ -587,6 +661,7 @@ gateway:
   logging:
     debug: false
     stdout:
+      json: false
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
     file:
       enabled: true
@@ -624,6 +699,8 @@ gateway:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: []
+    # revisionHistoryLimit: 10
 
   livenessProbe:
     tcpSocket:  
@@ -641,6 +718,11 @@ gateway:
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
 
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
@@ -719,6 +801,7 @@ gateway:
             path: "/p12/keystore"
       ingress:
         enabled: false
+        ingressClassName: ""
 #          path: /management/_(.*)
 #          hosts:
 #            - apim.example.com
@@ -731,6 +814,7 @@ gateway:
         enabled: false
 #         type: ClusterIP
 #         externalPort: 18082
+#         appProtocol: http
     kubeController:
       enabled: false
     bridge:
@@ -738,8 +822,8 @@ gateway:
       # host: localhost
       # username:
       # password:
-      # ssl:
-      #  enabled: false
+      ssl:
+        enabled: false
       #  keystore:
       #    type: jks # Supports jks, pem, pkcs12
       #    path: ${gravitee.home}/security/keystore.jks
@@ -752,8 +836,10 @@ gateway:
       # service:
       #   externalPort: 92
       #   internalPort: 18092
+      #   appProtocol: http
       # ingress:
       #   enabled: false
+      #   ingressClassName: ""
       #   path: /gateway/_bridge
       #   # Used to create an Ingress record.
       #   hosts:
@@ -795,6 +881,10 @@ gateway:
 #      port: 8379
 #    file:
 
+  classloader:
+    legacy:
+      enabled: false
+
   # DEPRECATED: This part will be removed shortly in favor of gateway.policy (see below)
   apiKey:
     header: X-Gravitee-Api-Key
@@ -809,8 +899,7 @@ gateway:
     repository: graviteeio/apim-gateway
     # tag: 3.0.2
     pullPolicy: Always
-    # pullSecrets:
-    #   - name: gravitee_secrets
+    # pullSecrets: gravitee_secrets
   env: []
   #   - name: ENV_VARIABLE
   #     value: ENV_VARIABLE_VALUE
@@ -824,6 +913,7 @@ gateway:
     externalPort: 82
     internalPort: 8082
     internalPortName: http
+#    appProtocol: http
   # annotations:
   # DEPRECATED, please define gateway.deployment.securityContext instead
   securityContext:
@@ -838,6 +928,7 @@ gateway:
   ingress:
     enabled: true
     path: /gateway
+    ingressClassName: ""
     # Used to create an Ingress record.
     # Multiple hostnames supported
     # - hosts:
@@ -890,8 +981,7 @@ portal:
     repository: graviteeio/apim-portal-ui
     # tag: 3.0.2
     pullPolicy: Always
-  # pullSecrets:
-  #   - name: gravitee_secrets
+    # pullSecrets: gravitee_secrets
 
   deployment:
     # Annotations to apply to the deployment
@@ -917,6 +1007,8 @@ portal:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
+    topologySpreadConstraints: []
+    # revisionHistoryLimit: 10
 
   livenessProbe:
     httpGet:
@@ -933,7 +1025,12 @@ portal:
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
-            
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
+       
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster
 
@@ -964,6 +1061,7 @@ portal:
     externalPort: 8003
     internalPort: 8080
     internalPortName: http
+#    appProtocol: http
   # annotations:
   # DEPRECATED, please define portal.deployment.securityContext instead
   securityContext:
@@ -973,6 +1071,7 @@ portal:
   ingress:
     enabled: true
     path: /
+    ingressClassName: ""
     # Used to create an Ingress record.
     hosts:
       - apim.example.com
@@ -1038,8 +1137,7 @@ ui:
     repository: graviteeio/apim-management-ui
     # tag: 3.0.2
     pullPolicy: Always
-  # pullSecrets:
-  #   - name: gravitee_secrets
+    # pullSecrets: gravitee_secrets
 
   deployment:
     # Annotations to apply to the deployment
@@ -1065,7 +1163,9 @@ ui:
       type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
-
+    topologySpreadConstraints: []
+    # revisionHistoryLimit: 10
+    
   livenessProbe:
     httpGet:
       path: /
@@ -1081,6 +1181,11 @@ ui:
     initialDelaySeconds: 10
     periodSeconds: 30
     failureThreshold: 3
+
+  pdb:
+    enabled: false
+    minAvailable: ""
+    maxUnavailable: "50%"
 
   podAnnotations: {}
     # iam.amazonaws.com/role: es-cluster 
@@ -1112,6 +1217,7 @@ ui:
     externalPort: 8002
     internalPort: 8080
     internalPortName: http
+#    appProtocol: http
   # annotations:
   # DEPRECATED, please define ui.deployment.securityContext instead
   securityContext:
@@ -1121,6 +1227,7 @@ ui:
   ingress:
     enabled: true
     path: /console(/|$)(.*)
+    ingressClassName: ""
     # Used to create an Ingress record.
     hosts:
       - apim.example.com

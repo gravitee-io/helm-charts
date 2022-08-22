@@ -2,6 +2,85 @@
 
 This file documents all notable changes to [Gravitee.io Alert Engine](https://github.com/gravitee-io/helm-charts/tree/master/ae) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.1.38
+
+- [X] Fix security context implementation
+
+### 1.1.37
+
+- [X] Add support for autoscaling/v2
+- [X] Add support for appProtocol to the services
+
+- Update gravitee.io AE v1.6.4
+
+### 1.1.36
+
+- [X] Add version labels on pods
+- [X] Add support for ingressClassName
+
+### 1.1.35
+
+- [X] Add support for managed ServiceAccounts name provided by user
+- 
+### 1.1.34
+
+- [X] Add support for PodDisruptionBudget
+
+### 1.1.33
+
+- [X] Allow name overriding
+
+### 1.1.32
+
+- [X] Reorder HPA resources to avoid outofsync state with ArgoCD
+
+### 1.1.31 
+
+- [X] Fix Technical API Ingress
+
+### 1.1.30
+
+- [X] Add support for Technical API
+- [X] Add support for envFrom
+
+- Update gravitee.io AE v1.6.1
+
+### 1.1.29
+
+- [X] Fix ignoring the managedServiceAccount in the deployment files
+
+### 1.1.28
+
+- [X] Set default array for topologySpreadConstraints
+
+### 1.1.27
+
+- [X] Add support for topologySpreadConstraints
+
+### 1.1.26
+
+- Make app.kubernetes.io/version label consistent
+- Add quotes to version to fix #6450
+- Update gravitee.io AE v1.6.0
+
+### 1.1.25
+
+- Add support for revisionHistoryLimit
+- Update gravitee.io AE v1.5.1
+
+### 1.1.24
+
+- Update processor env var to remove hyphens
+
+### 1.1.23
+
+- [X] startupProbe better management
+- Add documentation on production ready environment
+
+### 1.1.22
+
+- [X] Support Ingress kubernetes >= 1.22.x
+
 ### 1.1.21
 
 - [X] Configure deployment strategy

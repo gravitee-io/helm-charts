@@ -1,0 +1,50 @@
+suite: Test Management API default Service
+templates:
+  - "api/api-service.yaml"
+  - "api/api-configmap.yaml"
+tests:
+  - it: Check default service
+    template: api/api-service.yaml
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - contains:
+          path: spec.ports
+          content:
+            port: 83
+            targetPort: 8083
+            protocol: TCP
+            name: api
+            appProtocol: http
+
+  - it: Check service with custom appProtocol
+    template: api/api-service.yaml
+    set:
+      api:
+        service:
+          appProtocol: http-test
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - contains:
+          path: spec.ports
+          content:
+            port: 83
+            targetPort: 8083
+            protocol: TCP
+            name: api
+            appProtocol: http-test

@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.gateway.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.gateway.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -20,7 +20,31 @@ spec:
     - port: {{ .Values.gateway.service.externalPort }}
       targetPort: {{ .Values.gateway.service.internalPort }}
       protocol: TCP
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.gateway.service.appProtocol }}
+      appProtocol: {{ .Values.gateway.service.appProtocol }}
+      {{ else }}
+      {{ if .Values.gateway.ssl.enabled }}
+      appProtocol: https
+      {{ else }}
+      appProtocol: http
+      {{ end }}
+      {{ end }}
+      {{- end }}
       name: {{ .Values.gateway.name }}
+    {{- if .Values.gateway.services.core.service.enabled }}
+    - port: {{ .Values.gateway.services.core.service.externalPort }}
+      targetPort: {{ .Values.gateway.services.core.http.port }}
+      protocol: TCP
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if  .Values.gateway.services.core.service.appProtocol }}
+      appProtocol: {{ .Values.gateway.services.core.service.appProtocol }}
+      {{ else }}
+      appProtocol: http
+      {{ end }}
+      {{- end }}
+      name: {{ .Values.gateway.name }}-technical
+    {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

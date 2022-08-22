@@ -1,0 +1,133 @@
+version: 2.1
+
+orbs:
+    helm: circleci/helm@2.0.1
+
+commands:
+    install-helm-unittest:
+        description: install the helm-unittest helm plugin to be able to run tests
+        steps:
+            -   run:
+                    name: install helm-unittest plugin
+                    command: helm plugin install https://github.com/quintush/helm-unittest
+
+    execute-tests:
+        description: execute the unit tests of the folder
+        parameters:
+            folder:
+                type: string
+                default: ''
+                description: The name of the folder where tests to execute are.
+            files:
+                type: string
+                default: ''
+                description: The test suites files.
+            output-file:
+                type: string
+                default: ''
+                description: The name of the test result file.
+        steps:
+            -   run:
+                    name: execute the units tests in << parameters.folder >>.
+                    command: helm unittest -3 -f '<< parameters.files >>' << parameters.folder >> -t JUnit -o << parameters.output-file >>
+    lint:
+        description: Lint the helm charts available in the folder
+        parameters:
+            folder:
+                type: string
+                default: ''
+                description: The name of the folder to check.
+        steps:
+            -   run:
+                    name: Lint the helm charts available in << parameters.folder >>
+                    command: helm lint << parameters.folder >>
+
+jobs:
+    test-am-charts:
+        docker:
+            -   image: cimg/base:stable
+        resource_class: small
+        steps:
+            - checkout
+            -   helm/install-helm-client:
+                    version: v3.7.1
+            - install-helm-unittest
+            -   lint:
+                  folder: am
+            -   execute-tests:
+                    folder: am
+                    files: tests/*.yaml
+                    output-file: am-result.xml
+            -   store_test_results:
+                    path: am-result.xml
+
+    test-apim-charts:
+        docker:
+            -   image: cimg/base:stable
+        resource_class: small
+        steps:
+            - checkout
+            -   helm/install-helm-client:
+                    version: v3.7.1
+            - install-helm-unittest
+            -   lint:
+                  folder: apim/3.x
+            -   execute-tests:
+                    folder: apim/3.x
+                    files: tests/**/*.yaml
+                    output-file: apim-result.xml
+            -   store_test_results:
+                    path: apim-result.xml
+
+    test-cockpit-charts:
+        docker:
+            -   image: cimg/base:stable
+        resource_class: small
+        steps:
+            - checkout
+            -   helm/install-helm-client:
+                    version: v3.7.1
+            - install-helm-unittest
+            -   lint:
+                  folder: cockpit
+            -   execute-tests:
+                    folder: cockpit
+                    files: tests/**/*.yaml
+                    output-file: cockpit-result.xml
+            -   store_test_results:
+                    path: cockpit-result.xml
+
+    lint-charts:
+        parameters:
+          folder:
+            type: string
+            default: ''
+            description: The name of the folder where lint will be executed
+        docker:
+            -   image: cimg/base:stable
+        resource_class: small
+        steps:
+            - checkout
+            -   helm/install-helm-client:
+                    version: v3.7.1
+            -   lint:
+                  folder: << parameters.folder >>
+
+workflows:
+    test-charts:
+        jobs:
+            - test-am-charts:
+                name: AM - Lint & Test
+            - test-apim-charts:
+                name: APIM - Lint & Test
+            - test-cockpit-charts:
+                name: Cockpit - Lint & Test
+            - lint-charts:
+                name: AE - Lint
+                folder: ae
+            - lint-charts:
+                name: Cockpit - Lint
+                folder: cockpit
+            - lint-charts:
+                name: Designer - Lint
+                folder: designer
