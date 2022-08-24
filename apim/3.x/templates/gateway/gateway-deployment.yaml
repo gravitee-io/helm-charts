@@ -128,11 +128,11 @@ spec:
             - name: {{ .Values.gateway.service.internalPortName }}
               containerPort: {{ .Values.gateway.service.internalPort }}
             {{- if .Values.gateway.services.bridge.enabled }}
-            - name: {{- printf "%s-%s" .Values.gateway.name "bridge" | trunc 15 }}
+            - name: {{ printf "%s-%s" (.Values.gateway.name | trunc 8 | trimSuffix "-") "bridge" }}
               containerPort: {{ .Values.gateway.services.bridge.service.internalPort }}
             {{- end }}
             {{- if and .Values.gateway.services.core.http.enabled (or .Values.gateway.services.kubeController.enabled .Values.gateway.readinessProbe.apiSync) }}
-            - name: {{- printf "%s-%s" .Values.gateway.name "techapi" | trunc 15 }}
+            - name: {{ printf "%s-%s" (.Values.gateway.name | trunc 8 | trimSuffix "-") "techapi" }}
               containerPort: {{ .Values.gateway.services.core.http.port | default "18082" }}
             {{- end }}
           env:

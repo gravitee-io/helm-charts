@@ -110,11 +110,11 @@ spec:
             - name: {{ .Values.api.service.internalPortName }}
               containerPort: {{ .Values.api.service.internalPort }}
             {{- if .Values.api.http.services.core.http.enabled }}
-            - name: {{- printf "%s-%s" .Values.api.name "techapi" | trunc 15 }}
+            - name: {{ printf "%s-%s" (.Values.api.name | trunc 8 | trimSuffix "-") "techapi" }}
               containerPort: {{ .Values.api.http.services.core.http.port | default "18083" }}
             {{- end }}
             {{- if .Values.api.services.bridge.enabled }}
-            - name: {{- printf "%s-%s" .Values.api.name "bridge" | trunc 15 }}
+            - name: {{ printf "%s-%s" (.Values.api.name | trunc 8 | trimSuffix "-") "bridge" }}
               containerPort: {{ .Values.api.services.bridge.service.internalPort }}
             {{- end }}
           env:
