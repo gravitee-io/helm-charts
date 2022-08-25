@@ -48,3 +48,40 @@ tests:
             protocol: TCP
             name: gateway
             appProtocol: https
+
+  - it: Deploy with long gateway name
+    template: gateway/gateway-service.yaml
+    set:
+      gateway:
+        name: "I-am-a-very-long-name-Neque-porro-quisquam-est-qui-dolorem-ipsum-quia-dolor-sit"
+        services:
+          bridge:
+            enabled: true
+            service:
+              externalPort: 42
+          core:
+            service:
+              enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - equal:
+          path: spec.ports
+          value: 
+            - appProtocol: http
+              name: I-am-a-very-long-name-Neque-porro-quisquam-est-qui-dolorem-ipsu
+              port: 82
+              protocol: TCP
+              targetPort: 8082
+            - appProtocol: http
+              name: I-am-a-very-long-name-Neque-porro-quisquam-est-qui-dolor-bridge
+              port: 42
+              protocol: TCP
+              targetPort: null
+            - appProtocol: http
+              name: I-am-a-very-long-name-Neque-porro-quisquam-est-qui-do-technical
+              port: null
+              protocol: TCP
+              targetPort: 18082

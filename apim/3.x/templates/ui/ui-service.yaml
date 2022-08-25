@@ -27,7 +27,7 @@ spec:
       appProtocol: http
       {{ end }}
       {{- end }}
-      name: {{ .Values.ui.name }}
+      name: {{ .Values.ui.name | trunc 63 | trimSuffix "-" }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
