@@ -171,3 +171,40 @@ tests:
               app.kubernetes.io/component: api
               app.kubernetes.io/instance: my-cockpit
               app.kubernetes.io/name: cockpit
+
+  - it: Deploy with long api name
+    template: api/api-service.yaml
+    set:
+      api:
+        name: "I-am-a-very-long-name-Neque-porro-quisquam-est-qui-dolorem-ipsum-quia-dolor-sit"
+        controller:
+          ws:
+            enabled: true
+        http:
+          services:
+            core:
+              service:
+                enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - equal:
+          path: spec.ports
+          value: 
+            - appProtocol: http
+              name: I-am-a-very-long-name-Neque-porro-quisquam-est-qui-dolorem-http
+              port: 8063
+              protocol: TCP
+              targetPort: api-http
+            - appProtocol: http
+              name: I-am-a-very-long-name-Neque-porro-quisquam-est-qui-dolorem-i-ws
+              port: 8062
+              protocol: TCP
+              targetPort: api-ws
+            - appProtocol: http
+              name: I-am-a-very-long-name-Neque-porro-quisquam-est-qui-do-technical
+              port: 18063
+              protocol: TCP
+              targetPort: api-technical

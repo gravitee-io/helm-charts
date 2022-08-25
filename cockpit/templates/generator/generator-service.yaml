@@ -17,7 +17,7 @@ metadata:
 spec:
   type: "{{ .Values.generator.service.type }}"
   ports:
-    - name: {{ .Values.generator.name }}
+    - name: {{ .Values.generator.name | trunc 63 | trimSuffix "-" }}
       port: {{ .Values.generator.service.externalPort }}
       targetPort: {{ .Values.generator.service.internalPortName }}
       protocol: TCP

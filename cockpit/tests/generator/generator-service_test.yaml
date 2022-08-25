@@ -104,3 +104,22 @@ tests:
               app.kubernetes.io/component: swagger-generator
               app.kubernetes.io/instance: my-cockpit
               app.kubernetes.io/name: cockpit
+
+  - it: Deploy with long generator name
+    template: generator/generator-service.yaml
+    set:
+      generator:
+        name: "I-am-a-very-long-name-Neque-porro-quisquam-est-qui-dolorem-ipsum-quia-dolor-sit"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - equal:
+          path: spec.ports
+          value: 
+          - appProtocol: http
+            name: I-am-a-very-long-name-Neque-porro-quisquam-est-qui-dolorem-ipsu
+            port: 84
+            protocol: TCP
+            targetPort: generator-http
