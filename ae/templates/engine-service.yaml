@@ -31,9 +31,9 @@ spec:
       {{ end }}
       {{ end }}
       {{- end }}
-      name: {{ .Values.engine.name }}
+      name: {{ .Values.engine.name | trunc 63 | trimSuffix "-" }}
     - port: 5701
-      name: {{ .Values.engine.name }}-hz
+      name: {{ printf "%s-%s" (.Values.engine.name | trunc 60 | trimSuffix "-") "hz" }}
       protocol: TCP
       {{- if (include "common.service.supportsAppProtocol" .) }}
       {{ if .Values.engine.service.appProtocol }}
@@ -57,7 +57,7 @@ spec:
       appProtocol: http
       {{ end }}
       {{- end }}
-      name: {{ .Values.engine.name }}-techapi
+      name: {{ printf "%s-%s" (.Values.engine.name | trunc 55 | trimSuffix "-") "techapi" }}
     {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
