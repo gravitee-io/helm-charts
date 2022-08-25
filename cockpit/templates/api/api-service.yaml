@@ -17,7 +17,7 @@ metadata:
 spec:
   type: "{{ .Values.api.service.type }}"
   ports:
-    - name: {{ .Values.api.name }}-http
+    - name: {{ printf "%s-%s" (.Values.api.name | trunc 58 | trimSuffix "-") "http" }}
       port: {{ .Values.api.service.externalPort }}
       targetPort: {{ .Values.api.service.internalPortName }}
       protocol: TCP
@@ -33,7 +33,7 @@ spec:
       {{ end }}
       {{ end }}
     {{- if .Values.api.controller.ws.service.enabled }}
-    - name: {{ .Values.api.name }}-ws
+    - name: {{ printf "%s-%s" (.Values.api.name | trunc 60 | trimSuffix "-") "ws" }}
       port: {{ .Values.api.controller.ws.service.externalPort }}
       targetPort: {{ .Values.api.controller.ws.service.internalPortName }}
       protocol: TCP
@@ -46,7 +46,7 @@ spec:
       {{- end }}
     {{- end }}
     {{- if .Values.api.http.services.core.service.enabled }}
-    - name: {{ .Values.api.name }}-technical
+    - name: {{ printf "%s-%s" (.Values.api.name | trunc 53 | trimSuffix "-") "technical" }}
       port: {{ .Values.api.http.services.core.service.externalPort }}
       targetPort: {{ .Values.api.http.services.core.service.internalPortName }}
       protocol: TCP

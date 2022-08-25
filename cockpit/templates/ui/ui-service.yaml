@@ -17,7 +17,7 @@ metadata:
 spec:
   type: "{{ .Values.ui.service.type }}"
   ports:
-    - name: {{ .Values.ui.name }}
+    - name: {{ .Values.ui.name | trunc 63 | trimSuffix "-" }}
       port: {{ .Values.ui.service.externalPort }}
       targetPort: {{ .Values.ui.service.internalPortName }}
       protocol: TCP
