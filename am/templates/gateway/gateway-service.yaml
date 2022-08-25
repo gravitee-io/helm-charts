@@ -31,7 +31,7 @@ spec:
       {{ end }}
       {{ end }}
       {{- end }}
-      name: {{ .Values.gateway.name }}
+      name: {{ .Values.gateway.name | trunc 63 | trimSuffix "-" }}
     {{- if .Values.gateway.services.core.service.enabled }}
     - port: {{ .Values.gateway.services.core.service.externalPort }}
       targetPort: {{ .Values.gateway.services.core.http.port }}
@@ -43,7 +43,7 @@ spec:
       appProtocol: http
       {{ end }}
       {{- end }}
-      name: {{ .Values.gateway.name }}-technical
+      name: {{ printf "%s-%s" (.Values.gateway.name | trunc 53 | trimSuffix "-") "technical" }}
     {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
