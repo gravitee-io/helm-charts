@@ -786,3 +786,14 @@ initContainers:
     runAsUser: 1001
     runAsNonRoot: true
   env: []
+
+openshift:
+  enabled: false
+  securityContext:
+    runAsUser: null
+    runAsGroup: null
+    runAsNonRoot: true
+  ingress:
+    generateRoute: true
+    annotations:
+      route.openshift.io/termination: "edge"

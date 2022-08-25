@@ -1,0 +1,137 @@
+suite: Test API Gateway - Technical API Ingress for OpenShift
+templates:
+  - "gateway/gateway-technical-ingress.yaml"
+tests:
+  - it: Check that the annotation kubernetes.io/ingress.class is removed if OpenShift is enabled
+    set:
+      gateway:
+        services:
+          core:
+            ingress:
+              enabled: true
+              annotations:
+                kubernetes.io/ingress.class: nginx
+                nginx.ingress.kubernetes.io/rewrite-target: /_$1
+      openshift:
+        enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - isNull:
+          path: metadata.annotations.[kubernetes.io/ingress.class]
+      - equal:
+          path: metadata.annotations.[route.openshift.io/termination]
+          value: edge
+  - it: Check that the annotation route.openshift.io/termination is using the value from openshift 
+    set:
+      gateway:
+        services:
+          core:
+            ingress:
+              enabled: true
+              annotations:
+                kubernetes.io/ingress.class: nginx
+                nginx.ingress.kubernetes.io/rewrite-target: /_$1
+      openshift:
+        enabled: true
+        ingress:
+          generateRoute: true
+          annotations:
+            route.openshift.io/termination: "reencrypt"          
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - isNull:
+          path: metadata.annotations.[kubernetes.io/ingress.class]
+      - equal:
+          path: metadata.annotations.[route.openshift.io/termination]
+          value: reencrypt
+  - it: Check that the annotation kubernetes.io/ingress.class is not removed if OpenShift is enabled and generateRoute is set to false
+    set:
+      gateway:
+        services:
+          core:
+            ingress:
+              enabled: true
+              annotations:
+                kubernetes.io/ingress.class: nginx
+                nginx.ingress.kubernetes.io/rewrite-target: /_$1
+      openshift:
+        enabled: true
+        ingress:
+          generateRoute: false
+          annotations:
+            route.openshift.io/termination: "reencrypt"          
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - equal:
+          path: metadata.annotations.[kubernetes.io/ingress.class]
+          value: nginx
+      - equal:
+          path: metadata.annotations.[route.openshift.io/termination]
+          value: reencrypt
+  - it: Check that the annotation kubernetes.io/ingress.class is not removed if OpenShift is disabled and no annotations are added from openshift ingress attribute
+    set:
+      gateway:
+        services:
+          core:
+            ingress:
+              enabled: true
+              annotations:
+                kubernetes.io/ingress.class: nginx
+                nginx.ingress.kubernetes.io/rewrite-target: /_$1
+      openshift:
+        enabled: false
+        ingress:
+          generateRoute: true
+          annotations:
+            route.openshift.io/termination: "reencrypt"          
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - equal:
+          path: metadata.annotations.[kubernetes.io/ingress.class]
+          value: nginx
+      - isNull:
+          path: metadata.annotations.[route.openshift.io/termination]
+  - it: Check that the annotation kubernetes.io/ingress.class is removed if OpenShift is enabled, even if the value is not nginx
+    set:
+      gateway:
+        services:
+          core:
+            ingress:
+              enabled: true
+              annotations:
+                kubernetes.io/ingress.class: traefik
+                nginx.ingress.kubernetes.io/rewrite-target: /_$1
+      openshift:
+        enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - isNull:
+          path: metadata.annotations.[kubernetes.io/ingress.class]
+      - equal:
+          path: metadata.annotations.[route.openshift.io/termination]
+          value: edge

@@ -84,7 +84,7 @@ spec:
       {{- if .Values.api.additionalPlugins -}}
         {{- $plugins = concat $plugins .Values.api.additionalPlugins -}}
       {{- end -}}
-      {{- $pluginParams := dict "plugins" $plugins "jdbcDrivers" .Values.jdbc.drivers "securityContext" .Values.api.securityContext "appName" "graviteeio-am-management-api" "initContainers" $initContainers -}}
+      {{- $pluginParams := dict "plugins" $plugins "jdbcDrivers" .Values.jdbc.drivers "securityContext" .Values.api.securityContext "appName" "graviteeio-am-management-api" "initContainers" $initContainers "openshift" .Values.openshift -}}
       {{- if or .Values.api.extraInitContainers $plugins .Values.jdbc.drivers }}
       initContainers:
         {{- if and .Values.jdbc.drivers (eq .Values.management.type "jdbc") }}
@@ -99,7 +99,7 @@ spec:
         - name: {{ template "gravitee.api.fullname" . }}
           image: "{{ .Values.api.image.repository }}:{{ default .Chart.AppVersion .Values.api.image.tag }}"
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
-          securityContext: {{ toYaml ( .Values.api.securityContext | default .Values.api.deployment.securityContext ) | nindent 12 }}
+          securityContext: {{include "common.container.securitycontext" (dict "currentSecurityContext" .Values.api.securityContext "defaultSecurityContext" .Values.api.deployment.securityContext "openshift" .Values.openshift)| nindent 12}}
           ports:
             - name: {{ .Values.api.service.internalPortName }}
               containerPort: {{ .Values.api.service.internalPort }}

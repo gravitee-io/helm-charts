@@ -100,10 +100,16 @@ Usage:
 {{ include "common.ingress.annotations.render" ( dict "annotations" .Values.path.to.the.Value "ingressClassName" .Values.path.to.the.Value "context" $) }}
 */}}
 {{- define "common.ingress.annotations.render" -}}
+{{- $openshift := .openshift -}}
 {{- range $key, $value := .annotations }}
 {{- if or ( ne $key "kubernetes.io/ingress.class" ) ( not ( and ( $.ingressClassName ) ( include "common.ingress.supportsIngressClassname" $.context ))) }}
+{{- if not (and (eq $key "kubernetes.io/ingress.class") ($openshift.ingress.generateRoute) ($openshift.enabled)) }}
 {{ $key }}: {{ $value | quote }}
 {{- end -}}
+{{- end -}}
+{{- end -}}
+{{- if ($openshift.enabled) }}
+{{toYaml $openshift.ingress.annotations}}
 {{- end -}}
 {{- end -}}
 
@@ -130,5 +136,13 @@ Return the appropriate apiVersion for pod autoscaling.
 {{- print "autoscaling/v2beta2" -}}
 {{- else -}}
 {{- print "autoscaling/v2" -}}
+{{- end }}
+{{- end -}}
+
+{{- define "common.container.securitycontext" -}}
+{{- if .openshift.enabled -}}
+  {{ toYaml .openshift.securityContext }}
+{{- else if .runAsNonRoot -}}
+  {{ toYaml .engineSecurityContext }}
 {{- end }}
 {{- end -}}

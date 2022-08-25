@@ -89,6 +89,7 @@ tests:
                 periodSeconds: 5
                 tcpSocket:
                   port: http
+              securityContext: null
               startupProbe:
                 failureThreshold: 20
                 initialDelaySeconds: 30

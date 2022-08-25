@@ -83,7 +83,7 @@ spec:
         - name: {{ template "gravitee.ui.fullname" . }}
           image: "{{ .Values.ui.image.repository }}:{{ default .Chart.AppVersion .Values.ui.image.tag }}"
           imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
-          securityContext: {{ toYaml ( .Values.ui.securityContext | default .Values.ui.deployment.securityContext ) | nindent 12 }}
+          securityContext: {{include "common.container.securitycontext" (dict "currentSecurityContext" .Values.ui.securityContext "defaultSecurityContext" .Values.ui.deployment.securityContext "openshift" .Values.openshift)| nindent 12}}
           env:
             - name: MGMT_API_URL
               value: "https://{{index .Values.api.ingress.hosts 0 }}"

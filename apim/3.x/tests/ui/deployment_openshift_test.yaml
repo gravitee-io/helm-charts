@@ -1,0 +1,121 @@
+suite: Test Management UI OpenShift deployment
+templates:
+  - "ui/ui-deployment.yaml"
+  - "ui/ui-configmap.yaml"
+tests:
+  - it: Verify that the security context from OpenShift attribute is used
+    template: ui/ui-deployment.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    #values:
+    #  - ./values/staging.yaml
+    set:
+      openshift:
+        enabled: true
+        securityContext:
+          runAsUser: 9999
+          runAsGroup: 9998
+          runAsNonRoot: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - isAPIVersion:
+          of: apps/v1
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: graviteeio/apim-management-ui:1.0.0-app
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsGroup
+          value: 9998
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 9999
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: false
+  - it: Verify that the security context from the api attribute is used in case openshift is disabled
+    template: ui/ui-deployment.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    #values:
+    #  - ./values/staging.yaml
+    set:
+      openshift:
+        enabled: false
+        securityContext:
+          runAsUser: 9999
+          runAsGroup: 9998
+          runAsNonRoot: false
+      ui:
+        securityContext:
+          runAsUser: 8888
+          runAsGroup: 8887
+          runAsNonRoot: true
+        deployment:
+          securityContext:
+            runAsUser: 7777
+            runAsGroup: 7776
+            runAsNonRoot: true          
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - isAPIVersion:
+          of: apps/v1
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: graviteeio/apim-management-ui:1.0.0-app
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsGroup
+          value: 8887
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 8888
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true
+  - it: Verify that the security context from the api deployment attribute is used in case openshift is disabled and the api security content is null
+    template: ui/ui-deployment.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    #values:
+    #  - ./values/staging.yaml
+    set:
+      openshift:
+        enabled: false
+        securityContext:
+          runAsUser: 9999
+          runAsGroup: 9998
+          runAsNonRoot: false
+      ui:
+        securityContext: null
+        deployment:
+          securityContext:
+            runAsUser: 7777
+            runAsGroup: 7776
+            runAsNonRoot: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - isAPIVersion:
+          of: apps/v1
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: graviteeio/apim-management-ui:1.0.0-app
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsGroup
+          value: 7776
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 7777
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true          

@@ -1,0 +1,81 @@
+suite: Test Management API - Portal Ingress for OpenShift
+templates:
+  - "api/api-ingress-portal.yaml"
+tests:
+  - it: Check that the annotation kubernetes.io/ingress.class is removed if OpenShift is enabled
+    set:
+      openshift:
+        enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - isNull:
+          path: metadata.annotations.[kubernetes.io/ingress.class]
+      - equal:
+          path: metadata.annotations.[route.openshift.io/termination]
+          value: edge
+  - it: Check that the annotation route.openshift.io/termination is using the value from openshift 
+    set:
+      openshift:
+        enabled: true
+        ingress:
+          generateRoute: true
+          annotations:
+            route.openshift.io/termination: "reencrypt"          
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - isNull:
+          path: metadata.annotations.[kubernetes.io/ingress.class]
+      - equal:
+          path: metadata.annotations.[route.openshift.io/termination]
+          value: reencrypt
+  - it: Check that the annotation kubernetes.io/ingress.class is not removed if OpenShift is enabled and generateRoute is set to false
+    set:
+      openshift:
+        enabled: true
+        ingress:
+          generateRoute: false
+          annotations:
+            route.openshift.io/termination: "reencrypt"          
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - equal:
+          path: metadata.annotations.[kubernetes.io/ingress.class]
+          value: nginx
+      - equal:
+          path: metadata.annotations.[route.openshift.io/termination]
+          value: reencrypt
+  - it: Check that the annotation kubernetes.io/ingress.class is not removed if OpenShift is disabled and no annotations are added from openshift ingress attribute
+    set:
+      openshift:
+        enabled: false
+        ingress:
+          generateRoute: true
+          annotations:
+            route.openshift.io/termination: "reencrypt"          
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - equal:
+          path: metadata.annotations.[kubernetes.io/ingress.class]
+          value: nginx
+      - isNull:
+          path: metadata.annotations.[route.openshift.io/termination]

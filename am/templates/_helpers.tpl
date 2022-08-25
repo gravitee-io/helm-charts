@@ -113,7 +113,19 @@ Create initContainers for downloading jdbc drivers
 {{- define "deployment.jdbcDriverInitContainers" -}}
 {{- if .jdbcDrivers }}
 - name: get-jdbc-ext
-  {{- toYaml .initContainers | nindent 2 }}
+  {{/*{{- toYaml .initContainers | nindent 4 }}*/}}
+  {{- $openshift := .openshift -}}
+  {{- range $k, $v := .initContainers }}
+  {{- if and (eq $k "securityContext") ($openshift.enabled) }}
+  {{ $k }}:{{- toYaml $openshift.securityContext | nindent 4}}
+  {{- else -}}
+  {{- if kindIs "string" $v }}
+  {{ $k }}: {{ $v }}
+  {{- else }}
+  {{ $k }}: {{ toYaml $v| nindent 4 }}
+  {{- end -}}
+  {{- end -}}
+  {{- end }}  
   command: ['sh', '-c', "mkdir -p /tmp/plugins-ext && cd /tmp/plugins-ext {{- range $url := .jdbcDrivers -}}
     {{ printf " && ( rm "}} {{regexFind "[^/]+$" $url}} {{ printf " 2>/dev/null || true ) && wget %s" $url }}
   {{- end -}}"]
@@ -193,10 +205,16 @@ Usage:
 {{ include "common.ingress.annotations.render" ( dict "annotations" .Values.path.to.the.Value "ingressClassName" .Values.path.to.the.Value "context" $) }}
 */}}
 {{- define "common.ingress.annotations.render" -}}
+{{- $openshift := .openshift -}}
 {{- range $key, $value := .annotations }}
 {{- if or ( ne $key "kubernetes.io/ingress.class" ) ( not ( and ( $.ingressClassName ) ( include "common.ingress.supportsIngressClassname" $.context ))) }}
+{{- if not (and (eq $key "kubernetes.io/ingress.class") ($openshift.ingress.generateRoute) ($openshift.enabled)) }}
 {{ $key }}: {{ $value | quote }}
 {{- end -}}
+{{- end -}}
+{{- end -}}
+{{- if ($openshift.enabled) }}
+{{toYaml $openshift.ingress.annotations}}
 {{- end -}}
 {{- end -}}
 
@@ -222,5 +240,15 @@ Return the appropriate apiVersion for pod autoscaling.
 {{- print "autoscaling/v2beta2" -}}
 {{- else -}}
 {{- print "autoscaling/v2" -}}
+{{- end }}
+{{- end -}}
+
+{{- define "common.container.securitycontext" -}}
+{{- if .openshift.enabled -}}
+  {{ toYaml .openshift.securityContext }}
+{{- else if .currentSecurityContext -}}
+  {{ toYaml .currentSecurityContext }}
+{{- else -}}
+  {{ toYaml .defaultSecurityContext }}
 {{- end }}
 {{- end -}}

@@ -1,0 +1,170 @@
+suite: Test Management gateway OpenShift deployment
+templates:
+  - "gateway/gateway-deployment.yaml"
+  - "gateway/gateway-configmap.yaml"
+tests:
+  - it: Verify that the security context from OpenShift attribute is used
+    template: gateway/gateway-deployment.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    #values:
+    #  - ./values/staging.yaml
+    set:
+      management:
+        type: jdbc
+      jdbc:
+        driver: postgresql
+      openshift:
+        enabled: true
+        securityContext:
+          runAsUser: 9999
+          runAsGroup: 9998
+          runAsNonRoot: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - isAPIVersion:
+          of: apps/v1
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: graviteeio/am-gateway:1.0.0-app
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsGroup
+          value: 9998
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 9999
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: false
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext.runAsGroup
+          value: 9998
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext.runAsUser
+          value: 9999
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext.runAsNonRoot
+          value: false
+  - it: Verify that the security context from the api attribute is used in case openshift is disabled
+    template: gateway/gateway-deployment.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    #values:
+    #  - ./values/staging.yaml
+    set:
+      management:
+        type: jdbc
+      jdbc:
+        driver: postgresql
+      openshift:
+        enabled: false
+        securityContext:
+          runAsUser: 9999
+          runAsGroup: 9998
+          runAsNonRoot: false
+      gateway:
+        securityContext:
+          runAsUser: 8888
+          runAsGroup: 8887
+          runAsNonRoot: true
+        deployment:
+          securityContext:
+            runAsUser: 7777
+            runAsGroup: 7776
+            runAsNonRoot: true
+      initContainers:
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 6666
+          runAsGroup: 6665
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - isAPIVersion:
+          of: apps/v1
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: graviteeio/am-gateway:1.0.0-app
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsGroup
+          value: 8887
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 8888
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext.runAsGroup
+          value: 6665
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext.runAsUser
+          value: 6666
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext.runAsNonRoot
+          value: true
+  - it: Verify that the security context from the api deployment attribute is used in case openshift is disabled and the api security content is null
+    template: gateway/gateway-deployment.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    #values:
+    #  - ./values/staging.yaml
+    set:
+      management:
+        type: jdbc
+      jdbc:
+        driver: postgresql
+      openshift:
+        enabled: false
+        securityContext:
+          runAsUser: 9999
+          runAsGroup: 9998
+          runAsNonRoot: false
+      gateway:
+        securityContext: null
+        deployment:
+          securityContext:
+            runAsUser: 7777
+            runAsGroup: 7776
+            runAsNonRoot: true
+      initContainers:
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 6666
+          runAsGroup: 6665
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - isAPIVersion:
+          of: apps/v1
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: graviteeio/am-gateway:1.0.0-app
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsGroup
+          value: 7776
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 7777
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext.runAsGroup
+          value: 6665
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext.runAsUser
+          value: 6666
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext.runAsNonRoot
+          value: true
