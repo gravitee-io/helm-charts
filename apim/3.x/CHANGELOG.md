@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.53
+
+- [X] Remove alias for mongodb chart dependency
+- 
 ### 3.1.52
 
 - [X] Use ISO 8601 datetime for apim json logging
