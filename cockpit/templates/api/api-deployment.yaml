@@ -1,5 +1,7 @@
 {{- if .Values.api.enabled -}}
 {{- $serviceAccount := include "cockpit.serviceAccount" . -}}
+{{- $baseAffinity := include "api.default.affinity" . | fromYaml -}}
+{{- $mergedAffinity := mustMergeOverwrite (dict) .Values.api.deployment.affinity $baseAffinity -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -67,7 +69,7 @@ spec:
       {{- if $serviceAccount }}
       serviceAccountName: {{ $serviceAccount }}
       {{ end }}
-      affinity: {{ toYaml .Values.api.deployment.affinity | nindent 8 }}
+      affinity: {{- toYaml $mergedAffinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.api.deployment.nodeSelector | nindent 8 }}
       topologySpreadConstraints: {{ toYaml .Values.api.deployment.topologySpreadConstraints | nindent 8 }}
       tolerations: {{ toYaml .Values.api.deployment.tolerations | nindent 8 }}

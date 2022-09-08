@@ -219,3 +219,60 @@ Return the appropriate apiVersion for pod autoscaling.
 {{- print "autoscaling/v2" -}}
 {{- end }}
 {{- end -}}
+
+{{/* Define default API affinity */}}
+{{- define "api.default.affinity" -}}
+podAntiAffinity:
+  preferredDuringSchedulingIgnoredDuringExecution:
+  - weight: 100
+    podAffinityTerm:
+      labelSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+            - {{ template "gravitee.name" . }}
+        - key: app.kubernetes.io/component
+          operator: In
+          values:
+            - {{ .Values.api.name }}
+      topologyKey: "kubernetes.io/hostname"
+{{- end }}
+
+{{/* Define default UI affinity */}}
+{{- define "ui.default.affinity" -}}
+podAntiAffinity:
+  preferredDuringSchedulingIgnoredDuringExecution:
+  - weight: 100
+    podAffinityTerm:
+      labelSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+            - {{ template "gravitee.name" . }}
+        - key: app.kubernetes.io/component
+          operator: In
+          values:
+            - {{ .Values.ui.name }}
+      topologyKey: "kubernetes.io/hostname"
+{{- end }}
+
+{{/* Define default Generator affinity */}}
+{{- define "generator.default.affinity" -}}
+podAntiAffinity:
+  preferredDuringSchedulingIgnoredDuringExecution:
+  - weight: 100
+    podAffinityTerm:
+      labelSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+            - {{ template "gravitee.name" . }}
+        - key: app.kubernetes.io/component
+          operator: In
+          values:
+            - {{ .Values.generator.name }}
+      topologyKey: "kubernetes.io/hostname"
+{{- end }}
