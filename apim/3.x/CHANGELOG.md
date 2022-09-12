@@ -4,7 +4,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 
 ### 3.1.55
 
-- [X] Trunc port name with k8s limit (15 for deployment and 63 for service)
+- [X] Truncate port name to respect k8s limit (15 for deployment and 63 for service)
 
 ### 3.1.54
 
