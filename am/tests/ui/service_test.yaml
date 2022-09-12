@@ -48,3 +48,22 @@ tests:
             protocol: TCP
             name: management-ui
             appProtocol: http-test
+
+  - it: Deploy with long api name
+    template: ui/ui-service.yaml
+    set:
+      ui:
+        name: "I-am-a-very-long-name-Neque-porro-quisquam-est-qui-dolorem-ipsum-quia-dolor-sit"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - equal:
+          path: spec.ports
+          value: 
+          - appProtocol: http
+            name: I-am-a-very-long-name-Neque-porro-quisquam-est-qui-dolorem-ipsu
+            port: 8002
+            protocol: TCP
+            targetPort: 8080

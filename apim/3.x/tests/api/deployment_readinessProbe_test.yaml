@@ -1,0 +1,35 @@
+suite: Test Management API deployment with readinessProbe
+templates:
+  - "api/api-deployment.yaml"
+  - "api/api-configmap.yaml"
+tests:
+  - it: Check default readinessProbe with Kubernetes >= 1.18-0
+    template: api/api-deployment.yaml
+    capabilities:
+      KubeVersion: "1.18-0"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.tcpSocket.port
+          value: http
+  - it: Check custom readinessProbe
+    template: api/api-deployment.yaml
+    set:
+      api:
+        readinessProbe:
+          httpGet:
+            path: /_node/sync
+            port: 18083
+            scheme: HTTPS
+            httpHeaders:
+                - name: Authorization
+                  value: my_password
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.httpGet.path
+          value: /_node/sync
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.httpGet.port
+          value: 18083
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.httpGet.scheme
+          value: HTTPS

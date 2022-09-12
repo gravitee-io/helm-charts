@@ -34,7 +34,7 @@ spec:
       {{ end }}
       {{ end }}
       {{- end }}
-      name: {{ .Values.gateway.name }}
+      name: {{ .Values.gateway.name | trunc 63 | trimSuffix "-" }}
     {{- if .Values.gateway.services.bridge.enabled }}
     - port: {{ .Values.gateway.services.bridge.service.externalPort }}
       targetPort: {{ .Values.gateway.services.bridge.service.internalPort }}
@@ -50,7 +50,7 @@ spec:
       {{ end }}
       {{ end }}
       {{- end }}
-      name: {{ .Values.gateway.name }}-bridge
+      name: {{ printf "%s-%s" (.Values.gateway.name | trunc 56 | trimSuffix "-") "bridge" }}
     {{- end }}
     {{- if .Values.gateway.services.core.service.enabled }}
     - port: {{ .Values.gateway.services.core.service.externalPort }}
@@ -63,7 +63,7 @@ spec:
       appProtocol: http
       {{ end }}
       {{- end }}
-      name: {{ .Values.gateway.name }}-technical
+      name: {{ printf "%s-%s" (.Values.gateway.name | trunc 53 | trimSuffix "-") "technical" }}
     {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}

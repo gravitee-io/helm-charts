@@ -20,7 +20,7 @@ spec:
     - port: {{ .Values.generator.service.externalPort }}
       targetPort: {{ .Values.generator.service.internalPort }}
       protocol: TCP
-      name: {{ .Values.generator.name }}
+      name: {{ .Values.generator.name | trunc 63 | trimSuffix "-" }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

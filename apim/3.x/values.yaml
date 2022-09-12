@@ -431,6 +431,12 @@ api:
     periodSeconds: 30
     failureThreshold: 3
 
+  startupProbe:
+    tcpSocket:
+      port: http
+    failureThreshold: 30
+    periodSeconds: 10
+  
   pdb:
     enabled: false
     minAvailable: ""
