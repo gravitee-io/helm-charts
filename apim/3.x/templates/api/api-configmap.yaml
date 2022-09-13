@@ -381,7 +381,7 @@ data:
         password: {{ .Values.notifiers.smtp.password }}
         {{- end }}
         starttls.enabled: {{ .Values.notifiers.smtp.starttlsEnabled | default false }}
-        {{- if .Values.smtp.ssl }}
+        {{- if .Values.notifiers.smtp.ssl }}
         ssl:
           trustAll: {{ .Values.notifiers.smtp.ssl.trustAll }}
           keyStore: {{ .Values.notifiers.smtp.ssl.keyStore }}
