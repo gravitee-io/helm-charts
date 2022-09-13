@@ -361,12 +361,11 @@ data:
       username: {{ .Values.smtp.username }}
       password: {{ .Values.smtp.password }}
       {{- end }}
+      {{- with .Values.smtp.properties }}
       properties:
-        auth: {{ .Values.smtp.properties.auth }}
-        starttls.enable: {{ .Values.smtp.properties.starttlsEnable }}
-        {{- if .Values.smtp.properties.localhost }}
-        localhost: {{ .Values.smtp.properties.localhost }}
-        {{- end }}
+        {{ toYaml . | nindent 8 | trim -}}
+        starttls.enable: {{ .starttlsEnable }}{{- /* Deprecated. Prefer use yaml merge directly in properties */}}
+      {{- end }}
       {{- end }}
 
     # SMTP configuration used to send notifications / alerts
