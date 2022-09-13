@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.55
+
+- [X] Fix: Merge all smtp.properties directly into gravitee.yml
+- [X] Fix: Enable notifiers ssl with right smtp.ssl value
+
 ### 3.1.54
 
 - [X] Add a startup probe on the Management API
