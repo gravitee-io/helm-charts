@@ -157,9 +157,8 @@ smtp:
   subject: "[gravitee] %s"
   properties:
     auth: true
-    starttls.enable: false
+    starttlsEnable: false
     #localhost: apim.example.com
-    #ssl.trust: smtp.gmail.com
 
 notifiers:
   smtp:
