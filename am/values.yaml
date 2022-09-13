@@ -173,7 +173,7 @@ api:
   reloadOnConfigChange: true
   updateStrategy:
     rollingUpdate:
-      maxUnavailable: 1
+      maxUnavailable: 25%
     type: RollingUpdate
   replicaCount: 1
   image:
@@ -208,7 +208,7 @@ api:
     strategy:
       type: RollingUpdate
       rollingUpdate:
-        maxUnavailable: 1
+        maxUnavailable: 25%
     topologySpreadConstraints: []
     # revisionHistoryLimit: 10
 
@@ -464,7 +464,7 @@ gateway:
     strategy:
       type: RollingUpdate
       rollingUpdate:
-        maxUnavailable: 1
+        maxUnavailable: 25%
     topologySpreadConstraints: []
     # revisionHistoryLimit: 10
 
@@ -675,7 +675,7 @@ ui:
     strategy:
       type: RollingUpdate
       rollingUpdate:
-        maxUnavailable: 1
+        maxUnavailable: 25%
     topologySpreadConstraints: []
     # revisionHistoryLimit: 10
 
