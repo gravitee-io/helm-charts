@@ -364,7 +364,7 @@ data:
       {{- with .Values.smtp.properties }}
       properties:
         {{ toYaml . | nindent 8 | trim -}}
-        starttls.enable: {{ .starttlsEnable }}{{- /* Deprecated. Use `properties.starttls.enable` directly instead */}}
+        starttls.enable: {{ .starttlsEnable }}{{- /* Deprecated. Prefer use yaml merge directly in properties */}}
       {{- end }}
       {{- end }}
 
@@ -382,7 +382,7 @@ data:
         password: {{ .Values.notifiers.smtp.password }}
         {{- end }}
         starttls.enabled: {{ .Values.notifiers.smtp.starttlsEnabled | default false }}
-        {{- if .Values.notifiers.smtp.ssl }}
+        {{- if .Values.smtp.ssl }}
         ssl:
           trustAll: {{ .Values.notifiers.smtp.ssl.trustAll }}
           keyStore: {{ .Values.notifiers.smtp.ssl.keyStore }}
