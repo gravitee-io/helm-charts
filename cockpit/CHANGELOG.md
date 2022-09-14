@@ -2,9 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
-### 1.6.23
-
+### 1.7.0
 - [X] Trunc port name with k8s limit (63)
+- [X] Define default pod anti-affinity
+- [X] Enable INFO logs for Hazelcast
+- [X] Create new configmap to generate yaml config for Hazelcast
 
 ### 1.6.22
 
