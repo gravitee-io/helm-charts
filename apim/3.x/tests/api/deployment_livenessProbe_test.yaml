@@ -1,0 +1,35 @@
+suite: Test Management API deployment with livenessProbe
+templates:
+  - "api/api-deployment.yaml"
+  - "api/api-configmap.yaml"
+tests:
+  - it: Check default livenessProbe with Kubernetes >= 1.18-0
+    template: api/api-deployment.yaml
+    capabilities:
+      KubeVersion: "1.18-0"
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.tcpSocket.port
+          value: http
+  - it: Check custom livenessProbe
+    template: api/api-deployment.yaml
+    set:
+      api:
+        livenessProbe:
+          httpGet:
+            path: /_node/sync
+            port: 18083
+            scheme: HTTPS
+            httpHeaders:
+                - name: Authorization
+                  value: my_password
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.httpGet.path
+          value: /_node/sync
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.httpGet.port
+          value: 18083
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.httpGet.scheme
+          value: HTTPS

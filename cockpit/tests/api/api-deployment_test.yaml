@@ -80,7 +80,22 @@ tests:
       - equal:
           path: spec.template.spec
           value:
-            affinity: {}
+            affinity:
+              podAntiAffinity:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                  - weight: 100
+                    podAffinityTerm:
+                      labelSelector:
+                        matchExpressions:
+                          - key: app.kubernetes.io/name
+                            operator: In
+                            values:
+                              - cockpit
+                          - key: app.kubernetes.io/component
+                            operator: In
+                            values:
+                              - api
+                      topologyKey: "kubernetes.io/hostname"
             containers:
             - env: null
               envFrom: []

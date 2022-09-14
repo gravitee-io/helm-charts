@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io API Designer](https://github.com/gravitee-io/helm-charts/tree/master/designer) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.14
+
+- [X] Trunc port name with k8s limit (63)
+
 ### 1.0.13
 
 - [X] Upgrade Mongodb and Elasticsearch dependencies

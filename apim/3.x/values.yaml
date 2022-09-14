@@ -225,7 +225,7 @@ redis:
   download: true
 #  repositoryVersion: 3.3.0
 
-mongodb-replicaset:
+mongodb:
   enabled: false
   architecture: replicaset
   fullnameOverride: "graviteeio-apim-mongodb-replicaset"
@@ -431,6 +431,12 @@ api:
     periodSeconds: 30
     failureThreshold: 3
 
+  startupProbe:
+    tcpSocket:
+      port: http
+    failureThreshold: 30
+    periodSeconds: 10
+  
   pdb:
     enabled: false
     minAvailable: ""
