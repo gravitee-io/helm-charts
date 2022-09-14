@@ -301,6 +301,7 @@ data:
             <logger name="io.gravitee" level="{{ .Values.api.logging.graviteeLevel }}" />
             <logger name="com.graviteesource" level="{{ .Values.api.logging.graviteeLevel }}" />
             <logger name="org.eclipse.jetty" level="{{ .Values.api.logging.jettyLevel }}" />
+            <logger name="com.hazelcast" level="INFO"/>
 {{- if .Values.api.logging.additionalLoggers }}
 {{ .Values.api.logging.additionalLoggers | indent 12 }}
 {{- end }}
