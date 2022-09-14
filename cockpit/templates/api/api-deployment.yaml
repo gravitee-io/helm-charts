@@ -142,6 +142,9 @@ spec:
               mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast.xml
               subPath: hazelcast.xml
             - name: config
+              mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast.yml
+              subPath: hazelcast.yml
+            - name: config
               mountPath: /opt/gravitee-cockpit-management-api/config/logback.xml
               subPath: logback.xml
           {{- include "deployment.pluginVolumeMounts" $pluginParams | indent 12 }}

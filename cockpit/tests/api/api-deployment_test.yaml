@@ -71,7 +71,7 @@ tests:
           value:
             annotations:
               chaos.alpha.kubernetes.io/enabled: "false"
-              checksum/config: 156c05267fdd50837b1a3d73cfe7d6113ac56a2371d45637e8c36b41e1b75d3c
+              checksum/config: cdabe2bcaee6b67e79211423b1d1b689edbbd4f8ccf971b2e8de9f1bd91a2d14
             labels:
               app.kubernetes.io/component: api
               app.kubernetes.io/instance: my-cockpit
@@ -138,6 +138,9 @@ tests:
               - mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast.xml
                 name: config
                 subPath: hazelcast.xml
+              - mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast.yml
+                name: config
+                subPath: hazelcast.yml
               - mountPath: /opt/gravitee-cockpit-management-api/config/logback.xml
                 name: config
                 subPath: logback.xml
