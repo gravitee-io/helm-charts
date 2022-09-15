@@ -44,6 +44,7 @@ tests:
                     <logger name="io.gravitee" level="INFO" />
                     <logger name="com.graviteesource" level="INFO" />
                     <logger name="org.eclipse.jetty" level="INFO" />
+                    <logger name="com.hazelcast" level="INFO"/>
 
                     <!-- Strictly speaking, the level attribute is not necessary since -->
                     <!-- the level of the root level is set to DEBUG by default.       -->
@@ -103,6 +104,7 @@ tests:
                     <logger name="io.gravitee" level="INFO" />
                     <logger name="com.graviteesource" level="INFO" />
                     <logger name="org.eclipse.jetty" level="INFO" />
+                    <logger name="com.hazelcast" level="INFO"/>
 
                     <!-- Strictly speaking, the level attribute is not necessary since -->
                     <!-- the level of the root level is set to DEBUG by default.       -->

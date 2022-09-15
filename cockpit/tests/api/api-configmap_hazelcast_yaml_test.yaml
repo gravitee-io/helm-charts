@@ -93,3 +93,118 @@ tests:
                     </join>
                 </network>
             </hazelcast>
+
+  - it: should apply default hazelcast.yml configuration
+    template: api/api-configmap.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: data.[hazelcast.yml]
+          value: |
+            hazelcast:
+              cluster-name: my-cockpit_0
+              network:
+                join:
+                  multicast:
+                    enabled: false
+                  tcp-ip:
+                    enabled: false
+                  kubernetes:
+                    enabled: true
+                    namespace: unittest
+                    service-name: my-cockpit-api
+
+              properties:
+                hazelcast.logging.type: slf4j
+                hazelcast.max.wait.seconds.before.join: 3
+                hazelcast.member.list.publish.interval.seconds: 5
+                hazelcast.socket.client.bind.any: false
+
+              cp-subsystem:
+                cp-member-count: 0
+              map:
+                cockpit.channels.*:
+                  backup-count: 0
+                  async-backup-count: 1
+              queue:
+                commands-*:
+                  backup-count: 0
+                  async-backup-count: 1
+              reliable-topic:
+                cockpit.primaryChannels:
+                  read-batch-size: 10
+
+  - it: should apply additional properties in hazelcast.yml configuration
+    template: api/api-configmap.yaml
+    set:
+      hazelcast:
+        properties:
+          hazelcast.diagnostics.enabled: true
+        advancedNetwork:
+          enabled: true
+          rest-server-socket-endpoint-config:
+            endpoint-groups:
+              CLUSTER_READ:
+                enabled: true
+              HEALTH_CHECK:
+                enabled: true
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: data.[hazelcast.yml]
+          value: |
+            hazelcast:
+              cluster-name: my-cockpit_0
+              network:
+                join:
+                  multicast:
+                    enabled: false
+                  tcp-ip:
+                    enabled: false
+                  kubernetes:
+                    enabled: true
+                    namespace: unittest
+                    service-name: my-cockpit-api
+              advanced-network:
+                enabled: true
+                rest-server-socket-endpoint-config:
+                  endpoint-groups:
+                    CLUSTER_READ:
+                      enabled: true
+                    HEALTH_CHECK:
+                      enabled: true
+
+              properties:
+                hazelcast.logging.type: slf4j
+                hazelcast.max.wait.seconds.before.join: 3
+                hazelcast.member.list.publish.interval.seconds: 5
+                hazelcast.socket.client.bind.any: false
+                hazelcast.diagnostics.enabled: true
+
+              cp-subsystem:
+                cp-member-count: 0
+              map:
+                cockpit.channels.*:
+                  backup-count: 0
+                  async-backup-count: 1
+              queue:
+                commands-*:
+                  backup-count: 0
+                  async-backup-count: 1
+              reliable-topic:
+                cockpit.primaryChannels:
+                  read-batch-size: 10

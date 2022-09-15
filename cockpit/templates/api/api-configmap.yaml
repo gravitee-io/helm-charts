@@ -249,6 +249,47 @@ data:
         </network>
     </hazelcast>
 
+  hazelcast.yml: |
+    hazelcast:
+      cluster-name: {{ .Release.Name }}_{{ .Release.Revision }}
+      network:
+        join:
+          multicast:
+            enabled: false
+          tcp-ip:
+            enabled: false
+          kubernetes:
+            enabled: true
+            namespace: {{ .Release.Namespace }}
+            service-name: {{ template "gravitee.api.fullname" . }}
+
+{{- if .Values.hazelcast.advancedNetwork }}
+      advanced-network:
+        {{- toYaml .Values.hazelcast.advancedNetwork | nindent 8 }}
+{{- end }}
+
+      properties:
+        hazelcast.logging.type: slf4j
+        hazelcast.max.wait.seconds.before.join: 3
+        hazelcast.member.list.publish.interval.seconds: 5
+        hazelcast.socket.client.bind.any: false
+{{- if .Values.hazelcast.properties }}
+        {{- toYaml .Values.hazelcast.properties | nindent 8 }}
+{{- end }}
+
+      cp-subsystem:
+        cp-member-count: 0
+      map:
+        cockpit.channels.*:
+          backup-count: 0
+          async-backup-count: 1
+      queue:
+        commands-*:
+          backup-count: 0
+          async-backup-count: 1
+      reliable-topic:
+        cockpit.primaryChannels:
+          read-batch-size: 10
 
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
@@ -301,6 +342,7 @@ data:
             <logger name="io.gravitee" level="{{ .Values.api.logging.graviteeLevel }}" />
             <logger name="com.graviteesource" level="{{ .Values.api.logging.graviteeLevel }}" />
             <logger name="org.eclipse.jetty" level="{{ .Values.api.logging.jettyLevel }}" />
+            <logger name="com.hazelcast" level="INFO"/>
 {{- if .Values.api.logging.additionalLoggers }}
 {{ .Values.api.logging.additionalLoggers | indent 12 }}
 {{- end }}

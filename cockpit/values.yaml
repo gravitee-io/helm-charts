@@ -114,6 +114,10 @@ mongodb-replicaset:
       - ReadWriteOnce
     size: 1Gi
 
+hazelcast: {}
+#  advancedNetwork: {}
+#  properties: {}
+
 api:
   enabled: true
   name: api
