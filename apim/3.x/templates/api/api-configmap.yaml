@@ -361,12 +361,10 @@ data:
       username: {{ .Values.smtp.username }}
       password: {{ .Values.smtp.password }}
       {{- end }}
+      {{- with .Values.smtp.properties }}
       properties:
-        auth: {{ .Values.smtp.properties.auth }}
-        starttls.enable: {{ .Values.smtp.properties.starttlsEnable }}
-        {{- if .Values.smtp.properties.localhost }}
-        localhost: {{ .Values.smtp.properties.localhost }}
-        {{- end }}
+        {{ toYaml . | nindent 8 | trim -}}
+      {{- end }}
       {{- end }}
 
     # SMTP configuration used to send notifications / alerts
@@ -383,7 +381,7 @@ data:
         password: {{ .Values.notifiers.smtp.password }}
         {{- end }}
         starttls.enabled: {{ .Values.notifiers.smtp.starttlsEnabled | default false }}
-        {{- if .Values.smtp.ssl }}
+        {{- if .Values.notifiers.smtp.ssl }}
         ssl:
           trustAll: {{ .Values.notifiers.smtp.ssl.trustAll }}
           keyStore: {{ .Values.notifiers.smtp.ssl.keyStore }}
