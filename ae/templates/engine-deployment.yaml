@@ -140,6 +140,13 @@ spec:
               mountPath: /opt/graviteeio-alert-engine/config/logback.xml
               subPath: logback.xml
           {{- end }}
+          {{- with .Values.license }}
+          {{- if .key }}
+            - name: licensekey
+              mountPath: /opt/graviteeio-alert-engine/license
+              readOnly: true
+          {{- end }}
+          {{- end }}
           {{- with .Values.engine.extraVolumeMounts }}
           {{- tpl . $ | nindent 12 }}
           {{- end }}
@@ -151,7 +158,17 @@ spec:
         - name: config
           configMap:
             name: {{ template "gravitee.engine.fullname" . }}
-        {{- with .Values.engine.extraVolumes }}
-          {{- tpl . $ | nindent 8 }}
-        {{- end }}
+      {{- if .Values.license }}
+      {{- if .Values.license.key }}
+        - name: licensekey
+          secret:
+            secretName: licensekey
+            items:
+              - key: licensekey
+                path: license.key
+      {{- end }}
+      {{- end }}
+      {{- with .Values.engine.extraVolumes }}
+        {{- tpl . $ | nindent 8 }}
+      {{- end }}
 {{- end -}}

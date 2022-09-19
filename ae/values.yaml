@@ -228,3 +228,12 @@ engine:
       enabled: false
       prometheus:
         enabled: true
+
+  # You need a license to use alert engine,
+  # to use it, encode the license file in base64 and file the license.key attribut
+  # On linux : `base64 -w 0 license.key`
+  # On macOS : `base64 license.key`
+  # You can also define it from command line :
+  # `helm install --name graviteeio-ae graviteeio/ae --set license.key=${GRAVITEESOURCE_LICENSE_B64}`
+#license:
+#  key: <put here your license.key file encoded in base64>
