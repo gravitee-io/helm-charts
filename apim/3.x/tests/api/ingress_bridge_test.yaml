@@ -1,10 +1,10 @@
-suite: Test API Gateway Ingress with Hybrid Bridge enabled
+suite: Test Management API Ingress with Hybrid Bridge enabled
 templates:
-  - "gateway/gateway-bridge-ingress.yaml"
+  - "api/api-bridge-ingress.yaml"
 tests:
   - it: Check bridge ingress disabled
     set:
-      gateway:
+      api:
         services:
           bridge:
             enabled: false
@@ -14,35 +14,9 @@ tests:
       - hasDocuments:
           count: 0
 
-  - it: Check bridge Ingress extensions/v1beta1
-    set:
-      gateway:
-        services:
-          bridge:
-            enabled: true
-            service:
-              externalPort: 92
-              internalPort: 18092
-            ingress:
-              enabled: true
-              path: /gateway/_bridge
-              hosts:
-              - apim.example.com
-      global:
-        kubeVersion: 1.13.0
-    asserts:
-      - hasDocuments:
-          count: 1
-      - isKind:
-          of: Ingress
-      - isAPIVersion:
-          of: extensions/v1beta1
-      - isEmpty:
-          path: spec.ingressClassName
-
   - it: Check bridge ingress enabled
     set:
-      gateway:
+      api:
         services:
           bridge:
             enabled: true
@@ -51,9 +25,9 @@ tests:
               internalPort: 18092
             ingress:
               enabled: true
-              path: /gateway/_bridge
+              path: /api/_bridge
               hosts:
-              - apim.example.com
+                - apim.example.com
     asserts:
       - hasDocuments:
           count: 1
@@ -66,63 +40,13 @@ tests:
           value: apim.example.com
       - equal:
           path: spec.rules[0].http.paths[0].path
-          value: /gateway/_bridge
+          value: /api/_bridge
 
-  - it: Check bridge Ingress networking.k8s.io/v1beta1
-    set:
-      gateway:
-        services:
-          bridge:
-            enabled: true
-            service:
-              externalPort: 92
-              internalPort: 18092
-            ingress:
-              enabled: true
-              path: /gateway/_bridge
-              hosts:
-              - apim.example.com
-      global:
-        kubeVersion: 1.15.0
-    asserts:
-      - hasDocuments:
-          count: 1
-      - isKind:
-          of: Ingress
-      - isAPIVersion:
-          of: networking.k8s.io/v1beta1
-      - isEmpty:
-          path: spec.ingressClassName
-
-  - it: Check bridge Ingress networking.k8s.io/v1 without IngressClassName
-    set:
-      gateway:
-        services:
-          bridge:
-            enabled: true
-            service:
-              externalPort: 92
-              internalPort: 18092
-            ingress:
-              enabled: true
-              path: /gateway/_bridge
-              hosts:
-              - apim.example.com
-    asserts:
-      - hasDocuments:
-          count: 1
-      - isKind:
-          of: Ingress
-      - isAPIVersion:
-          of: networking.k8s.io/v1
-      - isEmpty:
-          path: spec.ingressClassName
-
-  - it: Check bridge Ingress networking.k8s.io/v1 with IngressClassName and kube < 1.18-0
+  - it: Check bridge ingress with ingressClassName and kube < 1.18-0
     set:
       global:
         kubeVersion: 1.15.0
-      gateway:
+      api:
         services:
           bridge:
             enabled: true
@@ -143,7 +67,7 @@ tests:
     set:
       global:
         kubeVersion: 1.18.0
-      gateway:
+      api:
         services:
           bridge:
             enabled: true
@@ -165,7 +89,7 @@ tests:
     set:
       global:
         kubeVersion: 1.18.0
-      gateway:
+      api:
         services:
           bridge:
             enabled: true

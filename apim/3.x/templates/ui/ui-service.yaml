@@ -23,7 +23,7 @@ spec:
       {{- if (include "common.service.supportsAppProtocol" .) }}
       {{ if .Values.ui.service.appProtocol }}
       appProtocol: {{ .Values.ui.service.appProtocol }}
-      {{ else}}
+      {{ else }}
       appProtocol: http
       {{ end }}
       {{- end }}

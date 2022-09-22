@@ -505,30 +505,30 @@ api:
       #    type: jks # Supports jks, pem, pkcs12
       #    path: ${gravitee.home}/security/truststore.jks
       #    password: secret
-      # service:
-      #   externalPort: 92
-      #   internalPort: 18092
-      #   appProtocol: http
-      # ingress:
-      #   enabled: false
-      #   ingressClassName: ""
-      #   path: /api/_bridge
-      #   # Used to create an Ingress record.
-      #   hosts:
-      #     - apim.example.com
-      #   annotations:
-      #     kubernetes.io/ingress.class: nginx
-      #     nginx.ingress.kubernetes.io/ssl-redirect: "false"
-      #     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
-      #     kubernetes.io/app-root: /api
-      #     kubernetes.io/rewrite-target: /api
-      #     nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
-      #     kubernetes.io/tls-acme: "true"
-      #   tls:
-      #     # Secrets must be manually created in the namespace.
-      #     - secretName: chart-example-tls
-      #       hosts:
-      #         - chart-example.local
+      service:
+        externalPort: 92
+        internalPort: 18092
+      #  appProtocol: http
+      ingress:
+        enabled: false
+        ingressClassName: ""
+        path: /api/_bridge
+        # Used to create an Ingress record.
+        hosts:
+          - apim.example.com
+        annotations: {}
+        #  kubernetes.io/ingress.class: nginx
+        #  nginx.ingress.kubernetes.io/ssl-redirect: "false"
+        #  nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+        #  kubernetes.io/app-root: /api
+        #  kubernetes.io/rewrite-target: /api
+        #  nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+        #  kubernetes.io/tls-acme: "true"
+        # tls:
+          # Secrets must be manually created in the namespace.
+        #  - hosts:
+        #      - apim.example.com
+        #    secretName: api-custom-cert
     subscription:
       enabled: false
 #      pre-expiration-notification-schedule: 15,10,5
@@ -609,15 +609,11 @@ api:
         kubernetes.io/ingress.class: nginx
         nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_pass_header if-match;\n"
         # kubernetes.io/tls-acme: "true"
-      #tls:
+      # tls:
         # Secrets must be manually created in the namespace.
-        # - secretName: chart-example-tls
-        #   hosts:
-        #     - chart-example.local
-      tls:
-        - hosts:
-            - apim.example.com
-          secretName: api-custom-cert
+      #  - hosts:
+      #      - apim.example.com
+      #    secretName: api-custom-cert
     portal:
       enabled: true
       path: /portal
@@ -625,19 +621,15 @@ api:
       # Used to create an Ingress record.
       hosts:
         - apim.example.com
-      annotations:
+      annotations: 
         kubernetes.io/ingress.class: nginx
         nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
         # kubernetes.io/tls-acme: "true"
-      #tls:
+      # tls:
         # Secrets must be manually created in the namespace.
-        # - secretName: chart-example-tls
-        #   hosts:
-        #     - chart-example.local
-      tls:
-        - hosts:
-            - apim.example.com
-          secretName: api-custom-cert
+      #  - hosts:
+      #      - apim.example.com
+      #    secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -808,10 +800,10 @@ gateway:
       ingress:
         enabled: false
         ingressClassName: ""
-#          path: /management/_(.*)
-#          hosts:
-#            - apim.example.com
-#          annotations:
+        path: /management/_(.*)
+        hosts:
+          - apim.example.com
+        annotations: {}
 #            kubernetes.io/ingress.class: nginx
 #            nginx.ingress.kubernetes.io/rewrite-target: /_$1
       service: 
@@ -839,18 +831,18 @@ gateway:
       #    type: jks # Supports jks, pem, pkcs12
       #    path: ${gravitee.home}/security/truststore.jks
       #    password: secret
-      # service:
-      #   externalPort: 92
-      #   internalPort: 18092
-      #   appProtocol: http
-      # ingress:
-      #   enabled: false
-      #   ingressClassName: ""
-      #   path: /gateway/_bridge
+      service:
+        externalPort: 92
+        internalPort: 18092
+      #  appProtocol: http
+      ingress:
+        enabled: false
+        ingressClassName: ""
+        path: /gateway/_bridge
       #   # Used to create an Ingress record.
-      #   hosts:
-      #     - apim.example.com
-      #   annotations:
+        hosts:
+          - apim.example.com
+        annotations: {}
       #     kubernetes.io/ingress.class: nginx
       #     nginx.ingress.kubernetes.io/ssl-redirect: "false"
       #     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
@@ -858,11 +850,11 @@ gateway:
       #     kubernetes.io/rewrite-target: /gateway
       #     nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
       #     kubernetes.io/tls-acme: "true"
-      #   tls:
-      #     # Secrets must be manually created in the namespace.
-      #     - secretName: chart-example-tls
-      #       hosts:
-      #         - chart-example.local
+      #  tls:
+          # Secrets must be manually created in the namespace.
+      #    - secretName: chart-example-tls
+      #      hosts:
+      #        - chart-example.local
     metrics:
       enabled: false
       prometheus:
@@ -948,14 +940,9 @@ gateway:
       # kubernetes.io/tls-acme: "true"
     #tls:
       # Secrets must be manually created in the namespace.
-      # - secretName: chart-example-tls
-      #   hosts:
-      #     - chart-example.local
-      #     - chart-example2.local
-    tls:
-      - hosts:
-          - apim.example.com
-        secretName: api-custom-cert
+    #  - hosts:
+    #      - apim.example.com
+    #    secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -1083,15 +1070,11 @@ portal:
     annotations:
       kubernetes.io/ingress.class: nginx
       nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
-      #tls:
+    #tls:
       # Secrets must be manually created in the namespace.
-      # - secretName: chart-example-tls
-      #   hosts:
-      #     - chart-example.local
-    tls:
-      - hosts:
-          - apim.example.com
-        secretName: api-custom-cert
+    #  - hosts:
+    #      - apim.example.com
+    #    secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -1240,15 +1223,11 @@ ui:
       kubernetes.io/ingress.class: nginx
       nginx.ingress.kubernetes.io/rewrite-target: /$1$2
       nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
-      #tls:
+    # tls:
       # Secrets must be manually created in the namespace.
-      # - secretName: chart-example-tls
-      #   hosts:
-      #     - chart-example.local
-    tls:
-      - hosts:
-          - apim.example.com
-        secretName: api-custom-cert
+    #  - hosts:
+    #      - apim.example.com
+    #    secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -1269,6 +1248,11 @@ ui:
     # - name: extra-volume
     #   mountPath: /mnt/volume
     #   readOnly: true
+
+# Enabling openshift support will update ingresses annotations for not containing "kubernetes.io/ingress.class" which
+# has to be removed to ensure OpenShift is creating a Route from the Ingress
+openshift:
+  enabled: false
 
 initContainers:
   image: alpine:latest
