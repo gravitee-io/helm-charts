@@ -26,12 +26,10 @@ spec:
       {{- if (include "common.service.supportsAppProtocol" .) }}
       {{ if .Values.gateway.service.appProtocol }}
       appProtocol: {{ .Values.gateway.service.appProtocol }}
-      {{ else }}
-      {{ if .Values.gateway.ssl.enabled }}
+      {{ else if .Values.gateway.ssl.enabled }}
       appProtocol: https
       {{ else }}
       appProtocol: http
-      {{ end }}
       {{ end }}
       {{- end }}
       name: {{ .Values.gateway.name | trunc 63 | trimSuffix "-" }}
@@ -42,12 +40,10 @@ spec:
       {{- if (include "common.service.supportsAppProtocol" .) }}
       {{ if .Values.gateway.services.bridge.service.appProtocol }}
       appProtocol: {{ .Values.gateway.services.bridge.service.appProtocol }}
-      {{ else }}
-      {{ if .Values.gateway.services.bridge.ssl.enabled }}
+      {{ else if .Values.gateway.services.bridge.ssl.enabled }}
       appProtocol: https
       {{ else }}
       appProtocol: http
-      {{ end }}
       {{ end }}
       {{- end }}
       name: {{ printf "%s-%s" (.Values.gateway.name | trunc 56 | trimSuffix "-") "bridge" }}
@@ -57,7 +53,7 @@ spec:
       targetPort: {{ .Values.gateway.services.core.http.port }}
       protocol: TCP
       {{- if (include "common.service.supportsAppProtocol" .) }}
-      {{ if  .Values.gateway.services.core.service.appProtocol }}
+      {{ if .Values.gateway.services.core.service.appProtocol }}
       appProtocol: {{ .Values.gateway.services.core.service.appProtocol }}
       {{ else }}
       appProtocol: http
