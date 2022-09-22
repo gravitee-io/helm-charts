@@ -52,12 +52,10 @@ spec:
       {{- if (include "common.service.supportsAppProtocol" .) }}
       {{ if .Values.api.services.bridge.service.appProtocol }}
       appProtocol: {{ .Values.api.services.bridge.service.appProtocol }}
-      {{ else }}
-      {{ if .Values.api.services.bridge.ssl.enabled }}
+      {{ else if .Values.api.services.bridge.ssl.enabled }}
       appProtocol: https
       {{ else }}
       appProtocol: http
-      {{ end }}
       {{ end }}
       {{- end }}
       name: {{ printf "%s-%s" (.Values.api.name | trunc 56 | trimSuffix "-") "bridge" }}
