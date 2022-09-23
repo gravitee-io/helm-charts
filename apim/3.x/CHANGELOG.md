@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.57
+
+- [X] Provide advanced support to connect to the Hybrid Bridge
+
 ### 3.1.56
 
 - [X] Add support for Openshift Routes by removing ingress annotation
