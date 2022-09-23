@@ -95,9 +95,9 @@ data:
       {{- else if (eq .Values.management.type "http") }}
       http:
         url: {{ .Values.gateway.management.http.url }}
-        keepAlive: true
-        idleTimeout: 30000
-        connectTimeout: 10000
+        keepAlive: {{ .Values.gateway.management.http.keepAlive | default true }}
+        idleTimeout: {{ .Values.gateway.management.http.idleTimeout | default 30000 }}
+        connectTimeout: {{ .Values.gateway.management.http.connectTimeout | default 10000 }}
         {{- if .Values.gateway.management.http.proxy }}
         proxy:
           host: {{ .Values.gateway.management.http.proxy.host }}
