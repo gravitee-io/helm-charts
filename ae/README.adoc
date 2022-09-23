@@ -1,3 +1,5 @@
+:toc:
+
 [[graviteeio-alert-engine-helm-chart]]
 == Gravitee.io Alert Engine Helm Chart
 
@@ -30,31 +32,6 @@ If you want to let Helm to create the Service Account with required cluster role
 Please note that `managedServiceAccount` is enabled by default and so, you'll have to switch it off if you want to manage the Service Account by yourself.
 
 WARNING: rbac.yml comes with default `graviteeio` namespace. Make sure to use the right namespace if you have overridden it.
-
-[IMPORTANT]
-====
-Alert Engine need a https://docs.gravitee.io/ee/ee_license.html[license] to work. You can define it by:
-
-* fill the `license.key` field in the `values.yml` file.
-* add helm arg: `--set license.key=<license.key in base64>`
-
-To get the license.key value, encode your file `license.key` in `base64`:
-
-* linux: `base64 -w 0 license.key`
-* macOS: `base64 license.key`
-
-Example:
-
-[source,bash]
-----
-export GRAVITEESOURCE_LICENSE_B64="$(base64 -w 0 license.key)"
-
-helm install \
-  --set license.key=${GRAVITEESOURCE_LICENSE_B64} \
-  graviteeio-ae \
-  graviteeio/ae
-----
-====
 
 === Installing
 
@@ -92,6 +69,30 @@ To install the chart using the chart archive, run:
 ....
 $ helm install ae-1.0.0.tgz
 ....
+
+=== License
+
+Alert Engine need a https://docs.gravitee.io/ee/ee_license.html[license] to work. You can define it by:
+
+* fill the `license.key` field in the `values.yml` file.
+* add helm arg: `--set license.key=<license.key in base64>`
+
+To get the license.key value, encode your file `license.key` in `base64`:
+
+* linux: `base64 -w 0 license.key`
+* macOS: `base64 license.key`
+
+Example:
+
+[source,bash]
+----
+export GRAVITEESOURCE_LICENSE_B64="$(base64 -w 0 license.key)"
+
+helm install \
+  --set license.key=${GRAVITEESOURCE_LICENSE_B64} \
+  graviteeio-ae \
+  graviteeio/ae
+----
 
 === Configuration
 

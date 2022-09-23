@@ -167,6 +167,13 @@ spec:
             - name: graviteeio-am-jdbc-ext
               mountPath: /opt/graviteeio-am-gateway/plugins/ext/reporter-am-jdbc
           {{- end }}
+          {{- with .Values.license }}
+          {{- if .key }}
+            - name: licensekey
+              mountPath: /opt/graviteeio-am-gateway/license
+              readOnly: true
+          {{- end }}
+          {{- end }}
           {{- include "deployment.pluginVolumeMounts" $pluginParams | indent 12 }}
           {{- with .Values.gateway.extraVolumeMounts }}
           {{- tpl . $ | nindent 12 }}
@@ -182,6 +189,16 @@ spec:
         {{- if and .Values.jdbc.drivers (eq .Values.management.type "jdbc") }}
         - name: graviteeio-am-jdbc-ext
           emptyDir: {}
+        {{- end }}
+        {{- with .Values.license }}
+        {{- if .key }}
+        - name: licensekey
+          secret:
+            secretName: licensekey
+            items:
+              - key: licensekey
+                path: license.key
+        {{- end }}
         {{- end }}
         {{- include "deployment.pluginVolumes" $pluginParams | indent 8 }}
         {{- with .Values.gateway.extraVolumes }}
