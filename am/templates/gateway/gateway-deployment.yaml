@@ -194,7 +194,7 @@ spec:
         {{- if .key }}
         - name: licensekey
           secret:
-            secretName: licensekey
+            secretName: {{ .name }}
             items:
               - key: licensekey
                 path: license.key

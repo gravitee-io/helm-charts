@@ -67,6 +67,7 @@ tests:
     template: api/api-deployment.yaml
     set:
       license:
+        name: licensekey_am
         key: unleashThePowerOfYourAPIs
     asserts:
       - hasDocuments:
@@ -84,7 +85,7 @@ tests:
           content:
             name: licensekey
             secret:
-              secretName: licensekey
+              secretName: licensekey_am
               items:
                 - key: licensekey
                   path: license.key

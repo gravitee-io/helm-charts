@@ -235,5 +235,6 @@ engine:
   # On macOS : `base64 license.key`
   # You can also define it from command line :
   # `helm install --name graviteeio-ae graviteeio/ae --set license.key=${GRAVITEESOURCE_LICENSE_B64}`
-#license:
+license:
+  name: licensekey
 #  key: <put here your license.key file encoded in base64>

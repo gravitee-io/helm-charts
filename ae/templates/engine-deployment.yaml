@@ -158,11 +158,11 @@ spec:
         - name: config
           configMap:
             name: {{ template "gravitee.engine.fullname" . }}
-      {{- if .Values.license }}
-      {{- if .Values.license.key }}
+      {{- with .Values.license }}
+      {{- if .key }}
         - name: licensekey
           secret:
-            secretName: licensekey
+            secretName: {{ .name }}
             items:
               - key: licensekey
                 path: license.key

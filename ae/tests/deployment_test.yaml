@@ -284,6 +284,7 @@ tests:
     template: engine-deployment.yaml
     set:
       license:
+        name: licensekey_ae
         key: unleashThePowerOfYourAPIs
     asserts:
       - hasDocuments:
@@ -301,7 +302,7 @@ tests:
           content:
             name: licensekey
             secret:
-              secretName: licensekey
+              secretName: licensekey_ae
               items:
                 - key: licensekey
                   path: license.key
