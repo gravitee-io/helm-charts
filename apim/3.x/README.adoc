@@ -839,6 +839,41 @@ command definition |`+null+`
 |===
 
 
+==== License
+
+For Enterprise plugin, and only for them, you have to include a https://docs.gravitee.io/ee/ee_license.html[license] in APIM. You can define it by:
+
+* fill the `license.key` field in the `values.yml` file.
+* add helm arg: `--set license.key=<license.key in base64>`
+
+To get the license.key value, encode your file `license.key` in `base64`:
+
+* linux: `base64 -w 0 license.key`
+* macOS: `base64 license.key`
+
+Example:
+
+[source,bash]
+----
+export GRAVITEESOURCE_LICENSE_B64="$(base64 -w 0 license.key)"
+
+helm install \
+  --set license.key=${GRAVITEESOURCE_LICENSE_B64} \
+  --create-namespace --namespace gravitee-apim \
+  graviteeio-apim3x \
+  graviteeio/apim3
+----
+
+
+[cols=",,",options="header",]
+|===
+|Parameter |Description |Default
+
+|license.key |string |license.key file encoded in base64 |
+
+|===
+
+
 == OpenShift
 
 The Gravitee.io API Management Helm Chart supports OpenShift > 3.10
