@@ -279,3 +279,53 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].securityContext.runAsUser
           value: 1001 # Use engine.securityContext.runAsUser value
+
+  - it: Deploy use licensekey secret if given
+    template: engine-deployment.yaml
+    set:
+      license:
+        name: licensekey_ae
+        key: unleashThePowerOfYourAPIs
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: licensekey
+            mountPath: /opt/graviteeio-alert-engine/license
+            readOnly: true
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: licensekey
+            secret:
+              secretName: licensekey_ae
+              items:
+                - key: licensekey
+                  path: license.key
+
+  - it: Deploy not use licensekey secret by default
+    template: engine-deployment.yaml
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - notContains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: licensekey
+            mountPath: /opt/graviteeio-alert-engine/license
+            readOnly: true
+      - notContains:
+          path: spec.template.spec.volumes
+          content:
+            name: licensekey
+            secret:
+              secretName: licensekey
+              items:
+                - key: licensekey
+                  path: license.key

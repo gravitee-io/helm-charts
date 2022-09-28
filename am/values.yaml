@@ -786,3 +786,8 @@ initContainers:
     runAsUser: 1001
     runAsNonRoot: true
   env: []
+
+# For enterprise plugin only, you will need a license
+license:
+  name: licensekey
+#  key: <put here your license.key file encoded in base64>

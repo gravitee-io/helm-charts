@@ -1,6 +1,13 @@
 # Changelog
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
+
+### 1.0.48
+
+- [X] Add optional value to use gravitee licence key
+
+- Update gravitee.io AM v3.18.6
+
 ### 1.0.47
 
 - [X] Trunc port name with k8s limit (63)

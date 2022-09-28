@@ -2,6 +2,12 @@
 
 This file documents all notable changes to [Gravitee.io Alert Engine](https://github.com/gravitee-io/helm-charts/tree/master/ae) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.1.40
+
+- [X] Add optional value to use gravitee licence key
+
+- Update gravitee.io AE v1.6.5
+
 ### 1.1.39
 
 - [X] Trunc port name with k8s limit (63)
