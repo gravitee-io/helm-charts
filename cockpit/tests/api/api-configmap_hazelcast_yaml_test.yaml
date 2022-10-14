@@ -94,11 +94,12 @@ tests:
                 </network>
             </hazelcast>
 
-  - it: should apply default hazelcast.yml configuration
+  - it: should apply default hazelcast.yml configuration on the 1st revision
     template: api/api-configmap.yaml
     release:
       name: my-cockpit
       namespace: unittest
+      revision: 1
     chart:
       version: 1.0.0-chart
       appVersion: 1.0.0-app
@@ -109,7 +110,55 @@ tests:
           path: data.[hazelcast.yml]
           value: |
             hazelcast:
-              cluster-name: my-cockpit_0
+              cluster-name: my-cockpit_52359412
+              network:
+                join:
+                  multicast:
+                    enabled: false
+                  tcp-ip:
+                    enabled: false
+                  kubernetes:
+                    enabled: true
+                    namespace: unittest
+                    service-name: my-cockpit-api
+
+              properties:
+                hazelcast.logging.type: slf4j
+                hazelcast.max.wait.seconds.before.join: 3
+                hazelcast.member.list.publish.interval.seconds: 5
+                hazelcast.socket.client.bind.any: false
+
+              cp-subsystem:
+                cp-member-count: 0
+              map:
+                cockpit.channels.*:
+                  backup-count: 0
+                  async-backup-count: 1
+              queue:
+                commands-*:
+                  backup-count: 0
+                  async-backup-count: 1
+              reliable-topic:
+                cockpit.primaryChannels:
+                  read-batch-size: 10
+
+  - it: should apply default hazelcast.yml configuration on a 2nd revision
+    template: api/api-configmap.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+      revision: 2
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: data.[hazelcast.yml]
+          value: |
+            hazelcast:
+              cluster-name: my-cockpit_2
               network:
                 join:
                   multicast:
