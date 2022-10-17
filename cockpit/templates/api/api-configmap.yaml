@@ -1,4 +1,10 @@
 {{- if .Values.api.enabled -}}
+
+{{- $clusterversion := default "0" .Release.Revision | toString -}}
+{{- if eq $clusterversion "1"  -}}
+  {{- $clusterversion = .Values.api.image.tag | default .Chart.AppVersion | sha1sum | substr 0 8 -}}
+{{- end -}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -251,7 +257,7 @@ data:
 
   hazelcast.yml: |
     hazelcast:
-      cluster-name: {{ .Release.Name }}_{{ .Release.Revision }}
+      cluster-name: {{ .Release.Name }}_{{ $clusterversion }}
       network:
         join:
           multicast:
