@@ -754,6 +754,18 @@ gateway:
   websocket: false
   ratelimit:
     redis:
+       # sentinel mode
+#      password:
+#      sentinel:
+#        master: mymaster
+#        password:
+#        nodes:
+#          - host: localhost
+#            port: 26379
+#          - hots: host2
+#            port: 6379
+
+       # Standalone mode
       # host:
       # port:
       # password:

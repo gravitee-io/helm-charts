@@ -1,0 +1,63 @@
+suite: Test API Gateway Configmap with Redis support
+templates:
+  - "gateway/gateway-configmap.yaml"
+
+tests:
+  - it: Check if sentinel mode is enabled
+    template: gateway/gateway-configmap.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 3.15.2
+    set:
+      ratelimit:
+        type: "redis"
+      gateway:
+        ratelimit:
+          redis:
+            password: redis_pass
+            sentinel:
+              master: mymaster
+              nodes:
+                - host: localhost
+                  port: 26379
+                - host: remotehost
+                  port: 26379
+              password: my_password
+    asserts:
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "  * redis:\n
+                      *   sentinel:\n
+                      *     password: my_password\n
+                      *     master: mymaster\n
+                      *     nodes:\n
+                      *       - host: localhost\n
+                      *         port: 26379\n
+                      *       - host: remotehost\n
+                      *         port: 26379\n
+                      *   password: redis_pass"
+
+  - it: Check if Standalone mode is enabled
+    template: gateway/gateway-configmap.yaml
+    chart:
+      version: 1.0.0-chart
+      appVersion: 3.15.2
+    set:
+      ratelimit:
+        type: "redis"
+      gateway:
+        ratelimit:
+          type: redis
+          redis:
+            host: localhost
+            port: 26379
+            password: my_password
+    asserts:
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "  * redis:\n
+                      *   - host: localhost\n
+                      *     port: 26379\n
+                      *     password: my_password"
+
+
