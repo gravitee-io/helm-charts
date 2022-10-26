@@ -2,6 +2,11 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.49
+
+- [X] Manage the proxy settings for HTTP clients
+- [X] RollingUpdate maxUnavailable set to 25% to avoid stop when only 1 pod
+
 ### 1.0.48
 
 - [X] Add optional value to use gravitee licence key
