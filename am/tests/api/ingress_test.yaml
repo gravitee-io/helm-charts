@@ -56,3 +56,19 @@ tests:
       - equal:
           path: spec.ingressClassName
           value: nginx
+
+  - it: Check Ingress networking.k8s.io/v1 with IngressClassName as none
+    set:
+      api:
+        ingress:
+          management:
+            ingressClassName: none
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - isEmpty:
+          path: spec.ingressClassName

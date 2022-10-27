@@ -79,3 +79,18 @@ tests:
           path: metadata.annotations.[kubernetes.io/ingress.class]
       - isNotEmpty:
           path: metadata.annotations.[my-annotation]
+
+  - it: Check Ingress networking.k8s.io/v1 with IngressClassName as none
+    set:
+      gateway:
+        ingress:
+          ingressClassName: none
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - isEmpty:
+          path: spec.ingressClassName

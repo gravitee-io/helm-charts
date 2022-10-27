@@ -327,7 +327,7 @@ api:
 #          path: /management/_(.*)
 #          hosts:
 #            - am.example.com
-#          annotations:
+          annotations: {}
 #            kubernetes.io/ingress.class: nginx
 #            nginx.ingress.kubernetes.io/rewrite-target: /_$1
         service:
@@ -372,14 +372,9 @@ api:
       ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
       # kubernetes.io/tls-acme: "true"
     #tls:
-      # Secrets must be manually created in the namespace.
-      # - secretName: chart-example-tls
-      #   hosts:
-      #     - chart-example.local
-    tls:
-      - hosts:
-          - am.example.com
-        secretName: api-custom-cert
+    # - hosts:
+    #    - am.example.com
+    #  secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -554,12 +549,12 @@ gateway:
       ingress:
         enabled: false
         ingressClassName: ""
-      #          path: /management/_(.*)
-      #          hosts:
-      #            - am.example.com
-      #          annotations:
-      #            kubernetes.io/ingress.class: nginx
-      #            nginx.ingress.kubernetes.io/rewrite-target: /_$1
+        path: /management/_(.*)
+        hosts:
+          - am.example.com
+        annotations: {}
+          # kubernetes.io/ingress.class: nginx
+          # nginx.ingress.kubernetes.io/rewrite-target: /_$1
       service:
         #       If you choose to enable this service, you'll need to expose the technical api
         #       on an accessible host outside of the pod: api.http.services.core.http.host
@@ -634,14 +629,9 @@ gateway:
       # ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
       # kubernetes.io/tls-acme: "true"
     #tls:
-      # Secrets must be manually created in the namespace.
-      # - secretName: chart-example-tls
-      #   hosts:
-      #     - chart-example.local
-    tls:
-      - hosts:
-          - am.example.com
-        secretName: api-custom-cert
+    #  - hosts:
+    #      - am.example.com
+    #    secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -772,15 +762,10 @@ ui:
       kubernetes.io/app-root: /
       kubernetes.io/rewrite-target: /
       ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\n"
-      #tls:
-      # Secrets must be manually created in the namespace.
-      # - secretName: chart-example-tls
-      #   hosts:
-      #     - chart-example.local
-    tls:
-      - hosts:
-          - am.example.com
-        secretName: api-custom-cert
+    #tls:
+    #  - hosts:
+    #      - am.example.com
+    #    secretName: api-custom-cert
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
