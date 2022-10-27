@@ -61,7 +61,12 @@ data:
       api:
         entrypoint: {{ .Values.api.http.api.entrypoint }}
     {{- end }}
-    
+
+    {{- if .Values.httpClient }}
+    httpClient:
+{{ toYaml .Values.httpClient | indent 6 }}
+    {{- end }}
+
     liquibase:
       enabled: {{ .Values.api.liquibase.enabled }}
   

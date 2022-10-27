@@ -138,6 +138,30 @@ See [MongoDB replicaset](https://artifacthub.io/packages/helm/bitnami/mongodb) f
 
 ** Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running AM locally.
 
+### Proxy configuration for HTTP clients
+
+To define the proxy settings for HTTP clients used by the Management API and the Gateway, the `httpClient` section needs to be defined into the values.yaml. This section will be apply on both Gateway and Management API configuration files.
+
+```yaml
+httpClient:
+  timeout: 10000 # in milliseconds
+  proxy:
+    enabled: false
+    exclude-hosts: # list of hosts to exclude from proxy (wildcard hosts are supported)
+      - '*.internal.com'
+      - internal.mycompany.com
+    type: HTTP #HTTP, SOCK4, SOCK5
+    http:
+      host: localhost
+      port: 3128
+      username: user
+      password: secret
+    https:
+      host: localhost
+      port: 3128
+      username: user
+      password: secret
+```
 
 ### Gravitee.io Configuration
 
@@ -313,14 +337,70 @@ There are two major considerations to have in mind when deploying Gravitee.io Ac
 1_ Use full host domain instead of paths for all the components (ingress paths are not well supported by OpenShift)
 2_ Override the security context to let OpenShift to define automatically the user-id and the group-id to run the containers.
 
-Here is an example regarding the UI component:
+Also, for Openshift to automatically create Routes from Ingress, you must define the ingressClassName to "none".
+
+Here is a standard values.yaml used to deploy Gravitee.io APIM into OpenShift:
 
 ```yaml
-ui:
+api:
+  ingress:
+    ingressClassName: none
+    path: /management
+    hosts:
+      - api-graviteeio.apps.openshift-test.l8e4.p1.openshiftapps.com
+    annotations:
+      route.openshift.io/termination: edge
+  securityContext: null
+  deployment:
     securityContext:
-        runAsUser: null
-        runAsGroup: null
-        runAsNonRoot: true
+      runAsUser: null
+      runAsGroup: null
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: RuntimeDefault
+
+gateway:
+  ingress:
+    ingressClassName: none
+    path: /
+    hosts:
+      - gw-graviteeio.apps.openshift-test.l8e4.p1.openshiftapps.com
+    annotations:
+      route.openshift.io/termination: edge
+  securityContext: null
+  deployment:
+    securityContext:
+      runAsUser: null
+      runAsGroup: null
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: RuntimeDefault
+
+ui:
+  ingress:
+    ingressClassName: none
+    path: /
+    hosts:
+      - console-graviteeio.apps.openshift-test.l8e4.p1.openshiftapps.com
+    annotations:
+      route.openshift.io/termination: edge
+  securityContext: null
+  deployment:
+    securityContext:
+      runAsUser: null
+      runAsGroup: null
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: RuntimeDefault
 ```
 
 By setting the value to `null` for `runAsUser` and `runAsGroup` it forces OpenShift to define the correct values for you while deploying the Helm Chart.

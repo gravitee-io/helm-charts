@@ -23,12 +23,10 @@ spec:
       {{- if (include "common.service.supportsAppProtocol" .) }}
       {{ if .Values.api.service.appProtocol }}
       appProtocol: {{ .Values.api.service.appProtocol }}
-      {{ else }}
-      {{ if .Values.api.ssl.enabled }}
+      {{ else if .Values.api.ssl.enabled }}
       appProtocol: https
       {{ else }}
       appProtocol: http
-      {{ end }}
       {{ end }}
       {{- end }}
       name: {{ .Values.api.name | trunc 63 | trimSuffix "-" }}
