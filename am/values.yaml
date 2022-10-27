@@ -23,6 +23,29 @@ am:
 chaos:
   enabled: false
 
+#####
+## Proxy settings to apply on HttpClient used by Management API and Gateway 
+## to perform external calls
+#####
+#httpClient:
+#  timeout: 10000 # in milliseconds
+#  proxy:
+#    enabled: false
+#    exclude-hosts: # list of hosts to exclude from proxy (wildcard hosts are supported)
+#      - '*.internal.com'
+#      - internal.mycompany.com
+#    type: HTTP #HTTP, SOCK4, SOCK5
+#    http:
+#      host: localhost
+#      port: 3128
+#      username: user
+#      password: secret
+#    https:
+#      host: localhost
+#      port: 3128
+#      username: user
+#      password: secret
+
 smtp:
   enabled: true
   host: smtp.example.com

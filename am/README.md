@@ -138,6 +138,30 @@ See [MongoDB replicaset](https://artifacthub.io/packages/helm/bitnami/mongodb) f
 
 ** Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running AM locally.
 
+### Proxy configuration for HTTP clients
+
+To define the proxy settings for HTTP clients used by the Management API and the Gateway, the `httpClient` section needs to be defined into the values.yaml. This section will be apply on both Gateway and Management API configuration files.
+
+```yaml
+httpClient:
+  timeout: 10000 # in milliseconds
+  proxy:
+    enabled: false
+    exclude-hosts: # list of hosts to exclude from proxy (wildcard hosts are supported)
+      - '*.internal.com'
+      - internal.mycompany.com
+    type: HTTP #HTTP, SOCK4, SOCK5
+    http:
+      host: localhost
+      port: 3128
+      username: user
+      password: secret
+    https:
+      host: localhost
+      port: 3128
+      username: user
+      password: secret
+```
 
 ### Gravitee.io Configuration
 

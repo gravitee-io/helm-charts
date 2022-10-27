@@ -75,6 +75,12 @@ data:
     liquibase:
       enabled: {{ .Values.gateway.liquibase.enabled }}
 
+
+    {{- if .Values.httpClient }}
+    httpClient:
+{{ toYaml .Values.httpClient | indent 6 }}
+    {{- end }}
+
     management:
       type: {{ .Values.management.type | default "mongodb" }}
       {{- if or (eq .Values.management.type "mongodb") (kindIs "invalid" .Values.management.type) }}
