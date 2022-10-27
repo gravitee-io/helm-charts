@@ -337,14 +337,70 @@ There are two major considerations to have in mind when deploying Gravitee.io Ac
 1_ Use full host domain instead of paths for all the components (ingress paths are not well supported by OpenShift)
 2_ Override the security context to let OpenShift to define automatically the user-id and the group-id to run the containers.
 
-Here is an example regarding the UI component:
+Also, for Openshift to automatically create Routes from Ingress, you must define the ingressClassName to "none".
+
+Here is a standard values.yaml used to deploy Gravitee.io APIM into OpenShift:
 
 ```yaml
-ui:
+api:
+  ingress:
+    ingressClassName: none
+    path: /management
+    hosts:
+      - api-graviteeio.apps.openshift-test.l8e4.p1.openshiftapps.com
+    annotations:
+      route.openshift.io/termination: edge
+  securityContext: null
+  deployment:
     securityContext:
-        runAsUser: null
-        runAsGroup: null
-        runAsNonRoot: true
+      runAsUser: null
+      runAsGroup: null
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: RuntimeDefault
+
+gateway:
+  ingress:
+    ingressClassName: none
+    path: /
+    hosts:
+      - gw-graviteeio.apps.openshift-test.l8e4.p1.openshiftapps.com
+    annotations:
+      route.openshift.io/termination: edge
+  securityContext: null
+  deployment:
+    securityContext:
+      runAsUser: null
+      runAsGroup: null
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: RuntimeDefault
+
+ui:
+  ingress:
+    ingressClassName: none
+    path: /
+    hosts:
+      - console-graviteeio.apps.openshift-test.l8e4.p1.openshiftapps.com
+    annotations:
+      route.openshift.io/termination: edge
+  securityContext: null
+  deployment:
+    securityContext:
+      runAsUser: null
+      runAsGroup: null
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: RuntimeDefault
 ```
 
 By setting the value to `null` for `runAsUser` and `runAsGroup` it forces OpenShift to define the correct values for you while deploying the Helm Chart.

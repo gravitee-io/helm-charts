@@ -23,12 +23,10 @@ spec:
       {{- if (include "common.service.supportsAppProtocol" .) }}
       {{ if .Values.gateway.service.appProtocol }}
       appProtocol: {{ .Values.gateway.service.appProtocol }}
-      {{ else }}
-      {{ if .Values.gateway.ssl.enabled }}
+      {{ else if .Values.gateway.ssl.enabled }}
       appProtocol: https
       {{ else }}
       appProtocol: http
-      {{ end }}
       {{ end }}
       {{- end }}
       name: {{ .Values.gateway.name | trunc 63 | trimSuffix "-" }}

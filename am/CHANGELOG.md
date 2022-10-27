@@ -6,6 +6,7 @@ This file documents all notable changes to [Gravitee.io Access Management 3.x](h
 
 - [X] Manage the proxy settings for HTTP clients
 - [X] RollingUpdate maxUnavailable set to 25% to avoid stop when only 1 pod
+- [X] Add support for Openshift Routes by removing ingress annotation
 
 ### 1.0.48
 

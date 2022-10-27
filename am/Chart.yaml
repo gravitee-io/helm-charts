@@ -25,3 +25,4 @@ annotations:
   artifacthub.io/changes: |
     - Manage the proxy settings for HTTP clients
     - RollingUpdate maxUnavailable set to 25% to avoid stop when only 1 pod
+    - Add support for Openshift Routes by removing ingress annotation
