@@ -28,3 +28,4 @@ annotations:
     - Update Elasticsearch version to 7.17.9
     - Update MongoDB version to 5.0.14
     - Add variable for ingress path type
+    - Remove legacy Kube Controller config. This feature is now provided by [Gravitee Operator for Kubernetes](https://github.com/gravitee-io/gravitee-kubernetes-operator)

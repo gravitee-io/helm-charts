@@ -190,8 +190,8 @@ tests:
           core:
             http:
               enabled: true
-          kubeController:
-            enabled: true
+        readinessProbe:
+          apiSync: true
     asserts:
       - hasDocuments:
           count: 1
