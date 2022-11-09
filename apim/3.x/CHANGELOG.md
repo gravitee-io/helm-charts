@@ -13,6 +13,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 - [X] Update Elasticsearch version to 7.17.9
 - [X] Update MongoDB version to 5.0.14
 - [X] Add variable for ingress path type
+- [X] Remove legacy Kube Controller config. This feature is now provided by [Gravitee Operator for Kubernetes](https://github.com/gravitee-io/gravitee-kubernetes-operator)
 
 ### 3.1.61
 
