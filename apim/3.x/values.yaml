@@ -831,8 +831,6 @@ gateway:
 #         type: ClusterIP
 #         externalPort: 18082
 #         appProtocol: http
-    kubeController:
-      enabled: false
     bridge:
       enabled: false
       # host: localhost

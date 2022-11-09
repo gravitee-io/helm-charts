@@ -115,10 +115,6 @@ spec:
         {{- tpl . $ | nindent 8 }}
         {{- end }}
       {{- end }}
-      {{- if .Values.gateway.services.kubeController.enabled }}          
-      serviceAccount: {{ .Values.gateway.services.kubeController.serviceAccount | default "default" }}
-      serviceAccountName: {{ .Values.gateway.services.kubeController.serviceAccount | default "default" }}
-      {{- end }}
       containers:
         - name: {{ template "gravitee.gateway.fullname" . }}
           image: "{{ .Values.gateway.image.repository }}:{{ default .Chart.AppVersion .Values.gateway.image.tag }}"
@@ -131,7 +127,7 @@ spec:
             - name: {{ printf "%s-%s" (.Values.gateway.name | trunc 8 | trimSuffix "-") "bridge" }}
               containerPort: {{ .Values.gateway.services.bridge.service.internalPort }}
             {{- end }}
-            {{- if and .Values.gateway.services.core.http.enabled (or .Values.gateway.services.kubeController.enabled .Values.gateway.readinessProbe.apiSync) }}
+            {{- if and .Values.gateway.services.core.http.enabled (or .Values.gateway.readinessProbe.apiSync) }}
             - name: {{ printf "%s-%s" (.Values.gateway.name | trunc 7 | trimSuffix "-") "techapi" }}
               containerPort: {{ .Values.gateway.services.core.http.port | default "18082" }}
             {{- end }}
@@ -141,12 +137,6 @@ spec:
               value: '${gravitee.home}/plugins'
             - name: GRAVITEE_PLUGINS_PATH_1
               value: '${gravitee.home}/plugins-ext'
-            {{- end }}
-            {{- if or .Values.gateway.services.kubeController.enabled }}
-            - name: KUBERNETES_AUTH_TRYKUBECONFIG
-              value: "false"
-            - name: KUBERNETES_AUTH_TRYSERVICEACCOUNT
-              value: "true"
             {{- end }}
 {{- if .Values.gateway.env | default .Values.gateway.deployment.extraEnvs }}
 {{ toYaml ( .Values.gateway.env | default .Values.gateway.deployment.extraEnvs ) | indent 12 }}
