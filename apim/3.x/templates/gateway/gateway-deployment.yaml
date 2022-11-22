@@ -157,12 +157,18 @@ spec:
             {{- if .Values.gateway.lifecycle.postStart }}
             postStart:
               exec:
-                command: {{ .Values.gateway.lifecycle.postStart }}
+                command:
+                  {{- range .Values.gateway.lifecycle.postStart }}
+                  - {{ . | quote }}
+                  {{- end }}
             {{- end }}
             {{- if .Values.gateway.lifecycle.preStop }}
             preStop:
               exec:
-                command: {{ .Values.gateway.lifecycle.preStop }}
+                command:
+                  {{- range .Values.gateway.lifecycle.preStop }}
+                  - {{ . | quote }}
+                  {{- end }}
             {{- end }}
           {{- end }}
           livenessProbe: {{ toYaml .Values.gateway.livenessProbe | nindent 12 }}
