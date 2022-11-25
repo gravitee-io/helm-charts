@@ -72,3 +72,16 @@ tests:
       - matchRegex:
           path: data.[gravitee.yml]
           pattern: "[ ]{6}password: jdbc-ssl-truststore-pass"
+
+  - it: should have mfa_rate settings
+    set:
+      gateway.mfa_rate.somevalue: block-duplicate-mfa-rate
+
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{2}somevalue: block-duplicate-mfa-rate"
