@@ -2,7 +2,7 @@ apiVersion: v1
 name: am
 # When the version is modified, make sure the artifacthub.io/changes list is updated
 # Also update CHANGELOG.md
-version: 1.0.49
+version: 1.0.50
 appVersion: 3.18.6
 description: Official Gravitee.io Helm chart for Access Management
 home: https://gravitee.io
@@ -23,6 +23,5 @@ annotations:
   # List of changes for the release in artifacthub.io
   # https://artifacthub.io/packages/helm/graviteeio/am?modal=changelog
   artifacthub.io/changes: |
-    - Manage the proxy settings for HTTP clients
-    - RollingUpdate maxUnavailable set to 25% to avoid stop when only 1 pod
-    - Add support for Openshift Routes by removing ingress annotation
+    - Manage mfa_rate limit on gateway
+    - Manage default certificates settings on management side

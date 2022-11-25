@@ -360,6 +360,10 @@ data:
     handlers:
 {{ toYaml .Values.gateway.handlers | indent 6 }}
     {{- end }}
+    {{- if or .Values.gateway.mfa_rate }}
+    mfa_rate:
+{{ toYaml .Values.gateway.mfa_rate | indent 6 }}
+    {{- end }}
 
   {{- if .Values.gateway.logging.debug }}
   logback.xml: |

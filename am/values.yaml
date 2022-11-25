@@ -428,6 +428,20 @@ api:
     ui:
       enabled: true
 
+  domains:
+    certificates:
+      default:
+        keysize: 2048
+        alias: default
+        keypass: gravitee
+        storepass: gravitee
+        validity: 365
+        algorithm: SHA256withRSA
+        name: cn=Gravitee.io
+        refresh:
+          delay: 10
+          timeUnit: MINUTES
+          
 gateway:
   enabled: true
   name: gateway
@@ -653,6 +667,11 @@ gateway:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+  mfa_rate:
+    enabled: true
+    limit: 5
+    timePeriod: 15
+    timeUnit: Minutes
 
 ui:
   enabled: true

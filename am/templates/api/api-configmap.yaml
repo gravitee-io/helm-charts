@@ -306,13 +306,18 @@ data:
     domains:
       certificates:
         default:
-          keysize: 2048
-          alias: default
-          keypass: gravitee
-          storepass: gravitee
-          validity: 365
-          algorithm: SHA256withRSA
-          name: cn=Gravitee.io
+          keysize: {{ .Values.api.domains.certificates.default.keysize }}
+          alias: {{ .Values.api.domains.certificates.default.alias }}
+          keypass:  {{ .Values.api.domains.certificates.default.keypass }}
+          storepass:  {{ .Values.api.domains.certificates.default.storepass }}
+          validity:  {{ .Values.api.domains.certificates.default.validity }}
+          algorithm:  {{ .Values.api.domains.certificates.default.algorithm }}
+          name:  {{ .Values.api.domains.certificates.default.name }}
+          {{- if .Values.api.domains.certificates.default.refresh }}
+          refresh:
+            delay: {{ .Values.api.domains.certificates.default.refresh.delay | default 10 }}
+            timeUnit: {{ .Values.api.domains.certificates.default.refresh.timeUnit | default "MINUTES" }}
+          {{- end }}
 
     jwt:
       secret: {{ .Values.api.jwt.secret }}
