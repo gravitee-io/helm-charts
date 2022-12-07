@@ -1,0 +1,104 @@
+
+apim:
+  enabled: true
+  management:
+    type: http
+  ratelimit:
+    type: redis
+  api:
+    enabled: false
+  ui:
+    enabled: false
+  portal:
+    enabled: false
+  elasticsearch:
+    enabled: false
+  mongodb:
+    enabled: false
+  es:
+    enabled: false
+  
+  gateway:
+    image:
+      tag: 3.19.4
+      pullPolicy: Always
+    management:
+      http:
+        url: https://bridge-gateway-url:bridge-gateway-port
+        username: my_username
+        password: my_password
+    ratelimit:
+      redis:
+        host: "redis"
+        port: 6379
+    reporters:
+      tcp:
+        enabled: true
+        host: logstash
+        port: 8379
+        output: elasticsearch
+      elasticsearch:
+        enabled: false
+
+logstash:
+  enabled: true
+  service:
+    type: ClusterIP
+    ports:
+      - name: tcp
+        port: 8379
+        protocol: TCP
+        targetPort: 8379
+  extraVolumes:
+  - name: logstash-config
+    configMap:
+      name: logstash-config
+      items:
+        - key: logstash.yml
+          path: logstash.yml
+        - key: pipelines.yml
+          path: pipelines.yml
+
+  - name: pipelines
+    configMap:
+      name: pipeline-config
+
+  extraVolumeMounts:
+  - name: logstash-config
+    mountPath: /usr/share/logstash/config/logstash.yml
+    subPath: logstash.yml
+  - name: logstash-config
+    mountPath: /usr/share/logstash/config/pipelines.yml
+    subPath: pipelines.yml
+  - name: pipelines
+    mountPath: /usr/share/logstash/pipeline
+
+  extraEnvs:
+    - name: S3_ACCESS_KEY_ID
+    # value: the_value_goes_here
+    # valueFrom:
+    #   secretKeyRef:
+    #     name: s3
+    #     key: accessKeyId
+    - name: S3_SECRET_ACCESS_KEY
+    # value: the_value_goes_here
+    # valueFrom:
+    #   secretKeyRef:
+    #     name: s3
+    #     key: secretAccessKey
+    - name: S3_REGION
+    # value: the_value_goes_here
+    # valueFrom:
+    #   secretKeyRef:
+    #     name: s3
+    #     key: region
+    - name: S3_BUCKET
+    # value: the_value_goes_here
+    # valueFrom:
+    #   secretKeyRef:
+    #     name: s3
+    #     key: bucket
+
+redis:
+  enabled: true
+  architecture: standalone

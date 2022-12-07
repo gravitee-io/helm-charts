@@ -1,0 +1,13 @@
+{{- if .Values.logstash.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+data:
+  logstash.yml: |
+    http.host: "0.0.0.0"
+    
+  pipelines.yml: |
+    - pipeline.id: gravitee
+      path.config: "/usr/share/logstash/pipeline/gravitee.conf"
+{{- end -}}

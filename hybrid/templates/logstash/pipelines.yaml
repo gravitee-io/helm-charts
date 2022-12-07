@@ -1,0 +1,31 @@
+{{- if .Values.logstash.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pipeline-config
+data:
+  gravitee.conf: |
+    input {
+      tcp {
+          port => 8379
+          codec => "json"
+      }
+    }
+
+    filter {
+        if [type] != "request" {
+            mutate { remove_field => ["path", "host"] }
+        }
+    }
+
+    output {
+      s3 {
+        access_key_id => "${S3_ACCESS_KEY_ID}"
+        secret_access_key => "${S3_SECRET_ACCESS_KEY}"
+        region => "${S3_REGION}"
+        bucket => "${S3_BUCKET}"
+        size_file => 10485760
+        codec => "json_lines"
+      }
+    }
+{{- end -}}

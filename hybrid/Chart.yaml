@@ -1,0 +1,38 @@
+apiVersion: v2
+name: hybrid
+version: 1.0.0
+appVersion: 1.0.0
+description: Official Gravitee.io Helm chart for SAAS Hybrid Deployment
+home: https://gravitee.io
+sources:
+  - https://github.com/gravitee-io
+icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
+keywords:
+  - gravitee.io
+  - gravitee
+  - graviteeio 
+  - API
+  - API Management
+  - API Gateway Hybrid
+kubeVersion: ">=1.14.0-0"
+
+dependencies:
+  - name: apim3
+    version: ~3.1
+    repository: https://helm.gravitee.io
+    condition: apim.enabled
+    alias: apim
+  - name: redis
+    version: ~17.3
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+  - name: logstash
+    version: ~8.5
+    repository: https://helm.elastic.co
+    condition: logstash.enabled
+
+annotations:
+  # List of changes for the release in artifacthub.io
+  # https://artifacthub.io/packages/helm/graviteeio/hybrid?modal=changelog
+  artifacthub.io/changes: |
+    - Initial implementation of the Hybrid helm chart

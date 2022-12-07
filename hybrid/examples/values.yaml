@@ -1,0 +1,37 @@
+
+apim:
+  gateway:
+    image:
+      tag: 3.19.4
+    management:
+      http:
+        url: https://bridge-gateway-url:bridge-gateway-port
+        username: my_username
+        password: my_password
+
+logstash:
+  extraEnvs:
+    - name: S3_ACCESS_KEY_ID
+    # value: the_value_goes_here
+    # valueFrom:
+    #   secretKeyRef:
+    #     name: s3
+    #     key: accessKeyId
+    - name: S3_SECRET_ACCESS_KEY
+    # value: the_value_goes_here
+    # valueFrom:
+    #   secretKeyRef:
+    #     name: s3
+    #     key: secretAccessKey
+    - name: S3_REGION
+    # value: the_value_goes_here
+    # valueFrom:
+    #   secretKeyRef:
+    #     name: s3
+    #     key: region
+    - name: S3_BUCKET
+    # value: the_value_goes_here
+    # valueFrom:
+    #   secretKeyRef:
+    #     name: s3
+    #     key: bucket
