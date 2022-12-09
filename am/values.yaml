@@ -9,7 +9,7 @@ am:
   # Custom service account override that the pod will use
   serviceAccount: ""
 
-  clusterRoleRules:
+  roleRules:
     - apiGroups:
         - ""
       resources:

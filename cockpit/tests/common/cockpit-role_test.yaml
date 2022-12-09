@@ -1,9 +1,9 @@
-suite: Cockpit - Common - ClusterRole config
+suite: Cockpit - Common - Role config
 templates:
-  - "common/cockpit-clusterrole.yaml"
+  - "common/cockpit-role.yaml"
 tests:
   - it: should generate nothing when managedServiceAccount is disabled
-    template: common/cockpit-clusterrole.yaml
+    template: common/cockpit-role.yaml
     set:
       cockpit:
         managedServiceAccount: false
@@ -15,7 +15,17 @@ tests:
           count: 0
 
   - it: should apply labels
-    template: common/cockpit-clusterrole.yaml
+    template: common/cockpit-role.yaml
+    set:
+      cockpit:
+        managedServiceAccount: true
+        roleRules:
+          - apiGroups:
+              - ""
+            resources:
+              - secrets
+            verbs:
+              - get
     release:
       name: my-cockpit
       namespace: unittest
@@ -26,7 +36,7 @@ tests:
       - hasDocuments:
           count: 1
       - isKind:
-          of: ClusterRole
+          of: Role
       - equal:
           path: metadata.labels
           value:
@@ -37,8 +47,25 @@ tests:
             app.kubernetes.io/version: 1.0.0-app
             helm.sh/chart: cockpit-1.0.0-chart
 
-  - it: should apply default clusterrole configuration
-    template: common/cockpit-clusterrole.yaml
+  - it: should apply default role configuration
+    template: common/cockpit-role.yaml
+    set:
+      cockpit:
+        managedServiceAccount: true
+        roleRules:
+          - apiGroups:
+              - ""
+            resources:
+              - endpoints
+              - pods
+              - nodes
+              - services
+              - configmaps
+              - secrets
+            verbs:
+              - get
+              - list
+              - watch
     release:
       name: my-cockpit
       namespace: unittest
@@ -46,12 +73,12 @@ tests:
       - hasDocuments:
           count: 1
       - isKind:
-          of: ClusterRole
+          of: Role
       - isAPIVersion:
           of: rbac.authorization.k8s.io/v1
       - equal:
           path: metadata.name
-          value: my-cockpit-cockpit-cluster-role
+          value: my-cockpit-cockpit-role
       - equal:
           path: rules
           value:
