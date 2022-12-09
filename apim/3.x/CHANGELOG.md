@@ -10,6 +10,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 - [X] Fix default ingress path for ui
 - [X] Add API properties config of the Management API and Gateway
 - [X] Update APIM version to 3.20.1
+- [X] Update Elasticsearch version to 7.17.9
 
 ### 3.1.61
 
