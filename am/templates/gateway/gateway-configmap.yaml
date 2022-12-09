@@ -388,11 +388,23 @@ data:
     <configuration>
 
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            {{- if .Values.gateway.logging.stdout.json }}
+            <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                    <jsonFormatter
+                            class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                    </jsonFormatter>
+                    <appendLineSeparator>true</appendLineSeparator>
+                    <timestampFormat>yyyy-MM-dd'T'HH:mm:ss.SSSXX</timestampFormat>
+                </layout>
+            </encoder>
+            {{- else }}
             <!-- encoders are assigned the type
                 ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
             <encoder>
                 <pattern>{{ .Values.gateway.logging.stdout.encoderPattern }}</pattern>
             </encoder>
+            {{- end }}
         </appender>
 
         {{- if .Values.gateway.logging.file.enabled }}
@@ -419,6 +431,9 @@ data:
         <logger name="com.graviteesource" level="{{ .Values.api.logging.graviteeSourceLevel }}" />
         <logger name="org.reflections" level="WARN" />
         <logger name="org.springframework" level="WARN" />
+        {{- if .Values.gateway.logging.extraLoggers }}
+{{ .Values.gateway.logging.extraLoggers | indent 12 }}
+        {{- end }}
 
         <!-- Strictly speaking, the level attribute is not necessary since -->
         <!-- the level of the root level is set to DEBUG by default.       -->
