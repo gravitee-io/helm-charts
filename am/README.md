@@ -197,6 +197,7 @@ httpClient:
 | api.logging.graviteeLevel | string | `"DEBUG"` |  |
 | api.logging.jettyLevel | string | `"INFO"` |  |
 | api.logging.stdout.encoderPattern | string | `"%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"` |  |
+| api.logging.stdout.json | bool | `false` |  |
 | api.name | string | `"management-api"` |  |
 | api.reloadOnConfigChange | bool | `true` |  |
 | api.replicaCount | int | `1` |  |
@@ -244,6 +245,7 @@ httpClient:
 | gateway.logging.graviteeLevel | string | `"DEBUG"` |  |
 | gateway.logging.jettyLevel | string | `"WARN"` |  |
 | gateway.logging.stdout.encoderPattern | string | `"%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"` |  |
+| gateway.logging.stdout.json | bool | `false` |  |
 | gateway.name | string | `"gateway"` |  |
 | gateway.reloadOnConfigChange | bool | `true` |  |
 | gateway.replicaCount | int | `1` |  |

@@ -333,6 +333,9 @@ httpClient:
 |api.logging.stdout.encoderPattern |string
 |`+"%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"+` |
 
+|api.logging.stdout.json |bool
+|`false` |
+
 |api.name |string |`+"management-api"+` |
 
 |api.reloadOnConfigChange |bool |`+true+` |
@@ -436,6 +439,10 @@ httpClient:
 
 |gateway.logging.stdout.encoderPattern |string
 |`+"%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"+`
+|
+
+|gateway.logging.stdout.json |string
+|`false`
 |
 
 |gateway.name |string |`+"gateway"+` |

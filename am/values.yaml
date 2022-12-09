@@ -178,6 +178,7 @@ api:
   logging:
     debug: false
     stdout:
+      json: false
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
     file:
       enabled: true
@@ -192,6 +193,9 @@ api:
     graviteeLevel: DEBUG
     graviteeSourceLevel: DEBUG
     jettyLevel: INFO
+    #extraLoggers: |
+    #  <!-- Add here a list of loggers you want to add -->
+
   restartPolicy: OnFailure
   reloadOnConfigChange: true
   updateStrategy:
@@ -455,6 +459,7 @@ gateway:
   logging:
     debug: false
     stdout:
+      json: false
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
     file:
       enabled: true
@@ -469,6 +474,9 @@ gateway:
     graviteeLevel: DEBUG
     graviteeSourceLevel: DEBUG
     jettyLevel: WARN
+    #extraLoggers: |
+    #  <!-- Add here a list of logger you want to add -->
+
   reloadOnConfigChange: true
 
   liquibase:
