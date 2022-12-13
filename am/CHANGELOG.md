@@ -2,6 +2,13 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.50
+
+- [X] Replace ClusterRole with Role
+- [X] Manage mfa_rate limit on gateway
+- [X] Manage default certificates settings on management side
+- [X] Add settings for JSON logs format definition
+
 ### 1.0.49
 
 - [X] Manage the proxy settings for HTTP clients

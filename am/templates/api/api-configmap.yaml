@@ -306,13 +306,18 @@ data:
     domains:
       certificates:
         default:
-          keysize: 2048
-          alias: default
-          keypass: gravitee
-          storepass: gravitee
-          validity: 365
-          algorithm: SHA256withRSA
-          name: cn=Gravitee.io
+          keysize: {{ .Values.api.domains.certificates.default.keysize }}
+          alias: {{ .Values.api.domains.certificates.default.alias }}
+          keypass:  {{ .Values.api.domains.certificates.default.keypass }}
+          storepass:  {{ .Values.api.domains.certificates.default.storepass }}
+          validity:  {{ .Values.api.domains.certificates.default.validity }}
+          algorithm:  {{ .Values.api.domains.certificates.default.algorithm }}
+          name:  {{ .Values.api.domains.certificates.default.name }}
+          {{- if .Values.api.domains.certificates.default.refresh }}
+          refresh:
+            delay: {{ .Values.api.domains.certificates.default.refresh.delay | default 10 }}
+            timeUnit: {{ .Values.api.domains.certificates.default.refresh.timeUnit | default "MINUTES" }}
+          {{- end }}
 
     jwt:
       secret: {{ .Values.api.jwt.secret }}
@@ -407,13 +412,25 @@ data:
 
         <configuration>
 
-            <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-                <!-- encoders are assigned the type
-                    ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-                <encoder>
-                    <pattern>{{ .Values.api.logging.stdout.encoderPattern }}</pattern>
-                </encoder>
-            </appender>
+          <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+              {{- if .Values.api.logging.stdout.json }}
+              <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                  <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                      <jsonFormatter
+                              class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                      </jsonFormatter>
+                      <appendLineSeparator>true</appendLineSeparator>
+                      <timestampFormat>yyyy-MM-dd'T'HH:mm:ss.SSSXX</timestampFormat>
+                  </layout>
+              </encoder>
+              {{- else }}
+              <!-- encoders are assigned the type
+                  ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+              <encoder>
+                  <pattern>{{ .Values.api.logging.stdout.encoderPattern }}</pattern>
+              </encoder>
+               {{- end }}
+          </appender>
 
             {{- if .Values.api.logging.file.enabled }}
             <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -428,6 +445,9 @@ data:
             <logger name="io.gravitee" level="{{ .Values.api.logging.graviteeLevel }}" />
             <logger name="com.graviteesource" level="{{ .Values.api.logging.graviteeSourceLevel }}" />
             <logger name="org.eclipse.jetty" level="{{ .Values.api.logging.jettyLevel }}" />
+            {{- if .Values.api.logging.extraLoggers }}
+{{ .Values.api.logging.extraLoggers | indent 12 }}
+            {{- end }}
 
             <!-- Strictly speaking, the level attribute is not necessary since -->
             <!-- the level of the root level is set to DEBUG by default.       -->

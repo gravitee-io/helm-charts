@@ -103,6 +103,10 @@ spec:
           ports:
             - name: {{ .Values.gateway.service.internalPortName }}
               containerPort: {{ .Values.gateway.service.internalPort }}
+            {{- if .Values.gateway.services.core.http.enabled }}
+            - name: {{ printf "%s-%s" (.Values.gateway.name | trunc 7 | trimSuffix "-") "techapi" }}
+              containerPort: {{ .Values.gateway.services.core.http.port | default "18092" }}
+            {{- end }}
           env:
             {{- if $plugins }}
             - name: GRAVITEE_PLUGINS_PATH_0

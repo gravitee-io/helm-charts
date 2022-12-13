@@ -2,6 +2,9 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.7.2
+- [X] Replace ClusterRole with Role
+
 ### 1.7.1
 - [X] Generate hazelcast cluster name using the sha of the tag
 

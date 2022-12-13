@@ -9,7 +9,7 @@ am:
   # Custom service account override that the pod will use
   serviceAccount: ""
 
-  clusterRoleRules:
+  roleRules:
     - apiGroups:
         - ""
       resources:
@@ -178,6 +178,7 @@ api:
   logging:
     debug: false
     stdout:
+      json: false
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
     file:
       enabled: true
@@ -192,6 +193,9 @@ api:
     graviteeLevel: DEBUG
     graviteeSourceLevel: DEBUG
     jettyLevel: INFO
+    #extraLoggers: |
+    #  <!-- Add here a list of loggers you want to add -->
+
   restartPolicy: OnFailure
   reloadOnConfigChange: true
   updateStrategy:
@@ -428,6 +432,20 @@ api:
     ui:
       enabled: true
 
+  domains:
+    certificates:
+      default:
+        keysize: 2048
+        alias: default
+        keypass: gravitee
+        storepass: gravitee
+        validity: 365
+        algorithm: SHA256withRSA
+        name: cn=Gravitee.io
+        refresh:
+          delay: 10
+          timeUnit: MINUTES
+          
 gateway:
   enabled: true
   name: gateway
@@ -441,6 +459,7 @@ gateway:
   logging:
     debug: false
     stdout:
+      json: false
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
     file:
       enabled: true
@@ -455,6 +474,9 @@ gateway:
     graviteeLevel: DEBUG
     graviteeSourceLevel: DEBUG
     jettyLevel: WARN
+    #extraLoggers: |
+    #  <!-- Add here a list of logger you want to add -->
+
   reloadOnConfigChange: true
 
   liquibase:
@@ -653,6 +675,11 @@ gateway:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+  mfa_rate:
+    enabled: true
+    limit: 5
+    timePeriod: 15
+    timeUnit: Minutes
 
 ui:
   enabled: true
