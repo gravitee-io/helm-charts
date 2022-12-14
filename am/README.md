@@ -65,7 +65,9 @@ mongo:
 
 If you need to access a secret, you have to create a role within your namespace.
 
-If you need to access a secret in another namespace, you have to create a role in that namespace. The two roles can have the same name, but they are completely seperate objects.
+If you are deploying in another namespace and you need to access a secret there, you have to create a separate role in that namespace. The two roles can have the same name, but they are completely separate objects - each role only gives access to the namespace it is created in.
+
+For more information about roles, see [Role and ClusterRole](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole) in the [Kubernetes documentation](https://kubernetes.io/docs/).
 
 ### Shared configuration
 
