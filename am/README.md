@@ -63,6 +63,9 @@ mongo:
   uri: kubernetes://default/secrets/mongo/mongouri
 ```
 
+If you need to access a secret, you have to create a role within your namespace.
+
+If you need to access a secret in another namespace, you have to create a role in that namespace. The two roles can have the same name, but they are completely seperate objects.
 
 ### Shared configuration
 
