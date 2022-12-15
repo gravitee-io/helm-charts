@@ -249,6 +249,37 @@ httpClient:
 [cols=",,,",options="header",]
 |===
 |Key |Type |Default |Description
+
+|alerts.enabled |bool |`+true+` |
+
+|alerts.endpoints |string[] |`+- http://localhost:8072/+` |
+
+|alerts.security.enabled |bool |`+false+` |
+
+|alerts.security.username |string |`+"admin"+` |
+
+|alerts.security.password |string |`+"password"+` |
+
+|alerts.options.sendEventsOnHttp |bool |`+true+` |
+
+|alerts.options.useSystemProxy |bool |`+false+` |
+
+|alerts.options.connectTimeout |int |`+2000+` |
+
+|alerts.options.idleTimeout |int |`+120000+` |
+
+|alerts.options.keepAlive |bool |`+true+` |
+
+|alerts.options.pipelining |bool |`+true+` |
+
+|alerts.options.tryCompression |bool |`+true+` |
+
+|alerts.options.maxPoolSize |int |`+50+` |
+
+|alerts.options.bulkEventsSize |int |`+100+` |
+
+|alerts.options.bulkEventsWait |int |`+100+` |
+
 |api.autoscaling.enabled |bool |`+true+` |
 
 |api.autoscaling.maxReplicas |int |`+3+` |

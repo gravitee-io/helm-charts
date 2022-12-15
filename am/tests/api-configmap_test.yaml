@@ -344,3 +344,113 @@ tests:
       - matchRegex:
           path: data.[gravitee.yml]
           pattern: "[ ]{5}longitude: 0.07"
+  
+
+  - it: should set default alert engine values disabled
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}enabled: false"
+
+  - it: should set default alert engine values enabled
+    set:
+      alerts.enabled: true
+      alerts.security.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}enabled: true"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}discovery: true"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}username: admin"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}password: adminadmin"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}- http://localhost:8072/"
+
+  - it: should set alert engine values enabled
+    set:
+      alerts.enabled: true
+      alerts.options.sendEventsOnHttp: false
+      alerts.options.useSystemProxy: true
+      alerts.options.connectTimeout: 25
+      alerts.options.idleTimeout: 220000
+      alerts.options.keepAlive: false
+      alerts.options.pipelining: false
+      alerts.options.tryCompression: false
+      alerts.options.maxPoolSize: 500
+      alerts.options.bulkEventsSize: 1000
+      alerts.options.bulkEventsWait: 1000
+      alerts.security.enabled: true
+      alerts.security.username: a_username
+      alerts.security.password: a_password
+      alerts.endpoints: 
+        - https://www.host1.com
+        - https://www.host2.com
+    
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{3}enabled: true"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}discovery: true"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}sendEventsOnHttp: false"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}useSystemProxy: true"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}connectTimeout: 25"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}idleTimeout: 220000"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}keepAlive: false"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}pipelining: false"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}tryCompression: false"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}maxPoolSize: 500"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}bulkEventsSize: 1000"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{4}bulkEventsWait: 1000"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}username: a_username"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}password: a_password"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}- https://www.host1.com"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{6}- https://www.host2.com"

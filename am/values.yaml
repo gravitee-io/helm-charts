@@ -681,6 +681,15 @@ gateway:
     timePeriod: 15
     timeUnit: Minutes
 
+alerts:
+  enabled: false
+  endpoints:
+    - http://localhost:8072/
+  security:
+    enabled: false
+    username: admin
+    password: adminadmin
+
 ui:
   enabled: true
   name: management-ui

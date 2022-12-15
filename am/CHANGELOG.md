@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Access Management 3.x](h
 ### 1.0.51
 
 - [X] Add upgrader framework job
+- [X] Add alert engine configuration
 - [X] Add support for User Activity settings
 
 ### 1.0.50
