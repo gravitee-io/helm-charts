@@ -1,0 +1,10 @@
+manager:
+  image:
+    repository: k3d-graviteeio.docker.localhost:12345/kubernetes-operator
+    tag: 0.4.0
+  logs:
+    json: true
+  configMap:
+    name: gko-config
+  scope:
+    cluster: false
