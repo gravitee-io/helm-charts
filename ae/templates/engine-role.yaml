@@ -1,20 +1,13 @@
 {{- if .Values.engine.managedServiceAccount }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: Role
 metadata:
-  name: {{ template "engine.serviceAccount" . }}-cluster-role-binding
+  name: {{ template "engine.serviceAccount" . }}-role
   labels:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Values.engine.image.tag | default .Chart.AppVersion | quote }}
     app.kubernetes.io/component: "{{ .Values.engine.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-roleRef:
-  kind: ClusterRole
-  name: {{ template "engine.serviceAccount" . }}-cluster-role
-  apiGroup: rbac.authorization.k8s.io
-subjects:
-- kind: ServiceAccount
-  name: {{ template "engine.serviceAccount" . }}
-  namespace: {{ .Release.Namespace }}
+rules: {{ toYaml .Values.engine.roleRules | nindent 2 -}}
 {{- end -}}
