@@ -220,7 +220,7 @@ elasticsearch:
 
   image:
     repository: "docker.elastic.co/elasticsearch/elasticsearch-oss"
-    tag: "6.7.0"
+    tag: "6.8.23"
   client:
     name: client
     replicas: 2
