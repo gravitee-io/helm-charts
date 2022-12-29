@@ -63,6 +63,11 @@ mongo:
   uri: kubernetes://default/secrets/mongo/mongouri
 ```
 
+If you need to access a secret, you have to create a role within your namespace.
+
+If you are deploying in another namespace and you need to access a secret there, you have to create a separate role in that namespace. The two roles can have the same name, but they are completely separate objects - each role only gives access to the namespace it is created in.
+
+For more information about roles, see [Role and ClusterRole](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole) in the [Kubernetes documentation](https://kubernetes.io/docs/).
 
 ### Shared configuration
 
@@ -167,6 +172,21 @@ httpClient:
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| alerts.enabled |bool |`+true+` |
+| alerts.endpoints |string[] |`+- http://localhost:8072/+` |
+| alerts.security.enabled |bool |`+false+` |
+| alerts.security.username |string |`+"admin"+` |
+| alerts.security.password |string |`+"password"+` |
+| alerts.options.sendEventsOnHttp |bool |`+true+` |
+| alerts.options.useSystemProxy |bool |`+false+` |
+| alerts.options.connectTimeout |int |`+2000+` |
+| alerts.options.idleTimeout |int |`+120000+` |
+| alerts.options.keepAlive |bool |`+true+` |
+| alerts.options.pipelining |bool |`+true+` |
+| alerts.options.tryCompression |bool |`+true+` |
+| alerts.options.maxPoolSize |int |`+50+` |
+| alerts.options.bulkEventsSize |int |`+100+` |
+| alerts.options.bulkEventsWait |int |`+100+` |
 | api.autoscaling.enabled | bool | `true` |  |
 | api.autoscaling.maxReplicas | int | `3` |  |
 | api.autoscaling.minReplicas | int | `1` |  |
@@ -328,6 +348,13 @@ httpClient:
 | ui.service.internalPortName | string | `http` |  |
 | ui.service.name | string | `"nginx"` |  |
 | ui.service.type | string | `"ClusterIP"` |  |
+| userManagement.activity.enabled | boolean | `false` | |
+| userManagement.activity.anon.algorithm | enum(`SHA256`, `SHA512`, `NONE`)| `SHA256` | | 
+| userManagement.activity.anon.salt | string | `null` | |
+| userManagement.activity.retention.time | int | `3` | | 
+| userManagement.activity.retention.unit | `enum(java.time.temporal.ChronoUnit)` | `MONTHS` |  |
+| userManagement.activity.geolocation.variation.latitude | double | `0.07` | | 
+| userManagement.activity.geolocation.variation.longitude: | double | `0.07`  | |
 
 
 ## OpenShift

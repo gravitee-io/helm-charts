@@ -111,6 +111,16 @@ mongo:
   uri: kubernetes://default/secrets/mongo/mongouri
 ----
 
+[TIP]
+====
+If you need to access a secret, you have to create a role within your namespace.
+
+If you are deploying in another namespace and you need to access a secret there, you have to create a separate role in that namespace. The two roles can have the same name, but they are completely separate objects - each role only gives access to the namespace it is created in.
+
+For more information about roles, see link:https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole[Role and ClusterRole] in the link:https://kubernetes.io/docs/[Kubernetes documentation].
+====
+
+
 ==== Shared Configuration
 
 To configure common features such as:
@@ -838,6 +848,41 @@ https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycl
 command definition |`+null+`
 |===
 
+==== Alert Engine
+
+[cols=",,",options="header",]
+|===
+|Parameter |Description |Default
+|alerts.enabled |Enables AE connectivity |`+true+`
+
+|alerts.endpoints |Defines AE endpoints |`+- http://localhost:8072/+`
+
+|alerts.security.enabled |Enables AE secure connectivity |`+false+`
+
+|alerts.security.username |The AE username |`+"admin"+`
+
+|alerts.security.password |The AE password |`+"password"+`
+
+|alerts.options.sendEventsOnHttp |Send event on http to AE (websocket otherwise) |`+true+`
+
+|alerts.options.useSystemProxy |Use system proxy to connect to AE |`+false+`
+
+|alerts.options.connectTimeout |AE connection timeout |`+2000+`
+
+|alerts.options.idleTimeout |AE idleTimeout timeout |`+120000+`
+
+|alerts.options.keepAlive |Keep the connection alive  |`+true+`
+
+|alerts.options.pipelining |Enables event pipelining |`+true+`
+
+|alerts.options.tryCompression |Enables event compression |`+true+`
+
+|alerts.options.maxPoolSize |Set the maximum numner of connection |`+50+`
+
+|alerts.options.bulkEventsSize |Send events by packets |`+100+`
+
+|alerts.options.bulkEventsWait |Duration for events to be ready to be sent |`+100+`
+|===
 
 ==== License
 
@@ -977,5 +1022,4 @@ ui:
       seccompProfile:
         type: RuntimeDefault
 ----
-
 By setting the value to `null` for `runAsUser` and `runAsGroup` it forces OpenShift to define the correct values for you while deploying the Helm Chart.

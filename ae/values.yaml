@@ -32,7 +32,7 @@ engine:
   # Custom service account override that the pod will use
   serviceAccount: ""
 
-  clusterRoleRules:
+  roleRules:
     - apiGroups:
         - ""
       resources:
@@ -198,6 +198,12 @@ engine:
     enabled: false
     minAvailable: ""
     maxUnavailable: "50%"
+
+  cluster:
+    sync:
+      time:
+        value: 30
+        unit: "SECONDS"
 
   services:
     core:

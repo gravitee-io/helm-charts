@@ -2,7 +2,7 @@ apiVersion: v1
 name: am
 # When the version is modified, make sure the artifacthub.io/changes list is updated
 # Also update CHANGELOG.md
-version: 1.0.50
+version: 1.0.51
 appVersion: 3.18.6
 description: Official Gravitee.io Helm chart for Access Management
 home: https://gravitee.io
@@ -23,6 +23,9 @@ annotations:
   # List of changes for the release in artifacthub.io
   # https://artifacthub.io/packages/helm/graviteeio/am?modal=changelog
   artifacthub.io/changes: |
+    - Add upgrader framework job
+    - Add alert engine configuration
+    - Add support for User Activity settings
     - Replace ClusterRole with Role
     - Add settings for JSON logs format definition
     - Manage mfa_rate limit on gateway

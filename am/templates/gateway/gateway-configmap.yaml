@@ -365,6 +365,31 @@ data:
 {{ toYaml .Values.gateway.mfa_rate | indent 6 }}
     {{- end }}
 
+    # Alert Engine communication
+    {{ if .Values.alerts.enabled }}
+    alerts:
+      alert-engine-connector-ws:
+        enabled: true
+      alert-engine:
+        enabled: true
+        ws:
+          discovery: true
+          {{ toYaml .Values.alerts.options | nindent 10 | trim -}}
+          {{- with .Values.alerts.endpoints }}
+          endpoints:
+            {{ toYaml . | nindent 12 | trim -}}
+          {{- end }}
+          {{- if (eq .Values.alerts.security.enabled true) }}
+          security:
+            username: {{ .Values.alerts.security.username }}
+            password: {{ .Values.alerts.security.password }}
+          {{- end }}
+    {{- else }}
+    alerts:
+      alert-engine-connector-ws:
+        enabled: false
+    {{- end }}
+
   {{- if .Values.gateway.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>

@@ -66,6 +66,11 @@ data:
       hazelcast:
         config:
           path: ${gravitee.home}/config/hazelcast.xml
+      sync:
+        time:
+          value: {{ ((((.Values.engine.cluster).sync).time).value) | default 30 }}
+          unit: {{ ((((.Values.engine.cluster).sync).time).unit) | default "SECONDS" | quote }}
+
 
   hazelcast.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
@@ -104,6 +109,16 @@ data:
             <time-to-live-seconds>30</time-to-live-seconds>
             <max-idle-seconds>30</max-idle-seconds>
             <eviction size="1000"/>
+        </map>
+
+        <map name="dampenings">
+            <backup-count>0</backup-count>
+            <async-backup-count>1</async-backup-count>
+        </map>
+
+        <map name="buckets">
+            <backup-count>0</backup-count>
+            <async-backup-count>1</async-backup-count>
         </map>
 
         <network>

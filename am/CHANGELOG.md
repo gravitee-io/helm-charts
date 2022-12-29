@@ -2,6 +2,12 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.51
+
+- [X] Add upgrader framework job
+- [X] Add alert engine configuration
+- [X] Add support for User Activity settings
+
 ### 1.0.50
 
 - [X] Replace ClusterRole with Role

@@ -1,0 +1,50 @@
+suite: Test the configMap values
+templates:
+  - "engine-configmap.yaml"
+tests:
+
+  - it: should set the default cluster sync when values are null
+    set:
+      engine.cluster: null
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}value: 30"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}unit: \"SECONDS\""
+
+  - it: should set the default cluster sync values
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}value: 30"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}unit: \"SECONDS\""
+
+  - it: should set the provided cluster sync values
+    set:
+      engine.cluster.sync.time.value: 100
+      engine.cluster.sync.time.unit: DAYS
+
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}value: 100"
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "[ ]{5}unit: \"DAYS\""
+

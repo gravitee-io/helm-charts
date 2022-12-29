@@ -360,6 +360,7 @@ data:
         enabled: true
         ws:
           discovery: true
+          {{ toYaml .Values.alerts.options | nindent 10 | trim -}}
           {{- with .Values.alerts.endpoints }}
           endpoints:
             {{ toYaml . | nindent 12 | trim -}}
