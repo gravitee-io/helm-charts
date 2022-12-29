@@ -199,6 +199,12 @@ engine:
     minAvailable: ""
     maxUnavailable: "50%"
 
+  cluster:
+    sync:
+      time:
+        value: 30
+        unit: "SECONDS"
+
   services:
     core:
       http:
