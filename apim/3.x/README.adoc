@@ -462,6 +462,9 @@ configuration |`+TimeBasedRollingPolicy+` for 30 days
 |`+api.logging.file.encoderPattern+` |Logback file encoder pattern
 |`+%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n+`
 
+|`+api.logging.additionalLoggers+` |List of additional logback loggers. Each logger is defined by a `name` and `level` (TRACE, DEBUG, INFO, WARN, or ERROR)
+|`+empty+`
+
 |`+api.ssl.enabled+` |API exposition through HTTPS protocol activation
 |`+false+`
 
@@ -704,6 +707,9 @@ command definition |`+null+`
 
 |`+gateway.logging.debug+` |Whether to enable Gateway debug logging or
 not |`+false+`
+
+|`+api.logging.additionalLoggers+` |List of additional logback loggers. Each logger is defined by a `name` and `level` (TRACE, DEBUG, INFO, WARN, or ERROR)
+|`+empty+`
 
 |`+gateway.ssl.enabled+` |API exposition through HTTPS protocol
 activation |`+false+`

@@ -7,6 +7,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 
 - [X] Add upgrader framework job
 - [X] Add additional Alert Engine configuration
+- [X] Add additional logback loggers configuration
 
 ### 3.1.59
 
