@@ -417,6 +417,9 @@ data:
             username: {{ .Values.alerts.security.username }}
             password: {{ .Values.alerts.security.password }}
           {{- end }}
+      {{- if .Values.alerts.triggers  }}
+      {{ toYaml .Values.alerts.triggers | nindent 6 | trim -}}
+      {{- end }}
     {{- else }}
     alerts:
       alert-engine-connector-ws:
