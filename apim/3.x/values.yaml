@@ -215,12 +215,9 @@ jdbc:
     maxPoolSize: 10
     registerMbeans: true
 
+# Configuration to download the gravitee-apim-repository-redis plugin if rate-limit is configured to use Redis
 redis:
-  host: 'redis.mycompany'
-  port: 6379
-#  password: 'mysecretpassword'
-#  timeout: 2000
-  # By default, the Helm will create init containers for downloading and mouting the Redis plugin as an init container. 
+  # By default, the Helm will create init containers for downloading and mounting the Redis plugin as an init container.
   # Set to false if you're looking to manage Redis plugin by yourself
   download: true
 #  repositoryVersion: 3.3.0
