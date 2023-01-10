@@ -280,6 +280,48 @@ httpClient:
 
 |alerts.options.bulkEventsWait |int |`+100+` |
 
+|alerts.options.ssl.trustall |boolean  |`+false+` |
+
+|alerts.options.ssl.keystore.type |enum(jks, pkcs12, pem) |`+null+` |
+
+|alerts.options.ssl.keystore.path |string |`+null+` |
+
+|alerts.options.ssl.keystore.password |string |`+null+` |
+
+|alerts.options.ssl.keystore.certs |array<string> |`+null+` |
+
+|alerts.options.ssl.keystore.keys |array<string> |`+null+` |
+
+|alerts.options.ssl.truststore.type |enum(jks, pkcs12, pem) |`+null+` |
+
+|alerts.options.ssl.truststore.path |string |`+null+` |
+
+|alerts.options.ssl.truststore.password |string |`+null+` |
+
+|alerts.engines.<cluster-name>.endpoints |array<string> |`+- http://localhost:8072/+` |
+
+|alerts.engines.<cluster-name>.security.username |string |`+"null"+` |
+
+|alerts.engines.<cluster-name>.security.password |string |`+"null"+` |
+
+|alerts.engines.<cluster-name>.ssl.trustall |boolean |`+false+` |
+
+|alerts.engines.<cluster-name>.ssl.keystore.type |enum(jks, pkcs12, pem) |`+null+` |
+
+|alerts.engines.<cluster-name>.ssl.keystore.path |string |`+null+` |
+
+|alerts.engines.<cluster-name>.ssl.keystore.password |string |`+null+` |
+
+|alerts.engines.<cluster-name>.ssl.keystore.certs |array<string> |`+null+ |`
+
+|alerts.engines.<cluster-name>.ssl.keystore.keys |array<string> |`+null+` |
+
+|alerts.engines.<cluster-name>.ssl.truststore.type |enum(jks, pkcs12, pem) |`+null+` |
+
+|alerts.engines.<cluster-name>.ssl.truststore.path |string |`+null+` |
+
+|alerts.engines.<cluster-name>.ssl.truststore.password |string |`+null+` |
+
 |api.autoscaling.enabled |bool |`+true+` |
 
 |api.autoscaling.maxReplicas |int |`+3+` |

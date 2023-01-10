@@ -8,6 +8,8 @@ This file documents all notable changes to [Gravitee.io Access Management 3.x](h
 - [X] Add alert engine configuration
 - [X] Add support for User Activity settings
 - [X] Add support for Alert triggers
+- [X] Add documentation for alert engine connector ssl
+- [X] Add AE engine list support
 
 ### 1.0.50
 

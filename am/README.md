@@ -187,6 +187,27 @@ httpClient:
 | alerts.options.maxPoolSize |int |`+50+` |
 | alerts.options.bulkEventsSize |int |`+100+` |
 | alerts.options.bulkEventsWait |int |`+100+` |
+| alerts.options.ssl.trustall |boolean  |`+false+` |
+| alerts.options.ssl.keystore.type |enum(jks, pkcs12, pem) |`+null+` |
+| alerts.options.ssl.keystore.path |string |`+null+` |
+| alerts.options.ssl.keystore.password |string |`+null+` |
+| alerts.options.ssl.keystore.certs |array<string> |`+null+` |
+| alerts.options.ssl.keystore.keys |array<string> |`+null+` |
+| alerts.options.ssl.truststore.type |enum(jks, pkcs12, pem) |`+null+` |
+| alerts.options.ssl.truststore.path |string |`+null+` |
+| alerts.options.ssl.truststore.password |string |`+null+` |
+| alerts.engines.<cluster-name>.endpoints |array<string> |`+- http://localhost:8072/+` |
+| alerts.engines.<cluster-name>.security.username |string |`+"null"+` |
+| alerts.engines.<cluster-name>.security.password |string |`+"null"+` |
+| alerts.engines.<cluster-name>.ssl.trustall |boolean |`+false+` |
+| alerts.engines.<cluster-name>.ssl.keystore.type |enum(jks, pkcs12, pem) |`+null+` |
+| alerts.engines.<cluster-name>.ssl.keystore.path |string |`+null+` |
+| alerts.engines.<cluster-name>.ssl.keystore.password |string |`+null+` |
+| alerts.engines.<cluster-name>.ssl.keystore.certs |array<string> |`+null+ |`
+| alerts.engines.<cluster-name>.ssl.keystore.keys |array<string> |`+null+` |
+| alerts.engines.<cluster-name>.ssl.truststore.type |enum(jks, pkcs12, pem) |`+null+` |
+| alerts.engines.<cluster-name>.ssl.truststore.path |string |`+null+` |
+| alerts.engines.<cluster-name>.ssl.truststore.password |string |`+null+` |
 | api.autoscaling.enabled | bool | `true` |  |
 | api.autoscaling.maxReplicas | int | `3` |  |
 | api.autoscaling.minReplicas | int | `1` |  |
@@ -243,10 +264,10 @@ httpClient:
 | gateway.enabled | bool | `true` |  |
 | gateway.image.pullPolicy | string | `"Always"` |  |
 | gateway.image.repository | string | `"graviteeio/am-gateway"` |  |
-|gateway.http.cookie.secure |bool |`false` |  |
-|gateway.http.cookie.sameSite |string |`"Lax"` |  |
-|gateway.http.cookie.session.name |string |`"GRAVITEE_IO_AM_SESSION"` |  |
-|gateway.http.cookie.session.timeout |int |`1800000` |  |
+| gateway.http.cookie.secure |bool |`false` |  |
+| gateway.http.cookie.sameSite |string |`"Lax"` |  |
+| gateway.http.cookie.session.name |string |`"GRAVITEE_IO_AM_SESSION"` |  |
+| gateway.http.cookie.session.timeout |int |`1800000` |  |
 | gateway.ingress.annotations."kubernetes.io/app-root" | string | `"/auth"` |  |
 | gateway.ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
 | gateway.ingress.annotations."kubernetes.io/rewrite-target" | string | `"/auth"` |  |
