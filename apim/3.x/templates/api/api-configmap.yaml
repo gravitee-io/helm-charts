@@ -455,6 +455,10 @@ data:
         enabled: true
       alert-engine:
         enabled: true
+        {{- if .Values.alerts.engines }}
+        engines:
+          {{ toYaml .Values.alerts.engines | nindent 10 | trim -}}
+        {{- end }}
         ws:
           discovery: true
           {{ toYaml .Values.alerts.options | nindent 10 | trim -}}
