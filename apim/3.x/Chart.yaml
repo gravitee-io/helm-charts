@@ -22,4 +22,7 @@ annotations:
   artifacthub.io/changes: |
     - Add upgrader framework job
     - Add additional Alert Engine configuration
-    - Replace ClusterRole with Role
+    - Add additional logback loggers configuration
+    - Clean Redis configuration in the `values.yaml` file
+    - Add documentation for alert engine connector ssl
+    - Add AE engine list support
