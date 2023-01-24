@@ -455,6 +455,10 @@ data:
         enabled: true
       alert-engine:
         enabled: true
+        {{- if .Values.alerts.engines }}
+        engines:
+          {{ toYaml .Values.alerts.engines | nindent 10 | trim -}}
+        {{- end }}
         ws:
           discovery: true
           {{ toYaml .Values.alerts.options | nindent 10 | trim -}}
@@ -523,6 +527,9 @@ data:
 
           <logger name="io.gravitee" level="{{ .Values.api.logging.graviteeLevel }}" />
           <logger name="org.eclipse.jetty" level="{{ .Values.api.logging.jettyLevel }}" />
+          {{- range $additionalLogger := .Values.api.logging.additionalLoggers }}
+          <logger name="{{ $additionalLogger.name }}" level="{{ $additionalLogger.level }}" />
+          {{- end }}
 
           <!-- Strictly speaking, the level attribute is not necessary since -->
           <!-- the level of the root level is set to DEBUG by default.       -->

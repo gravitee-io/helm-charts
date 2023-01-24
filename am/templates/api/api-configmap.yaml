@@ -405,6 +405,10 @@ data:
         enabled: true
       alert-engine:
         enabled: true
+        {{- if .Values.alerts.engines }}
+        engines:
+          {{ toYaml .Values.alerts.engines | nindent 10 | trim -}}
+        {{- end }}        
         ws:
           discovery: true
           {{ toYaml .Values.alerts.options | nindent 10 | trim -}}
@@ -417,6 +421,9 @@ data:
             username: {{ .Values.alerts.security.username }}
             password: {{ .Values.alerts.security.password }}
           {{- end }}
+      {{- if .Values.alerts.triggers  }}
+      {{ toYaml .Values.alerts.triggers | nindent 6 | trim -}}
+      {{- end }}
     {{- else }}
     alerts:
       alert-engine-connector-ws:

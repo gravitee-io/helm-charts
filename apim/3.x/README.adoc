@@ -462,6 +462,9 @@ configuration |`+TimeBasedRollingPolicy+` for 30 days
 |`+api.logging.file.encoderPattern+` |Logback file encoder pattern
 |`+%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n+`
 
+|`+api.logging.additionalLoggers+` |List of additional logback loggers. Each logger is defined by a `name` and `level` (TRACE, DEBUG, INFO, WARN, or ERROR)
+|`+empty+`
+
 |`+api.ssl.enabled+` |API exposition through HTTPS protocol activation
 |`+false+`
 
@@ -705,6 +708,9 @@ command definition |`+null+`
 |`+gateway.logging.debug+` |Whether to enable Gateway debug logging or
 not |`+false+`
 
+|`+api.logging.additionalLoggers+` |List of additional logback loggers. Each logger is defined by a `name` and `level` (TRACE, DEBUG, INFO, WARN, or ERROR)
+|`+empty+`
+
 |`+gateway.ssl.enabled+` |API exposition through HTTPS protocol
 activation |`+false+`
 
@@ -882,6 +888,49 @@ command definition |`+null+`
 |alerts.options.bulkEventsSize |Send events by packets |`+100+`
 
 |alerts.options.bulkEventsWait |Duration for events to be ready to be sent |`+100+`
+
+|alerts.options.ssl.trustall |Ssl trust all  |`+false+`
+
+|alerts.options.ssl.keystore.type |Type of the keystore  (jks, pkcs12, pem)|`+null+`
+
+|alerts.options.ssl.keystore.path |Path to the keystore |`+null+`
+
+|alerts.options.ssl.keystore.password |Path to the keystore |`+null+`
+
+|alerts.options.ssl.keystore.certs |Keystore cert paths (array, only for pem) |`+null+`
+
+|alerts.options.ssl.keystore.keys |Keystore key paths (array, only for pem) |`+null+`
+
+|alerts.options.ssl.truststore.type |Type of the truststore |`+null+`
+
+|alerts.options.ssl.truststore.path |Path to the truststore |`+null+`
+
+|alerts.options.ssl.truststore.password |Password of the truststore |`+null+`
+
+|alerts.engines.<cluster-name>.endpoints |Defines AE endpoints on the cluster <cluster-name> |`+- http://localhost:8072/+`
+
+|alerts.engines.<cluster-name>.security.username |The AE username on the cluster <cluster-name> |`+"admin"+`
+
+|alerts.engines.<cluster-name>.security.password |The AE password on the cluster <cluster-name> |`+"password"+`
+
+|alerts.engines.<cluster-name>.ssl.trustall |Ssl trust all on the cluster <cluster-name>|`+false+`
+
+|alerts.engines.<cluster-name>.ssl.keystore.type |Type of the keystore  (jks, pkcs12, pem) on the cluster <cluster-name> |`+null+`
+
+|alerts.engines.<cluster-name>.ssl.keystore.path |Path to the keystore (jks, pkcs12, pem) on the cluster <cluster-name> |`+null+`
+
+|alerts.engines.<cluster-name>.ssl.keystore.password |Path to the keystore on the cluster <cluster-name> |`+null+`
+
+|alerts.engines.<cluster-name>.ssl.keystore.certs |Keystore cert paths (array, only for pem) on the cluster <cluster-name> |`+null+`
+
+|alerts.engines.<cluster-name>.ssl.keystore.keys |Keystore key paths (array, only for pem) on the cluster <cluster-name> |`+null+`
+
+|alerts.engines.<cluster-name>.ssl.truststore.type |Type of the truststore on the cluster <cluster-name> |`+null+`
+
+|alerts.engines.<cluster-name>.ssl.truststore.path |Path to the truststore on the cluster <cluster-name> |`+null+`
+
+|alerts.engines.<cluster-name>.ssl.truststore.password |Password of the truststore on the cluster <cluster-name> |`+null+`
+
 |===
 
 ==== License
