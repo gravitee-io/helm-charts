@@ -4,6 +4,9 @@ templates:
   - "api/api-configmap.yaml"
 tests:
   - it: Check upgrade mode is enabled
+    set:
+      api:
+        upgrader: true
     template: api/api-upgrader-job.yaml
     chart:
       version: 1.0.0-chart
@@ -28,6 +31,9 @@ tests:
           path: spec.template.spec.initContainers
 
   - it: Check if the helm hook annotations are present
+    set:
+      api:
+        upgrader: true
     template: api/api-upgrader-job.yaml
     asserts:
       - hasDocuments:
@@ -47,3 +53,9 @@ tests:
       - equal:
           path: metadata.annotations.[helm.sh/hook-delete-policy]
           value: hook-succeeded
+
+  - it: Check if the upgrader manifest is missing by default
+    template: api/api-upgrader-job.yaml
+    asserts:
+      - hasDocuments:
+          count: 0
