@@ -130,9 +130,11 @@ spec:
         - name: {{ .Values.ui.image.pullSecrets }}
       {{- end }}
       volumes:
+        {{- if not (include "ui.externalConfig" .) }}
         - name: config
           configMap:
             name: {{ template "gravitee.ui.fullname" . }}
+        {{- end }}
       {{- with .Values.ui.extraVolumes }}
         {{- tpl . $ | nindent 8 }}
       {{- end }}

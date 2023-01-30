@@ -198,6 +198,7 @@ api:
     #  <!-- Add here a list of loggers you want to add -->
 
   restartPolicy: OnFailure
+  # If you provide your own gravitee.yml by using a volumeMount, reloadOnConfigChange is disabled.
   reloadOnConfigChange: true
   updateStrategy:
     rollingUpdate:
@@ -401,6 +402,16 @@ api:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+  # If you want to use your own gravitee.yml you have to provide your configmap or secret in extraVolume part.
+  # the name of the volume MUST be "config".
+  # In this case, values configuration related to gravitee.yml defined in this file will be ignored
+  #extraVolumes: |
+  #  - name: config
+  #    configMap:
+  #      name: gravitee-config-configmap-name
+  #  - name: config
+  #    secret:
+  #      secretName: gravitee-config-secret-name
 
   services:
     notifier:
@@ -478,6 +489,7 @@ gateway:
     #extraLoggers: |
     #  <!-- Add here a list of logger you want to add -->
 
+  # If you provide your own gravitee.yml by using a volumeMount, reloadOnConfigChange is disabled.
   reloadOnConfigChange: true
 
   liquibase:
@@ -676,6 +688,16 @@ gateway:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+  # If you want to use your own gravitee.yml you have to provide your configmap or secret in extraVolume part.
+  # the name of the volume MUST be "config".
+  # In this case, values configuration related to gravitee.yml defined in this file will be ignored
+  #extraVolumes: |
+  #  - name: config
+  #    configMap:
+  #      name: gravitee-config-configmap-name
+  #  - name: config
+  #    secret:
+  #      secretName: gravitee-config-secret-name
   mfa_rate:
     enabled: true
     limit: 5
@@ -874,6 +896,16 @@ ui:
     # - name: extra-volume
     #   mountPath: /mnt/volume
     #   readOnly: true
+  # If you want to use your own constants.json you have to provide your configmap or secret in extraVolume part.
+  # the name of the volume MUST be "config".
+  # In this case, values configuration related to constants.json defined in this file will be ignored
+  #extraVolumes: |
+  #  - name: config
+  #    configMap:
+  #      name: gravitee-config-configmap-name
+  #  - name: config
+  #    secret:
+  #      secretName: gravitee-config-secret-name
 
 initContainers:
   image: alpine:latest

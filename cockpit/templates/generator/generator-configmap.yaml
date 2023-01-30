@@ -1,4 +1,4 @@
-{{- if .Values.generator.enabled -}}
+{{- if and (.Values.generator.enabled) (not (include "generator.externalConfig" .)) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:

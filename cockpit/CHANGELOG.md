@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Cockpit](https://github.
 
 ### 1.7.3
 - [X] Add upgrader framework job
+- [X] Allow users to define their own configuration file by defining a volume
 
 ### 1.7.2
 - [X] Replace ClusterRole with Role
