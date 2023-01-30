@@ -352,6 +352,16 @@ api:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+  # If you want to use your own configuration you have to provide your configmap or secret in extraVolume part.
+  # the name of the volume MUST be "config".
+  # In this case, values configuration related to gravitee.yaml, logback and hazelcast defined in this file will be ignored
+  #extraVolumes: |
+  #  - name: config
+  #    configMap:
+  #      name: gravitee-config-configmap-name
+  #  - name: config
+  #    secret:
+  #      secretName: gravitee-config-secret-name
   initialPlans:
     small:
       name: 'Small'
@@ -507,6 +517,16 @@ ui:
     # - name: extra-volume
     #   mountPath: /mnt/volume
     #   readOnly: true
+  # If you want to use your own config.json you have to provide your configmap or secret in extraVolume part.
+  # the name of the volume MUST be "config".
+  # In this case, values configuration related to config.json defined in this file will be ignored
+  #extraVolumes: |
+  #  - name: config
+  #    configMap:
+  #      name: gravitee-config-configmap-name
+  #  - name: config
+  #    secret:
+  #      secretName: gravitee-config-secret-name
 
 generator:
   enabled: true
@@ -631,3 +651,13 @@ generator:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+  # If you want to use your own env.props you have to provide your configmap or secret in extraVolume part.
+  # the name of the volume MUST be "config".
+  # In this case, values configuration related to env.props defined in this file will be ignored
+  #extraVolumes: |
+  #  - name: config
+  #    configMap:
+  #      name: gravitee-config-configmap-name
+  #  - name: config
+  #    secret:
+  #      secretName: gravitee-config-secret-name

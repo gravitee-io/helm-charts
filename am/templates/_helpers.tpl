@@ -224,3 +224,42 @@ Return the appropriate apiVersion for pod autoscaling.
 {{- print "autoscaling/v2" -}}
 {{- end }}
 {{- end -}}
+
+{{/*
+Returns true if an extraVolumes named config is defined
+Usage:
+{{ include "gateway.externalConfig" . }}
+*/}}
+{{- define "gateway.externalConfig" -}}
+{{- if hasKey .Values.gateway "extraVolumes" }}
+{{- if contains "- name: config" .Values.gateway.extraVolumes  }}
+{{- print "true" -}}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns true if an extraVolumes named config is defined
+Usage:
+{{ include "api.externalConfig" . }}
+*/}}
+{{- define "api.externalConfig" -}}
+{{- if hasKey .Values.api "extraVolumes" }}
+{{- if contains "- name: config" .Values.api.extraVolumes  }}
+{{- print "true" -}}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns true if an extraVolumes named config is defined
+Usage:
+{{ include "ui.externalConfig" . }}
+*/}}
+{{- define "ui.externalConfig" -}}
+{{- if hasKey .Values.ui "extraVolumes" }}
+{{- if contains "- name: config" .Values.ui.extraVolumes  }}
+{{- print "true" -}}
+{{- end }}
+{{- end }}
+{{- end }}

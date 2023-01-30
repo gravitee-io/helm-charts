@@ -44,7 +44,7 @@ spec:
     metadata:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
-        {{- if .Values.gateway.reloadOnConfigChange }}
+        {{- if and (.Values.gateway.reloadOnConfigChange) (not (include "gateway.externalConfig" .)) }}
         checksum/config: {{ include (print $.Template.BasePath "/gateway/gateway-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- range $key, $value := .Values.gateway.podAnnotations }}
@@ -187,9 +187,11 @@ spec:
         - name: {{ .Values.gateway.image.pullSecrets }}
       {{- end }}
       volumes:
+        {{- if not (include "gateway.externalConfig" .) }}
         - name: config
           configMap:
             name: {{ template "gravitee.gateway.fullname" . }}
+        {{- end }}
         {{- if and .Values.jdbc.drivers (eq .Values.management.type "jdbc") }}
         - name: graviteeio-am-jdbc-ext
           emptyDir: {}

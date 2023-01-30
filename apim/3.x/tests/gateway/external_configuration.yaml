@@ -1,0 +1,66 @@
+suite: Test deployment and configmap with a volumeMount named config defined
+templates:
+  - "gateway/gateway-deployment.yaml"
+  - "gateway/gateway-configmap.yaml"
+tests:
+  - it: Should NOT generate gateway-configmap.yaml
+    template: gateway/gateway-configmap.yaml
+    set:
+      gateway:
+        extraVolumes: |
+          - name: config
+            secret:
+              secretName: gravitee-yml-secret-name
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: Should generate gateway-configmap.yaml
+    template: gateway/gateway-configmap.yaml
+    set:
+    asserts:
+      - hasDocuments:
+          count: 1
+
+  - it: Should generate a volume named config in gateway-deployment.yaml
+    template: gateway/gateway-deployment.yaml
+    set:
+      gateway:
+        extraVolumes: |
+           - name: config
+             secret:
+               secretName: gravitee-yml-secret-name
+    asserts:
+      - hasDocuments:
+          count: 1
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config
+            mountPath: /opt/graviteeio-gateway/config/gravitee.yml
+            subPath: gravitee.yml
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: config
+            secret:
+              secretName: gravitee-yml-secret-name
+
+  - it: Should NOT generate a volume named config in gateway-deployment.yaml
+    template: gateway/gateway-deployment.yaml
+    set:
+    asserts:
+      - hasDocuments:
+          count: 1
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config
+            mountPath: /opt/graviteeio-gateway/config/gravitee.yml
+            subPath: gravitee.yml
+      - notContains:
+          path: spec.template.spec.volumes
+          content:
+            name: config
+            secret:
+              secretName: gravitee-yml-secret-name

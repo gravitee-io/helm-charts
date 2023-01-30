@@ -1,4 +1,4 @@
-{{- if .Values.gateway.enabled -}}
+{{- if and (.Values.gateway.enabled) (not (include "gateway.externalConfig" .)) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
