@@ -336,6 +336,16 @@ data:
         {{- end }}
       {{- end }}
 
+      {{- if .Values.gateway.services.tracing.enabled }}
+      tracing:
+        enabled: {{ .Values.gateway.services.tracing.enabled }}
+        type: {{ .Values.gateway.services.tracing.type | quote }}
+        {{- if .Values.gateway.services.tracing.jaeger }}
+        jaeger:
+{{ toYaml .Values.gateway.services.tracing.jaeger | indent 10 }}
+        {{- end }}
+      {{- end }}
+
     {{- if or .Values.gateway.handlers }}
     handlers:
 {{ toYaml .Values.gateway.handlers | indent 6 }}
