@@ -132,3 +132,16 @@ Return the appropriate apiVersion for pod autoscaling.
 {{- print "autoscaling/v2" -}}
 {{- end }}
 {{- end -}}
+
+{{/*
+Returns true if an extraVolumes named config is defined
+Usage:
+{{ include "engine.externalConfig" . }}
+*/}}
+{{- define "engine.externalConfig" -}}
+{{- if hasKey .Values.engine "extraVolumes" }}
+{{- if contains "- name: config" .Values.engine.extraVolumes  }}
+{{- print "true" -}}
+{{- end }}
+{{- end }}
+{{- end }}

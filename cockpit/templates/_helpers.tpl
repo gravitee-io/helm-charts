@@ -276,3 +276,55 @@ podAntiAffinity:
             - {{ .Values.generator.name }}
       topologyKey: "kubernetes.io/hostname"
 {{- end }}
+
+{{/*
+Returns true if an extraVolumes named config is defined
+Usage:
+{{ include "gateway.externalConfig" . }}
+*/}}
+{{- define "gateway.externalConfig" -}}
+{{- if hasKey .Values.gateway "extraVolumes" }}
+{{- if contains "- name: config" .Values.gateway.extraVolumes  }}
+{{- print "true" -}}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns true if an extraVolumes named config is defined
+Usage:
+{{ include "api.externalConfig" . }}
+*/}}
+{{- define "api.externalConfig" -}}
+{{- if hasKey .Values.api "extraVolumes" }}
+{{- if contains "- name: config" .Values.api.extraVolumes  }}
+{{- print "true" -}}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns true if an extraVolumes named config is defined
+Usage:
+{{ include "ui.externalConfig" . }}
+*/}}
+{{- define "ui.externalConfig" -}}
+{{- if hasKey .Values.ui "extraVolumes" }}
+{{- if contains "- name: config" .Values.ui.extraVolumes  }}
+{{- print "true" -}}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns true if an extraVolumes named config is defined
+Usage:
+{{ include "generator.externalConfig" . }}
+*/}}
+{{- define "generator.externalConfig" -}}
+{{- if hasKey .Values.generator "extraVolumes" }}
+{{- if contains "- name: config" .Values.generator.extraVolumes  }}
+{{- print "true" -}}
+{{- end }}
+{{- end }}
+{{- end }}

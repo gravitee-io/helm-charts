@@ -39,7 +39,9 @@ spec:
     metadata:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
+        {{- if not (include "portal.externalConfig" .) }}
         checksum/config: {{ include (print $.Template.BasePath "/portal/portal-configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- range $key, $value := .Values.portal.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
@@ -127,9 +129,11 @@ spec:
         - name: {{ .Values.portal.image.pullSecrets }}
       {{- end }}
       volumes:
+        {{- if not (include "portal.externalConfig" .) }}
         - name: config
           configMap:
             name: {{ template "gravitee.portal.fullname" . }}
+        {{- end }}
       {{- with .Values.portal.extraVolumes }}
         {{- tpl . $ | nindent 8 }}
       {{- end }}

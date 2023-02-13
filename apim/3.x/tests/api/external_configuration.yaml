@@ -1,0 +1,66 @@
+suite: Test deployment and configmap with a volumeMount named config defined
+templates:
+  - "api/api-deployment.yaml"
+  - "api/api-configmap.yaml"
+tests:
+  - it: Should NOT generate api-configmap.yaml
+    template: api/api-configmap.yaml
+    set:
+      api:
+        extraVolumes: |
+          - name: config
+            secret:
+              secretName: gravitee-yml-secret-name
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: Should generate api-configmap.yaml
+    template: api/api-configmap.yaml
+    set:
+    asserts:
+      - hasDocuments:
+          count: 1
+
+  - it: Should generate a volume named config in api-deployment.yaml
+    template: api/api-deployment.yaml
+    set:
+      api:
+        extraVolumes: |
+          - name: config
+            secret:
+              secretName: gravitee-yml-secret-name
+    asserts:
+      - hasDocuments:
+          count: 1
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config
+            mountPath: /opt/graviteeio-management-api/config/gravitee.yml
+            subPath: gravitee.yml
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: config
+            secret:
+              secretName: gravitee-yml-secret-name
+
+  - it: Should NOT generate a volume named config in api-deployment.yaml
+    template: api/api-deployment.yaml
+    set:
+    asserts:
+      - hasDocuments:
+          count: 1
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config
+            mountPath: /opt/graviteeio-management-api/config/gravitee.yml
+            subPath: gravitee.yml
+      - notContains:
+          path: spec.template.spec.volumes
+          content:
+            name: config
+            secret:
+              secretName: gravitee-yml-secret-name

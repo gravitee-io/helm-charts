@@ -10,6 +10,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 - [X] Clean Redis configuration in the `values.yaml` file
 - [X] Add documentation for alert engine connector ssl
 - [X] Add AE engine list support
+- [X] Allow users to define their own configuration file by defining a volume
 
 ### 3.1.59
 
