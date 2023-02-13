@@ -1,4 +1,4 @@
-{{- if .Values.engine.enabled -}}
+{{- if and (.Values.engine.enabled) (not (include "engine.externalConfig" .)) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:

@@ -24,6 +24,7 @@ engine:
         </rollingPolicy>
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
     graviteeLevel: INFO
+  # If you provide your own gconfiguration by using a volumeMount, reloadOnConfigChange is disabled.
   reloadOnConfigChange: true
 
   # Whether this chart should self-manage its service account, role, and associated role binding.
@@ -174,6 +175,16 @@ engine:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+  # If you want to use your own gravitee.yml and hazelcast.xml you have to provide your configmap or secret in extraVolume part.
+  # the name of the volume MUST be "config".
+  # In this case, values configuration related to gravitee.yml and hazelcast.xml defined in this file will be ignored
+  #extraVolumes: |
+  #  - name: config
+  #    configMap:
+  #      name: gravitee-config-configmap-name
+  #  - name: config
+  #    secret:
+  #      secretName: gravitee-config-secret-name
 
   livenessProbe:
     tcpSocket:

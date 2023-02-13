@@ -1,0 +1,66 @@
+suite: Test deployment and configmap with a volumeMount named config defined
+templates:
+  - "generator/generator-deployment.yaml"
+  - "generator/generator-configmap.yaml"
+tests:
+  - it: Should NOT generate generator-configmap.yaml
+    template: generator/generator-configmap.yaml
+    set:
+      generator:
+        extraVolumes: |
+          - name: config
+            secret:
+              secretName: gravitee-yml-secret-name
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: Should generate generator-configmap.yaml
+    template: generator/generator-configmap.yaml
+    set:
+    asserts:
+      - hasDocuments:
+          count: 1
+
+  - it: Should generate a volume named config in generator-deployment.yaml
+    template: generator/generator-deployment.yaml
+    set:
+      generator:
+        extraVolumes: |
+          - name: config
+            secret:
+              secretName: gravitee-yml-secret-name
+    asserts:
+      - hasDocuments:
+          count: 1
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config
+            mountPath: /app/.env
+            subPath: env.props
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: config
+            secret:
+              secretName: gravitee-yml-secret-name
+
+  - it: Should NOT generate a volume named config in generator-deployment.yaml
+    template: generator/generator-deployment.yaml
+    set:
+    asserts:
+      - hasDocuments:
+          count: 1
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config
+            mountPath: /app/.env
+            subPath: env.props
+      - notContains:
+          path: spec.template.spec.volumes
+          content:
+            name: config
+            secret:
+              secretName: gravitee-yml-secret-name

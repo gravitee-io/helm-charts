@@ -45,7 +45,7 @@ spec:
     metadata:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
-        {{- if .Values.api.reloadOnConfigChange }}
+        {{- if and (.Values.api.reloadOnConfigChange) (not (include "api.externalConfig" .)) }}
         checksum/config: {{ include (print $.Template.BasePath "/api/api-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- range $key, $value := .Values.api.podAnnotations }}
@@ -161,9 +161,11 @@ spec:
         - name: {{ .Values.api.image.pullSecrets }}
       {{- end }}
       volumes:
+        {{- if not (include "api.externalConfig" .) }}
         - name: config
           configMap:
             name: {{ template "gravitee.api.fullname" . }}
+        {{- end }}
         {{- include "deployment.pluginVolumes" $pluginParams | indent 8 }}
         {{- with .Values.api.extraVolumes }}
           {{- tpl . $ | nindent 8 }}

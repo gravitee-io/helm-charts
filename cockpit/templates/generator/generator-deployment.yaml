@@ -40,7 +40,7 @@ spec:
     metadata:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "{{ .Values.chaos.enabled }}"
-        {{- if .Values.generator.reloadOnConfigChange }}
+        {{- if and (.Values.generator.reloadOnConfigChange) (not (include "generator.externalConfig" .)) }}
         checksum/config: {{ include (print $.Template.BasePath "/generator/generator-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- range $key, $value := .Values.generator.podAnnotations }}
@@ -123,9 +123,11 @@ spec:
         - name: {{ .Values.generator.image.pullSecrets }}
       {{- end }}
       volumes:
+        {{- if not (include "generator.externalConfig" .) }}
         - name: config
           configMap:
             name: {{ template "gravitee.generator.fullname" . }}
+        {{- end }}
         {{- with .Values.generator.extraVolumes }}
           {{- tpl . $ | nindent 8 }}
         {{- end }}

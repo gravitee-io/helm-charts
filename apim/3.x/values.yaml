@@ -388,6 +388,7 @@ api:
     graviteeLevel: DEBUG
     jettyLevel: INFO
   restartPolicy: OnFailure
+  # If you provide your own gravitee.yml by using a volumeMount, reloadOnConfigChange is disabled.
   reloadOnConfigChange: true
   deployment:
     # Annotations to apply to the deployment
@@ -649,6 +650,16 @@ api:
     #   mountPath: /mnt/volume
     #   readOnly: true
     #   existingClaim: volume-claim
+  # If you want to use your own gravitee.yml you have to provide your configmap or secret in extraVolume part.
+  # the name of the volume MUST be "config".
+  # In this case, values configuration related to gravitee.yaml defined in this file will be ignored
+  #extraVolumes: |
+  #  - name: config
+  #    configMap:
+  #      name: gravitee-config-configmap-name
+  #  - name: config
+  #    secret:
+  #      secretName: gravitee-config-secret-name
 
 gateway:
   enabled: true
@@ -671,6 +682,7 @@ gateway:
       encoderPattern: "%d{HH:mm:ss.SSS} [%thread] [%X{api}] %-5level %logger{36} - %msg%n"
     graviteeLevel: DEBUG
     jettyLevel: WARN
+  # If you provide your own gravitee.yml by using a volumeMount, reloadOnConfigChange is disabled.
   reloadOnConfigChange: true
   deployment:
     # Annotations to apply to the deployment
@@ -981,11 +993,22 @@ gateway:
     #    preStop: '[ "/bin/sh", "-c", "echo Pre stopping Gravitee Gateway" ]'
     ## Additional gravitee gateway volume mounts
     # Defines additional volume mounts.
-    # extraVolumeMounts: |
-    # - name: extra-volume
-    #   mountPath: /mnt/volume
-    #   readOnly: true
-    #   existingClaim: volume-claim
+  #extraVolumeMounts: |
+  #  - name: extra-volume
+  #    mountPath: /mnt/volume
+  #    readOnly: true
+  #    existingClaim: volume-claim
+  #
+  # If you want to use your own gravitee.yml you have to provide your configmap or secret in extraVolume part.
+  # the name of the volume MUST be "config".
+  # In this case, values configuration related to gravitee.yaml defined in this file will be ignored
+  #extraVolumes: |
+  #  - name: config
+  #    configMap:
+  #      name: gravitee-config-configmap-name
+  #  - name: config
+  #    secret:
+  #      secretName: gravitee-config-secret-name
 
 portal:
   enabled: true
@@ -1117,6 +1140,16 @@ portal:
     # - name: extra-volume
     #   mountPath: /mnt/volume
     #   readOnly: true
+  # If you want to use your own config.json you have to provide your configmap or secret in extraVolume part.
+  # the name of the volume MUST be "config".
+  # In this case, values configuration related to config.json defined in this file will be ignored
+  #extraVolumes: |
+  #  - name: config
+  #    configMap:
+  #      name: gravitee-config-configmap-name
+  #  - name: config
+  #    secret:
+  #      secretName: gravitee-config-secret-name
 
 ui:
   enabled: true
@@ -1270,6 +1303,16 @@ ui:
     # - name: extra-volume
     #   mountPath: /mnt/volume
     #   readOnly: true
+  # If you want to use your own constants.json you have to provide your configmap or secret in extraVolume part.
+  # the name of the volume MUST be "config".
+  # In this case, values configuration related to constants.json defined in this file will be ignored
+  #extraVolumes: |
+  #  - name: config
+  #    configMap:
+  #      name: gravitee-config-configmap-name
+  #  - name: config
+  #    secret:
+  #      secretName: gravitee-config-secret-name
 
 # Enabling openshift support will update ingresses annotations for not containing "kubernetes.io/ingress.class" which
 # has to be removed to ensure OpenShift is creating a Route from the Ingress
