@@ -72,20 +72,6 @@ If you are deploying in another namespace and you need to access a secret there,
 
 For more information about roles, see [Role and ClusterRole](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole) in the [Kubernetes documentation](https://kubernetes.io/docs/).
 
-### External configuration file
-
-If you want to use an external configuration file, such as `gravitee.yml` for the gateway or API management, or `constant.json` for the UI, add the following lines to the helm chart.
-
-[code,yml]
-----
-extraVolumes: |
-    - name: config
-      configMap:
-        name: gravitee-config-configmap-name
-----
-
-Where `gravitee-config-configmap-name` is the full path to the external configuration file.
-
 ### Shared configuration
 
 To configure common features such as:

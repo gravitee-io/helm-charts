@@ -120,6 +120,21 @@ If you are deploying in another namespace and you need to access a secret there,
 For more information about roles, see link:https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole[Role and ClusterRole] in the link:https://kubernetes.io/docs/[Kubernetes documentation].
 ====
 
+==== External configuration file
+
+If you want to use an external configuration file, such as `gravitee.yml` for the gateway or API management, or `constant.json` for the UI, add the following lines to the helm chart.
+
+[code,yml]
+----
+extraVolumes: |
+    - name: config
+      configMap:
+        name: gravitee-config-configmap-name
+----
+
+Where `gravitee-config-configmap-name` is the full path to the external configuration file.
+
+External configuration files are only available for the AE Helm chart 1.1.42 and above, the AM Helm chart 1.0.53 and above, and the APIM Helm chart 3.1.60 and above.
 
 ==== Shared Configuration
 
