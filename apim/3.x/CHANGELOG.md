@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 ### 3.1.61
 
 - [X] Fix AE alerts configuration without options
+- [X] Add values to define tracing options
 
 ### 3.1.60
 
