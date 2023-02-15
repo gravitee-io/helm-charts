@@ -374,7 +374,9 @@ data:
         {{- end }}
         ws:
           discovery: true
+          {{- if .Values.alerts.options }}
           {{ toYaml .Values.alerts.options | nindent 10 | trim -}}
+          {{- end }}
           {{- with .Values.alerts.endpoints }}
           endpoints:
             {{ toYaml . | nindent 12 | trim -}}

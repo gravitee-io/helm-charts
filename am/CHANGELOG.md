@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io Access Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/am/) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.0.54
+
+- [X] Fix AE alerts configuration without options
+
 ### 1.0.53
 
 - [X] Allow users to define their own configuration file by defining a volume
