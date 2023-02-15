@@ -6166,4 +6166,25 @@ entries:
     urls:
     - https://helm.gravitee.io/helm/designer/designer-1.0.0.tgz
     version: 1.0.0
-generated: "2023-02-13T11:04:27.165376+01:00"
+  gko:
+  - apiVersion: v2
+    appVersion: 0.5.0
+    created: "2023-02-15T10:42:21.313341984Z"
+    description: The Gravitee Kubernetes Operator Helm Chart
+    digest: bfc4b4a3bb586da2399395d73f1d6958490b34c5c58934d910c412be21077ecb
+    home: https://gravitee.io
+    icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
+    keywords:
+    - gravitee.io
+    - kubernetes
+    - operator
+    - API management
+    kubeVersion: '>=1.14.0-0'
+    name: gko
+    sources:
+    - https://github.com/gravitee-io/gravitee-kubernetes-operator
+    type: application
+    urls:
+    - https://helm.gravitee.io/helm/gko-0.5.0.tgz
+    version: 0.5.0
+generated: "2023-02-15T10:42:21.312424925Z"
