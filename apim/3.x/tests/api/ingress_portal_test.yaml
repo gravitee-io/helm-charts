@@ -57,3 +57,19 @@ tests:
       - equal:
           path: spec.ingressClassName
           value: nginx
+
+  - it: Check Ingress pathType and path
+    set:
+      api:
+        ingress:
+          portal:
+            pathType: Exact
+            path: /test-portal
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].pathType
+          value: Exact
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /test-portal
+
