@@ -103,3 +103,23 @@ tests:
           of: networking.k8s.io/v1
       - isEmpty:
           path: spec.ingressClassName
+
+  - it: Check Ingress pathType and path
+    set:
+      api:
+        http:
+          services:
+            core:
+              ingress:
+                enabled: true
+                pathType: Exact
+                path: /test-technical
+                hosts:
+                  - apim.example.com
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].pathType
+          value: Exact
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /test-technical
