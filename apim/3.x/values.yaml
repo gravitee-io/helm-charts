@@ -818,7 +818,7 @@ gateway:
         enabled: false
         ingressClassName: ""
         pathType: Prefix
-        path: /management/_(.*)
+        path: /_(.*)
         hosts:
           - apim.example.com
         annotations: {}
@@ -857,7 +857,7 @@ gateway:
         enabled: false
         ingressClassName: ""
         pathType: Prefix
-        path: /gateway/_bridge
+        path: /_bridge
       #   # Used to create an Ingress record.
         hosts:
           - apim.example.com
