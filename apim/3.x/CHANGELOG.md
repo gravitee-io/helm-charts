@@ -8,6 +8,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 - [X] Add `labels` in metrics config of the Management API and Gateway
 - [X] Fix default ingress path for ui
 - [X] Add API properties config of the Management API and Gateway
+- [X] Update APIM version to 3.20.1
 
 ### 3.1.61
 

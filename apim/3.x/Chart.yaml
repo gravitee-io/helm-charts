@@ -3,7 +3,7 @@ name: apim3
 # When the version is modified, make sure the artifacthub.io/changes list is updated
 # Also update CHANGELOG.md
 version: 3.1.62
-appVersion: 3.18.10
+appVersion: 3.20.1
 description: Official Gravitee.io Helm chart for API Management 3.x
 home: https://gravitee.io
 sources:
@@ -24,3 +24,4 @@ annotations:
     - Add `labels` in metrics config of the Management API and Gateway
     - Fix default ingress path for ui
     - Add API properties config of the Management API and Gateway
+    - Update APIM version to 3.20.1
