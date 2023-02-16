@@ -10,7 +10,8 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 - [X] Add API properties config of the Management API and Gateway
 - [X] Update APIM version to 3.20.1
 - [X] Update Elasticsearch version to 7.17.9
-
+- [X] Update MongoDB version to 5.0.14
+ 
 ### 3.1.61
 
 - [X] Fix AE alerts configuration without options
