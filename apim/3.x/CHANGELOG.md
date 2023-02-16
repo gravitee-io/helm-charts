@@ -7,6 +7,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 - [X] Remove `/gateway` from the gateway ingress path 
 - [X] Add `labels` in metrics config of the Management API and Gateway
 - [X] Fix default ingress path for ui
+- [X] Add API properties config of the Management API and Gateway
 
 ### 3.1.61
 

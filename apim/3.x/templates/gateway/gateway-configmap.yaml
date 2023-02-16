@@ -387,6 +387,10 @@ data:
         enabled: false
     {{- end }}
 
+    # APIs specific configuration
+    {{- if .Values.gateway.api }}
+      api: {{- toYaml .Values.gateway.api | nindent 6 -}}
+    {{- end}}
     # Old class loader behavior, false by default
     classloader:
       legacy:
