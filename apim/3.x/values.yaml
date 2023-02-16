@@ -511,6 +511,7 @@ api:
       ingress:
         enabled: false
         ingressClassName: ""
+        pathType: Prefix
         path: /api/_bridge
         # Used to create an Ingress record.
         hosts:
@@ -543,6 +544,7 @@ api:
         ingress:
           enabled: false
           ingressClassName: ""
+          pathType: Prefix
 #          path: /management/_(.*)
 #          hosts:
 #            - apim.example.com
@@ -599,6 +601,7 @@ api:
   ingress:
     management:
       enabled: true
+      pathType: Prefix
       path: /management
       ingressClassName: ""
       # Used to create an Ingress record.
@@ -615,6 +618,7 @@ api:
       #    secretName: api-custom-cert
     portal:
       enabled: true
+      pathType: Prefix
       path: /portal
       ingressClassName: ""
       # Used to create an Ingress record.
@@ -813,6 +817,7 @@ gateway:
       ingress:
         enabled: false
         ingressClassName: ""
+        pathType: Prefix
         path: /management/_(.*)
         hosts:
           - apim.example.com
@@ -851,6 +856,7 @@ gateway:
       ingress:
         enabled: false
         ingressClassName: ""
+        pathType: Prefix
         path: /gateway/_bridge
       #   # Used to create an Ingress record.
         hosts:
@@ -958,6 +964,7 @@ gateway:
     targetMemoryAverageUtilization: 80
   ingress:
     enabled: true
+    pathType: Prefix
     path: /
     ingressClassName: ""
     # Used to create an Ingress record.
@@ -1107,6 +1114,7 @@ portal:
     runAsNonRoot: true
   ingress:
     enabled: true
+    pathType: Prefix
     path: /
     ingressClassName: ""
     # Used to create an Ingress record.
@@ -1269,6 +1277,7 @@ ui:
     runAsNonRoot: true
   ingress:
     enabled: true
+    pathType: Prefix
     path: /console(/.*)?
     ingressClassName: ""
     # Used to create an Ingress record.

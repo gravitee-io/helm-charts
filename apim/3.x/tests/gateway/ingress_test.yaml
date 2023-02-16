@@ -79,3 +79,17 @@ tests:
           path: metadata.annotations.[kubernetes.io/ingress.class]
       - isNotEmpty:
           path: metadata.annotations.[my-annotation]
+
+  - it: Check Ingress pathType and path
+    set:
+      gateway:
+        ingress:
+          pathType: Exact
+          path: /test-gateway
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].pathType
+          value: Exact
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /test-gateway
