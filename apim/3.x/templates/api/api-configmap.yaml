@@ -140,12 +140,7 @@ data:
       {{- end }}
 
       {{- if .Values.api.services.metrics.enabled }}
-      metrics:
-        enabled: {{ .Values.api.services.metrics.enabled }}
-        {{- if .Values.api.services.metrics.prometheus }}
-        prometheus:
-{{ toYaml .Values.api.services.metrics.prometheus | indent 10 }}
-        {{- end }}
+      metrics: {{- toYaml .Values.api.services.metrics | nindent 10 }}
       {{- end }}
       {{- if .Values.api.services.subscription.enabled }}
       subscription:

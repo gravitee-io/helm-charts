@@ -328,12 +328,7 @@ data:
       {{- end }}
 
       {{- if .Values.gateway.services.metrics.enabled }}
-      metrics:
-        enabled: {{ .Values.gateway.services.metrics.enabled }}
-        {{- if .Values.gateway.services.metrics.prometheus }}
-        prometheus:
-{{ toYaml .Values.gateway.services.metrics.prometheus | indent 10 }}
-        {{- end }}
+      metrics: {{- toYaml .Values.gateway.services.metrics | nindent 10 }}
       {{- end }}
 
       {{- if .Values.gateway.services.tracing.enabled }}
