@@ -958,7 +958,7 @@ gateway:
     targetMemoryAverageUtilization: 80
   ingress:
     enabled: true
-    path: /gateway
+    path: /
     ingressClassName: ""
     # Used to create an Ingress record.
     # Multiple hostnames supported
