@@ -17,7 +17,10 @@ metadata:
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
   {{- if .Values.api.ingress.management.annotations }}
   annotations:
-    {{- include "common.ingress.annotations.render" (dict "annotations" .Values.api.ingress.management.annotations "ingressClassName" .Values.api.ingress.management.ingressClassName "openshift" .Values.openshift "context" $) | nindent 4 }}
+    {{- if eq (index .Values.api.ingress.management.annotations "kubernetes.io/ingress.class") "nginx" }}
+    nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_pass_header if-match;\n"
+    {{- end }}
+{{/*    {{- include "common.ingress.annotations.render" (dict "annotations" .Values.api.ingress.management.annotations "ingressClassName" .Values.api.ingress.management.ingressClassName "openshift" .Values.openshift "context" $) | nindent 4 }}*/}}
   {{- end }}
 spec:
   {{- if and (eq (include "common.ingress.supportsIngressClassname" .) "true") (.Values.api.ingress.management.ingressClassName) (ne .Values.api.ingress.management.ingressClassName "none") }}

@@ -606,7 +606,6 @@ api:
         - apim.example.com
       annotations:
         kubernetes.io/ingress.class: nginx
-        nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_pass_header if-match;\n"
         # kubernetes.io/tls-acme: "true"
       # tls:
         # Secrets must be manually created in the namespace.
