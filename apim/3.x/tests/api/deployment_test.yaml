@@ -22,7 +22,7 @@ tests:
           path: spec.template.spec.containers[0].env
           value:
             - name: portal.entrypoint
-              value: https://apim.example.com/gateway
+              value: https://apim.example.com/
       - isEmpty:
           # It should not contain init containers by default
           path: spec.template.spec.initContainers
