@@ -284,6 +284,10 @@ es:
     #     - /path/to/key2
   endpoints:
     - http://graviteeio-apim-elasticsearch-data.default.svc.cluster.local:9200
+  settings:
+    number_of_shards: 1
+    number_of_replicas: 1
+    refresh_interval: 5s
   pipeline:
     plugins:
       ingest: geoip, user_agent # geoip and user_agent plugins are enabled by default
