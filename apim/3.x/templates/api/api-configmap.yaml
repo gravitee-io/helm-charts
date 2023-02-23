@@ -417,6 +417,11 @@ data:
       login:
         # Create a default application when user connects to the portal for the very first time (default true)
         defaultApplication: {{ .Values.api.user.login.defaultApplication }}
+
+      {{- if .Values.api.user.password }}
+      password: {{ toYaml .Values.api.user.password | nindent 8 }}
+      {{- end }}
+
       creation:
         # Allows to register new users from portal (default false)
         #enabled: true
