@@ -94,3 +94,15 @@ tests:
       - matchRegex:
           path: data.[gravitee.yml]
           pattern: "management:\n  url: https://apim.example.com/mg.mt_-_ui~/"
+  - it: Set user password policy pattern
+    template: api/api-configmap.yaml
+    set:
+      api:
+        user:
+          password:
+            policy:
+              pattern: ^regex$
+    asserts:
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: "pattern: \\^regex\\$"
