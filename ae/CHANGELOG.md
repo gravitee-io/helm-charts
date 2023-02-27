@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Alert Engine](https://gi
 ### 1.1.42
 
 - [X] Allow users to define their own configuration file by defining a volume
+- [X] Add `externalTrafficPolicy` in service configuration
 
 ### 1.1.41
 

@@ -34,6 +34,8 @@ tests:
             protocol: TCP
             name: gateway-bridge
             appProtocol: http
+      - isNull:
+          path: spec.externalTrafficPolicy
 
   - it: Check bridge service with ssl enabled
     template: gateway/gateway-service.yaml
@@ -100,3 +102,31 @@ tests:
             protocol: TCP
             name: gateway-bridge
             appProtocol: https
+
+  - it: Deploy with NodePort and externalTrafficPolicy
+    template: gateway/gateway-service.yaml
+    set:
+      gateway:
+        service:
+          type: NodePort
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
+
+  - it: Deploy with LoadBalancer and externalTrafficPolicy
+    template: gateway/gateway-service.yaml
+    set:
+      gateway:
+        service:
+          type: LoadBalancer
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local

@@ -2,6 +2,9 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.7.4
+
+- [X] Add `externalTrafficPolicy` in service configuration
 
 ### 1.7.3
 - [X] Add upgrader framework job

@@ -16,6 +16,9 @@ metadata:
     {{- end }}
 spec:
   type: "{{ .Values.generator.service.type }}"
+  {{- if eq .Values.generator.service.type "NodePort" "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.generator.service.externalTrafficPolicy }}
+  {{- end }}
   ports:
     - name: {{ .Values.generator.name | trunc 63 | trimSuffix "-" }}
       port: {{ .Values.generator.service.externalPort }}

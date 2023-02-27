@@ -116,6 +116,8 @@ engine:
   
   service:
     type: ClusterIP
+    # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
+    externalTrafficPolicy: Cluster
     externalPort: 82
     internalPort: 8072
     internalPortName: http

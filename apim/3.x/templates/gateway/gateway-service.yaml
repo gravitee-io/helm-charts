@@ -19,6 +19,9 @@ spec:
   loadBalancerIP: "{{ .Values.gateway.service.loadBalancerIP }}"
   {{- end }}
   type: "{{ .Values.gateway.service.type }}"
+  {{- if eq .Values.gateway.service.type "NodePort" "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.gateway.service.externalTrafficPolicy }}
+  {{- end }}
   ports:
     - port: {{ .Values.gateway.service.externalPort }}
       targetPort: {{ .Values.gateway.service.internalPort }}

@@ -54,6 +54,8 @@ tests:
           value: my-cockpit-api
       - isEmpty:
           path: metadata.annotations
+      - isNull:
+          path: spec.externalTrafficPolicy
       - equal:
           path: spec
           value:
@@ -208,3 +210,31 @@ tests:
               port: 18063
               protocol: TCP
               targetPort: api-technical
+
+  - it: Deploy with NodePort and externalTrafficPolicy
+    template: api/api-service.yaml
+    set:
+      api:
+        service:
+          type: NodePort
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
+
+  - it: Deploy with LoadBalancer and externalTrafficPolicy
+    template: api/api-service.yaml
+    set:
+      api:
+        service:
+          type: LoadBalancer
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
