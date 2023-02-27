@@ -7,6 +7,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 
 - [X] Add support of user password policy config on API Management
 - [X] Add `externalTrafficPolicy` in service configuration
+- [X] Remove `email` block when smtp is disabled
 
 ### 3.1.62
 

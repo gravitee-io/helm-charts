@@ -345,9 +345,9 @@ data:
           {{- end }}
         {{- end }}
     # SMTP configuration used to send mails
+    {{- if .Values.smtp }}
     email:
       enabled: {{ .Values.smtp.enabled }}
-      {{- if .Values.smtp.enabled }} 
       host: {{ .Values.smtp.host }}
       subject: {{ .Values.smtp.subject | quote }}
       port: {{ .Values.smtp.port }}
@@ -360,8 +360,7 @@ data:
       properties:
         {{ toYaml . | nindent 8 | trim -}}
       {{- end }}
-      {{- end }}
-
+    {{- end }}
     # SMTP configuration used to send notifications / alerts
     notifiers:
       email:
