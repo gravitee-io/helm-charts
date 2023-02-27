@@ -352,6 +352,8 @@ api:
       path: /
   service:
     type: ClusterIP
+    # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
+    externalTrafficPolicy: Cluster
     externalPort: 83
     internalPort: 8093
     internalPortName: http
@@ -635,6 +637,8 @@ gateway:
 
   service:
     type: ClusterIP
+    # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
+    externalTrafficPolicy: Cluster
     externalPort: 82
     internalPort: 8092
     internalPortName: http
@@ -851,6 +855,8 @@ ui:
   service:
     name: nginx
     type: ClusterIP
+    # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
+    externalTrafficPolicy: Cluster
     externalPort: 8002
     internalPort: 8080
     internalPortName: http

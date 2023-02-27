@@ -54,6 +54,8 @@ tests:
           value: my-cockpit-ui
       - isEmpty:
           path: metadata.annotations
+      - isNull:
+          path: spec.externalTrafficPolicy
       - equal:
           path: spec
           value:
@@ -123,3 +125,31 @@ tests:
             port: 8002
             protocol: TCP
             targetPort: ui-http
+
+  - it: Deploy with NodePort and externalTrafficPolicy
+    template: ui/ui-service.yaml
+    set:
+      ui:
+        service:
+          type: NodePort
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
+
+  - it: Deploy with LoadBalancer and externalTrafficPolicy
+    template: ui/ui-service.yaml
+    set:
+      ui:
+        service:
+          type: LoadBalancer
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local

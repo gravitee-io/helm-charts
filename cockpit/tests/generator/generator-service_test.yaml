@@ -52,6 +52,8 @@ tests:
       - equal:
           path: metadata.name
           value: my-cockpit-swagger-generator
+      - isNull:
+          path: spec.externalTrafficPolicy
       - isEmpty:
           path: metadata.annotations
       - equal:
@@ -123,3 +125,31 @@ tests:
             port: 84
             protocol: TCP
             targetPort: generator-http
+
+  - it: Deploy with NodePort and externalTrafficPolicy
+    template: generator/generator-service.yaml
+    set:
+      generator:
+        service:
+          type: NodePort
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
+
+  - it: Deploy with LoadBalancer and externalTrafficPolicy
+    template: generator/generator-service.yaml
+    set:
+      generator:
+        service:
+          type: LoadBalancer
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
