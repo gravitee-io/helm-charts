@@ -47,6 +47,15 @@ tests:
           path: data.[gravitee.yml]
           pattern: "ssl.trust: TEST.properties.ssl.trust"
 
+  - it: Set smtp attributes
+    template: api/api-configmap.yaml
+    set:
+      smtp:
+    asserts:
+      - notMatchRegex:
+          path: data.[gravitee.yml]
+          pattern: "host: smtp.example.com"
+
   - it: Set notifiers smtp attributes
     template: api/api-configmap.yaml
     set:
