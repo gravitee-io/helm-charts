@@ -3,6 +3,9 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.64
+- [X] Add support of rate limit timeout
+
 ### 3.1.63
 - [X] Add support of user password policy config on API Management
 

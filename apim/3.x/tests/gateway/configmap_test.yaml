@@ -1,0 +1,16 @@
+suite: Test Management API default configmap
+templates:
+  - "gateway/gateway-configmap.yaml"
+tests:
+  - it: Set rate limit timeout
+    template: gateway/gateway-configmap.yaml
+    set:
+      gateway:
+        services:
+          ratelimit:
+            timeout: 10000
+    asserts:
+      - matchRegex:
+          path: data.[gravitee.yml]
+          pattern: " * ratelimit: \n 
+                     *   timeout: 10000\n"
