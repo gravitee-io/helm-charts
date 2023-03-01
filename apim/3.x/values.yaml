@@ -583,6 +583,8 @@ api:
   newsletterEnabled: true
   service:
     type: ClusterIP
+    # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
+    externalTrafficPolicy: Cluster
     externalPort: 83
     internalPort: 8083
     internalPortName: http
@@ -945,6 +947,8 @@ gateway:
   #         key: SPECIAL_LEVEL
   service:
     type: ClusterIP
+    # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
+    externalTrafficPolicy: Cluster
     externalPort: 82
     internalPort: 8082
     internalPortName: http
@@ -1100,6 +1104,8 @@ portal:
   service:
     name: nginx
     type: ClusterIP
+    # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
+    externalTrafficPolicy: Cluster
     externalPort: 8003
     internalPort: 8080
     internalPortName: http
@@ -1263,6 +1269,8 @@ ui:
   service:
     name: nginx
     type: ClusterIP
+    # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
+    externalTrafficPolicy: Cluster
     externalPort: 8002
     internalPort: 8080
     internalPortName: http

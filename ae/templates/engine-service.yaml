@@ -16,6 +16,9 @@ metadata:
     {{- end }}
 spec:
   type: "{{ .Values.engine.service.type }}"
+  {{- if eq .Values.engine.service.type "NodePort" "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.engine.service.externalTrafficPolicy }}
+  {{- end }}
   ports:
     - port: {{ .Values.engine.service.externalPort }}
       targetPort: {{ .Values.engine.service.internalPort }}

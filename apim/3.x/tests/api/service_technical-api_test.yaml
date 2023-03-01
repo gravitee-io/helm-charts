@@ -22,6 +22,8 @@ tests:
       - equal:
           path: spec.type
           value: ClusterIP
+      - isNull:
+          path: spec.externalTrafficPolicy
       - contains:
           path: spec.ports
           content:
@@ -60,3 +62,31 @@ tests:
             protocol: TCP
             name: api-technical
             appProtocol: http-test
+
+  - it: Deploy with NodePort and externalTrafficPolicy
+    template: api/api-service.yaml
+    set:
+      api:
+        service:
+          type: NodePort
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
+
+  - it: Deploy with LoadBalancer and externalTrafficPolicy
+    template: api/api-service.yaml
+    set:
+      api:
+        service:
+          type: LoadBalancer
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local

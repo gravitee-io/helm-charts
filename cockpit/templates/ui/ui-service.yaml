@@ -16,6 +16,9 @@ metadata:
     {{- end }}
 spec:
   type: "{{ .Values.ui.service.type }}"
+  {{- if eq .Values.ui.service.type "NodePort" "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.ui.service.externalTrafficPolicy }}
+  {{- end }}
   ports:
     - name: {{ .Values.ui.name | trunc 63 | trimSuffix "-" }}
       port: {{ .Values.ui.service.externalPort }}

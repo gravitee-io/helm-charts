@@ -120,6 +120,7 @@ hazelcast: {}
 
 api:
   enabled: true
+  upgrader: false
   name: api
   logging:
     stdout:
@@ -296,6 +297,8 @@ api:
 
   service:
     type: ClusterIP
+    # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
+    externalTrafficPolicy: Cluster
     externalPort: 8063
     internalPortName: api-http
 #    appProtocol: http
@@ -469,6 +472,8 @@ ui:
   service:
     name: nginx
     type: ClusterIP
+    # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
+    externalTrafficPolicy: Cluster
     externalPort: 8002
     internalPort: 8080
     internalPortName: ui-http
@@ -586,6 +591,8 @@ generator:
 
   service:
     type: ClusterIP
+    # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
+    externalTrafficPolicy: Cluster
     externalPort: 84
     internalPort: 3003
     internalPortName: generator-http

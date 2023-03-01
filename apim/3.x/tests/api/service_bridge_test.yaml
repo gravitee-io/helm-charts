@@ -34,6 +34,8 @@ tests:
             protocol: TCP
             name: api-bridge
             appProtocol: http
+      - isNull:
+          path: spec.externalTrafficPolicy
 
   - it: Check bridge service with ssl enabled
     template: api/api-service.yaml
@@ -101,3 +103,31 @@ tests:
             protocol: TCP
             name: api-bridge
             appProtocol: http-test
+
+  - it: Deploy with NodePort and externalTrafficPolicy
+    template: api/api-service.yaml
+    set:
+      api:
+        service:
+          type: NodePort
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
+
+  - it: Deploy with LoadBalancer and externalTrafficPolicy
+    template: api/api-service.yaml
+    set:
+      api:
+        service:
+          type: LoadBalancer
+          externalTrafficPolicy: Local
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.externalTrafficPolicy
+          value: Local
