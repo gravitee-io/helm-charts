@@ -10,10 +10,6 @@ This file documents all notable changes to [Gravitee.io Access Management 3.x](h
 
 - [X] Update AM version to 3.20.1
 
-### 1.0.55
-
-- [X] Update AM version to 3.20.1
-
 ### 1.0.54
 
 - [X] Fix AE alerts configuration without options
