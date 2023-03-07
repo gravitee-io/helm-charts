@@ -917,6 +917,9 @@ gateway:
 #      host: localhost
 #      port: 8379
 #    file:
+  gracefulShutdown:
+    delay: 0
+    unit: MILLISECONDS
 
   classloader:
     legacy:
