@@ -391,6 +391,11 @@ data:
     {{- if .Values.gateway.api }}
       api: {{- toYaml .Values.gateway.api | nindent 6 -}}
     {{- end}}
+
+    gracefulShutdown:
+      delay: {{ .Values.gateway.gracefulShutdown.delay }}
+      unit: {{ .Values.gateway.gracefulShutdown.unit }}
+
     # Old class loader behavior, false by default
     classloader:
       legacy:
