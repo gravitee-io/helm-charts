@@ -19,6 +19,11 @@ metadata:
   {{- if .Values.api.ingress.portal.annotations }}
   annotations:
     {{- include "common.ingress.annotations.render" (dict "annotations" .Values.api.ingress.portal.annotations "ingressClassName" .Values.api.ingress.portal.ingressClassName "openshift" .Values.openshift "context" $) | nindent 4 }}
+  {{- range $key, $value := .Values.api.ingress.portal.annotations }}
+    {{- if and (eq $key "kubernetes.io/ingress.class") (eq $value "nginx")}}
+    nginx.ingress.kubernetes.io/configuration-snippet: "etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
+    {{- end }}
+  {{- end }}
   {{- end }}
 spec:
   {{- if and (eq (include "common.ingress.supportsIngressClassname" .) "true") (.Values.api.ingress.portal.ingressClassName) (ne .Values.api.ingress.portal.ingressClassName "none") }}
