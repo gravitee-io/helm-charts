@@ -92,8 +92,6 @@ tests:
     template: gateway/gateway-deployment.yaml
     set:
       gateway:
-        readinessProbe:
-          apiSync: true
         services:
           core:
             http:
@@ -190,8 +188,6 @@ tests:
           core:
             http:
               enabled: true
-        readinessProbe:
-          apiSync: true
     asserts:
       - hasDocuments:
           count: 1

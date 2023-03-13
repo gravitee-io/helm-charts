@@ -136,11 +136,20 @@ spec:
                 command: {{ .Values.ui.lifecycle.preStop }}
             {{- end }}
           {{- end }}
-          livenessProbe: {{ toYaml .Values.ui.livenessProbe | nindent 12 }}
-          readinessProbe: {{ toYaml .Values.ui.readinessProbe | nindent 12 }}
-          resources: {{ toYaml .Values.ui.resources | nindent 12 }}
-          {{- if and (.Values.ui.startupProbe) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
-          startupProbe: {{ toYaml .Values.ui.startupProbe | nindent 12 }}
+          {{- if .Values.ui.deployment.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.ui.deployment.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.ui.deployment.customLivenessProbe }}
+          livenessProbe: {{ toYaml .Values.ui.deployment.customLivenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.ui.deployment.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.ui.deployment.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.ui.deployment.customReadinessProbe }}
+          readinessProbe: {{ toYaml .Values.ui.deployment.customReadinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if and (.Values.ui.deployment.startupProbe.enabled) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+          startupProbe: {{- omit .Values.ui.deployment.startupProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if and (.Values.ui.deployment.customStartupProbe) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+          startupProbe: {{ toYaml .Values.ui.deployment.customStartupProbe | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: config
