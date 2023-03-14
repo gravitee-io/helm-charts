@@ -1,4 +1,4 @@
-{{- if and (.Values.api.enabled) (not (include "api.externalConfig" .)) -}}
+{{- if and (.Values.api.enabled) (or (not (include "api.externalConfig" .)) (.Values.api.logging.debug)) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11,6 +11,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 data:
+{{- if not (include "api.externalConfig" .)}}
   gravitee.yml: |
     {{- if .Values.api.ssl.enabled }}
     jetty:
@@ -481,6 +482,7 @@ data:
     {{- if .Values.api.api }}
       api: {{- toYaml .Values.api.api | nindent 6 -}}
     {{- end}}
+    {{- end }}
   {{- if .Values.api.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>

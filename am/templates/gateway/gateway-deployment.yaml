@@ -1,6 +1,7 @@
 {{- if .Values.gateway.enabled -}}
 {{- $initContainers := .Values.initContainers -}}
 {{- $serviceAccount := include "am.serviceAccount" . -}}
+{{- $logbackVolumeName := include "gateway.logbackVolumeName" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -161,7 +162,7 @@ spec:
               mountPath: /opt/graviteeio-am-gateway/config/gravitee.yml
               subPath: gravitee.yml
           {{- if .Values.gateway.logging.debug }}
-            - name: config
+            - name: {{ $logbackVolumeName }}
               mountPath: /opt/graviteeio-am-gateway/config/logback.xml
               subPath: logback.xml
           {{- end }}
@@ -189,6 +190,11 @@ spec:
       volumes:
         {{- if not (include "gateway.externalConfig" .) }}
         - name: config
+          configMap:
+            name: {{ template "gravitee.gateway.fullname" . }}
+        {{- end }}
+        {{- if and (include "gateway.externalConfig" .) (.Values.gateway.logging.debug) }}
+        - name: logback
           configMap:
             name: {{ template "gravitee.gateway.fullname" . }}
         {{- end }}

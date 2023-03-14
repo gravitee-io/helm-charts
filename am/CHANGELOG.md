@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Access Management 3.x](h
 ### 1.0.57
 
 - [X] Add hook-delete-policy
+- [X] Allow users to use `logging.debug: true` when they define their own configuration file by defining a volume
 - [X] Remove ingress nginx annotation when `ingress.class` is not nginx
 
 ### 1.0.56

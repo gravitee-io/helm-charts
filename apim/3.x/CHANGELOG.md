@@ -6,6 +6,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 ### 3.1.65
 
 - [X] Add hook-delete-policy
+- [X] Allow users to use `logging.debug: true` when they define their own configuration file by defining a volume
 - [X] Add check to allow automatic Redis plugin download only for versions prior to 3.21.0 (it is now embedded in the distribution)
 - [X] Add SSL and Sentinel configuration management for Redis and updated doc. 
 - [X] Auto-generate `PORTAL_BASE_HREF` and `CONSOLE_BASE_HREF` environment variables
