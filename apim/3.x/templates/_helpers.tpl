@@ -266,6 +266,19 @@ Usage:
 {{- end }}
 
 {{/*
+Returns logback if an extraVolumes named config is defined and gateway.logging.debug is set to true, else return config
+Usage:
+{{ include "gateway.logbackVolumeName" . }}
+*/}}
+{{- define "gateway.logbackVolumeName" -}}
+{{- if and (include "gateway.externalConfig" .) (.Values.gateway.logging.debug) }}
+{{- print "logback" -}}
+{{- else -}}
+{{- print "config" -}}
+{{- end }}
+{{- end }}
+
+{{/*
 Returns true if an extraVolumes named config is defined
 Usage:
 {{ include "api.externalConfig" . }}
@@ -275,6 +288,19 @@ Usage:
 {{- if contains "- name: config" .Values.api.extraVolumes  }}
 {{- print "true" -}}
 {{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns logback if an extraVolumes named config is defined and api.logging.debug is set to true, else return config
+Usage:
+{{ include "api.logbackVolumeName" . }}
+*/}}
+{{- define "api.logbackVolumeName" -}}
+{{- if and (include "api.externalConfig" .) (.Values.api.logging.debug) }}
+{{- print "logback" -}}
+{{- else -}}
+{{- print "config" -}}
 {{- end }}
 {{- end }}
 
