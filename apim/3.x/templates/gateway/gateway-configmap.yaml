@@ -1,4 +1,4 @@
-{{- if and (.Values.gateway.enabled) (not (include "gateway.externalConfig" .)) -}}
+{{- if and (.Values.gateway.enabled) (or (not (include "gateway.externalConfig" .)) (.Values.gateway.logging.debug)) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11,6 +11,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 data:
+  {{- if not (include "gateway.externalConfig" .)}}
   gravitee.yml: |
     # Gateway HTTP server
     http:
@@ -413,6 +414,7 @@ data:
       legacy:
         enabled: {{ .Values.gateway.classloader.legacy.enabled }}
 
+  {{- end }}
   {{- if .Values.gateway.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
