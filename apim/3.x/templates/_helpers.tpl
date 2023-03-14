@@ -263,6 +263,14 @@ Usage:
 {{- end }}
 {{- end }}
 
+{{- define "gateway.logbackVolumeName" -}}
+{{- if and (include "gateway.externalConfig" .) (.Values.gateway.logging.debug) }}
+{{- print "logback" -}}
+{{- else -}}
+{{- print "config" -}}
+{{- end }}
+{{- end }}
+
 {{/*
 Returns true if an extraVolumes named config is defined
 Usage:

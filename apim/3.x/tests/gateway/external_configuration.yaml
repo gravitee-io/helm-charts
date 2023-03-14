@@ -22,6 +22,16 @@ tests:
       - hasDocuments:
           count: 1
 
+  - it: Should generate gateway-configmap.yaml when logging.debug is true
+    template: gateway/gateway-configmap.yaml
+    set:
+      gateway:
+        logging:
+          debug: true
+    asserts:
+      - hasDocuments:
+          count: 1
+
   - it: Should generate a volume named config in gateway-deployment.yaml
     template: gateway/gateway-deployment.yaml
     set:
