@@ -10,6 +10,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 - [X] Remove `apiSync` parameter under `gateway.readinessProbe`
 - [X] Allow users to define their own `customStartupProbe` `customReadinessProbe` `customlivenessProbe`
 - [X] Allow disabling analytics in Management API
+- [X] Update default version of MongoDB in values. Set it to 6.0.6
 
 - **BREAKING CHANGE**: Probes configuration has been changed. Check the default `values.yaml` before upgrade!
 
