@@ -339,6 +339,10 @@ Please be aware that the Elasticsearch installed by Gravitee is NOT recommended 
 `+null+`, defaults to Management API ingress value)_
 |`+[apim.example.com]/management+`
 
+|`+ui.scheme+` |Whether to use HTTP or HTTPS to communicate with Management API,
+defaults to https
+|`https`
+
 |`+ui.title+` |UI Portal title _(if set to `+null+`, retrieved from the
 management repository)_ |`+API Portal+`
 

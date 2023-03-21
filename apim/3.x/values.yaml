@@ -1025,6 +1025,7 @@ gateway:
 portal:
   enabled: true
   name: portal
+  scheme: https # should be https or http
   replicaCount: 1
   image:
     repository: graviteeio/apim-portal-ui
@@ -1170,6 +1171,7 @@ ui:
   enabled: true
   name: ui
   companyName: Gravitee.io
+  scheme: https # https or http
   title: Management UI
   managementTitle: API Management
   documentationLink: http://docs.gravitee.io/
