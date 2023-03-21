@@ -20,9 +20,9 @@ data:
       "baseURL": "{{ .Values.ui.baseURL }}"
       {{- else }}
       {{- if hasSuffix "/" .Values.api.ingress.management.path }}
-      "baseURL": "https://{{ index .Values.api.ingress.management.hosts 0 }}{{ .Values.api.ingress.management.path }}organizations/DEFAULT/environments/DEFAULT/"
+      "baseURL": "{{.Values.ui.scheme }}://{{ index .Values.api.ingress.management.hosts 0 }}{{ .Values.api.ingress.management.path }}organizations/DEFAULT/environments/DEFAULT/"
       {{- else }}
-      "baseURL": "https://{{ index .Values.api.ingress.management.hosts 0 }}{{ .Values.api.ingress.management.path }}/organizations/DEFAULT/environments/DEFAULT/"
+      "baseURL": "{{.Values.ui.scheme }}://{{ index .Values.api.ingress.management.hosts 0 }}{{ .Values.api.ingress.management.path }}/organizations/DEFAULT/environments/DEFAULT/"
       {{- end }}
       {{- end }}
       {{- if .Values.ui.managementTitle }},
