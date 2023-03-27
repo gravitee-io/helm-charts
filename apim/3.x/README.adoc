@@ -327,6 +327,68 @@ for detailed documentation on optional requirements Helm chart.
 
 Please be aware that the Elasticsearch installed by Gravitee is NOT recommended in production and it is just for testing purpose and running APIM locally.
 
+==== Redis
+To install Redis, use the command below :
+----
+helm install --set auth.password=p@ssw0rd redis-apim bitnami/redis
+----
+
+See
+https://github.com/bitnami/charts/tree/main/bitnami/redis[Redis] for detailed documentation on helm chart (like how to use Sentinel).
+
+
+Check that Redis pod is up and running before proceeding by running `kubectl get pods` as indicated below.
+
+----
+$ kubectl get pod
+NAME                    READY   STATUS    RESTARTS   AGE
+redis-apim-master-0     1/1     Running   0          105s
+redis-apim-replicas-0   1/1     Running   0          105s
+redis-apim-replicas-1   1/1     Running   0          68s
+redis-apim-replicas-2   1/1     Running   0          40s
+----
+
+
+To use Redis for rate limit policy, use the information below in `values.yml` and replace the `host`, `port` and `password` with details for your specific instance.
+You can enable ssl by setting `ssl` to true.
+
+----
+ratelimit:
+  type: redis
+gateway:
+  ratelimit:
+    redis:
+      host: redis-apim-master
+      port: 6379
+      password: p@ssw0rd
+      ssl: false
+----
+
+If you want to connect to a Sentinel cluster, you need to specify the `master` and the `nodes`.
+
+----
+gateway:
+  ratelimit:
+      password: p@ssw0rd
+      ssl: false
+      sentinel:
+        master: redis-master
+        nodes:
+          - host: sentinel1
+            port: 26379
+          - host: sentinel2
+            port: 26379
+----
+
+===== Other Keys
+
+[cols=",,",options="header",]
+|===
+|Parameter |Description |Default
+|`+gateway.ratelimit.redis.ssl+` |Enable SSL connection to Redis |`+false+`
+|`+gateway.ratelimit.redis.password+` |Redis password |`+false+`
+|===
+
 
 ==== Gravitee UI
 

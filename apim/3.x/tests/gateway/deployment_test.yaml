@@ -30,7 +30,7 @@ tests:
     set:
       gateway:
         image:
-          tag: 3.17
+          tag: 3.17.0
     asserts:
       - hasDocuments:
           count: 1
@@ -40,7 +40,7 @@ tests:
           of: apps/v1
       - equal:
           path: spec.template.spec.containers[0].image
-          value: graviteeio/apim-gateway:3.17
+          value: graviteeio/apim-gateway:3.17.0
       - isEmpty:
           # It should not contain environment variable by default
           path: spec.template.spec.containers[0].env
