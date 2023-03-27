@@ -172,6 +172,18 @@ data:
         {{- if .Values.gateway.ratelimit.redis.password }}
         password: {{ .Values.gateway.ratelimit.redis.password }}
         {{- end }}
+        {{- if .Values.gateway.ratelimit.redis.ssl }}
+        ssl: {{ .Values.gateway.ratelimit.redis.ssl }}
+        {{- end }}
+        {{- if and .Values.gateway.ratelimit.redis.sentinel (not (empty .Values.gateway.ratelimit.redis.sentinel.nodes)) }}
+        sentinel:
+          master: {{ .Values.gateway.ratelimit.redis.sentinel.master }}
+          nodes:
+            {{- range .Values.gateway.ratelimit.redis.sentinel.nodes }}
+            - host: {{ .host }}
+              port: {{ .port }}
+            {{- end }}
+        {{- end }}
       {{- end }}
 
     cache:

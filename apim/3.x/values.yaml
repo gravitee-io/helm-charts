@@ -770,9 +770,17 @@ gateway:
   websocket: false
   ratelimit:
     redis:
-      # host:
-      # port:
-      # password:
+#      host: redis
+#      port: 6379
+#      password:
+#      ssl: false
+#      sentinel:
+#        master: redis-master
+#        nodes:
+#          - host: sentinel1
+#            port: 26379
+#          - host: sentinel2
+#            port: 26379
   management: 
     http:
       # url: 
