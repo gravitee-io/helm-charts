@@ -15,7 +15,7 @@ tests:
           path: spec.template.spec.containers[0].env[1].value
           value: "/"
 
-  - it: Should generate a CONSOLE_BASE_HREF environment variable when modifying ingress path
+  - it: Should generate a PORTAL_BASE_HREF environment variable when modifying ingress path
     template: portal/portal-deployment.yaml
     set:
       portal:
