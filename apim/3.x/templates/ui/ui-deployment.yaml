@@ -1,4 +1,6 @@
 {{- if .Values.ui.enabled -}}
+{{- $base_href := include "ui.base_href" . -}}
+{{- $base_href_defined := include "ui.base_href.defined" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -89,6 +91,10 @@ spec:
           env:
             - name: MGMT_API_URL
               value: "https://{{index .Values.api.ingress.management.hosts 0 }}{{ .Values.api.ingress.management.path }}/"
+            {{- if not (eq $base_href_defined "true") }}
+            - name: CONSOLE_BASE_HREF
+              value: {{ $base_href }}
+            {{- end }}
 {{- if .Values.ui.env | default .Values.ui.deployment.extraEnvs }}
 {{ toYaml ( .Values.ui.env | default .Values.ui.deployment.extraEnvs ) | indent 12 }}
 {{- end }}
