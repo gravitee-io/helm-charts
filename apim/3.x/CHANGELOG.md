@@ -3,14 +3,13 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
-### 3.1.67
-
-- [X] Add hook-delete-policy
-
 ### 3.1.65
 
+- [X] Add hook-delete-policy
 - [X] Add check to allow automatic Redis plugin download only for versions prior to 3.21.0 (it is now embedded in the distribution)
 - [X] Add SSL and Sentinel configuration management for Redis and updated doc. 
+- [X] Auto-generate `PORTAL_BASE_HREF` and `CONSOLE_BASE_HREF` environment variables
+- [X] Remove ingress nginx annotation when `ingress.class` is not nginx
 
 ### 3.1.64
 
