@@ -3,6 +3,10 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.67
+
+- [X] Add hook-delete-policy
+
 ### 3.1.65
 
 - [X] Add check to allow automatic Redis plugin download only for versions prior to 3.21.0 (it is now embedded in the distribution)

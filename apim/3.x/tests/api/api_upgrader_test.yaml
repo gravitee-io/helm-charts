@@ -46,13 +46,13 @@ tests:
           path: metadata.annotations
           value:
             helm.sh/hook: pre-upgrade
-            helm.sh/hook-delete-policy: hook-succeeded
+            helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
       - equal:
           path: metadata.annotations.[helm.sh/hook]
           value: pre-upgrade
       - equal:
           path: metadata.annotations.[helm.sh/hook-delete-policy]
-          value: hook-succeeded
+          value: before-hook-creation,hook-succeeded
 
   - it: Check if the upgrader manifest is disabled by default
     template: api/api-upgrader-job.yaml
