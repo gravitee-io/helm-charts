@@ -68,6 +68,7 @@ tests:
           annotations:
             kubernetes.io/ingress.class: nginx
             my-annotation: my-annotation-value
+            nginx.ingress.kubernetes.io/rewrite-target: /$1
     asserts:
       - hasDocuments:
           count: 1
@@ -79,6 +80,31 @@ tests:
           path: metadata.annotations.[kubernetes.io/ingress.class]
       - isNotEmpty:
           path: metadata.annotations.[my-annotation]
+      - isNotEmpty:
+          path: metadata.annotations.[nginx.ingress.kubernetes.io/rewrite-target]
+
+  - it: Check Ingress networking.k8s.io/v1 with ingress.class notNginx
+    set:
+      gateway:
+        ingress:
+          ingressClassName: nginx
+          annotations:
+            kubernetes.io/ingress.class: notNginx
+            my-annotation: my-annotation-value
+            nginx.ingress.kubernetes.io/rewrite-target: /$1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - isAPIVersion:
+          of: networking.k8s.io/v1
+      - isEmpty:
+          path: metadata.annotations.[kubernetes.io/ingress.class]
+      - isNotEmpty:
+          path: metadata.annotations.[my-annotation]
+      - isEmpty:
+          path: metadata.annotations.[nginx.ingress.kubernetes.io/rewrite-target]
 
   - it: Check Ingress pathType and path
     set:

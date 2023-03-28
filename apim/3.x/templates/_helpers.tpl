@@ -216,9 +216,13 @@ Usage:
 {{ include "common.ingress.annotations.render" ( dict "annotations" .Values.path.to.the.Value "ingressClassName" .Values.path.to.the.Value "context" $) }}
 */}}
 {{- define "common.ingress.annotations.render" -}}
+{{ $ingressType := get $.annotations "kubernetes.io/ingress.class"  }}
 {{- range $key, $value := .annotations }}
 {{- if or ( ne $key "kubernetes.io/ingress.class" ) ( not ( and ( $.ingressClassName ) ( include "common.ingress.supportsIngressClassname" $.context ))) }}
+{{- if and (hasPrefix "nginx.ingress.kubernetes.io" $key) (ne $ingressType "nginx")}}
+{{ else }}
 {{ $key }}: {{ $value | quote }}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
