@@ -132,7 +132,7 @@ extraVolumes: |
         name: gravitee-config-configmap-name
 ----
 
-Where `gravitee-config-configmap-name` is the full path to the external configuration file.
+Where `gravitee-config-configmap-name` is the configmap name containing the external configuration file.
 
 External configuration files are only available for the AE Helm chart 1.1.42 and above, the AM Helm chart 1.0.53 and above, and the APIM Helm chart 3.1.60 and above.
 
