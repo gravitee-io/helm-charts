@@ -339,10 +339,6 @@ Please be aware that the Elasticsearch installed by Gravitee is NOT recommended 
 `+null+`, defaults to Management API ingress value)_
 |`+[apim.example.com]/management+`
 
-|`+ui.scheme+` |Whether to use HTTP or HTTPS to communicate with Management API,
-defaults to https
-|`https`
-
 |`+ui.title+` |UI Portal title _(if set to `+null+`, retrieved from the
 management repository)_ |`+API Portal+`
 
@@ -693,6 +689,10 @@ TLS termination] |`+[apim.example.com]+`
 
 |`+api.ingress.tls.secretName+` |Ingress TLS K8s secret name containing
 the TLS private key and certificate |`+api-custom-cert+`
+
+|`+api.ingress.management.scheme+` |Whether to use HTTP or HTTPS to communicate with Management API,
+defaults to https
+|`https`
 
 |`+api.resources.limits.cpu+` |K8s pod deployment
 https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/[limits
