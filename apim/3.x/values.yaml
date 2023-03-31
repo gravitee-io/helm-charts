@@ -603,6 +603,7 @@ api:
   ingress:
     management:
       enabled: true
+      scheme: https # should be https or http
       pathType: Prefix
       path: /management
       ingressClassName: ""
@@ -620,6 +621,7 @@ api:
       #    secretName: api-custom-cert
     portal:
       enabled: true
+      scheme: https # should be https or http
       pathType: Prefix
       path: /portal
       ingressClassName: ""
