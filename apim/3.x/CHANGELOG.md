@@ -11,6 +11,7 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 - [X] Add SSL and Sentinel configuration management for Redis and updated doc. 
 - [X] Auto-generate `PORTAL_BASE_HREF` and `CONSOLE_BASE_HREF` environment variables
 - [X] Remove ingress nginx annotation when `ingress.class` is not nginx
+- [X] Add variables `api.ingress.management.scheme` and `api.ingress.portal.scheme` default `https`
 
 ### 3.1.64
 
