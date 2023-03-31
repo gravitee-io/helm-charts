@@ -756,6 +756,10 @@ the TLS private key and certificate |`+api-custom-cert+`
 defaults to https
 |`https`
 
+|`+api.ingress.portal.scheme+` |Whether to use HTTP or HTTPS to communicate with Management API,
+defaults to https
+|`https`
+
 |`+api.resources.limits.cpu+` |K8s pod deployment
 https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/[limits
 definition for CPU] |`+500m+`
