@@ -47,6 +47,9 @@ data:
           path: {{ .Values.gateway.ssl.truststore.path }}
           password: {{ .Values.gateway.ssl.truststore.password | quote }}
         {{- end }}
+        {{- if .Values.gateway.ssl.sni }}
+        sni: true
+        {{- end }}
       {{- end }}
       websocket:
         enabled: {{ .Values.gateway.websocket }}
