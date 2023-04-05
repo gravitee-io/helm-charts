@@ -766,6 +766,7 @@ gateway:
   #    type: jks # Supports jks, pem, pkcs12
   #    path: ${gravitee.home}/security/truststore.jks
   #    password: secret
+  #  sni: true
   replicaCount: 1
   # sharding_tags:
   # tenant:
