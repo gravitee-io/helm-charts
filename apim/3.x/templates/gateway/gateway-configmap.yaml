@@ -179,7 +179,7 @@ data:
         {{- if .Values.gateway.ratelimit.redis.ssl }}
         ssl: {{ .Values.gateway.ratelimit.redis.ssl }}
         {{- end }}
-        {{- if and .Values.gateway.ratelimit.redis.sentinel (not (empty .Values.gateway.ratelimit.redis.sentinel.nodes)) }}
+        {{- if (not (empty ((.Values.gateway.ratelimit.redis.sentinel).nodes))) }}
         sentinel:
           master: {{ .Values.gateway.ratelimit.redis.sentinel.master }}
           nodes:
