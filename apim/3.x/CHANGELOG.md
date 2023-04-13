@@ -3,6 +3,10 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.1.69
+
+- [X] Allow disabling analytics in Management API
+
 ### 3.1.68
 
 - [X] Revert Previous commit "Remove old and unused `cache.type` from gateway configmap"

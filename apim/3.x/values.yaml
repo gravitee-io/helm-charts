@@ -669,6 +669,10 @@ api:
   #    secret:
   #      secretName: gravitee-config-secret-name
 
+  # you can choose if you want to enable analytics using elasticsearch or disable it (set type to "none")
+  analytics:
+    type: elasticsearch # or none
+
 gateway:
   enabled: true
   type: Deployment
