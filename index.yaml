@@ -7,7 +7,7 @@ entries:
         - Add `externalTrafficPolicy` in service configuration
     apiVersion: v1
     appVersion: 2.0.0
-    created: "2023-04-06T09:40:52.256359+02:00"
+    created: "2023-04-19T10:46:23.984258+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 464ebab2a37fa174898d4bce020e09e9a07d42b42a67f72788c301c52c87c628
     home: https://gravitee.io
@@ -33,7 +33,7 @@ entries:
         - Add cluster synchronization schedule time
     apiVersion: v1
     appVersion: 2.0.0
-    created: "2023-04-06T09:40:52.255573+02:00"
+    created: "2023-04-19T10:46:23.983393+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 5603c961a107748996db188b2802c1426fff2809de11a4826438d20ed46a2db3
     home: https://gravitee.io
@@ -56,7 +56,7 @@ entries:
         - Add optional value to use gravitee licence key
     apiVersion: v1
     appVersion: 1.6.5
-    created: "2023-04-06T09:40:52.25476+02:00"
+    created: "2023-04-19T10:46:23.982563+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 19af2318589a6f56342a3fe4e7fc523827022dd8608cc4ba0163373e026ebde3
     home: https://gravitee.io
@@ -79,7 +79,7 @@ entries:
         - Fix security context implementation
     apiVersion: v1
     appVersion: 1.6.4
-    created: "2023-04-06T09:40:52.25253+02:00"
+    created: "2023-04-19T10:46:23.980876+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 3e010e0dd27f4d99d0446ae417d84c6ba657343d6a068eec69eb495d14c0c0ee
     home: https://gravitee.io
@@ -104,7 +104,7 @@ entries:
         - Add Bridge service to Management API
     apiVersion: v1
     appVersion: 1.6.4
-    created: "2023-04-06T09:40:52.251854+02:00"
+    created: "2023-04-19T10:46:23.979969+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 3e535a6500efb7b2c5ba161c69a411cc6f6b948fcbff2f3c387a4d986cb434fe
     home: https://gravitee.io
@@ -128,7 +128,7 @@ entries:
         - Add support for ingressClassName
     apiVersion: v1
     appVersion: 1.6.1
-    created: "2023-04-06T09:40:52.251167+02:00"
+    created: "2023-04-19T10:46:23.979183+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: aa1c56dfb483e750f75076c7da8cba44f6d8acfae8d6454b23f0a81af0b68002
     home: https://gravitee.io
@@ -151,7 +151,7 @@ entries:
         - Add support for managed ServiceAccounts name provided by user
     apiVersion: v1
     appVersion: 1.6.1
-    created: "2023-04-06T09:40:52.250446+02:00"
+    created: "2023-04-19T10:46:23.978466+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 8f3dc610c0ed46e784defe5e0e784565b9eea70e34b5cbf3ac89360a068f2eba
     home: https://gravitee.io
@@ -174,7 +174,7 @@ entries:
         - Add support for PodDisruptionBudget
     apiVersion: v1
     appVersion: 1.6.1
-    created: "2023-04-06T09:40:52.249735+02:00"
+    created: "2023-04-19T10:46:23.977733+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: e3f6d4f0f114e504471437736a8551fab8db2b94a82a1efac5dd46e08e412585
     home: https://gravitee.io
@@ -197,7 +197,7 @@ entries:
         - Allow name overriding
     apiVersion: v1
     appVersion: 1.6.1
-    created: "2023-04-06T09:40:52.24908+02:00"
+    created: "2023-04-19T10:46:23.977041+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: a0a757e892ea0c9d33915c6334acce46b706b2a8ed0d8ac1ae24ad25fb10fc4b
     home: https://gravitee.io
@@ -220,7 +220,7 @@ entries:
         - Reorder HPA resources to avoid outofsync state with ArgoCD
     apiVersion: v1
     appVersion: 1.6.1
-    created: "2023-04-06T09:40:52.248285+02:00"
+    created: "2023-04-19T10:46:23.976319+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: d5c63597a2b44ad80902a9e6c7612e0f224b6474793adf72d58294df1bb5ac67
     home: https://gravitee.io
@@ -243,7 +243,7 @@ entries:
         - Fix Technical API Ingress
     apiVersion: v1
     appVersion: 1.6.1
-    created: "2023-04-06T09:40:52.247496+02:00"
+    created: "2023-04-19T10:46:23.975466+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: f581bfe6974318d3f6576f79ee7258927e98f4c3c813767cb64c4fb11c168aad
     home: https://gravitee.io
@@ -267,7 +267,7 @@ entries:
         - Add support for envFrom
     apiVersion: v1
     appVersion: 1.6.1
-    created: "2023-04-06T09:40:52.246837+02:00"
+    created: "2023-04-19T10:46:23.974751+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 783d4562da0e94c03bc727b8c3a2db6d3e44bfc704137ea5079a9c79238c8d04
     home: https://gravitee.io
@@ -290,7 +290,7 @@ entries:
         - Fix ignoring the managedServiceAccount in the deployment files
     apiVersion: v1
     appVersion: 1.6.0
-    created: "2023-04-06T09:40:52.244908+02:00"
+    created: "2023-04-19T10:46:23.972988+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: e6574391971abbb4668ad5bd297cc8a175c1d4540dba13cb75bcf2bb139d47f1
     home: https://gravitee.io
@@ -313,7 +313,7 @@ entries:
         - Set default array for topologySpreadConstraints
     apiVersion: v1
     appVersion: 1.6.0
-    created: "2023-04-06T09:40:52.244364+02:00"
+    created: "2023-04-19T10:46:23.972001+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 1d002dda5a87dc7f8d441d1977613087ddfdcd989a79d0f65bfa236cf85fa460
     home: https://gravitee.io
@@ -336,7 +336,7 @@ entries:
         - Add support for topologySpreadConstraints
     apiVersion: v1
     appVersion: 1.6.0
-    created: "2023-04-06T09:40:52.243797+02:00"
+    created: "2023-04-19T10:46:23.971384+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: d503070064e64e034f80c853a26dd1bed60d10960de2d0f82ae44e86c0713a39
     home: https://gravitee.io
@@ -361,7 +361,7 @@ entries:
         - Add ServiceAccount to all deployments
     apiVersion: v1
     appVersion: 1.6.0
-    created: "2023-04-06T09:40:52.243094+02:00"
+    created: "2023-04-19T10:46:23.970785+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: c6a2f8ff37be3243a84fc88470d1d1953a20cbd168310a38e0214ba0e4e9be48
     home: https://gravitee.io
@@ -383,7 +383,7 @@ entries:
       artifacthub.io/changes: '- Add support for revisionHistoryLimit'
     apiVersion: v1
     appVersion: 1.5.1
-    created: "2023-04-06T09:40:52.242355+02:00"
+    created: "2023-04-19T10:46:23.97019+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 7171398e6dd67c017eb52249ed700e8a9a6bfa0a56db2b893113d3f49b96f8c3
     home: https://gravitee.io
@@ -405,7 +405,7 @@ entries:
       artifacthub.io/changes: '- Update processor env var to remove hyphens'
     apiVersion: v1
     appVersion: 1.4.1
-    created: "2023-04-06T09:40:52.241734+02:00"
+    created: "2023-04-19T10:46:23.969605+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: e6560780d855f3e8cec80b52fd3b63792696e5a8baf56eba633d0c6d80d6c8a6
     home: https://gravitee.io
@@ -427,7 +427,7 @@ entries:
       artifacthub.io/changes: '- Improve startupProbe'
     apiVersion: v1
     appVersion: 1.4.1
-    created: "2023-04-06T09:40:52.241209+02:00"
+    created: "2023-04-19T10:46:23.968999+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 60e62a0699a2e63ae12ca7f961faf8f6ad79782a13ba105ad54f9ca49695c352
     home: https://gravitee.io
@@ -449,7 +449,7 @@ entries:
       artifacthub.io/changes: '- Support Ingress kubernetes >= 1.22.x'
     apiVersion: v1
     appVersion: 1.4.1
-    created: "2023-04-06T09:40:52.240675+02:00"
+    created: "2023-04-19T10:46:23.968278+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: f656dce3c80e193707213eed2afb69f925375ee94cb4b855092a3e08661f6654
     home: https://gravitee.io
@@ -473,7 +473,7 @@ entries:
         - Configure deployment strategy
     apiVersion: v1
     appVersion: 1.4.1
-    created: "2023-04-06T09:40:52.240162+02:00"
+    created: "2023-04-19T10:46:23.967628+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: a2292ca4adb10619503b9154be7dae3a57d8cbe098df40f2bd24d6a80278f5a1
     home: https://gravitee.io
@@ -497,7 +497,7 @@ entries:
         - Update Hazelcast configuration
     apiVersion: v1
     appVersion: 1.4.0
-    created: "2023-04-06T09:40:52.239455+02:00"
+    created: "2023-04-19T10:46:23.966989+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: e120529c1b02939cdd5b1ded41e1d1d94983a4182d6cbad46b3a6cba22860bba
     home: https://gravitee.io
@@ -519,7 +519,7 @@ entries:
       artifacthub.io/changes: '- Fix Deployment issue'
     apiVersion: v1
     appVersion: 1.3.3
-    created: "2023-04-06T09:40:52.236526+02:00"
+    created: "2023-04-19T10:46:23.965396+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 8fecca47c42ef811f73d9d905ab1d8af5e9de0a9c50c69a4918b6d9ac0236617
     home: https://gravitee.io
@@ -541,7 +541,7 @@ entries:
       artifacthub.io/changes: '- Improve Deployment configurability'
     apiVersion: v1
     appVersion: 1.3.3
-    created: "2023-04-06T09:40:52.235925+02:00"
+    created: "2023-04-19T10:46:23.96478+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: fa6036299cddc485021b43809047195814c110323bd128b1f5ac19155ddaffa4
     home: https://gravitee.io
@@ -564,7 +564,7 @@ entries:
         role creation'
     apiVersion: v1
     appVersion: 1.3.2
-    created: "2023-04-06T09:40:52.235265+02:00"
+    created: "2023-04-19T10:46:23.963148+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: ffc048b1d89ceba452cfdbd4aa5327c178e55739b1a778a4c4fb57a0e955836b
     home: https://gravitee.io
@@ -586,7 +586,7 @@ entries:
       artifacthub.io/changes: '- Downgrade required kube version to 1.14'
     apiVersion: v1
     appVersion: 1.3.0
-    created: "2023-04-06T09:40:52.234368+02:00"
+    created: "2023-04-19T10:46:23.962024+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 996acf9fdd61419b45bcf14c39efe1ae459f8b2c63b3ddf1ddded6b44962a97e
     home: https://gravitee.io
@@ -606,7 +606,7 @@ entries:
     version: 1.1.16
   - apiVersion: v1
     appVersion: 1.3.0
-    created: "2023-04-06T09:40:52.233673+02:00"
+    created: "2023-04-19T10:46:23.961337+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 2b419a8f6dc3a5de6b371f316e2590e12c40eec820a3126b836c0a64a02e5dd6
     home: https://gravitee.io
@@ -619,7 +619,7 @@ entries:
     version: 1.1.15
   - apiVersion: v1
     appVersion: 1.2.18
-    created: "2023-04-06T09:40:52.233139+02:00"
+    created: "2023-04-19T10:46:23.960859+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: ebd0eb77b4ba7f03acdb9eedc27c172ad747e0f6675522184eb2f176b1615ea8
     home: https://gravitee.io
@@ -632,7 +632,7 @@ entries:
     version: 1.1.14
   - apiVersion: v1
     appVersion: 1.2.18
-    created: "2023-04-06T09:40:52.232346+02:00"
+    created: "2023-04-19T10:46:23.960305+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: f8c7d474ebbaa27be77ef3a5096b796e9413f067da6d044f0943139986f9107c
     home: https://gravitee.io
@@ -645,7 +645,7 @@ entries:
     version: 1.1.12
   - apiVersion: v1
     appVersion: 1.2.13
-    created: "2023-04-06T09:40:52.231663+02:00"
+    created: "2023-04-19T10:46:23.959832+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: e624e4706927f3d2839c979d1f3cb35c1581b3086d3f9c3d65d883701c9db0df
     home: https://gravitee.io
@@ -658,7 +658,7 @@ entries:
     version: 1.1.11
   - apiVersion: v1
     appVersion: 1.2.7
-    created: "2023-04-06T09:40:52.231039+02:00"
+    created: "2023-04-19T10:46:23.959282+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: fd55cc1b6a3ad204259cd559df36f41d67f413683a25133b454be367c5ad46a0
     home: https://gravitee.io
@@ -671,7 +671,7 @@ entries:
     version: 1.1.10
   - apiVersion: v1
     appVersion: 1.2.6
-    created: "2023-04-06T09:40:52.261542+02:00"
+    created: "2023-04-19T10:46:23.990405+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: b3e7fd209f934df806d21856fe18020c7817c1fce474d5d4f41f0a11804ed83d
     home: https://gravitee.io
@@ -684,7 +684,7 @@ entries:
     version: 1.1.9
   - apiVersion: v1
     appVersion: 1.2.1
-    created: "2023-04-06T09:40:52.260104+02:00"
+    created: "2023-04-19T10:46:23.987756+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: a6599451bccec3718bd46aa71a20d4e0872b677b5502ef2faa01495ae7dd4cab
     home: https://gravitee.io
@@ -697,7 +697,7 @@ entries:
     version: 1.1.8
   - apiVersion: v1
     appVersion: 1.2.1
-    created: "2023-04-06T09:40:52.259325+02:00"
+    created: "2023-04-19T10:46:23.986897+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 4e76ade034fe5ac776c70656ab3ca97e103e187a65488e95096ee4db72fb9492
     home: https://gravitee.io
@@ -710,7 +710,7 @@ entries:
     version: 1.1.7
   - apiVersion: v1
     appVersion: 1.2.1
-    created: "2023-04-06T09:40:52.258241+02:00"
+    created: "2023-04-19T10:46:23.986069+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 08614013b975a8c4e8b493fc14d48b0e2f47e9c276c92fab137594d4adc8159b
     home: https://gravitee.io
@@ -723,7 +723,7 @@ entries:
     version: 1.1.6
   - apiVersion: v1
     appVersion: 1.2.1
-    created: "2023-04-06T09:40:52.257132+02:00"
+    created: "2023-04-19T10:46:23.985271+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: c006086ab25048da954dc80259db670fa443174cc3f5e6b91502925ba7aaa32a
     home: https://gravitee.io
@@ -736,7 +736,7 @@ entries:
     version: 1.1.5
   - apiVersion: v1
     appVersion: 1.2.0
-    created: "2023-04-06T09:40:52.253878+02:00"
+    created: "2023-04-19T10:46:23.981819+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 151a38f99de92f55bf4106a16f7877f3f8980cc739ed1aa8f34f763db09ca34d
     home: https://gravitee.io
@@ -749,7 +749,7 @@ entries:
     version: 1.1.4
   - apiVersion: v1
     appVersion: 1.1.0
-    created: "2023-04-06T09:40:52.245667+02:00"
+    created: "2023-04-19T10:46:23.973899+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: ad7d5b1811f75c8a33426e3366e42f20ab792d55a3efe2c117ce90e9ec4d3e28
     home: https://gravitee.io
@@ -762,7 +762,7 @@ entries:
     version: 1.1.3
   - apiVersion: v1
     appVersion: 1.1.0
-    created: "2023-04-06T09:40:52.23854+02:00"
+    created: "2023-04-19T10:46:23.966371+02:00"
     description: Official Gravitee.io Helm chart for Alert Engine
     digest: 3e6cc2b6a12c9293485f9414443350609b420ded07727a885e4a8fbc383b265e
     home: https://gravitee.io
@@ -781,7 +781,7 @@ entries:
         - Allow users to use `logging.debug: true` when they define their own configuration file by defining a volume
     apiVersion: v1
     appVersion: 3.20.1
-    created: "2023-04-06T09:40:52.425406+02:00"
+    created: "2023-04-19T10:46:24.144788+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -812,7 +812,7 @@ entries:
       artifacthub.io/changes: '- Add `externalTrafficPolicy` in service configuration'
     apiVersion: v1
     appVersion: 3.20.1
-    created: "2023-04-06T09:40:52.419502+02:00"
+    created: "2023-04-19T10:46:24.139371+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -843,7 +843,7 @@ entries:
       artifacthub.io/changes: '- Update AM version to 3.20.1'
     apiVersion: v1
     appVersion: 3.20.1
-    created: "2023-04-06T09:40:52.413379+02:00"
+    created: "2023-04-19T10:46:24.133317+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -875,7 +875,7 @@ entries:
         - Fix AE alerts configuration without options
     apiVersion: v1
     appVersion: 3.18.6
-    created: "2023-04-06T09:40:52.407424+02:00"
+    created: "2023-04-19T10:46:24.127393+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -907,7 +907,7 @@ entries:
         - Allow users to define their own configuration file by defining a volume
     apiVersion: v1
     appVersion: 3.18.6
-    created: "2023-04-06T09:40:52.40185+02:00"
+    created: "2023-04-19T10:46:24.121882+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -939,7 +939,7 @@ entries:
         - Disable upgrader framework job by default
     apiVersion: v1
     appVersion: 3.18.6
-    created: "2023-04-06T09:40:52.396949+02:00"
+    created: "2023-04-19T10:46:24.116872+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -976,7 +976,7 @@ entries:
         - Add AE engine list support
     apiVersion: v1
     appVersion: 3.18.6
-    created: "2023-04-06T09:40:52.391072+02:00"
+    created: "2023-04-19T10:46:24.111379+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -1012,7 +1012,7 @@ entries:
         - Add services core (a.k.a technical API) support in deployment
     apiVersion: v1
     appVersion: 3.18.6
-    created: "2023-04-06T09:40:52.38524+02:00"
+    created: "2023-04-19T10:46:24.10587+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -1046,7 +1046,7 @@ entries:
         - Add support for Openshift Routes by removing ingress annotation
     apiVersion: v1
     appVersion: 3.18.6
-    created: "2023-04-06T09:40:52.377732+02:00"
+    created: "2023-04-19T10:46:24.099222+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -1078,7 +1078,7 @@ entries:
         - Add optional value to use gravitee licence key
     apiVersion: v1
     appVersion: 3.18.6
-    created: "2023-04-06T09:40:52.372371+02:00"
+    created: "2023-04-19T10:46:24.093679+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -1111,7 +1111,7 @@ entries:
         - Add settings for Backend SSL connection
     apiVersion: v1
     appVersion: 3.15.9
-    created: "2023-04-06T09:40:52.367126+02:00"
+    created: "2023-04-19T10:46:24.088596+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -1144,7 +1144,7 @@ entries:
         - Add support for autoscaling/v2
     apiVersion: v1
     appVersion: 3.15.9
-    created: "2023-04-06T09:40:52.362062+02:00"
+    created: "2023-04-19T10:46:24.083815+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1175,7 +1175,7 @@ entries:
         - Add support for ingressClassName
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:52.359626+02:00"
+    created: "2023-04-19T10:46:24.081659+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1206,7 +1206,7 @@ entries:
         - Add support for managed ServiceAccounts name provided by user
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:52.357425+02:00"
+    created: "2023-04-19T10:46:24.079453+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1237,7 +1237,7 @@ entries:
         - Add support for jetty configuration
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:52.354738+02:00"
+    created: "2023-04-19T10:46:24.077029+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1268,7 +1268,7 @@ entries:
         - Add support for PodDisruptionBudget
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:52.352293+02:00"
+    created: "2023-04-19T10:46:24.0745+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1299,7 +1299,7 @@ entries:
         - Reorder HPA resources to avoid outofsync state with ArgoCD
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:52.347858+02:00"
+    created: "2023-04-19T10:46:24.070554+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1330,7 +1330,7 @@ entries:
         - Fix ignoring the managedServiceAccount in the deployment files
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:52.345372+02:00"
+    created: "2023-04-19T10:46:24.067776+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1361,7 +1361,7 @@ entries:
         - Set default array for topologySpreadConstraints
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:52.342925+02:00"
+    created: "2023-04-19T10:46:24.06534+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1397,7 +1397,7 @@ entries:
         variables (csp, xframe, cors, csrf)\n- Add support for topologySpreadConstraints\n"
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:52.339859+02:00"
+    created: "2023-04-19T10:46:24.06305+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1429,7 +1429,7 @@ entries:
         - Improve AM Gateway readinessProbe configuration
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:52.33755+02:00"
+    created: "2023-04-19T10:46:24.060358+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1462,7 +1462,7 @@ entries:
         - Add ServiceAccount to all deployments
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:52.335209+02:00"
+    created: "2023-04-19T10:46:24.058205+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1493,7 +1493,7 @@ entries:
         - Add support for revisionHistoryLimit
     apiVersion: v1
     appVersion: 3.14.0
-    created: "2023-04-06T09:40:52.332413+02:00"
+    created: "2023-04-19T10:46:24.056086+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1524,7 +1524,7 @@ entries:
         - Allow to override init containers for downloading jdbc drivers
     apiVersion: v1
     appVersion: 3.14.0
-    created: "2023-04-06T09:40:52.330284+02:00"
+    created: "2023-04-19T10:46:24.053455+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1555,7 +1555,7 @@ entries:
         - Allow to override init containers for additional plugins
     apiVersion: v1
     appVersion: 3.14.0
-    created: "2023-04-06T09:40:52.327964+02:00"
+    created: "2023-04-19T10:46:24.051597+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1586,7 +1586,7 @@ entries:
         template for AM Gateway & API \n"
     apiVersion: v1
     appVersion: 3.11.0
-    created: "2023-04-06T09:40:52.325233+02:00"
+    created: "2023-04-19T10:46:24.049587+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1617,7 +1617,7 @@ entries:
         - Support Ingress kubernetes >= 1.22.x
     apiVersion: v1
     appVersion: 3.11.0
-    created: "2023-04-06T09:40:52.319224+02:00"
+    created: "2023-04-19T10:46:24.044003+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1649,7 +1649,7 @@ entries:
         - Update gravitee.io AM v3.11.0
     apiVersion: v1
     appVersion: 3.11.0
-    created: "2023-04-06T09:40:52.316147+02:00"
+    created: "2023-04-19T10:46:24.041658+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1680,7 +1680,7 @@ entries:
         - Make Management API entrypoint configurable using `api.http.api.entrypoint` value
     apiVersion: v1
     appVersion: 3.9.3
-    created: "2023-04-06T09:40:52.313802+02:00"
+    created: "2023-04-19T10:46:24.039097+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1710,7 +1710,7 @@ entries:
       artifacthub.io/changes: '- Add logger for com.graviteesource packages'
     apiVersion: v1
     appVersion: 3.9.2
-    created: "2023-04-06T09:40:52.311069+02:00"
+    created: "2023-04-19T10:46:24.036589+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1740,7 +1740,7 @@ entries:
       artifacthub.io/changes: '- Fix additional plugins integration'
     apiVersion: v1
     appVersion: 3.9.2
-    created: "2023-04-06T09:40:52.308461+02:00"
+    created: "2023-04-19T10:46:24.034278+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1770,7 +1770,7 @@ entries:
       artifacthub.io/changes: '- Fix additional plugins integration'
     apiVersion: v1
     appVersion: 3.9.2
-    created: "2023-04-06T09:40:52.305748+02:00"
+    created: "2023-04-19T10:46:24.031729+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1800,7 +1800,7 @@ entries:
       artifacthub.io/changes: '- Fix additional plugins integration'
     apiVersion: v1
     appVersion: 3.9.2
-    created: "2023-04-06T09:40:52.303438+02:00"
+    created: "2023-04-19T10:46:24.028482+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1830,7 +1830,7 @@ entries:
       artifacthub.io/changes: '- Improve Deployment configurability'
     apiVersion: v1
     appVersion: 3.9.2
-    created: "2023-04-06T09:40:52.3005+02:00"
+    created: "2023-04-19T10:46:24.026257+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1860,7 +1860,7 @@ entries:
       artifacthub.io/changes: '- Remove Ingress beta API and add support for networking.k8s.io'
     apiVersion: v1
     appVersion: 3.9.2
-    created: "2023-04-06T09:40:52.297842+02:00"
+    created: "2023-04-19T10:46:24.023841+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1892,7 +1892,7 @@ entries:
         - Add support for JDBC Connection pool
     apiVersion: v1
     appVersion: 3.9.0
-    created: "2023-04-06T09:40:52.291799+02:00"
+    created: "2023-04-19T10:46:24.018291+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1923,7 +1923,7 @@ entries:
         constants.json file\n- Remove duplicate gateway.url value in AM \n"
     apiVersion: v1
     appVersion: 3.8.1
-    created: "2023-04-06T09:40:52.289527+02:00"
+    created: "2023-04-19T10:46:24.015936+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1955,7 +1955,7 @@ entries:
         - Handle gateway.url value
     apiVersion: v1
     appVersion: 3.8.1
-    created: "2023-04-06T09:40:52.287199+02:00"
+    created: "2023-04-19T10:46:24.01377+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -1986,7 +1986,7 @@ entries:
         - Fix wrong constants.json file
     apiVersion: v1
     appVersion: 3.8.1
-    created: "2023-04-06T09:40:52.284232+02:00"
+    created: "2023-04-19T10:46:24.011217+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2016,7 +2016,7 @@ entries:
       artifacthub.io/changes: '- Add support for Access Gateway TLS configuration'
     apiVersion: v1
     appVersion: 3.7.1
-    created: "2023-04-06T09:40:52.281892+02:00"
+    created: "2023-04-19T10:46:24.009096+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2044,7 +2044,7 @@ entries:
     version: 1.0.15
   - apiVersion: v1
     appVersion: 3.7.1
-    created: "2023-04-06T09:40:52.279766+02:00"
+    created: "2023-04-19T10:46:24.006957+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2072,7 +2072,7 @@ entries:
     version: 1.0.14
   - apiVersion: v1
     appVersion: 3.5.0
-    created: "2023-04-06T09:40:52.277286+02:00"
+    created: "2023-04-19T10:46:24.004457+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2090,7 +2090,7 @@ entries:
     version: 1.0.13
   - apiVersion: v1
     appVersion: 3.5.0
-    created: "2023-04-06T09:40:52.275075+02:00"
+    created: "2023-04-19T10:46:24.00261+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2108,7 +2108,7 @@ entries:
     version: 1.0.12
   - apiVersion: v1
     appVersion: 3.4.0
-    created: "2023-04-06T09:40:52.273211+02:00"
+    created: "2023-04-19T10:46:24.000582+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2126,7 +2126,7 @@ entries:
     version: 1.0.11
   - apiVersion: v1
     appVersion: 3.1.2
-    created: "2023-04-06T09:40:52.271146+02:00"
+    created: "2023-04-19T10:46:23.9987+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2144,7 +2144,7 @@ entries:
     version: 1.0.10
   - apiVersion: v1
     appVersion: 3.1.2
-    created: "2023-04-06T09:40:52.433079+02:00"
+    created: "2023-04-19T10:46:24.151953+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2162,7 +2162,7 @@ entries:
     version: 1.0.9
   - apiVersion: v1
     appVersion: 3.1.2
-    created: "2023-04-06T09:40:52.43155+02:00"
+    created: "2023-04-19T10:46:24.150503+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2180,7 +2180,7 @@ entries:
     version: 1.0.8
   - apiVersion: v1
     appVersion: 3.1.1
-    created: "2023-04-06T09:40:52.430042+02:00"
+    created: "2023-04-19T10:46:24.148932+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2198,7 +2198,7 @@ entries:
     version: 1.0.7
   - apiVersion: v1
     appVersion: 3.0.4
-    created: "2023-04-06T09:40:52.428158+02:00"
+    created: "2023-04-19T10:46:24.147194+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2216,7 +2216,7 @@ entries:
     version: 1.0.6
   - apiVersion: v1
     appVersion: 2.10.15
-    created: "2023-04-06T09:40:52.379383+02:00"
+    created: "2023-04-19T10:46:24.100798+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2234,7 +2234,7 @@ entries:
     version: 1.0.5
   - apiVersion: v1
     appVersion: 2.10.15
-    created: "2023-04-06T09:40:52.349951+02:00"
+    created: "2023-04-19T10:46:24.072218+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2252,7 +2252,7 @@ entries:
     version: 1.0.4
   - apiVersion: v1
     appVersion: 2.10.14
-    created: "2023-04-06T09:40:52.32237+02:00"
+    created: "2023-04-19T10:46:24.047051+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2270,7 +2270,7 @@ entries:
     version: 1.0.3
   - apiVersion: v1
     appVersion: 2.10.14
-    created: "2023-04-06T09:40:52.295164+02:00"
+    created: "2023-04-19T10:46:24.021386+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2288,7 +2288,7 @@ entries:
     version: 1.0.2
   - apiVersion: v1
     appVersion: 2.10.9
-    created: "2023-04-06T09:40:52.268893+02:00"
+    created: "2023-04-19T10:46:23.996377+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2306,7 +2306,7 @@ entries:
     version: 1.0.1
   - apiVersion: v1
     appVersion: 2.10.8
-    created: "2023-04-06T09:40:52.265765+02:00"
+    created: "2023-04-19T10:46:23.99355+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -2325,7 +2325,7 @@ entries:
   apim:
   - apiVersion: v1
     appVersion: 1.30.26
-    created: "2023-04-06T09:40:52.462068+02:00"
+    created: "2023-04-19T10:46:24.179348+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2347,7 +2347,7 @@ entries:
     version: 1.29.13
   - apiVersion: v1
     appVersion: 1.30.19
-    created: "2023-04-06T09:40:52.458899+02:00"
+    created: "2023-04-19T10:46:24.176413+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2369,7 +2369,7 @@ entries:
     version: 1.29.12
   - apiVersion: v1
     appVersion: 1.30.19
-    created: "2023-04-06T09:40:52.455729+02:00"
+    created: "2023-04-19T10:46:24.173261+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2391,7 +2391,7 @@ entries:
     version: 1.29.11
   - apiVersion: v1
     appVersion: 1.30.19
-    created: "2023-04-06T09:40:52.452611+02:00"
+    created: "2023-04-19T10:46:24.170258+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2413,7 +2413,7 @@ entries:
     version: 1.29.10
   - apiVersion: v1
     appVersion: 1.30.19
-    created: "2023-04-06T09:40:52.49013+02:00"
+    created: "2023-04-19T10:46:24.206273+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2435,7 +2435,7 @@ entries:
     version: 1.29.9
   - apiVersion: v1
     appVersion: 1.30.15
-    created: "2023-04-06T09:40:52.487092+02:00"
+    created: "2023-04-19T10:46:24.20284+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2457,7 +2457,7 @@ entries:
     version: 1.29.8
   - apiVersion: v1
     appVersion: 1.30.13
-    created: "2023-04-06T09:40:52.483754+02:00"
+    created: "2023-04-19T10:46:24.200116+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2479,7 +2479,7 @@ entries:
     version: 1.29.7
   - apiVersion: v1
     appVersion: 1.30.12
-    created: "2023-04-06T09:40:52.480803+02:00"
+    created: "2023-04-19T10:46:24.196958+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2501,7 +2501,7 @@ entries:
     version: 1.29.6
   - apiVersion: v1
     appVersion: 1.30.11
-    created: "2023-04-06T09:40:52.477335+02:00"
+    created: "2023-04-19T10:46:24.194335+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2523,7 +2523,7 @@ entries:
     version: 1.29.5
   - apiVersion: v1
     appVersion: 1.30.11
-    created: "2023-04-06T09:40:52.47432+02:00"
+    created: "2023-04-19T10:46:24.191391+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2545,7 +2545,7 @@ entries:
     version: 1.29.4
   - apiVersion: v1
     appVersion: 1.30.3
-    created: "2023-04-06T09:40:52.47017+02:00"
+    created: "2023-04-19T10:46:24.187145+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2567,7 +2567,7 @@ entries:
     version: 1.29.3
   - apiVersion: v1
     appVersion: 1.30.3
-    created: "2023-04-06T09:40:52.466283+02:00"
+    created: "2023-04-19T10:46:24.183423+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2589,7 +2589,7 @@ entries:
     version: 1.29.2
   - apiVersion: v1
     appVersion: 1.30.1
-    created: "2023-04-06T09:40:52.449069+02:00"
+    created: "2023-04-19T10:46:24.16695+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2611,7 +2611,7 @@ entries:
     version: 1.29.1
   - apiVersion: v1
     appVersion: 1.30.1
-    created: "2023-04-06T09:40:52.445216+02:00"
+    created: "2023-04-19T10:46:24.163497+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2633,7 +2633,7 @@ entries:
     version: 1.29.0
   - apiVersion: v1
     appVersion: 1.30.1
-    created: "2023-04-06T09:40:52.441931+02:00"
+    created: "2023-04-19T10:46:24.160567+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2655,7 +2655,7 @@ entries:
     version: 1.28.0
   - apiVersion: v1
     appVersion: 1.29.4
-    created: "2023-04-06T09:40:52.439167+02:00"
+    created: "2023-04-19T10:46:24.158031+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2677,7 +2677,7 @@ entries:
     version: 1.27.2
   - apiVersion: v1
     appVersion: 1.29.4
-    created: "2023-04-06T09:40:52.43629+02:00"
+    created: "2023-04-19T10:46:24.155256+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2700,6 +2700,38 @@ entries:
   apim3:
   - annotations:
       artifacthub.io/changes: |
+        - Add sni to the gateway configuration
+    apiVersion: v1
+    appVersion: 3.20.1
+    created: "2023-04-19T10:46:24.633522+02:00"
+    dependencies:
+    - condition: elasticsearch.enabled
+      name: elasticsearch
+      repository: https://charts.bitnami.com/bitnami
+      version: ^17.9.29
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: ^12.1.7
+    description: Official Gravitee.io Helm chart for API Management 3.x
+    digest: 9451560644340503dfe7a358e1532841807cf3353192bcf92a376eb4e28da1e9
+    home: https://gravitee.io
+    icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
+    keywords:
+    - gravitee.io
+    - gravitee
+    - graviteeio
+    - API
+    - API Management
+    kubeVersion: '>=1.14.0-0'
+    name: apim3
+    sources:
+    - https://github.com/gravitee-io
+    urls:
+    - https://helm.gravitee.io/helm/apim3/apim3-3.1.66.tgz
+    version: 3.1.66
+  - annotations:
+      artifacthub.io/changes: |
         - Add hook-delete-policy
         - Add check to allow automatic Redis plugin download only for versions prior to 3.21.0 (it is now embedded in the distribution)
         - Add SSL and Sentinel configuration management for Redis and updated doc.
@@ -2709,7 +2741,7 @@ entries:
         - Allow users to use `logging.debug: true` when they define their own configuration file by defining a volume
     apiVersion: v1
     appVersion: 3.20.1
-    created: "2023-04-06T09:40:52.923485+02:00"
+    created: "2023-04-19T10:46:24.623301+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2740,7 +2772,7 @@ entries:
       artifacthub.io/changes: '- Add `gracefulShutdown` in gateway configuration'
     apiVersion: v1
     appVersion: 3.20.1
-    created: "2023-04-06T09:40:52.913454+02:00"
+    created: "2023-04-19T10:46:24.612701+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2774,7 +2806,7 @@ entries:
         - Remove `email` block when smtp is disabled
     apiVersion: v1
     appVersion: 3.20.1
-    created: "2023-04-06T09:40:52.903037+02:00"
+    created: "2023-04-19T10:46:24.602749+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2814,7 +2846,7 @@ entries:
         - Remove legacy Kube Controller config. This feature is now provided by [Gravitee Operator for Kubernetes](https://github.com/gravitee-io/gravitee-kubernetes-operator)
     apiVersion: v1
     appVersion: 3.20.1
-    created: "2023-04-06T09:40:52.89242+02:00"
+    created: "2023-04-19T10:46:24.592553+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2847,7 +2879,7 @@ entries:
         - Add values to define tracing options
     apiVersion: v1
     appVersion: 3.18.10
-    created: "2023-04-06T09:40:52.881732+02:00"
+    created: "2023-04-19T10:46:24.581891+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2885,7 +2917,7 @@ entries:
         - Allow users to define their own configuration file by defining a volume
     apiVersion: v1
     appVersion: 3.18.10
-    created: "2023-04-06T09:40:52.870907+02:00"
+    created: "2023-04-19T10:46:24.571801+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2916,7 +2948,7 @@ entries:
       artifacthub.io/changes: '- Replace ClusterRole with Role'
     apiVersion: v1
     appVersion: 3.18.10
-    created: "2023-04-06T09:40:52.856783+02:00"
+    created: "2023-04-19T10:46:24.558558+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2947,7 +2979,7 @@ entries:
       artifacthub.io/changes: '- Add optional value to use gravitee licence key'
     apiVersion: v1
     appVersion: 3.18.10
-    created: "2023-04-06T09:40:52.846204+02:00"
+    created: "2023-04-19T10:46:24.548233+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -2979,7 +3011,7 @@ entries:
         Bridge'
     apiVersion: v1
     appVersion: 3.18.9
-    created: "2023-04-06T09:40:52.835206+02:00"
+    created: "2023-04-19T10:46:24.537981+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3011,7 +3043,7 @@ entries:
         annotation'
     apiVersion: v1
     appVersion: 3.18.9
-    created: "2023-04-06T09:40:52.825048+02:00"
+    created: "2023-04-19T10:46:24.528259+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3045,7 +3077,7 @@ entries:
         - "BREAKING CHANGE: Use `smtp.properties.starttls.enable` instead of `smtp.properties.starttlsEnable`"
     apiVersion: v1
     appVersion: 3.15.10
-    created: "2023-04-06T09:40:52.814887+02:00"
+    created: "2023-04-19T10:46:24.518307+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3077,7 +3109,7 @@ entries:
         Truncate port name to respect k8s limit (15 for deployment and 63 for service)"
     apiVersion: v1
     appVersion: 3.15.10
-    created: "2023-04-06T09:40:52.804507+02:00"
+    created: "2023-04-19T10:46:24.508457+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3109,7 +3141,7 @@ entries:
         - Remove alias for mongodb chart dependency
     apiVersion: v1
     appVersion: 3.15.10
-    created: "2023-04-06T09:40:52.793639+02:00"
+    created: "2023-04-19T10:46:24.498462+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3140,7 +3172,7 @@ entries:
       artifacthub.io/changes: "- Use ISO 8601 datetime for apim json logging \n"
     apiVersion: v1
     appVersion: 3.15.10
-    created: "2023-04-06T09:40:52.78325+02:00"
+    created: "2023-04-19T10:46:24.488485+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3173,7 +3205,7 @@ entries:
         in Management URL of API configmap. \n"
     apiVersion: v1
     appVersion: 3.15.10
-    created: "2023-04-06T09:40:52.772806+02:00"
+    created: "2023-04-19T10:46:24.478485+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3206,7 +3238,7 @@ entries:
         Handle subscription service configuration\n"
     apiVersion: v1
     appVersion: 3.15.10
-    created: "2023-04-06T09:40:52.76235+02:00"
+    created: "2023-04-19T10:46:24.468547+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3241,7 +3273,7 @@ entries:
         - Add Bridge service to Management API
     apiVersion: v1
     appVersion: 3.15.10
-    created: "2023-04-06T09:40:52.74863+02:00"
+    created: "2023-04-19T10:46:24.45458+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3273,7 +3305,7 @@ entries:
         - Add support for ingressClassName
     apiVersion: v1
     appVersion: 3.15.9
-    created: "2023-04-06T09:40:52.743723+02:00"
+    created: "2023-04-19T10:46:24.450208+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3305,7 +3337,7 @@ entries:
         - Fix Gateway Service Account for Kube Controller
     apiVersion: v1
     appVersion: 3.15.9
-    created: "2023-04-06T09:40:52.739544+02:00"
+    created: "2023-04-19T10:46:24.446121+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3338,7 +3370,7 @@ entries:
         - Add version labels on pods
     apiVersion: v1
     appVersion: 3.15.8
-    created: "2023-04-06T09:40:52.735009+02:00"
+    created: "2023-04-19T10:46:24.441978+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3371,7 +3403,7 @@ entries:
         - Add version labels on pods
     apiVersion: v1
     appVersion: 3.15.8
-    created: "2023-04-06T09:40:52.730219+02:00"
+    created: "2023-04-19T10:46:24.43794+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3403,7 +3435,7 @@ entries:
         - Add support for managed ServiceAccounts name provided by user
     apiVersion: v1
     appVersion: 3.15.8
-    created: "2023-04-06T09:40:52.726136+02:00"
+    created: "2023-04-19T10:46:24.433639+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3435,7 +3467,7 @@ entries:
         - Disable automatic download of Redis plugin
     apiVersion: v1
     appVersion: 3.15.8
-    created: "2023-04-06T09:40:52.721261+02:00"
+    created: "2023-04-19T10:46:24.429601+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3467,7 +3499,7 @@ entries:
         - Add support for PodDisruptionBudget
     apiVersion: v1
     appVersion: 3.15.7
-    created: "2023-04-06T09:40:52.716968+02:00"
+    created: "2023-04-19T10:46:24.425428+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3499,7 +3531,7 @@ entries:
         - Reorder HPA resources to avoid outofsync state with ArgoCD
     apiVersion: v1
     appVersion: 3.15.7
-    created: "2023-04-06T09:40:52.712387+02:00"
+    created: "2023-04-19T10:46:24.421302+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3531,7 +3563,7 @@ entries:
         - Fix ignoring the managedServiceAccount in the deployment files
     apiVersion: v1
     appVersion: 3.15.7
-    created: "2023-04-06T09:40:52.708015+02:00"
+    created: "2023-04-19T10:46:24.417342+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3563,7 +3595,7 @@ entries:
         - Set default array for topologySpreadConstraints
     apiVersion: v1
     appVersion: 3.15.7
-    created: "2023-04-06T09:40:52.700298+02:00"
+    created: "2023-04-19T10:46:24.410132+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3595,7 +3627,7 @@ entries:
         - Add support for topologySpreadConstraints
     apiVersion: v1
     appVersion: 3.15.7
-    created: "2023-04-06T09:40:52.696385+02:00"
+    created: "2023-04-19T10:46:24.40581+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3627,7 +3659,7 @@ entries:
         - Add template to APIM Cockpit secret name
     apiVersion: v1
     appVersion: 3.15.2
-    created: "2023-04-06T09:40:52.692095+02:00"
+    created: "2023-04-19T10:46:24.402054+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3659,7 +3691,7 @@ entries:
         - Fix deploy gateway specific version with default ratelimit
     apiVersion: v1
     appVersion: 3.15.2
-    created: "2023-04-06T09:40:52.688098+02:00"
+    created: "2023-04-19T10:46:24.397723+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3691,7 +3723,7 @@ entries:
         - Ease the integration of Gravitee.io Cockpit
     apiVersion: v1
     appVersion: 3.15.2
-    created: "2023-04-06T09:40:52.68351+02:00"
+    created: "2023-04-19T10:46:24.393862+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3723,7 +3755,7 @@ entries:
         - Ease the integration of Gravitee.io Cockpit
     apiVersion: v1
     appVersion: 3.15.2
-    created: "2023-04-06T09:40:52.679533+02:00"
+    created: "2023-04-19T10:46:24.389475+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3758,7 +3790,7 @@ entries:
         - Disable old classloader to enable the new one by default (since v3.15)
     apiVersion: v1
     appVersion: 3.15.1
-    created: "2023-04-06T09:40:52.675174+02:00"
+    created: "2023-04-19T10:46:24.385492+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3791,7 +3823,7 @@ entries:
         - Add support for ES reporter ingest plugins configuration
     apiVersion: v1
     appVersion: 3.11.3
-    created: "2023-04-06T09:40:52.671174+02:00"
+    created: "2023-04-19T10:46:24.381223+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3823,7 +3855,7 @@ entries:
         - Add support for ILM managed indexes
     apiVersion: v1
     appVersion: 3.11.2
-    created: "2023-04-06T09:40:52.666561+02:00"
+    created: "2023-04-19T10:46:24.377136+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3855,7 +3887,7 @@ entries:
         - Add support for startupProbe
     apiVersion: v1
     appVersion: 3.11.2
-    created: "2023-04-06T09:40:52.662457+02:00"
+    created: "2023-04-19T10:46:24.373072+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3887,7 +3919,7 @@ entries:
         - Customization of the readinessProbe
     apiVersion: v1
     appVersion: 3.11.2
-    created: "2023-04-06T09:40:52.655083+02:00"
+    created: "2023-04-19T10:46:24.365918+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3919,7 +3951,7 @@ entries:
         - Support Ingress kubernetes >= 1.22.x
     apiVersion: v1
     appVersion: 3.11.2
-    created: "2023-04-06T09:40:52.651452+02:00"
+    created: "2023-04-19T10:46:24.362123+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3951,7 +3983,7 @@ entries:
         - Manage redis repository plugin for nightly tag
     apiVersion: v1
     appVersion: 3.11.1
-    created: "2023-04-06T09:40:52.64714+02:00"
+    created: "2023-04-19T10:46:24.358028+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -3983,7 +4015,7 @@ entries:
         - Define redis repository version depending on the APIM version
     apiVersion: v1
     appVersion: 3.11.1
-    created: "2023-04-06T09:40:52.643475+02:00"
+    created: "2023-04-19T10:46:24.354391+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4016,7 +4048,7 @@ entries:
         - Support proxy at hybrid gateway level and system level
     apiVersion: v1
     appVersion: 3.11.1
-    created: "2023-04-06T09:40:52.639344+02:00"
+    created: "2023-04-19T10:46:24.350344+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4048,7 +4080,7 @@ entries:
         - Fix Management UI URL
     apiVersion: v1
     appVersion: 3.11.1
-    created: "2023-04-06T09:40:52.63556+02:00"
+    created: "2023-04-19T10:46:24.346717+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4080,7 +4112,7 @@ entries:
         - Fix init containers image repository and tag
     apiVersion: v1
     appVersion: 3.11.1
-    created: "2023-04-06T09:40:52.631341+02:00"
+    created: "2023-04-19T10:46:24.342601+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4112,7 +4144,7 @@ entries:
         - Configure init containers image repository and tag
     apiVersion: v1
     appVersion: 3.11.1
-    created: "2023-04-06T09:40:52.627443+02:00"
+    created: "2023-04-19T10:46:24.339101+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4144,7 +4176,7 @@ entries:
         - Configure gateway sync service from ConfigMap
     apiVersion: v1
     appVersion: 3.11.0
-    created: "2023-04-06T09:40:52.623367+02:00"
+    created: "2023-04-19T10:46:24.335068+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4176,7 +4208,7 @@ entries:
         - Configure deployment strategy
     apiVersion: v1
     appVersion: 3.11.0
-    created: "2023-04-06T09:40:52.61899+02:00"
+    created: "2023-04-19T10:46:24.330894+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4208,7 +4240,7 @@ entries:
         - Provide a way to remove default plugins
     apiVersion: v1
     appVersion: 3.11.0
-    created: "2023-04-06T09:40:52.610816+02:00"
+    created: "2023-04-19T10:46:24.323315+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4242,7 +4274,7 @@ entries:
         - Fix typos in ES reporter lifecycle definitions
     apiVersion: v1
     appVersion: 3.10.0
-    created: "2023-04-06T09:40:52.607395+02:00"
+    created: "2023-04-19T10:46:24.319438+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4273,7 +4305,7 @@ entries:
       artifacthub.io/changes: '- Fix issues with HTTP Bridge configuration'
     apiVersion: v1
     appVersion: 3.8.4
-    created: "2023-04-06T09:40:52.603399+02:00"
+    created: "2023-04-19T10:46:24.315969+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4304,7 +4336,7 @@ entries:
       artifacthub.io/changes: '- Fix typo in API configmap'
     apiVersion: v1
     appVersion: 3.8.4
-    created: "2023-04-06T09:40:52.599757+02:00"
+    created: "2023-04-19T10:46:24.311971+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4335,7 +4367,7 @@ entries:
       artifacthub.io/changes: '- Add support for tolerations for Portal'
     apiVersion: v1
     appVersion: 3.8.4
-    created: "2023-04-06T09:40:52.59499+02:00"
+    created: "2023-04-19T10:46:24.307785+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4366,7 +4398,7 @@ entries:
       artifacthub.io/changes: '- Improve Deployment configurability'
     apiVersion: v1
     appVersion: 3.8.4
-    created: "2023-04-06T09:40:52.59071+02:00"
+    created: "2023-04-19T10:46:24.303219+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4397,7 +4429,7 @@ entries:
       artifacthub.io/changes: '- Gateway Bridge Ingress based on networking.k8s.io'
     apiVersion: v1
     appVersion: 3.8.4
-    created: "2023-04-06T09:40:52.585731+02:00"
+    created: "2023-04-19T10:46:24.299096+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4429,7 +4461,7 @@ entries:
         and Management API'
     apiVersion: v1
     appVersion: 3.8.4
-    created: "2023-04-06T09:40:52.581005+02:00"
+    created: "2023-04-19T10:46:24.294334+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4460,7 +4492,7 @@ entries:
       artifacthub.io/changes: '- Rename Alert Engine connector when alerting is disabled'
     apiVersion: v1
     appVersion: 3.8.3
-    created: "2023-04-06T09:40:52.575862+02:00"
+    created: "2023-04-19T10:46:24.289746+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4491,7 +4523,7 @@ entries:
       artifacthub.io/changes: '- Rename Alert Engine connector when alerting is disabled'
     apiVersion: v1
     appVersion: 3.8.3
-    created: "2023-04-06T09:40:52.936862+02:00"
+    created: "2023-04-19T10:46:24.645582+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4527,7 +4559,7 @@ entries:
         - Enable only if the ssl dictionary is defined from values
     apiVersion: v1
     appVersion: 3.8.3
-    created: "2023-04-06T09:40:52.931609+02:00"
+    created: "2023-04-19T10:46:24.640626+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4559,7 +4591,7 @@ entries:
         API when JDBC is enabled'
     apiVersion: v1
     appVersion: 3.7.0
-    created: "2023-04-06T09:40:52.927813+02:00"
+    created: "2023-04-19T10:46:24.636983+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4590,7 +4622,7 @@ entries:
       artifacthub.io/changes: '- Add support for policy configuration from gravitee.yml'
     apiVersion: v1
     appVersion: 3.7.0
-    created: "2023-04-06T09:40:52.860212+02:00"
+    created: "2023-04-19T10:46:24.561957+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4621,7 +4653,7 @@ entries:
       artifacthub.io/changes: '- Add support for client authentication for HTTP bridge '
     apiVersion: v1
     appVersion: 3.7.0
-    created: "2023-04-06T09:40:52.752068+02:00"
+    created: "2023-04-19T10:46:24.458483+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4650,7 +4682,7 @@ entries:
     version: 3.1.5
   - apiVersion: v1
     appVersion: 3.7.0
-    created: "2023-04-06T09:40:52.703938+02:00"
+    created: "2023-04-19T10:46:24.413336+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4679,7 +4711,7 @@ entries:
     version: 3.1.4
   - apiVersion: v1
     appVersion: 3.6.0
-    created: "2023-04-06T09:40:52.658753+02:00"
+    created: "2023-04-19T10:46:24.369335+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4701,7 +4733,7 @@ entries:
     version: 3.1.3
   - apiVersion: v1
     appVersion: 3.6.0
-    created: "2023-04-06T09:40:52.614481+02:00"
+    created: "2023-04-19T10:46:24.326628+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4723,7 +4755,7 @@ entries:
     version: 3.1.2
   - apiVersion: v1
     appVersion: 3.6.0
-    created: "2023-04-06T09:40:52.571105+02:00"
+    created: "2023-04-19T10:46:24.285153+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4745,7 +4777,7 @@ entries:
     version: 3.1.1
   - apiVersion: v1
     appVersion: 3.6.0
-    created: "2023-04-06T09:40:52.567673+02:00"
+    created: "2023-04-19T10:46:24.281583+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4767,7 +4799,7 @@ entries:
     version: 3.1.0
   - apiVersion: v1
     appVersion: 3.5.3
-    created: "2023-04-06T09:40:52.542009+02:00"
+    created: "2023-04-19T10:46:24.256884+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4789,7 +4821,7 @@ entries:
     version: 3.0.21
   - apiVersion: v1
     appVersion: 3.5.2
-    created: "2023-04-06T09:40:52.538802+02:00"
+    created: "2023-04-19T10:46:24.253179+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4811,7 +4843,7 @@ entries:
     version: 3.0.20
   - apiVersion: v1
     appVersion: 3.5.2
-    created: "2023-04-06T09:40:52.532357+02:00"
+    created: "2023-04-19T10:46:24.2464+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4833,7 +4865,7 @@ entries:
     version: 3.0.19
   - apiVersion: v1
     appVersion: 3.5.2
-    created: "2023-04-06T09:40:52.528734+02:00"
+    created: "2023-04-19T10:46:24.243271+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4855,7 +4887,7 @@ entries:
     version: 3.0.18
   - apiVersion: v1
     appVersion: 3.5.2
-    created: "2023-04-06T09:40:52.52527+02:00"
+    created: "2023-04-19T10:46:24.23945+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4877,7 +4909,7 @@ entries:
     version: 3.0.17
   - apiVersion: v1
     appVersion: 3.5.0
-    created: "2023-04-06T09:40:52.521796+02:00"
+    created: "2023-04-19T10:46:24.236417+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4899,7 +4931,7 @@ entries:
     version: 3.0.16
   - apiVersion: v1
     appVersion: 3.4.2
-    created: "2023-04-06T09:40:52.518635+02:00"
+    created: "2023-04-19T10:46:24.232902+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4921,7 +4953,7 @@ entries:
     version: 3.0.15
   - apiVersion: v1
     appVersion: 3.4.0
-    created: "2023-04-06T09:40:52.515213+02:00"
+    created: "2023-04-19T10:46:24.229894+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4943,7 +4975,7 @@ entries:
     version: 3.0.14
   - apiVersion: v1
     appVersion: 3.3.3
-    created: "2023-04-06T09:40:52.511761+02:00"
+    created: "2023-04-19T10:46:24.226535+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4965,7 +4997,7 @@ entries:
     version: 3.0.13
   - apiVersion: v1
     appVersion: 3.3.3
-    created: "2023-04-06T09:40:52.508321+02:00"
+    created: "2023-04-19T10:46:24.223625+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -4987,7 +5019,7 @@ entries:
     version: 3.0.12
   - apiVersion: v1
     appVersion: 3.1.3
-    created: "2023-04-06T09:40:52.505183+02:00"
+    created: "2023-04-19T10:46:24.220627+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5009,7 +5041,7 @@ entries:
     version: 3.0.11
   - apiVersion: v1
     appVersion: 3.1.3
-    created: "2023-04-06T09:40:52.501439+02:00"
+    created: "2023-04-19T10:46:24.216791+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5031,7 +5063,7 @@ entries:
     version: 3.0.10
   - apiVersion: v1
     appVersion: 3.1.3
-    created: "2023-04-06T09:40:52.564078+02:00"
+    created: "2023-04-19T10:46:24.27839+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5053,7 +5085,7 @@ entries:
     version: 3.0.9
   - apiVersion: v1
     appVersion: 3.1.3
-    created: "2023-04-06T09:40:52.560806+02:00"
+    created: "2023-04-19T10:46:24.275296+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5075,7 +5107,7 @@ entries:
     version: 3.0.8
   - apiVersion: v1
     appVersion: 3.1.2
-    created: "2023-04-06T09:40:52.557689+02:00"
+    created: "2023-04-19T10:46:24.27228+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5097,7 +5129,7 @@ entries:
     version: 3.0.7
   - apiVersion: v1
     appVersion: 3.1.2
-    created: "2023-04-06T09:40:52.554536+02:00"
+    created: "2023-04-19T10:46:24.2692+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5119,7 +5151,7 @@ entries:
     version: 3.0.6
   - apiVersion: v1
     appVersion: 3.1.2
-    created: "2023-04-06T09:40:52.551451+02:00"
+    created: "2023-04-19T10:46:24.266182+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5141,7 +5173,7 @@ entries:
     version: 3.0.5
   - apiVersion: v1
     appVersion: 3.1.1
-    created: "2023-04-06T09:40:52.548319+02:00"
+    created: "2023-04-19T10:46:24.263357+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5163,7 +5195,7 @@ entries:
     version: 3.0.4
   - apiVersion: v1
     appVersion: 3.0.4
-    created: "2023-04-06T09:40:52.545306+02:00"
+    created: "2023-04-19T10:46:24.259832+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5185,7 +5217,7 @@ entries:
     version: 3.0.3
   - apiVersion: v1
     appVersion: 3.0.3
-    created: "2023-04-06T09:40:52.535378+02:00"
+    created: "2023-04-19T10:46:24.250023+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5207,7 +5239,7 @@ entries:
     version: 3.0.2
   - apiVersion: v1
     appVersion: 3.0.2
-    created: "2023-04-06T09:40:52.497873+02:00"
+    created: "2023-04-19T10:46:24.213498+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5229,7 +5261,7 @@ entries:
     version: 3.0.1
   - apiVersion: v1
     appVersion: 3.0.2
-    created: "2023-04-06T09:40:52.494546+02:00"
+    created: "2023-04-19T10:46:24.209976+02:00"
     dependencies:
     - condition: elasticsearch.enabled
       name: elasticsearch
@@ -5254,7 +5286,7 @@ entries:
       artifacthub.io/changes: '- Add hook-delete-policy'
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:53.060008+02:00"
+    created: "2023-04-19T10:46:24.765584+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -5285,7 +5317,7 @@ entries:
         - Add `externalTrafficPolicy` in service configuration
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:53.050791+02:00"
+    created: "2023-04-19T10:46:24.756815+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -5316,7 +5348,7 @@ entries:
         - Allow users to define their own configuration file by defining a volume
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:53.042817+02:00"
+    created: "2023-04-19T10:46:24.748644+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -5346,7 +5378,7 @@ entries:
         - Replace ClusterRole with Role
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:53.03441+02:00"
+    created: "2023-04-19T10:46:24.740837+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -5376,7 +5408,7 @@ entries:
         - Generate hazelcast cluster name using the sha of the tag
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:53.026255+02:00"
+    created: "2023-04-19T10:46:24.731948+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -5409,7 +5441,7 @@ entries:
         - Create new configmap to generate yaml config for Hazelcast
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:53.017745+02:00"
+    created: "2023-04-19T10:46:24.724128+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -5439,7 +5471,7 @@ entries:
         - Use ISO 8601 datetime for cockpit json logging
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.994235+02:00"
+    created: "2023-04-19T10:46:24.700576+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -5469,7 +5501,7 @@ entries:
         - Fix json logging to log one message per line
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.988832+02:00"
+    created: "2023-04-19T10:46:24.695133+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -5500,7 +5532,7 @@ entries:
         - Add support for json logging in logback
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.984212+02:00"
+    created: "2023-04-19T10:46:24.690141+02:00"
     dependencies:
     - alias: mongodb-replicaset
       condition: mongodb-replicaset.enabled
@@ -5531,7 +5563,7 @@ entries:
         - Add support for autoscaling/v2
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.976648+02:00"
+    created: "2023-04-19T10:46:24.683262+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5562,7 +5594,7 @@ entries:
         - Add support for ingressClassName
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.974112+02:00"
+    created: "2023-04-19T10:46:24.681056+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5593,7 +5625,7 @@ entries:
         - Use named port in service
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.972099+02:00"
+    created: "2023-04-19T10:46:24.679154+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5622,7 +5654,7 @@ entries:
         - Add support for PodDisruptionBudget
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.970083+02:00"
+    created: "2023-04-19T10:46:24.67724+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5651,7 +5683,7 @@ entries:
         - Reorder HPA resources to avoid outofsync state with ArgoCD
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.967406+02:00"
+    created: "2023-04-19T10:46:24.674469+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5680,7 +5712,7 @@ entries:
         - Fix ignoring the managedServiceAccount in the deployment files
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.965419+02:00"
+    created: "2023-04-19T10:46:24.672602+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5709,7 +5741,7 @@ entries:
         - Set default array for topologySpreadConstraints
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.963431+02:00"
+    created: "2023-04-19T10:46:24.670667+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5738,7 +5770,7 @@ entries:
         - Add support for topologySpreadConstraints
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.961106+02:00"
+    created: "2023-04-19T10:46:24.668447+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5768,7 +5800,7 @@ entries:
         - add missing labels
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.95855+02:00"
+    created: "2023-04-19T10:46:24.666076+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5798,7 +5830,7 @@ entries:
         - Add API Designer default model creation limit
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:52.956585+02:00"
+    created: "2023-04-19T10:46:24.664186+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5828,7 +5860,7 @@ entries:
         - Define additional loggers in logback configuration
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:53.009476+02:00"
+    created: "2023-04-19T10:46:24.715821+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5858,7 +5890,7 @@ entries:
         - Update to Cockpit v3.16.0
     apiVersion: v1
     appVersion: 3.16.0
-    created: "2023-04-06T09:40:53.007096+02:00"
+    created: "2023-04-19T10:46:24.712884+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5887,7 +5919,7 @@ entries:
         - Fix typo in ServiceAccount resources
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:53.004835+02:00"
+    created: "2023-04-19T10:46:24.710958+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5918,7 +5950,7 @@ entries:
         - Add ServiceAccount to all deployments
     apiVersion: v1
     appVersion: 3.15.0
-    created: "2023-04-06T09:40:53.002849+02:00"
+    created: "2023-04-19T10:46:24.708982+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5947,7 +5979,7 @@ entries:
         - Add support for revisionHistoryLimit
     apiVersion: v1
     appVersion: 3.12.2
-    created: "2023-04-06T09:40:53.000538+02:00"
+    created: "2023-04-19T10:46:24.706637+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -5976,7 +6008,7 @@ entries:
         - Fix Cockpit WS ingress with pathPrefix
     apiVersion: v1
     appVersion: 3.12.2
-    created: "2023-04-06T09:40:52.998162+02:00"
+    created: "2023-04-19T10:46:24.704559+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6005,7 +6037,7 @@ entries:
         - Support Ingress kubernetes >= 1.22.x
     apiVersion: v1
     appVersion: 3.12.2
-    created: "2023-04-06T09:40:52.996293+02:00"
+    created: "2023-04-19T10:46:24.70259+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6035,7 +6067,7 @@ entries:
         - Update gravitee.io Cockpit v3.12.2
     apiVersion: v1
     appVersion: 3.12.2
-    created: "2023-04-06T09:40:52.978593+02:00"
+    created: "2023-04-19T10:46:24.685392+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6065,7 +6097,7 @@ entries:
         - Update gravitee.io Cockpit v3.11.1
     apiVersion: v1
     appVersion: 3.11.1
-    created: "2023-04-06T09:40:52.95412+02:00"
+    created: "2023-04-19T10:46:24.662084+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6094,7 +6126,7 @@ entries:
         - Add swagger generator url and api key configuration
     apiVersion: v1
     appVersion: 3.10.0
-    created: "2023-04-06T09:40:52.951588+02:00"
+    created: "2023-04-19T10:46:24.659529+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6123,7 +6155,7 @@ entries:
         - Add swagger generator
     apiVersion: v1
     appVersion: 3.10.0
-    created: "2023-04-06T09:40:52.949524+02:00"
+    created: "2023-04-19T10:46:24.657715+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6152,7 +6184,7 @@ entries:
         - Make management-api ingress sse compatible
     apiVersion: v1
     appVersion: 1.4.1
-    created: "2023-04-06T09:40:52.947607+02:00"
+    created: "2023-04-19T10:46:24.655743+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6181,7 +6213,7 @@ entries:
         - Add native support for service account
     apiVersion: v1
     appVersion: 1.3.0
-    created: "2023-04-06T09:40:52.945378+02:00"
+    created: "2023-04-19T10:46:24.653734+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6211,7 +6243,7 @@ entries:
         - Update Hazelcast configuration for primary/replica installations
     apiVersion: v1
     appVersion: 1.3.0
-    created: "2023-04-06T09:40:52.942895+02:00"
+    created: "2023-04-19T10:46:24.651601+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6241,7 +6273,7 @@ entries:
         - Add support for health check cron job attributes
     apiVersion: v1
     appVersion: 1.2.1
-    created: "2023-04-06T09:40:52.940718+02:00"
+    created: "2023-04-19T10:46:24.649197+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6269,7 +6301,7 @@ entries:
       artifacthub.io/changes: '- Initial Chart for Gravitee.io Cockpit'
     apiVersion: v1
     appVersion: 1.2.0
-    created: "2023-04-06T09:40:52.938792+02:00"
+    created: "2023-04-19T10:46:24.647383+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6298,7 +6330,7 @@ entries:
       artifacthub.io/changes: '- Ensure to run api designer api in production mode'
     apiVersion: v1
     appVersion: 1.31.4
-    created: "2023-04-06T09:40:53.068769+02:00"
+    created: "2023-04-19T10:46:24.774044+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6326,7 +6358,7 @@ entries:
         - Add property to configure API url from the UI pod
     apiVersion: v1
     appVersion: 1.30.4
-    created: "2023-04-06T09:40:53.085466+02:00"
+    created: "2023-04-19T10:46:24.789596+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6354,7 +6386,7 @@ entries:
         - Remove rewrite-target for the API
     apiVersion: v1
     appVersion: 1.23.5
-    created: "2023-04-06T09:40:53.084014+02:00"
+    created: "2023-04-19T10:46:24.787839+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6382,7 +6414,7 @@ entries:
         - Remove useless path regex capture from API's ingress
     apiVersion: v1
     appVersion: 1.23.5
-    created: "2023-04-06T09:40:53.082066+02:00"
+    created: "2023-04-19T10:46:24.786365+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6407,7 +6439,7 @@ entries:
     version: 1.0.7
   - apiVersion: v1
     appVersion: 1.23.5
-    created: "2023-04-06T09:40:53.080273+02:00"
+    created: "2023-04-19T10:46:24.784877+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6425,7 +6457,7 @@ entries:
     version: 1.0.6
   - apiVersion: v1
     appVersion: 1.23.5
-    created: "2023-04-06T09:40:53.078749+02:00"
+    created: "2023-04-19T10:46:24.783265+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6443,7 +6475,7 @@ entries:
     version: 1.0.5
   - apiVersion: v1
     appVersion: 1.22.5
-    created: "2023-04-06T09:40:53.077212+02:00"
+    created: "2023-04-19T10:46:24.781814+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6461,7 +6493,7 @@ entries:
     version: 1.0.4
   - apiVersion: v1
     appVersion: 1.16.0
-    created: "2023-04-06T09:40:53.075326+02:00"
+    created: "2023-04-19T10:46:24.780091+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6479,7 +6511,7 @@ entries:
     version: 1.0.3
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2023-04-06T09:40:53.071755+02:00"
+    created: "2023-04-19T10:46:24.776914+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6497,7 +6529,7 @@ entries:
     version: 1.0.2
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2023-04-06T09:40:53.067124+02:00"
+    created: "2023-04-19T10:46:24.772509+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6515,7 +6547,7 @@ entries:
     version: 1.0.1
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2023-04-06T09:40:53.063367+02:00"
+    created: "2023-04-19T10:46:24.768694+02:00"
     dependencies:
     - condition: mongodb-replicaset.enabled
       name: mongodb-replicaset
@@ -6534,7 +6566,7 @@ entries:
   gko:
   - apiVersion: v2
     appVersion: 0.5.1
-    created: "2023-04-06T09:40:53.086289+02:00"
+    created: "2023-04-19T10:46:24.790365+02:00"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 6c68cf1ae22fa0055ae56831ba2f272fcf82001c0517b704ff8024a8f68c202b
     home: https://gravitee.io
@@ -6554,7 +6586,7 @@ entries:
     version: 0.5.1
   - apiVersion: v2
     appVersion: 0.5.0
-    created: "2023-04-06T09:40:53.085944+02:00"
+    created: "2023-04-19T10:46:24.790029+02:00"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 0abe9d920aaa0bc0d6710a9b8dffd822a6dc31c1857d635a880dc2ba6776394a
     home: https://gravitee.io
@@ -6572,4 +6604,4 @@ entries:
     urls:
     - https://helm.gravitee.io/helm/gko/gko-0.5.0.tgz
     version: 0.5.0
-generated: "2023-04-06T09:40:52.229475+02:00"
+generated: "2023-04-19T10:46:23.957862+02:00"
