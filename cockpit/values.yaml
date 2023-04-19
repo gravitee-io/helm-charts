@@ -668,3 +668,19 @@ generator:
   #  - name: config
   #    secret:
   #      secretName: gravitee-config-secret-name
+#
+#notifiers:
+#  enabled: true
+#  tryAvoidDuplicateNotification: true
+#  email:
+#    host: ${email.host}
+#    port: ${email.port}
+#    username: ${email.username}
+#    subject: ${email.subject}
+#    password: ${email.password}
+#    from: cloud@graviteesource.com
+#    ## Optional
+#    startTLSEnabled: true
+#    sslKeyStore: /path/to/keystore
+#    sslTrustAll: true
+#    sslKeyStorePassword: password

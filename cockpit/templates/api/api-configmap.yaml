@@ -66,6 +66,13 @@ data:
     {{- end }}
 
     services:
+    {{- with .Values.notifiers }}
+    {{- if .enabled }}
+      notifier:
+        enabled: true
+        tryAvoidDuplicateNotification: {{ .tryAvoidDuplicateNotification }}
+    {{- end }}
+    {{- end }}
       core:
         http: 
           enabled: true
@@ -148,6 +155,26 @@ data:
       notifications:
 {{ toYaml .Values.api.email.notifications | indent 8 }}
       {{- end }}
+
+  {{- with .Values.notifiers }}
+  {{- if .enabled }}
+
+    notifiers:
+      email:
+        host: {{ .email.host }}
+        port: {{ .email.port }}
+        username: {{ .email.username }}
+        subject: {{ .email.subject | quote }}
+        password: {{ .email.password }}
+        from: cloud@graviteesource.com
+        {{- if .email.startTLSEnabled }}
+        startTLSEnabled: true
+        sslKeyStore: {{ .email.sslKeyStore }}
+        sslTrustAll: {{ .email.sslTrustAll }}
+        sslKeyStorePassword: {{ .email.sslKeyStorePassword }}
+        {{- end }}
+  {{- end }}
+  {{- end }}
 
     jwt:
       secret: {{ .Values.api.jwt.secret }}

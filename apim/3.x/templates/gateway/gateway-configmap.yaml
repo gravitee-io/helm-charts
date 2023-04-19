@@ -47,6 +47,9 @@ data:
           path: {{ .Values.gateway.ssl.truststore.path }}
           password: {{ .Values.gateway.ssl.truststore.password | quote }}
         {{- end }}
+        {{- if .Values.gateway.ssl.sni }}
+        sni: true
+        {{- end }}
       {{- end }}
       websocket:
         enabled: {{ .Values.gateway.websocket }}
@@ -176,7 +179,7 @@ data:
         {{- if .Values.gateway.ratelimit.redis.ssl }}
         ssl: {{ .Values.gateway.ratelimit.redis.ssl }}
         {{- end }}
-        {{- if and .Values.gateway.ratelimit.redis.sentinel (not (empty .Values.gateway.ratelimit.redis.sentinel.nodes)) }}
+        {{- if (not (empty ((.Values.gateway.ratelimit.redis.sentinel).nodes))) }}
         sentinel:
           master: {{ .Values.gateway.ratelimit.redis.sentinel.master }}
           nodes:
