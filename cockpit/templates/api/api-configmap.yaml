@@ -167,12 +167,18 @@ data:
         subject: {{ .email.subject | quote }}
         password: {{ .email.password }}
         from: cloud@graviteesource.com
-        {{- if .email.startTLSEnabled }}
+      {{- if .email.startTLSEnabled }}
         startTLSEnabled: true
+        {{- if hasKey .email "sslKeyStore" }}
         sslKeyStore: {{ .email.sslKeyStore }}
+        {{- end }}
+        {{- if hasKey .email "sslTrustAll" }}
         sslTrustAll: {{ .email.sslTrustAll }}
+        {{- end }}
+        {{- if hasKey .email "sslKeyStorePassword" }}
         sslKeyStorePassword: {{ .email.sslKeyStorePassword }}
         {{- end }}
+      {{- end }}
   {{- end }}
   {{- end }}
 
