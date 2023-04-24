@@ -930,16 +930,17 @@ tests:
   - it: should enable notifiers
     template: api/api-configmap.yaml
     set:
-      notifiers:
-        enabled: true
-        tryAvoidDuplicateNotification: true
-        email:
-          host: my.host.name
-          port: 445
-          username: cockpit
-          subject: awesome test
-          password: strong password
-          from: cloud@graviteesource.com
+      api:
+        notifiers:
+          enabled: true
+          tryAvoidDuplicateNotification: true
+          email:
+            host: my.host.name
+            port: 445
+            username: cockpit
+            subject: awesome test
+            password: strong password
+            from: cloud@graviteesource.com
     release:
       name: my-cockpit
       namespace: unittest
@@ -1096,20 +1097,21 @@ tests:
   - it: should enable notifiers when TLS enabled
     template: api/api-configmap.yaml
     set:
-      notifiers:
-        enabled: true
-        tryAvoidDuplicateNotification: true
-        email:
-          host: my.host.name
-          port: 445
-          username: cockpit
-          subject: awesome test
-          password: strong password
-          from: cloud@graviteesource.com
-          startTLSEnabled: true
-          sslKeyStore: test-keystore
-          sslTrustAll: test-truststore
-          sslKeyStorePassword: very-strong-password
+      api:
+        notifiers:
+          enabled: true
+          tryAvoidDuplicateNotification: true
+          email:
+            host: my.host.name
+            port: 445
+            username: cockpit
+            subject: awesome test
+            password: strong password
+            from: cloud@graviteesource.com
+            startTLSEnabled: true
+            sslKeyStore: test-keystore
+            sslTrustAll: test-truststore
+            sslKeyStorePassword: very-strong-password
     release:
       name: my-cockpit
       namespace: unittest
@@ -1269,17 +1271,18 @@ tests:
   - it: should enable notifiers when TLS enabled without truststore
     template: api/api-configmap.yaml
     set:
-      notifiers:
-        enabled: true
-        tryAvoidDuplicateNotification: true
-        email:
-          host: my.host.name
-          port: 445
-          username: cockpit
-          subject: awesome test
-          password: strong password
-          from: cloud@graviteesource.com
-          startTLSEnabled: true
+      api:
+        notifiers:
+          enabled: true
+          tryAvoidDuplicateNotification: true
+          email:
+            host: my.host.name
+            port: 445
+            username: cockpit
+            subject: awesome test
+            password: strong password
+            from: cloud@graviteesource.com
+            startTLSEnabled: true
     release:
       name: my-cockpit
       namespace: unittest

@@ -66,7 +66,7 @@ data:
     {{- end }}
 
     services:
-    {{- with .Values.notifiers }}
+    {{- with .Values.api.notifiers }}
     {{- if .enabled }}
       notifier:
         enabled: true
@@ -156,7 +156,7 @@ data:
 {{ toYaml .Values.api.email.notifications | indent 8 }}
       {{- end }}
 
-  {{- with .Values.notifiers }}
+  {{- with .Values.api.notifiers }}
   {{- if .enabled }}
 
     notifiers:
@@ -166,7 +166,7 @@ data:
         username: {{ .email.username }}
         subject: {{ .email.subject | quote }}
         password: {{ .email.password }}
-        from: cloud@graviteesource.com
+        from: {{ .email.from }}
       {{- if .email.startTLSEnabled }}
         startTLSEnabled: true
         {{- if hasKey .email "sslKeyStore" }}
