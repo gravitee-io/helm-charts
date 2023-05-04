@@ -2,6 +2,34 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# -- Array of extra K8s manifests to deploy
+extraObjects: []
+  #- apiVersion: v1
+  #  kind: Secret
+  #  metadata:
+  #    name: gravitee-license
+  #    namespace: graviteeio
+  #  type: Opaque
+  #  data:
+#    license.key: myLicenceInBase64==
+
+# Create NetworkPolicy objects
+# https://kubernetes.io/docs/concepts/services-networking/network-policies/
+networkPolicy:
+#  podSelector:
+#    matchExpressions:
+#      - key: app.kubernetes.io/component
+#        operator: In
+#        values: [ "engine" ]
+#  policyTypes:
+#    - Egress
+#  egress:
+#    - to:
+#        - ipBlock:
+#            cidr: 0.0.0.0/0
+#            except:
+#              - 169.254.169.254/32
+
 chaos:
   enabled: false
 
@@ -84,6 +112,12 @@ engine:
     envFrom: []
     # - configMapRef:
     #     name: config-secret
+    # SecurityContext holds pod-level security attributes and common container settings.
+    # Field values of container.securityContext take precedence over field values of PodSecurityContext.
+    #podSecurityContext:
+      #fsGroup: 1001
+      #runAsUser: 1001
+      #runAsNonRoot: true
     securityContext:
       runAsUser: 1001
       runAsNonRoot: true
@@ -255,5 +289,5 @@ engine:
   # You can also define it from command line :
   # `helm install --name graviteeio-ae graviteeio/ae --set license.key=${GRAVITEESOURCE_LICENSE_B64}`
 license:
-  name: licensekey
+  name: licensekey-ae
 #  key: <put here your license.key file encoded in base64>

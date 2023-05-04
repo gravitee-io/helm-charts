@@ -1,6 +1,35 @@
 # Default values for gravitee.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
+# -- Array of extra K8s manifests to deploy
+extraObjects: []
+  #- apiVersion: v1
+  #  kind: Secret
+  #  metadata:
+  #    name: gravitee-license
+  #    namespace: graviteeio
+  #  type: Opaque
+#  data:
+#    license.key: myLicenceInBase64==
+
+# Create NetworkPolicy objects
+# https://kubernetes.io/docs/concepts/services-networking/network-policies/
+networkPolicy:
+#  podSelector:
+#    matchExpressions:
+#      - key: app.kubernetes.io/component
+#        operator: In
+#        values: [ "generator", "api", "ui" ]
+#  policyTypes:
+#    - Egress
+#  egress:
+#    - to:
+#        - ipBlock:
+#            cidr: 0.0.0.0/0
+#            except:
+#              - 169.254.169.254/32
+
 cockpit:
   name: cockpit
   # Whether this chart should self-manage its service account, role, and associated role binding.
@@ -97,7 +126,7 @@ mongodb-replicaset:
   replicaSetName: rs0
   image:
     repository: bitnami/mongodb
-    tag: 5.0.9-debian-10-r20
+    tag: 6.0.10
   auth:
     enabled: false
   resources:
@@ -276,6 +305,20 @@ api:
 #      sslTrustAll: true
 #      sslKeyStorePassword: password
 
+  onboarding:
+    incomplete:
+      timeBeforeNotifying: PT30M
+
+# Optional values related to Confluent API call to create kafka topic for APIM v4 Demo
+#  confluent:
+#    api:
+#      credentials:
+#        api-key: YOUR_CONFLUENT_API_KEY
+#        api-secret-key: YOUR_CONFLUENT_API_SECRET_KEY
+#      topic:
+#        prefix: dev-
+#        uri: https://great-cluster.westeurope.azure.confluent.cloud/kafka/v3/clusters/id-cluster/topics
+
   controller:
     compatibleVersions:
       apim: "3.6.2"
@@ -318,6 +361,12 @@ api:
     internalPortName: api-http
 #    appProtocol: http
   # annotations:
+  # SecurityContext holds pod-level security attributes and common container settings.
+  # Field values of container.securityContext take precedence over field values of PodSecurityContext.
+  #podSecurityContext:
+    #fsGroup: 1001
+    #runAsUser: 1001
+    #runAsNonRoot: true
   securityContext:
     runAsUser: 1001
     runAsNonRoot: true
@@ -429,6 +478,12 @@ ui:
     envFrom: []
     # - configMapRef:
     #     name: config-secret
+    # SecurityContext holds pod-level security attributes and common container settings.
+    # Field values of container.securityContext take precedence over field values of PodSecurityContext.
+    #podSecurityContext:
+      #fsGroup: 1001
+      #runAsUser: 1001
+      #runAsNonRoot: true
     securityContext:
       runAsUser: 101
       runAsGroup: 101
@@ -581,6 +636,12 @@ generator:
     envFrom: []
     # - configMapRef:
     #     name: config-secret
+    # SecurityContext holds pod-level security attributes and common container settings.
+    # Field values of container.securityContext take precedence over field values of PodSecurityContext.
+    #podSecurityContext:
+      #fsGroup: 1001
+      #runAsUser: 1001
+      #runAsNonRoot: true
     securityContext:
       runAsUser: 1001
       runAsNonRoot: true

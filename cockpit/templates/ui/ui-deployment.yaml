@@ -63,6 +63,9 @@ spec:
         {{- end }}
         {{- end }}
     spec:
+      {{- if .Values.ui.deployment.podSecurityContext }}
+      securityContext: {{ toYaml .Values.ui.deployment.podSecurityContext | nindent 8 }}
+      {{- end }}
       affinity: {{- toYaml $mergedAffinity | nindent 8 }}
       nodeSelector: {{ toYaml .Values.ui.deployment.nodeSelector | nindent 8 }}
       topologySpreadConstraints: {{ toYaml .Values.ui.deployment.topologySpreadConstraints | nindent 8 }}
@@ -88,8 +91,6 @@ spec:
           securityContext:
 {{ toYaml .Values.ui.securityContext | trim | indent 12 }}
           env:
-            - name: API_URL
-              value: "https://{{index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/"
 {{- if .Values.ui.env | default .Values.ui.deployment.extraEnvs }}
 {{ toYaml ( .Values.ui.env | default .Values.ui.deployment.extraEnvs ) | indent 12 }}
 {{- end }}

@@ -2,6 +2,51 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.9.5
+
+- [X] Upgrade Mongodb dependency to 13.18.5
+
+### 1.9.4
+
+- [X] add networkPolicy
+
+### 1.9.3
+
+- [X] Allow users to define extra manifests
+
+### 1.9.2
+
+- [X] Allow wildcard in ingress host
+- [X] Add podSecurityContext
+
+### 1.9.1
+
+- [X] Add property to override endpoints ui URL
+- [X] Add property to override endpoints ws URL
+- [X] Add property to override authentication callback URL 
+
+### 1.9.0
+
+#### Breaking changes
+- [X] UI API_URL environment variable need to be defined 
+
+### 1.8.5
+
+- [X] Add confluence api configuration for trial demo
+
+### 1.8.4
+
+- [X] Add new incomplete onboarding parameter on cockpit
+- [X] Remove old onboarding parameter on cockpit
+
+### 1.8.3
+
+- [X] Add onboarding parameter on cockpit
+
+### 1.8.2
+
+- [X] fix Email notifier configuration
+
 ### 1.8.1
 
 - [X] Email notifier fix configuration with TLS without truststore

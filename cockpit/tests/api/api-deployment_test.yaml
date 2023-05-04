@@ -71,7 +71,7 @@ tests:
           value:
             annotations:
               chaos.alpha.kubernetes.io/enabled: "false"
-              checksum/config: cdabe2bcaee6b67e79211423b1d1b689edbbd4f8ccf971b2e8de9f1bd91a2d14
+              checksum/config: 02e31a22a8941c4836da71a7bc5f06aaad10f5bebf708a6774aa8170138b8c1d
             labels:
               app.kubernetes.io/component: api
               app.kubernetes.io/instance: my-cockpit
@@ -256,3 +256,19 @@ tests:
       - equal:
           path: spec.template.spec.serviceAccountName
           value: "test-sa"
+
+  - it: Deploy with podSecurityContext
+    template: api/api-deployment.yaml
+    set:
+      api:
+        deployment:
+          podSecurityContext:
+            fsGroup: 1001
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.securityContext.fsGroup
+          value: 1001

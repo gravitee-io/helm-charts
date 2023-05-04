@@ -98,8 +98,6 @@ tests:
                       topologyKey: "kubernetes.io/hostname"
             containers:
             - env:
-              - name: API_URL
-                value: https://cockpit.example.com/management/
               envFrom: []
               image: graviteeio/cockpit-management-ui:1.0.0-app
               imagePullPolicy: Always
@@ -187,3 +185,19 @@ tests:
       - equal:
           path: spec.revisionHistoryLimit
           value: 10
+
+  - it: Deploy with podSecurityContext
+    template: ui/ui-deployment.yaml
+    set:
+      ui:
+        deployment:
+          podSecurityContext:
+            fsGroup: 1001
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.securityContext.fsGroup
+          value: 1001
