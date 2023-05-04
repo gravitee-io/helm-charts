@@ -20,4 +20,4 @@ annotations:
   # List of changes for the release in artifacthub.io
   # https://artifacthub.io/packages/helm/graviteeio/apim3?modal=changelog
   artifacthub.io/changes: |
-    - Add sni to the gateway configuration
+    - Remove old and unused `cache.type` from gateway config map
