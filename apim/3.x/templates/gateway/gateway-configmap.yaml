@@ -10,6 +10,16 @@ metadata:
     app.kubernetes.io/component: "{{ .Values.gateway.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  {{- if .Values.gateway.configMap.labels}}
+    {{- range $key, $value := .Values.gateway.configMap.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if .Values.gateway.configMap.annotations}}
+    {{- range $key, $value := .Values.gateway.configMap.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 data:
   {{- if not (include "gateway.externalConfig" .)}}
   gravitee.yml: |
