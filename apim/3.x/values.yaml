@@ -1,6 +1,10 @@
 # Default values for gravitee.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+common:
+  labels: {}
+  annotations: {}
+
 apim:
   name: apim
   # Whether this chart should self-manage its service account, role, and associated role binding.
@@ -675,6 +679,7 @@ api:
 
 gateway:
   enabled: true
+  ingressController: false
   type: Deployment
   name: gateway
   logging:

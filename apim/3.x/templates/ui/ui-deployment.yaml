@@ -21,12 +21,22 @@ metadata:
     {{ $key }}: {{ $value | quote }}
     {{- end }}
     {{- end }}
-  {{- if .Values.ui.deployment.annotations}}
+    {{- if .Values.common.labels }}
+    {{- range $key, $value := .Values.common.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
   annotations:
+    {{- if .Values.ui.deployment.annotations}}
     {{- range $key, $value := .Values.ui.deployment.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
-  {{- end }}
+    {{- end }}
+    {{- if .Values.common.annotations }}
+    {{- range $key, $value := .Values.common.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
 spec:
   {{- if .Values.ui.deployment.revisionHistoryLimit }}
   revisionHistoryLimit: {{ .Values.ui.deployment.revisionHistoryLimit }}
@@ -50,6 +60,11 @@ spec:
         {{- range $key, $value := .Values.ui.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
+        {{- if .Values.common.annotations }}
+        {{- range $key, $value := .Values.common.annotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
@@ -61,6 +76,12 @@ spec:
         {{- end }}
         {{- else }}
         {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+      annotations:
+        {{- if .Values.common.annotations }}
+        {{- range $key, $value := .Values.common.annotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
         {{- end }}

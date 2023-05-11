@@ -21,12 +21,22 @@ metadata:
     {{ $key }}: {{ $value | quote }}
     {{- end }}
     {{- end }}
-  {{- if .Values.portal.deployment.annotations}}
+    {{- if .Values.common.labels }}
+    {{- range $key, $value := .Values.common.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
   annotations:
+    {{- if .Values.portal.deployment.annotations}}
     {{- range $key, $value := .Values.portal.deployment.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
-  {{- end }}
+    {{- end }}
+    {{- if .Values.common.annotations }}
+    {{- range $key, $value := .Values.common.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
 spec:
   {{- if not .Values.portal.autoscaling.enabled }}
   replicas: {{ .Values.portal.replicaCount }}
@@ -47,6 +57,11 @@ spec:
         {{- range $key, $value := .Values.portal.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
+        {{- if .Values.common.annotations }}
+        {{- range $key, $value := .Values.common.annotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
@@ -58,6 +73,11 @@ spec:
         {{- end }}
         {{- else }}
         {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.common.labels }}
+        {{- range $key, $value := .Values.common.labels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
         {{- end }}
