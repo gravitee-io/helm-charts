@@ -696,9 +696,6 @@ gateway:
     jettyLevel: WARN
   # If you provide your own gravitee.yml by using a volumeMount, reloadOnConfigChange is disabled.
   reloadOnConfigChange: true
-  configMap:
-    labels: {}
-    annotations: {}
   deployment:
     # Annotations to apply to the deployment
     annotations: {}
