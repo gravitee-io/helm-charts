@@ -6,7 +6,6 @@ This file documents all notable changes to [Gravitee.io API Management 3.x](http
 ### 3.1.69
 
 - [X] Allow disabling analytics in Management API
-- [X] Allow labels and annotations on Gateway Config Map
 
 ### 3.1.68
 
