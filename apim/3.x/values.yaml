@@ -1,6 +1,10 @@
 # Default values for gravitee.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+common:
+  labels: {}
+  annotations: {}
+
 apim:
   name: apim
   # Whether this chart should self-manage its service account, role, and associated role binding.
@@ -230,7 +234,7 @@ mongodb:
   podAffinityPreset: soft
   image:
     repository: bitnami/mongodb
-    tag: 5.0.14
+    tag: 6.0.6
   auth:
     enabled: false
   resources:
@@ -416,26 +420,35 @@ api:
     topologySpreadConstraints: []
     # revisionHistoryLimit: 10
 
-  livenessProbe:
-    tcpSocket:  
-      port: http
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    failureThreshold: 3
+    livenessProbe:
+      enabled: true
+      tcpSocket:
+        port: http
+      initialDelaySeconds: 30
+      periodSeconds: 30
+      failureThreshold: 3
 
-  readinessProbe:
-    tcpSocket:
-      port: http
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    failureThreshold: 3
+    customLivenessProbe: {}
 
-  startupProbe:
-    tcpSocket:
-      port: http
-    failureThreshold: 30
-    periodSeconds: 10
-  
+    readinessProbe:
+      enabled: true
+      tcpSocket:
+        port: http
+      initialDelaySeconds: 30
+      periodSeconds: 30
+      failureThreshold: 3
+
+    customReadinessProbe: {}
+
+    startupProbe:
+      enabled: true
+      tcpSocket:
+        port: http
+      failureThreshold: 30
+      periodSeconds: 10
+
+    customStartupProbe: {}
+
   pdb:
     enabled: false
     minAvailable: ""
@@ -669,8 +682,13 @@ api:
   #    secret:
   #      secretName: gravitee-config-secret-name
 
+  # you can choose if you want to enable analytics using elasticsearch or disable it (set type to "none")
+  analytics:
+    type: elasticsearch # or none
+
 gateway:
   enabled: true
+  ingressController: false
   type: Deployment
   name: gateway
   logging:
@@ -718,22 +736,71 @@ gateway:
     topologySpreadConstraints: []
     # revisionHistoryLimit: 10
 
-  livenessProbe:
-    tcpSocket:  
-      port: http
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    failureThreshold: 3
+    startupProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 29
+      httpGet:
+        path: /_node/health?probes=http-server
+        scheme: HTTP
+        port: 18082
+        httpHeaders:
+        - name: Authorization
+          value: Basic YWRtaW46YWRtaW5hZG1pbg==
 
-  readinessProbe:
-    # use the management node endpoint as readinessProbe to test the api-sync
-    # in this case, the gateway.management.services.core.http.host must be defined to the Pod IP or 0.0.0.0
-    apiSync: false
-    tcpSocket:
-      port: http
-    initialDelaySeconds: 10
-    periodSeconds: 30
-    failureThreshold: 3
+    # set startupProbe.enabled: false to define your own StartupProbe
+    customStartupProbe: {}
+    #  tcpSocket:
+    #    port: http
+    #  failureThreshold: 30
+    #  periodSeconds: 10
+
+    livenessProbe:
+      enabled: true
+      periodSeconds: 15
+      timeoutSeconds: 2
+      successThreshold: 1
+      failureThreshold: 3
+      httpGet:
+        path: /_node/health?probes=http-server
+        scheme: HTTP
+        port: 18082
+        httpHeaders:
+        - name: Authorization
+          value: Basic YWRtaW46YWRtaW5hZG1pbg==
+
+    # set livenessProbe.enabled: false to define your own livenessProbe
+    customLivenessProbe: {}
+    #  tcpSocket:
+    #    port: http
+    #  initialDelaySeconds: 30
+    #  periodSeconds: 30
+    #  failureThreshold: 3
+
+    readinessProbe:
+      enabled: true
+      periodSeconds: 10
+      timeoutSeconds: 2
+      successThreshold: 1
+      failureThreshold: 2
+      httpGet:
+        path: /_node/health?probes=api-sync
+        scheme: HTTP
+        port: 18082
+        httpHeaders:
+        - name: Authorization
+          value: Basic YWRtaW46YWRtaW5hZG1pbg==
+
+    # set readinessProbe.enabled: false to define your own readinessProbe
+    customReadinessProbe: {}
+    #  tcpSocket:
+    #    port: http
+    #  initialDelaySeconds: 10
+    #  periodSeconds: 30
+    #  failureThreshold: 3
 
   pdb:
     enabled: false
@@ -818,7 +885,7 @@ gateway:
       http:
         enabled: true
         port: 18082
-        host: localhost
+        host: 0.0.0.0
         authentication:
           type: basic
           password: adminadmin
@@ -1071,21 +1138,32 @@ portal:
     topologySpreadConstraints: []
     # revisionHistoryLimit: 10
 
-  livenessProbe:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 10
-    periodSeconds: 30
-    failureThreshold: 3
+    livenessProbe:
+      enabled: true
+      httpGet:
+        path: /
+        port: http
+      initialDelaySeconds: 10
+      periodSeconds: 30
+      failureThreshold: 3
 
-  readinessProbe:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 10
-    periodSeconds: 30
-    failureThreshold: 3
+    customLivenessProbe: {}
+
+    readinessProbe:
+      enabled: true
+      httpGet:
+        path: /
+        port: http
+      initialDelaySeconds: 10
+      periodSeconds: 30
+      failureThreshold: 3
+
+    customReadinessProbe: {}
+
+    startupProbe:
+      enabled: false
+
+    customStartupProbe: {}
 
   pdb:
     enabled: false
@@ -1236,21 +1314,32 @@ ui:
     topologySpreadConstraints: []
     # revisionHistoryLimit: 10
     
-  livenessProbe:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 10
-    periodSeconds: 30
-    failureThreshold: 3
+    livenessProbe:
+      enabled: true
+      httpGet:
+        path: /
+        port: http
+      initialDelaySeconds: 10
+      periodSeconds: 30
+      failureThreshold: 3
 
-  readinessProbe:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 10
-    periodSeconds: 30
-    failureThreshold: 3
+    customLivenessProbe: {}
+
+    readinessProbe:
+      enabled: true
+      httpGet:
+        path: /
+        port: http
+      initialDelaySeconds: 10
+      periodSeconds: 30
+      failureThreshold: 3
+
+    customReadinessProbe: {}
+
+    startupProbe:
+      enabled: false
+
+    customStartupProbe: { }
 
   pdb:
     enabled: false

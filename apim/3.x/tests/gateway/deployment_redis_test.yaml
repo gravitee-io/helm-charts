@@ -43,8 +43,8 @@ tests:
               runAsNonRoot: true
               runAsUser: 1001
             volumeMounts:
-            - name: graviteeio-apim-plugins
-              mountPath: /tmp/plugins
+              - name: graviteeio-apim-plugins
+                mountPath: /tmp/plugins
 
   - it: Check that volumes are defined for APIM < 3.6.0
     template: gateway/gateway-deployment.yaml
@@ -84,8 +84,8 @@ tests:
               runAsNonRoot: true
               runAsUser: 1001
             volumeMounts:
-            - name: graviteeio-apim-plugins
-              mountPath: /tmp/plugins
+              - name: graviteeio-apim-plugins
+                mountPath: /tmp/plugins
 
   - it: Check redis plugin with old version of image (should be 3.15.2)
     template: gateway/gateway-deployment.yaml
@@ -93,12 +93,12 @@ tests:
       version: 1.0.0-chart
       appVersion: 3.15.2
     set:
+      ratelimit:
+        type: "redis"
+      gateway:
         ratelimit:
-          type: "redis"
-        gateway:
-          ratelimit:
-            redis:
-              host: localhost
+          redis:
+            host: localhost
     asserts:
       - hasDocuments:
           count: 1
@@ -171,21 +171,48 @@ tests:
                 ports:
                   - name: http
                     containerPort: 8082
+                  - containerPort: 18082
+                    name: gateway-techapi
                 env:
                 envFrom:
                   [ ]
                 livenessProbe:
                   failureThreshold: 3
-                  initialDelaySeconds: 30
-                  periodSeconds: 30
-                  tcpSocket:
-                    port: http
+                  httpGet:
+                    httpHeaders:
+                      - name: Authorization
+                        value: Basic YWRtaW46YWRtaW5hZG1pbg==
+                    path: /_node/health?probes=http-server
+                    port: 18082
+                    scheme: HTTP
+                  periodSeconds: 15
+                  successThreshold: 1
+                  timeoutSeconds: 2
                 readinessProbe:
-                  failureThreshold: 3
+                  failureThreshold: 2
+                  httpGet:
+                    httpHeaders:
+                      - name: Authorization
+                        value: Basic YWRtaW46YWRtaW5hZG1pbg==
+                    path: /_node/health?probes=api-sync
+                    port: 18082
+                    scheme: HTTP
+                  periodSeconds: 10
+                  successThreshold: 1
+                  timeoutSeconds: 2
+                startupProbe:
+                  failureThreshold: 29
+                  httpGet:
+                    httpHeaders:
+                      - name: Authorization
+                        value: Basic YWRtaW46YWRtaW5hZG1pbg==
+                    path: /_node/health?probes=http-server
+                    port: 18082
+                    scheme: HTTP
                   initialDelaySeconds: 10
-                  periodSeconds: 30
-                  tcpSocket:
-                    port: http
+                  periodSeconds: 10
+                  successThreshold: 1
+                  timeoutSeconds: 1
                 resources:
                   limits:
                     cpu: 500m
@@ -292,21 +319,48 @@ tests:
                 ports:
                   - name: http
                     containerPort: 8082
+                  - containerPort: 18082
+                    name: gateway-techapi
                 env:
                 envFrom:
                   [ ]
                 livenessProbe:
                   failureThreshold: 3
-                  initialDelaySeconds: 30
-                  periodSeconds: 30
-                  tcpSocket:
-                    port: http
+                  httpGet:
+                    httpHeaders:
+                      - name: Authorization
+                        value: Basic YWRtaW46YWRtaW5hZG1pbg==
+                    path: /_node/health?probes=http-server
+                    port: 18082
+                    scheme: HTTP
+                  periodSeconds: 15
+                  successThreshold: 1
+                  timeoutSeconds: 2
                 readinessProbe:
-                  failureThreshold: 3
+                  failureThreshold: 2
+                  httpGet:
+                    httpHeaders:
+                      - name: Authorization
+                        value: Basic YWRtaW46YWRtaW5hZG1pbg==
+                    path: /_node/health?probes=api-sync
+                    port: 18082
+                    scheme: HTTP
+                  periodSeconds: 10
+                  successThreshold: 1
+                  timeoutSeconds: 2
+                startupProbe:
+                  failureThreshold: 29
+                  httpGet:
+                    httpHeaders:
+                      - name: Authorization
+                        value: Basic YWRtaW46YWRtaW5hZG1pbg==
+                    path: /_node/health?probes=http-server
+                    port: 18082
+                    scheme: HTTP
                   initialDelaySeconds: 10
-                  periodSeconds: 30
-                  tcpSocket:
-                    port: http
+                  periodSeconds: 10
+                  successThreshold: 1
+                  timeoutSeconds: 1
                 resources:
                   limits:
                     cpu: 500m
@@ -332,68 +386,95 @@ tests:
       name: my-apim
       namespace: unittest
     set:
+      ratelimit:
+        type: "redis"
+      gateway:
         ratelimit:
-            type: "redis"
-        gateway:
-            ratelimit:
-                redis:
-                    host: localhost
-        redis:
-          download: false
+          redis:
+            host: localhost
+      redis:
+        download: false
     asserts:
-        - hasDocuments:
-              count: 1
-        - equal:
-            path: spec.template.spec
-            value:
-              serviceAccountName: my-apim-apim3
-              affinity:
-                {}
-              nodeSelector:
-                {}
-              topologySpreadConstraints:
-                []
-              tolerations:
-                []
-              terminationGracePeriodSeconds: 30
-              initContainers:
-              containers:
-                - name: my-apim-apim3-gateway
-                  image: "graviteeio/apim-gateway:1.0.0-app"
-                  imagePullPolicy: Always
-                  securityContext:
-                    runAsNonRoot: true
-                    runAsUser: 1001
-                  ports:
-                    - name: http
-                      containerPort: 8082
-                  env:
-                  envFrom:
-                    []
-                  livenessProbe:
-                    failureThreshold: 3
-                    initialDelaySeconds: 30
-                    periodSeconds: 30
-                    tcpSocket:
-                      port: http
-                  readinessProbe:
-                    failureThreshold: 3
-                    initialDelaySeconds: 10
-                    periodSeconds: 30
-                    tcpSocket:
-                      port: http
-                  resources:
-                    limits:
-                      cpu: 500m
-                      memory: 512Mi
-                    requests:
-                      cpu: 200m
-                      memory: 256Mi
-                  volumeMounts:
-                    - name: config
-                      mountPath: /opt/graviteeio-gateway/config/gravitee.yml
-                      subPath: gravitee.yml
-              volumes:
-                - name: config
-                  configMap:
-                    name: my-apim-apim3-gateway
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.template.spec
+          value:
+            serviceAccountName: my-apim-apim3
+            affinity:
+              {}
+            nodeSelector:
+              {}
+            topologySpreadConstraints:
+              []
+            tolerations:
+              []
+            terminationGracePeriodSeconds: 30
+            initContainers:
+            containers:
+              - name: my-apim-apim3-gateway
+                image: "graviteeio/apim-gateway:1.0.0-app"
+                imagePullPolicy: Always
+                securityContext:
+                  runAsNonRoot: true
+                  runAsUser: 1001
+                ports:
+                  - name: http
+                    containerPort: 8082
+                  - containerPort: 18082
+                    name: gateway-techapi
+                env:
+                envFrom:
+                  []
+                livenessProbe:
+                  failureThreshold: 3
+                  httpGet:
+                    httpHeaders:
+                      - name: Authorization
+                        value: Basic YWRtaW46YWRtaW5hZG1pbg==
+                    path: /_node/health?probes=http-server
+                    port: 18082
+                    scheme: HTTP
+                  periodSeconds: 15
+                  successThreshold: 1
+                  timeoutSeconds: 2
+                readinessProbe:
+                  failureThreshold: 2
+                  httpGet:
+                    httpHeaders:
+                      - name: Authorization
+                        value: Basic YWRtaW46YWRtaW5hZG1pbg==
+                    path: /_node/health?probes=api-sync
+                    port: 18082
+                    scheme: HTTP
+                  periodSeconds: 10
+                  successThreshold: 1
+                  timeoutSeconds: 2
+                startupProbe:
+                  failureThreshold: 29
+                  httpGet:
+                    httpHeaders:
+                      - name: Authorization
+                        value: Basic YWRtaW46YWRtaW5hZG1pbg==
+                    path: /_node/health?probes=http-server
+                    port: 18082
+                    scheme: HTTP
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+                  successThreshold: 1
+                  timeoutSeconds: 1
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 512Mi
+                  requests:
+                    cpu: 200m
+                    memory: 256Mi
+                volumeMounts:
+                  - name: config
+                    mountPath: /opt/graviteeio-gateway/config/gravitee.yml
+                    subPath: gravitee.yml
+            volumes:
+              - name: config
+                configMap:
+                  name: my-apim-apim3-gateway

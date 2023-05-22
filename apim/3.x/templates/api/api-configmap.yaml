@@ -10,6 +10,17 @@ metadata:
     app.kubernetes.io/component: "{{ .Values.api.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    {{- if .Values.common.labels }}
+    {{- range $key, $value := .Values.common.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+  annotations:
+    {{- if .Values.common.annotations }}
+    {{- range $key, $value := .Values.common.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
 data:
 {{- if not (include "api.externalConfig" .)}}
   gravitee.yml: |
@@ -188,6 +199,7 @@ data:
     {{- end }}
 
     analytics:
+      {{- if (eq .Values.api.analytics.type "elasticsearch") }}
       type: elasticsearch
       elasticsearch:
         {{- with .Values.es.endpoints }}
@@ -222,6 +234,9 @@ data:
             {{- end }}
         {{- end }}
         index: {{ .Values.es.index }}
+      {{- else if (eq .Values.api.analytics.type "none") }}
+      type: none
+      {{- end }}
     security:
       trustAll: {{ .Values.security.trustAll | default false }}
       providers:
@@ -483,7 +498,7 @@ data:
       api: {{- toYaml .Values.api.api | nindent 6 -}}
     {{- end}}
     {{- end }}
-  {{- if .Values.api.logging.debug }}
+    {{- if .Values.api.logging.debug }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
     <!--

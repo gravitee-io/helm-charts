@@ -3,6 +3,17 @@
 
 This file documents all notable changes to [Gravitee.io API Management 3.x](https://github.com/gravitee-io/helm-charts/tree/master/apim/3.x) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 3.2.0
+
+- [X] Move Probes configuration under `deployment:`
+- [X] Change probe default configuration
+- [X] Remove `apiSync` parameter under `gateway.readinessProbe`
+- [X] Allow users to define their own `customStartupProbe` `customReadinessProbe` `customlivenessProbe`
+- [X] Allow disabling analytics in Management API
+- [X] Update default version of MongoDB in values. Set it to 6.0.6
+
+- **BREAKING CHANGE**: Probes configuration has been changed. Check the default `values.yaml` before upgrade!
+
 ### 3.1.68
 
 - [X] Revert Previous commit "Remove old and unused `cache.type` from gateway configmap"

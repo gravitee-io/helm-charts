@@ -22,12 +22,22 @@ metadata:
     {{ $key }}: {{ $value | quote }}
     {{- end }}
     {{- end }}
-  {{- if .Values.api.deployment.annotations}}
+    {{- if .Values.common.labels }}
+    {{- range $key, $value := .Values.common.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
   annotations:
+    {{- if .Values.api.deployment.annotations}}
     {{- range $key, $value := .Values.api.deployment.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
-  {{- end }}
+    {{- end }}
+    {{- if .Values.common.annotations }}
+    {{- range $key, $value := .Values.common.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
 spec:
   {{- if .Values.api.deployment.revisionHistoryLimit }}
   revisionHistoryLimit: {{ .Values.api.deployment.revisionHistoryLimit }}
@@ -51,6 +61,11 @@ spec:
         {{- range $key, $value := .Values.api.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
+        {{- if .Values.common.annotations }}
+        {{- range $key, $value := .Values.common.annotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
@@ -62,6 +77,11 @@ spec:
         {{- end }}
         {{- else }}
         {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.common.labels }}
+        {{- range $key, $value := .Values.common.labels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
         {{- end }}
@@ -170,11 +190,22 @@ spec:
                 command: {{ .Values.api.lifecycle.preStop }}
             {{- end }}
           {{- end }}
-          livenessProbe: {{ toYaml .Values.api.livenessProbe | nindent 12 }}
-          readinessProbe: {{ toYaml .Values.api.readinessProbe | nindent 12 }}
-          {{- if and (.Values.api.startupProbe) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
-          startupProbe: {{ toYaml .Values.api.startupProbe | nindent 12 }}
+          {{- if .Values.api.deployment.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.api.deployment.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.api.deployment.customLivenessProbe }}
+          livenessProbe: {{ toYaml .Values.api.deployment.customLivenessProbe | nindent 12 }}
           {{- end }}
+          {{- if .Values.api.deployment.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.api.deployment.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.api.deployment.customReadinessProbe }}
+          readinessProbe: {{ toYaml .Values.api.deployment.customReadinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if and (.Values.api.deployment.startupProbe.enabled) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+          startupProbe: {{- omit .Values.api.deployment.startupProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if and (.Values.api.deployment.customStartupProbe) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+          startupProbe: {{ toYaml .Values.api.deployment.customStartupProbe | nindent 12 }}
+          {{- end }}
+
           resources: {{ toYaml .Values.api.resources | nindent 12 }}
           volumeMounts:
             - name: config

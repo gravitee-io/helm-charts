@@ -21,12 +21,22 @@ metadata:
     {{ $key }}: {{ $value | quote }}
     {{- end }}
     {{- end }}
-  {{- if .Values.portal.deployment.annotations}}
+    {{- if .Values.common.labels }}
+    {{- range $key, $value := .Values.common.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
   annotations:
+    {{- if .Values.portal.deployment.annotations}}
     {{- range $key, $value := .Values.portal.deployment.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
-  {{- end }}
+    {{- end }}
+    {{- if .Values.common.annotations }}
+    {{- range $key, $value := .Values.common.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
 spec:
   {{- if not .Values.portal.autoscaling.enabled }}
   replicas: {{ .Values.portal.replicaCount }}
@@ -47,6 +57,11 @@ spec:
         {{- range $key, $value := .Values.portal.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
+        {{- if .Values.common.annotations }}
+        {{- range $key, $value := .Values.common.annotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
       labels:
         app.kubernetes.io/name: {{ template "gravitee.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
@@ -58,6 +73,11 @@ spec:
         {{- end }}
         {{- else }}
         {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.common.labels }}
+        {{- range $key, $value := .Values.common.labels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
         {{- end }}
@@ -112,10 +132,20 @@ spec:
                 command: {{ .Values.portal.lifecycle.preStop }}
             {{- end }}
           {{- end }}
-          livenessProbe: {{ toYaml .Values.portal.livenessProbe | nindent 12 }}
-          readinessProbe: {{ toYaml .Values.portal.readinessProbe | nindent 12 }}
-          {{- if and (.Values.portal.startupProbe) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
-          startupProbe: {{ toYaml .Values.portal.startupProbe | nindent 12 }}
+          {{- if .Values.portal.deployment.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.portal.deployment.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.portal.deployment.customLivenessProbe }}
+          livenessProbe: {{ toYaml .Values.portal.deployment.customLivenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.portal.deployment.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.portal.deployment.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.portal.deployment.customReadinessProbe }}
+          readinessProbe: {{ toYaml .Values.portal.deployment.customReadinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if and (.Values.portal.deployment.startupProbe.enabled) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+          startupProbe: {{- omit .Values.portal.deployment.startupProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if and (.Values.portal.deployment.customStartupProbe) (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+          startupProbe: {{ toYaml .Values.portal.deployment.customStartupProbe | nindent 12 }}
           {{- end }}
           resources: {{ toYaml .Values.portal.resources | nindent 12 }}
           volumeMounts:
