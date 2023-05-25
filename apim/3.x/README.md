@@ -24,6 +24,10 @@ This chart will deploy the following:
   $ helm install --name graviteeio-apim3x graviteeio/apim3
   ```
 
+## Upgrading
+
+Please always check [CHANGELOG.md](https://github.com/gravitee-io/helm-charts/blob/gh-pages/apim/3.x/CHANGELOG.md) and [BREAKING_CHANGES.md](https://github.com/gravitee-io/helm-charts/blob/gh-pages/apim/3.x/BREAKING_CHANGES.md) before upgrading to a new chart version.
+
 ## Create a chart archive
 
 To package this chart directory into a chart archive, run:
