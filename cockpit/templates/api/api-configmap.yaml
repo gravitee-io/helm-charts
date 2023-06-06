@@ -182,6 +182,12 @@ data:
   {{- end }}
   {{- end }}
 
+  {{- if .Values.api.onboarding }}
+
+    onboarding:
+      notify-uncompleted-cron: {{ .Values.api.onboarding.notifyUncompletedCron }}
+  {{- end }}
+
     jwt:
       secret: {{ .Values.api.jwt.secret }}
 
