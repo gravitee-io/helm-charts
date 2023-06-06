@@ -2,6 +2,14 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.8.3
+
+- [X] Add onboarding parameter on cockpit
+
+### 1.8.2
+
+- [X] fix Email notifier configuration
+
 ### 1.8.1
 
 - [X] Email notifier fix configuration with TLS without truststore
