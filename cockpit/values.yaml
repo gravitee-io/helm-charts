@@ -276,6 +276,9 @@ api:
 #      sslTrustAll: true
 #      sslKeyStorePassword: password
 
+  onboarding:
+    notifyUncompletedCron: 0 */30 * * * *
+
   controller:
     compatibleVersions:
       apim: "3.6.2"
