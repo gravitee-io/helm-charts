@@ -185,7 +185,8 @@ data:
   {{- if .Values.api.onboarding }}
 
     onboarding:
-      notify-uncompleted-cron: {{ .Values.api.onboarding.notifyUncompletedCron }}
+      incomplete:
+        time-before-notifying: {{ .Values.api.onboarding.incomplete.timeBeforeNotifying }}
   {{- end }}
 
     jwt:

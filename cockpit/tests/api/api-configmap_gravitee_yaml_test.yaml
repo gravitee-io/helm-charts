@@ -101,7 +101,8 @@ tests:
                 starttls.enable : "false"
             
             onboarding:
-              notify-uncompleted-cron: 0 */30 * * * *
+              incomplete:
+                time-before-notifying: PT30M
             
             jwt:
               secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
@@ -267,7 +268,8 @@ tests:
                 starttls.enable : "false"
             
             onboarding:
-              notify-uncompleted-cron: 0 */30 * * * *
+              incomplete:
+                time-before-notifying: PT30M
             
             jwt:
               secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
@@ -412,7 +414,8 @@ tests:
                 starttls.enable : "false"
             
             onboarding:
-              notify-uncompleted-cron: 0 */30 * * * *
+              incomplete:
+                time-before-notifying: PT30M
             
             jwt:
               secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
@@ -564,7 +567,8 @@ tests:
                 starttls.enable : "false"
             
             onboarding:
-              notify-uncompleted-cron: 0 */30 * * * *
+              incomplete:
+                time-before-notifying: PT30M
             
             jwt:
               secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
@@ -713,7 +717,8 @@ tests:
                 starttls.enable : "false"
             
             onboarding:
-              notify-uncompleted-cron: 0 */30 * * * *
+              incomplete:
+                time-before-notifying: PT30M
             
             jwt:
               secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
@@ -867,7 +872,8 @@ tests:
                 starttls.enable : "false"
             
             onboarding:
-              notify-uncompleted-cron: 0 */30 * * * *
+              incomplete:
+                time-before-notifying: PT30M
             
             jwt:
               secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
@@ -1035,7 +1041,8 @@ tests:
                 from: cloud@graviteesource.com
             
             onboarding:
-              notify-uncompleted-cron: 0 */30 * * * *
+              incomplete:
+                time-before-notifying: PT30M
             
             jwt:
               secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
@@ -1213,7 +1220,8 @@ tests:
                 sslKeyStorePassword: very-strong-password
             
             onboarding:
-              notify-uncompleted-cron: 0 */30 * * * *
+              incomplete:
+                time-before-notifying: PT30M
             
             jwt:
               secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
@@ -1384,7 +1392,8 @@ tests:
                 startTLSEnabled: true
             
             onboarding:
-              notify-uncompleted-cron: 0 */30 * * * *
+              incomplete:
+                time-before-notifying: PT30M
             
             jwt:
               secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
@@ -1462,12 +1471,13 @@ tests:
                 responseType: code
                 scopes: openid,profile,email
 
-  - it: should configure onboarding to 5 mins
+  - it: should configure to notifying incomplete onboarding 10 mins later
     template: api/api-configmap.yaml
     set:
       api:
         onboarding:
-          notifyUncompletedCron: 0 */5 * * * *
+          incomplete:
+            timeBeforeNotifying: PT10M
     release:
       name: my-cockpit
       namespace: unittest
@@ -1532,7 +1542,8 @@ tests:
                 starttls.enable : "false"
             
             onboarding:
-              notify-uncompleted-cron: 0 */5 * * * *
+              incomplete:
+                time-before-notifying: PT10M
             
             jwt:
               secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
