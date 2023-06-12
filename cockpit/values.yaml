@@ -277,7 +277,8 @@ api:
 #      sslKeyStorePassword: password
 
   onboarding:
-    notifyUncompletedCron: 0 */30 * * * *
+    incomplete:
+      timeBeforeNotifying: PT30M
 
   controller:
     compatibleVersions:
