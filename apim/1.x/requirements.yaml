@@ -1,9 +1,0 @@
-dependencies:
-- name: elasticsearch
-  version: ^1.27.3
-  repository: https://kubernetes-charts.storage.googleapis.com/
-  condition: elasticsearch.enabled
-- name: mongodb-replicaset
-  version: ^3.10.1
-  repository: https://kubernetes-charts.storage.googleapis.com/
-  condition: mongodb-replicaset.enabled
