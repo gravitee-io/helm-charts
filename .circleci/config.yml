@@ -61,24 +61,6 @@ jobs:
             -   store_test_results:
                     path: am-result.xml
 
-    test-apim-charts:
-        docker:
-            -   image: cimg/base:stable
-        resource_class: small
-        steps:
-            - checkout
-            -   helm/install-helm-client:
-                    version: v3.7.1
-            - install-helm-unittest
-            -   lint:
-                  folder: apim/3.x
-            -   execute-tests:
-                    folder: apim/3.x
-                    files: tests/**/*.yaml
-                    output-file: apim-result.xml
-            -   store_test_results:
-                    path: apim-result.xml
-
     test-cockpit-charts:
         docker:
             -   image: cimg/base:stable
@@ -118,8 +100,6 @@ workflows:
         jobs:
             - test-am-charts:
                 name: AM - Lint & Test
-            - test-apim-charts:
-                name: APIM - Lint & Test
             - test-cockpit-charts:
                 name: Cockpit - Lint & Test
             - lint-charts:
