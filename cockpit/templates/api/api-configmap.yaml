@@ -188,6 +188,11 @@ data:
       incomplete:
         time-before-notifying: {{ .Values.api.onboarding.incomplete.timeBeforeNotifying }}
   {{- end }}
+  {{- if .Values.api.confluent }}
+
+    confluent:
+{{ toYaml .Values.api.confluent | indent 6 }}
+  {{- end }}
 
     jwt:
       secret: {{ .Values.api.jwt.secret }}
