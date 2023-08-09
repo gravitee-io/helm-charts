@@ -173,6 +173,11 @@ $ helm install cockpit-1.0.0.tgz
 | api.ssl.enabled | bool | `false` |
 | api.updateStrategy.rollingUpdate.maxUnavailable | int | `1` |
 | api.updateStrategy.type | string | `"RollingUpdate"` |
+| onboarding.incomplete.timeBeforeNotifying | string | PT30M | Time before notifying user about his cockpit onboarding defined with the https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html#parse(java.lang.CharSequence)[java Duration format]
+| confluent.api.credentials.api-key | string | | API Key need to call Confluent API when setup a trial demo with Kafka
+| confluent.api.credentials.api-secret-key | string | | API Secret Key need to call Confluent API when setup a trial demo with Kafka
+| confluent.api.topic.prefix | string | | Optional prefix to set when setup a trial demo with Kafka
+| confluent.api.topic.uri | string | | The URI of you Kafka cluster in Confluent - it is use to create topic from the Confluent API
 | authentication.github.clientId | string | `nil` |
 | authentication.github.clientSecret | string | `nil` |
 | authentication.google.clientId | string | `nil` |
