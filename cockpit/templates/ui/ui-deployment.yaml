@@ -88,8 +88,6 @@ spec:
           securityContext:
 {{ toYaml .Values.ui.securityContext | trim | indent 12 }}
           env:
-            - name: API_URL
-              value: "https://{{index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}/"
 {{- if .Values.ui.env | default .Values.ui.deployment.extraEnvs }}
 {{ toYaml ( .Values.ui.env | default .Values.ui.deployment.extraEnvs ) | indent 12 }}
 {{- end }}
