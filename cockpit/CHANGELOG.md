@@ -2,6 +2,15 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.9.0
+
+#### Breaking changes
+- [X] UI API_URL environment variable need to be defined 
+
+### 1.8.5
+
+- [X] Add confluence api configuration for trial demo
+
 ### 1.8.4
 
 - [X] Add new incomplete onboarding parameter on cockpit

@@ -98,8 +98,6 @@ tests:
                       topologyKey: "kubernetes.io/hostname"
             containers:
             - env:
-              - name: API_URL
-                value: https://cockpit.example.com/management/
               envFrom: []
               image: graviteeio/cockpit-management-ui:1.0.0-app
               imagePullPolicy: Always
