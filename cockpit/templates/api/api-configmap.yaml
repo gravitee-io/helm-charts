@@ -221,8 +221,12 @@ data:
         name: "GraviteeAccessManagement"
         ui: "http://localhost:4200"
         api: "http://localhost:8093/management"
+  {{- if .Values.api.endpoints }}
+{{ toYaml .Values.api.endpoints | indent 6 }}
+  {{- else }}
       ui: "https://{{ index .Values.ui.ingress.hosts 0 }}{{ .Values.ui.ingress.path }}"
       ws: "https://{{ index .Values.api.controller.ws.ingress.hosts 0 }}{{ .Values.api.controller.ws.ingress.path }}"
+  {{- end }}
 
     {{- if .Values.api.initialPlans }}
     initialPlans:
@@ -230,7 +234,11 @@ data:
     {{- end }}
 
     auth:
+    {{- if .Values.authentication.callbackUrl }}
+      callbackUrl: {{ .Values.authentication.callbackUrl }}
+    {{- else }}
       callbackUrl: {{ .Values.api.ingress.path }}/auth/login/callback
+    {{- end }}
 
       {{- if .Values.authentication.github }}
       github:

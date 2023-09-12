@@ -2,6 +2,12 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.9.1
+
+- [X] Add property to override endpoints ui URL
+- [X] Add property to override endpoints ws URL
+- [X] Add property to override authentication callback URL 
+
 ### 1.9.0
 
 #### Breaking changes
