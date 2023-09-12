@@ -1784,3 +1784,307 @@ tests:
                 codeParameter: code
                 responseType: code
                 scopes: openid,profile,email
+
+  - it: should configure endpoint ui and ws
+    template: api/api-configmap.yaml
+    set:
+      api:
+        endpoints:
+          ui: https://ui.com
+          ws: https://ws.com
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: data.[gravitee.yml]
+          value: | 
+            jetty:
+              port: 8063
+            
+            management:
+              type: mongodb
+              mongodb:
+                sslEnabled: false
+                socketKeepAlive: false
+                uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
+            swaggerGenerator:
+              url: http://my-cockpit-swagger-generator:84
+              apiKey: api_key_value
+            
+            services:
+              core:
+                http:
+                  enabled: true
+                  port: 18063
+                  host: localhost
+                  authentication:
+                    type: basic
+                    users:
+                      admin: adminadmin
+              healthCheckPurge:
+                cron: 0 0 0 */1 * *
+                onPremise:
+                  dataRetentionDuration: -1
+            
+            reCaptcha:
+              enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
+            
+            email:
+              enabled: true
+              host: smtp.example.com
+              subject: "[gravitee] %s"
+              port: 25
+              from: info@example.com
+              username: info@example.com
+              password: example.com
+              properties:
+                auth : "true"
+                starttls.enable : "false"
+            
+            onboarding:
+              incomplete:
+                time-before-notifying: PT30M
+            
+            jwt:
+              secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
+            
+            platform:
+              admin:
+                password: $2a$10$YCR.gYLmG8TzKSg5TYxdzeJOpMGpEavOCni5sbHukD2qwwZxhuXvO
+            
+            certificates:
+              secret: QdjshTRmurH3YtzFCrYATkSG8H65xwah
+              principal: 'EMAILADDRESS=contact@graviteesource.com, CN={accountId}, OU=Cockpit, O=GraviteeSource, L=Lille, ST=France, C=FR'
+              expire-after: 31536000
+              key:
+                alg: RSA
+                size: 4096
+              signature:
+                alg: SHA512WithRSA
+            
+            endpoints:
+              loginPath: "/auth/cockpit?token={token}"
+              apim:
+                name: "GraviteeAPIManagement"
+                ui: "http://localhost:3000"
+                api: "http://localhost:8083/management"
+              am:
+                name: "GraviteeAccessManagement"
+                ui: "http://localhost:4200"
+                api: "http://localhost:8093/management"
+              ui: https://ui.com
+              ws: https://ws.com
+            initialPlans:
+              large:
+                dataRetentionDuration: 182
+                maxDesignerModelsCount: 1
+                maxEnvs: -1
+                name: Large
+              medium:
+                dataRetentionDuration: 30
+                maxDesignerModelsCount: 1
+                maxEnvs: 4
+                name: Medium
+              small:
+                dataRetentionDuration: 1
+                isDefault: "true"
+                maxDesignerModelsCount: 1
+                maxEnvs: 2
+                name: Small
+            
+            auth:
+              callbackUrl: /management/auth/login/callback
+              github:
+                redirectUri: https://cockpit.example.com/management/auth/login/callback?provider=github
+                accessTokenUri: https://github.com/login/oauth/access_token
+                clientId: null
+                clientSecret: null
+                codeParameter: code
+                responseType: code
+                userAutorizationUri: https://github.com/login/oauth/authorize
+                userProfileUri: https://api.github.com/user
+              google:
+                redirectUri: https://cockpit.example.com/management/auth/login/callback?provider=google
+                accessTokenUri: https://oauth2.googleapis.com/token
+                clientId: null
+                clientSecret: null
+                codeParameter: code
+                responseType: code
+                scopes: openid,profile,email
+                userAutorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+                userProfileUri: https://openidconnect.googleapis.com/v1/userinfo
+              oidc:
+                redirectUri: https://cockpit.example.com/management/auth/login/callback?provider=oidc
+                clientId: null
+                clientSecret: null
+                codeParameter: code
+                responseType: code
+                scopes: openid,profile,email
+
+  - it: should configure auth redirectURI for each provider
+    template: api/api-configmap.yaml
+    set:
+      api:
+        auth:
+          github:
+            redirectUri: https://github-redirectUri.com
+          google:
+            redirectUri: https://google-redirectUri.com
+          oidc:
+            redirectUri: https://oidc-redirectUri.com
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: data.[gravitee.yml]
+          value: |
+            jetty:
+              port: 8063
+
+            management:
+              type: mongodb
+              mongodb:
+                sslEnabled: false
+                socketKeepAlive: false
+                uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
+            swaggerGenerator:
+              url: http://my-cockpit-swagger-generator:84
+              apiKey: api_key_value
+
+            services:
+              core:
+                http:
+                  enabled: true
+                  port: 18063
+                  host: localhost
+                  authentication:
+                    type: basic
+                    users:
+                      admin: adminadmin
+              healthCheckPurge:
+                cron: 0 0 0 */1 * *
+                onPremise:
+                  dataRetentionDuration: -1
+
+            reCaptcha:
+              enabled: false
+
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
+
+            email:
+              enabled: true
+              host: smtp.example.com
+              subject: "[gravitee] %s"
+              port: 25
+              from: info@example.com
+              username: info@example.com
+              password: example.com
+              properties:
+                auth : "true"
+                starttls.enable : "false"
+
+            onboarding:
+              incomplete:
+                time-before-notifying: PT30M
+
+            jwt:
+              secret: ybbrZDZmjnzWhstP8xv2SQL28AdHuNah
+
+            platform:
+              admin:
+                password: $2a$10$YCR.gYLmG8TzKSg5TYxdzeJOpMGpEavOCni5sbHukD2qwwZxhuXvO
+
+            certificates:
+              secret: QdjshTRmurH3YtzFCrYATkSG8H65xwah
+              principal: 'EMAILADDRESS=contact@graviteesource.com, CN={accountId}, OU=Cockpit, O=GraviteeSource, L=Lille, ST=France, C=FR'
+              expire-after: 31536000
+              key:
+                alg: RSA
+                size: 4096
+              signature:
+                alg: SHA512WithRSA
+
+            endpoints:
+              loginPath: "/auth/cockpit?token={token}"
+              apim:
+                name: "GraviteeAPIManagement"
+                ui: "http://localhost:3000"
+                api: "http://localhost:8083/management"
+              am:
+                name: "GraviteeAccessManagement"
+                ui: "http://localhost:4200"
+                api: "http://localhost:8093/management"
+              ui: "https://cockpit.example.com/"
+              ws: "https://cockpit-controller.example.com/"
+            initialPlans:
+              large:
+                dataRetentionDuration: 182
+                maxDesignerModelsCount: 1
+                maxEnvs: -1
+                name: Large
+              medium:
+                dataRetentionDuration: 30
+                maxDesignerModelsCount: 1
+                maxEnvs: 4
+                name: Medium
+              small:
+                dataRetentionDuration: 1
+                isDefault: "true"
+                maxDesignerModelsCount: 1
+                maxEnvs: 2
+                name: Small
+
+            auth:
+              callbackUrl: /management/auth/login/callback
+              github:
+                redirectUri: https://cockpit.example.com/management/auth/login/callback?provider=github
+                accessTokenUri: https://github.com/login/oauth/access_token
+                clientId: null
+                clientSecret: null
+                codeParameter: code
+                responseType: code
+                userAutorizationUri: https://github.com/login/oauth/authorize
+                userProfileUri: https://api.github.com/user
+              google:
+                redirectUri: https://cockpit.example.com/management/auth/login/callback?provider=google
+                accessTokenUri: https://oauth2.googleapis.com/token
+                clientId: null
+                clientSecret: null
+                codeParameter: code
+                responseType: code
+                scopes: openid,profile,email
+                userAutorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+                userProfileUri: https://openidconnect.googleapis.com/v1/userinfo
+              oidc:
+                redirectUri: https://cockpit.example.com/management/auth/login/callback?provider=oidc
+                clientId: null
+                clientSecret: null
+                codeParameter: code
+                responseType: code
+                scopes: openid,profile,email
