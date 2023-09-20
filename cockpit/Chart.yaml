@@ -21,6 +21,7 @@ annotations:
   # List of changes for the release in artifacthub.io
   # https://artifacthub.io/packages/helm/graviteeio/cockpit?modal=changelog
   artifacthub.io/changes: |
+    - Add podSecurityContext
     - Add property to override endpoints ui URL
     - Add property to override endpoints ws URL
     - Add property to override authentication callback URL
