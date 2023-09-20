@@ -20,6 +20,7 @@ annotations:
   # List of changes for the release in artifacthub.io
   # https://artifacthub.io/packages/helm/graviteeio/ae?modal=changelog
   artifacthub.io/changes: |
+    - Add podSecurityContext
     - Allow users to define their own configuration file by defining a volume
     - Add `externalTrafficPolicy` in service configuration
 
