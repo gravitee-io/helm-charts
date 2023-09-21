@@ -136,3 +136,16 @@ tests:
               - hosts:
                   - cockpit.example.com
                 secretName: api-custom-cert
+
+  - it: Check Ingress host with wildcard
+    set:
+      api:
+        enabled: true
+        ingress:
+          enabled: true
+          hosts:
+            - "*.cockpit.example.com"
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "*.cockpit.example.com"
