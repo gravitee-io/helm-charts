@@ -10,6 +10,9 @@ metadata:
     app.kubernetes.io/component: "{{ .Values.engine.name }}"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
 data:
   gravitee.yml: |
     ingesters:
