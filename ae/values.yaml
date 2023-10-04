@@ -2,6 +2,17 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# -- Array of extra K8s manifests to deploy
+extraObjects: []
+  #- apiVersion: v1
+  #  kind: Secret
+  #  metadata:
+  #    name: gravitee-license
+  #    namespace: graviteeio
+  #  type: Opaque
+  #  data:
+#    license.key: myLicenceInBase64==
+
 chaos:
   enabled: false
 

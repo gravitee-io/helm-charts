@@ -2,7 +2,7 @@ apiVersion: v1
 name: ae
 # When the version is modified, make sure the artifacthub.io/changes list is updated
 # Also update CHANGELOG.md
-version: 1.1.43
+version: 1.1.44
 appVersion: 2.0.0
 description: Official Gravitee.io Helm chart for Alert Engine
 home: https://gravitee.io
@@ -20,6 +20,5 @@ annotations:
   # List of changes for the release in artifacthub.io
   # https://artifacthub.io/packages/helm/graviteeio/ae?modal=changelog
   artifacthub.io/changes: |
-    - Allow wildcard in ingress host
-    - Add podSecurityContext
+    - Allow users to define extra manifests
 
