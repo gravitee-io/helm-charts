@@ -3,7 +3,7 @@ name: ae
 # When the version is modified, make sure the artifacthub.io/changes list is updated
 # Also update CHANGELOG.md
 version: 1.1.44
-appVersion: 2.0.0
+appVersion: 2.1.5
 description: Official Gravitee.io Helm chart for Alert Engine
 home: https://gravitee.io
 sources:
@@ -21,4 +21,5 @@ annotations:
   # https://artifacthub.io/packages/helm/graviteeio/ae?modal=changelog
   artifacthub.io/changes: |
     - Allow users to define extra manifests
+    - Upgrade AE version
 

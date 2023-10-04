@@ -5,6 +5,7 @@ This file documents all notable changes to [Gravitee.io Alert Engine](https://gi
 ### 1.1.44
 
 - [X] Allow users to define extra manifests
+- [X] Upgrade AE version
 
 ### 1.1.43
 
