@@ -43,24 +43,6 @@ commands:
                     command: helm lint << parameters.folder >>
 
 jobs:
-    test-am-charts:
-        docker:
-            -   image: cimg/base:stable
-        resource_class: small
-        steps:
-            - checkout
-            -   helm/install-helm-client:
-                    version: v3.7.1
-            - install-helm-unittest
-            -   lint:
-                  folder: am
-            -   execute-tests:
-                    folder: am
-                    files: tests/*.yaml
-                    output-file: am-result.xml
-            -   store_test_results:
-                    path: am-result.xml
-
     test-cockpit-charts:
         docker:
             -   image: cimg/base:stable
@@ -98,8 +80,6 @@ jobs:
 workflows:
     test-charts:
         jobs:
-            - test-am-charts:
-                name: AM - Lint & Test
             - test-cockpit-charts:
                 name: Cockpit - Lint & Test
             - lint-charts:
