@@ -2,6 +2,15 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 1.9.3
+
+- [X] Allow users to define extra manifests
+
+### 1.9.2
+
+- [X] Allow wildcard in ingress host
+- [X] Add podSecurityContext
+
 ### 1.9.1
 
 - [X] Add property to override endpoints ui URL
