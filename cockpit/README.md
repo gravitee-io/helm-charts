@@ -1,681 +1,248 @@
-Gravitee.io Cockpit Helm Chart {#graviteeio-cockpit-helm-chart}
-==============================
+# Gravitee.io Cockpit Helm Chart
 
 **Chart supported versions: 1.0.x and higher**
 
-Components {#_components}
-----------
+## Components
 
 This chart will deploy the following:
 
--   Gravitee.io Cockpit
+* Gravitee.io Cockpit
 
-Requirements {#_requirements}
-------------
+## Requirements
 
 Kubernetes: `>=1.16.0-0`
 
-+-----------------------+-----------------------+-----------------------+
-| Repository            | Name                  | Version               |
-+-----------------------+-----------------------+-----------------------+
-| <https://c            | mongodb-replicaset    | \^3.10.1              |
-| harts.helm.sh/stable> |                       |                       |
-+-----------------------+-----------------------+-----------------------+
+| Repository | Name | Version |
+| --- | --- | --- |
+| https://charts.bitnami.com/bitnami | mongodb-replicaset | ^3.10.1 |
 
 ### Mongo ReplicaSet
 
-| Parameter                    | Description                           | Default |
-| ---------------------------- | ------------------------------------- | ------- |
+| Parameter | Description | Default |
+| --- | --- | --- |
 | `mongodb-replicaset.enabled` | Enable deployment of Mongo replicaset | `false` |
 
-See [MongoDB replicaset](https://artifacthub.io/packages/helm/bitnami/mongodb) for detailed documentation on helm chart.
+See
+[MongoDB](https://github.com/bitnami/charts/tree/master/bitnami/mongodb) for detailed documentation on helm chart.
 
-** Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running Cockpit locally.
+Please be aware that the mongodb-replicaset installed by Gravitee is NOT recommended in production and it is just for testing purpose and running Cockpit locally.
 
+### Hazelcast
 
-### Hazelcast {#_hazelcast}
+Cockpit embeds Hazelcast to handle installations connections.
+In order to make Hazelcast work best when embedded and deployed under a Kubernetes cluster, we pre-configured the auto-discovery to work with the Kubernetes API.
 
-Cockpit embeds Hazelcast to handle installations connections. In order
-to make Hazelcast work best when embedded and deployed under a
-Kubernetes cluster, we pre-configured the auto-discovery to work with
-the Kubernetes API.
+> Kubernetes API mode means that each node makes a REST call to Kubernetes Master in order to discover IPs of PODs (with Hazelcast members).]
 
-> Kubernetes API mode means that each node makes a REST call to
-> Kubernetes Master in order to discover IPs of PODs (with Hazelcast
-> members).\]
+In order to make it work, you need to grant access to the Kubernetes API.
 
-In order to make it work, you need to grant access to the Kubernetes
-API.
-
-``` {.bash}
+```bash
 $ kubectl apply -f https://raw.githubusercontent.com/gravitee-io/helm-charts/master/cockpit/rbac.yml
 ```
 
-If you want to let Helm to create the Service Account with required
-cluster role while installating the Chart, use
-`--set engine.managedServiceAccount=true`
+If you want to let Helm to create the Service Account with required cluster role while installating the Chart, use `--set engine.managedServiceAccount=true`
 
-Please note that `managedServiceAccount` is enabled by default and so,
-you'll have to switch it off if you want to manage the Service Account
-by yourself.
+Please note that `managedServiceAccount` is enabled by default and so, you’ll have to switch it off if you want to manage the Service Account by yourself.
 
-::: {.warning}
-rbac.yml comes with default `graviteeio` namespace and a
-`gravitee-cockpit` service account. Make sure to use the right namespace
-and service account if you have overridden it.
-:::
+**⚠️ WARNING**\
+rbac.yml comes with default `graviteeio` namespace and a `gravitee-cockpit` service account. Make sure to use the right namespace and service account if you have overridden it.
 
-Installing {#_installing}
-----------
+## Installing
 
--   Add the Gravitee.io helm charts repo
+* Add the Gravitee.io helm charts repo
 
-        $ helm repo add graviteeio https://helm.gravitee.io
+  ```
+  $ helm repo add graviteeio https://helm.gravitee.io
+  ```
+* Install it
 
--   Install it
+  ```
+  $ helm install --name graviteeio-cockpit graviteeio/cockpit
+  ```
 
-        $ helm install --name graviteeio-cockpit graviteeio/cockpit
-
-Create a chart archive {#_create_a_chart_archive}
-----------------------
+## Create a chart archive
 
 To package this chart directory into a chart archive, run:
 
-    $ helm package .
+```
+$ helm package .
+```
 
-Installing the Chart {#_installing_the_chart}
---------------------
+## Installing the Chart
 
 To install the chart from the Helm repository with the release name
-`+graviteeio-cockpit+`:
+`graviteeio-cockpit`:
 
-``` {.bash}
+```bash
 $ helm install --name graviteeio-cockpit graviteeio/cockpit
 ```
 
 To install the chart using the chart archive, run:
 
-    $ helm install cockpit-1.0.0.tgz
-
-Values {#_values}
-------
-
-+-----------------+-----------------+-----------------+-----------------+
-| Key             | Type            | Default         | Description     |
-+-----------------+-----------------+-----------------+-----------------+
-| api.auto        | bool            | `true`          |                 |
-| scaling.enabled |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.autoscal    | int             | `3`             |                 |
-| ing.maxReplicas |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.autoscal    | int             | `1`             |                 |
-| ing.minReplicas |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.autosc      | int             | `50`            |                 |
-| aling.targetAve |                 |                 |                 |
-| rageUtilization |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| a               | int             | `80`            |                 |
-| pi.autoscaling. |                 |                 |                 |
-| targetMemoryAve |                 |                 |                 |
-| rageUtilization |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.contro      | bool            | `true`          |                 |
-| ller.ws.enabled |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.contr       | string          | `"nginx"`       |                 |
-| oller.ws.ingres |                 |                 |                 |
-| s.annotations.\ |                 |                 |                 |
-| "kubernetes.io/ |                 |                 |                 |
-| ingress.class\" |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.contro      | string          | `"true"`        |                 |
-| ller.ws.ingress |                 |                 |                 |
-| .annotations.\" |                 |                 |                 |
-| nginx.ingress.k |                 |                 |                 |
-| ubernetes.io/ss |                 |                 |                 |
-| l-passthrough\" |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.con         | string          | `"true"`        |                 |
-| troller.ws.ingr |                 |                 |                 |
-| ess.annotations |                 |                 |                 |
-| .\"nginx.ingres |                 |                 |                 |
-| s.kubernetes.io |                 |                 |                 |
-| /ssl-redirect\" |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api             | bool            | `true`          |                 |
-| .controller.ws. |                 |                 |                 |
-| ingress.enabled |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.co          | string          | `"co            |                 |
-| ntroller.ws.ing |                 | ckpit-controlle |                 |
-| ress.hosts\[0\] |                 | r.example.com"` |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.controller. | string          | `"/"`           |                 |
-| ws.ingress.path |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.controller. | string          | `"cockpi        |                 |
-| ws.ingress.tls\ |                 | t.example.com"` |                 |
-| [0\].hosts\[0\] |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.controller. | string          | `"ap            |                 |
-| ws.ingress.tls\ |                 | i-custom-cert"` |                 |
-| [0\].secretName |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.con         | int             | `8062`          |                 |
-| troller.ws.port |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api             | bool            | `true`          |                 |
-| .controller.ws. |                 |                 |                 |
-| service.enabled |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.cont        | int             | `8062`          |                 |
-| roller.ws.servi |                 |                 |                 |
-| ce.externalPort |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.controller. | string          | `"ClusterIP"`   |                 |
-| ws.service.type |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.emai        | string          | `nil`           |                 |
-| l.notifications |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.enabled     | bool            | `true`          |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.ht          | string          | `"adminadmin"`  |                 |
-| tp.services.cor |                 |                 |                 |
-| e.http.authenti |                 |                 |                 |
-| cation.password |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ap              | string          | `"localhost"`   |                 |
-| i.http.services |                 |                 |                 |
-| .core.http.host |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ap              | int             | `18063`         |                 |
-| i.http.services |                 |                 |                 |
-| .core.http.port |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.http        | bool            | `false`         |                 |
-| .services.core. |                 |                 |                 |
-| ingress.enabled |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.http        | bool            | `false`         |                 |
-| .services.core. |                 |                 |                 |
-| service.enabled |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.i           | string          | `"Always"`      |                 |
-| mage.pullPolicy |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.i           | string          | `"gravi         |                 |
-| mage.repository |                 | teeio/cockpit-m |                 |
-|                 |                 | anagement-api"` |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.ingres      | string          | `"nginx"`       |                 |
-| s.annotations.\ |                 |                 |                 |
-| "kubernetes.io/ |                 |                 |                 |
-| ingress.class\" |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ap              | string          | `"etag on;\n    |                 |
-| i.ingress.annot |                 | proxy_pass_head |                 |
-| ations.\"nginx. |                 | er ETag;\nproxy |                 |
-| ingress.kuberne |                 | _set_header if- |                 |
-| tes.io/configur |                 | match \"\";\n"` |                 |
-| ation-snippet\" |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.            | bool            | `true`          |                 |
-| ingress.enabled |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.ing         | string          | `"cockpi        |                 |
-| ress.hosts\[0\] |                 | t.example.com"` |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| a               | string          | `"/management"` |                 |
-| pi.ingress.path |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| a               | string          | `"cockpi        |                 |
-| pi.ingress.tls\ |                 | t.example.com"` |                 |
-| [0\].hosts\[0\] |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| a               | string          | `"ap            |                 |
-| pi.ingress.tls\ |                 | i-custom-cert"` |                 |
-| [0\].secretName |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.in          | int             | `182`           |                 |
-| itialPlans.larg |                 |                 |                 |
-| e.healthCheckRe |                 |                 |                 |
-| tentionDuration |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.initialPlan | int             | `-1`            |                 |
-| s.large.maxEnvs |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.initialP    | string          | `"Large"`       |                 |
-| lans.large.name |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.ini         | int             | `30`            |                 |
-| tialPlans.mediu |                 |                 |                 |
-| m.healthCheckRe |                 |                 |                 |
-| tentionDuration |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| a               | int             | `4`             |                 |
-| pi.initialPlans |                 |                 |                 |
-| .medium.maxEnvs |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.initialPl   | string          | `"Medium"`      |                 |
-| ans.medium.name |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.in          | int             | `1`             |                 |
-| itialPlans.smal |                 |                 |                 |
-| l.healthCheckRe |                 |                 |                 |
-| tentionDuration |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ap              | string          | `"true"`        |                 |
-| i.initialPlans. |                 |                 |                 |
-| small.isDefault |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.initialPlan | int             | `2`             |                 |
-| s.small.maxEnvs |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.initialP    | string          | `"Small"`       |                 |
-| lans.small.name |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.jwt.secret  | string          | `"ybbr          |                 |
-|                 |                 | ZDZmjnzWhstP8xv |                 |
-|                 |                 | 2SQL28AdHuNah"` |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ap              | bool            | `false`         |                 |
-| i.logging.debug |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.loggi       | bool            | `true`          |                 |
-| ng.file.enabled |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| a               | string          | `"              |                 |
-| pi.logging.file |                 | %d{HH:mm:ss.SSS |                 |
-| .encoderPattern |                 | } [%thread] %-5 |                 |
-|                 |                 | level %logger{3 |                 |
-|                 |                 | 6} - %msg%n%n"` |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.logging.fil | string          | `"<rol          |                 |
-| e.rollingPolicy |                 | lingPolicy clas |                 |
-|                 |                 | s=\"ch.qos.logb |                 |
-|                 |                 | ack.core.rollin |                 |
-|                 |                 | g.TimeBasedRoll |                 |
-|                 |                 | ingPolicy\">\n  |                 |
-|                 |                 |    <!-- daily r |                 |
-|                 |                 | ollover -->\n   |                 |
-|                 |                 |   <fileNamePatt |                 |
-|                 |                 | ern>${gravitee. |                 |
-|                 |                 | management.log. |                 |
-|                 |                 | dir}/gravitee_% |                 |
-|                 |                 | d{yyyy-MM-dd}.l |                 |
-|                 |                 | og</fileNamePat |                 |
-|                 |                 | tern>\n    <!-- |                 |
-|                 |                 |  keep 30 days'  |                 |
-|                 |                 | worth of histor |                 |
-|                 |                 | y -->\n    <max |                 |
-|                 |                 | History>30</max |                 |
-|                 |                 | History>\n</rol |                 |
-|                 |                 | lingPolicy>\n"` |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.loggin      | string          | `"DEBUG"`       |                 |
-| g.graviteeLevel |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.log         | string          | `"INFO"`        |                 |
-| ging.jettyLevel |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api             | bool            | `false`         |                 |
-| .logging.stdout |                 |                 |                 |
-| .json           |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api             | string          | `"%d{HH:mm:ss.S |                 |
-| .logging.stdout |                 | SS} [%thread] % |                 |
-| .encoderPattern |                 | -5level %logger |                 |
-|                 |                 | {36}  [%mdc] -  |                 |
-|                 |                 | %msg%n"`        |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.name        | string          | `"api"`         |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.platform    | string          | `"$2            |                 |
-| .admin.password |                 | a$10$YCR.gYLmG8 |                 |
-|                 |                 | TzKSg5TYxdzeJOp |                 |
-|                 |                 | MGpEavOCni5sbHu |                 |
-|                 |                 | kD2qwwZxhuXvO"` |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.re          | bool            | `false`         |                 |
-| Captcha.enabled |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.reloa       | bool            | `true`          |                 |
-| dOnConfigChange |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| a               | int             | `1`             |                 |
-| pi.replicaCount |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.resou       | string          | `"500m"`        |                 |
-| rces.limits.cpu |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.resource    | string          | `"1024Mi"`      |                 |
-| s.limits.memory |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.resourc     | string          | `"200m"`        |                 |
-| es.requests.cpu |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.resources.  | string          | `"512Mi"`       |                 |
-| requests.memory |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ap              | string          | `"OnFailure"`   |                 |
-| i.restartPolicy |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ap              | bool            | `true`          |                 |
-| i.securityConte |                 |                 |                 |
-| xt.runAsNonRoot |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.securityCo  | int             | `1001`          |                 |
-| ntext.runAsUser |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.servi       | int             | `8063`          |                 |
-| ce.externalPort |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.servi       | int             | `8063`          |                 |
-| ce.internalPort |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.service.i   | string          | `"http"`        |                 |
-| nternalPortName |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| a               | string          | `"ClusterIP"`   |                 |
-| pi.service.type |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.            | string          | `"              |                 |
-| services.health |                 | 0 0 0 */1 * *"` |                 |
-| CheckPurge.cron |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.serv        | int             | `-1`            |                 |
-| ices.healthChec |                 |                 |                 |
-| kPurge.onPremis |                 |                 |                 |
-| e.healthCheckRe |                 |                 |                 |
-| tentionDuration |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.ssl.enabled | bool            | `false`         |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ap              | int             | `1`             |                 |
-| i.updateStrateg |                 |                 |                 |
-| y.rollingUpdate |                 |                 |                 |
-| .maxUnavailable |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| api.upda        | string          | `"              |                 |
-| teStrategy.type |                 | RollingUpdate"` |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| authentication. | string          | `nil`           |                 |
-| github.clientId |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| auth            | string          | `nil`           |                 |
-| entication.gith |                 |                 |                 |
-| ub.clientSecret |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| authentication. | string          | `nil`           |                 |
-| google.clientId |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| auth            | string          | `nil`           |                 |
-| entication.goog |                 |                 |                 |
-| le.clientSecret |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| authenticatio   | string          | `nil`           |                 |
-| n.oidc.clientId |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-|                 | au              | string          | `nil`           |
-|                 | thentication.oi |                 |                 |
-|                 | dc.clientSecret |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-|                 |                 | auth            | string          |
-|                 |                 | entication.oidc |                 |
-|                 |                 | .accessTokenUri |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `nil`           |                 |                 | authentica      |
-|                 |                 |                 | tion.oidc.userA |
-|                 |                 |                 | uthorizationUri |
-+-----------------+-----------------+-----------------+-----------------+
-| string          | `nil`           |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| auth            | string          | `nil`           |                 |
-| entication.oidc |                 |                 |                 |
-| .userProfileUri |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-|                 | au              | string          | `nil`           |
-|                 | thentication.oi |                 |                 |
-|                 | dc.wellKnownUri |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-|                 |                 | chaos.enabled   | bool            |
-+-----------------+-----------------+-----------------+-----------------+
-| `false`         |                 | mon             | bool            |
-|                 |                 | go.auth.enabled |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `false`         |                 | mong            | string          |
-|                 |                 | o.auth.password |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `nil`           |                 | mo              | string          |
-|                 |                 | ngo.auth.source |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"admin"`       |                 | mong            | string          |
-|                 |                 | o.auth.username |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `nil`           |                 | mongo.c         | int             |
-|                 |                 | onnectTimeoutMS |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `30000`         |                 | mongo.dbhost    | string          |
-+-----------------+-----------------+-----------------+-----------------+
-| `"gravit        |                 | mongo.dbname    | string          |
-| eeio-apim-mongo |                 |                 |                 |
-| db-replicaset"` |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"gravitee"`    |                 | mongo.dbport    | int             |
-+-----------------+-----------------+-----------------+-----------------+
-| `27017`         |                 | mongo.rs        | string          |
-+-----------------+-----------------+-----------------+-----------------+
-| `"rs0"`         |                 | mongo.rsEnabled | bool            |
-+-----------------+-----------------+-----------------+-----------------+
-| `true`          |                 | mongo.          | bool            |
-|                 |                 | socketKeepAlive |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `false`         |                 | m               | bool            |
-|                 |                 | ongo.sslEnabled |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `false`         |                 | mongodb         | string          |
-|                 |                 | -replicaset.aut |                 |
-|                 |                 | h.adminPassword |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"password"`    |                 | mon             | string          |
-|                 |                 | godb-replicaset |                 |
-|                 |                 | .auth.adminUser |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"username"`    |                 | m               | bool            |
-|                 |                 | ongodb-replicas |                 |
-|                 |                 | et.auth.enabled |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `false`         |                 | mongodb-repl    | string          |
-|                 |                 | icaset.auth.key |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"keycontent"`  |                 | mongodb-r       | string          |
-|                 |                 | eplicaset.auth. |                 |
-|                 |                 | metricsPassword |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"password"`    |                 | mongo           | string          |
-|                 |                 | db-replicaset.a |                 |
-|                 |                 | uth.metricsUser |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"metrics"`     |                 | mongodb-repli   | object          |
-|                 |                 | caset.configmap |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `{}`            |                 | mongodb-rep     | bool            |
-|                 |                 | licaset.enabled |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `false`         |                 | mongo           | string          |
-|                 |                 | db-replicaset.i |                 |
-|                 |                 | mage.repository |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"mongo"`       |                 | mongodb-repli   | float           |
-|                 |                 | caset.image.tag |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `3.6`           |                 | mongodb         | string          |
-|                 |                 | -replicaset.per |                 |
-|                 |                 | sistentVolume.a |                 |
-|                 |                 | ccessModes\[0\] |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"              |                 | mongodb-repli   | bool            |
-| ReadWriteOnce"` |                 | caset.persisten |                 |
-|                 |                 | tVolume.enabled |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `true`          |                 | mongodb-re      | string          |
-|                 |                 | plicaset.persis |                 |
-|                 |                 | tentVolume.size |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"1Gi"`         |                 | mon             | string          |
-|                 |                 | godb-replicaset |                 |
-|                 |                 | .replicaSetName |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"rs0"`         |                 | mongodb-repl    | int             |
-|                 |                 | icaset.replicas |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `3`             |                 | mongodb-r       | string          |
-|                 |                 | eplicaset.resou |                 |
-|                 |                 | rces.limits.cpu |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"500m"`        |                 | mongodb-repl    | string          |
-|                 |                 | icaset.resource |                 |
-|                 |                 | s.limits.memory |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"512Mi"`       |                 | mongodb-rep     | string          |
-|                 |                 | licaset.resourc |                 |
-|                 |                 | es.requests.cpu |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"100m"`        |                 | mongodb-replic  | string          |
-|                 |                 | aset.resources. |                 |
-|                 |                 | requests.memory |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"256Mi"`       |                 | smtp.enabled    | bool            |
-+-----------------+-----------------+-----------------+-----------------+
-| `true`          |                 | smtp.from       | string          |
-+-----------------+-----------------+-----------------+-----------------+
-| `"inf           |                 | smtp.host       | string          |
-| o@example.com"` |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"smt           |                 | smtp.password   | string          |
-| p.example.com"` |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"example.com"` |                 | smtp.port       | int             |
-+-----------------+-----------------+-----------------+-----------------+
-| `25`            |                 | smtp.           | bool            |
-|                 |                 | properties.\"st |                 |
-|                 |                 | arttls.enable\" |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `false`         |                 | smtp.           | bool            |
-|                 |                 | properties.auth |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `true`          |                 | smtp.subject    | string          |
-+-----------------+-----------------+-----------------+-----------------+
-| `"              |                 | smtp.username   | string          |
-| [gravitee] %s"` |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"inf           |                 | ui.auto         | bool            |
-| o@example.com"` |                 | scaling.enabled |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `true`          |                 | ui.autoscal     | int             |
-|                 |                 | ing.maxReplicas |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `3`             |                 | ui.autoscal     | int             |
-|                 |                 | ing.minReplicas |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `1`             |                 | ui.autosc       | int             |
-|                 |                 | aling.targetAve |                 |
-|                 |                 | rageUtilization |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `50`            |                 | ui.autoscaling. | int             |
-|                 |                 | targetMemoryAve |                 |
-|                 |                 | rageUtilization |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `80`            |                 | ui.enabled      | bool            |
-+-----------------+-----------------+-----------------+-----------------+
-| `true`          |                 | ui.i            | string          |
-|                 |                 | mage.pullPolicy |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"Always"`      |                 | ui.i            | string          |
-|                 |                 | mage.repository |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"graviteeio/   |                 | ui.ingres       | string          |
-| cockpit-webui"` |                 | s.annotations.\ |                 |
-|                 |                 | "kubernetes.io/ |                 |
-|                 |                 | ingress.class\" |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"nginx"`       |                 | u               | string          |
-|                 |                 | i.ingress.annot |                 |
-|                 |                 | ations.\"nginx. |                 |
-|                 |                 | ingress.kuberne |                 |
-|                 |                 | tes.io/configur |                 |
-|                 |                 | ation-snippet\" |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"etag on       |                 | ui.             | bool            |
-| ;\nproxy_pass_h |                 | ingress.enabled |                 |
-| eader ETag;\n"` |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `true`          |                 | ui.ing          | string          |
-|                 |                 | ress.hosts\[0\] |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"cockpi        |                 | ui.ingress.path | string          |
-| t.example.com"` |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"/"`           |                 | ui.ingress.tls\ | string          |
-|                 |                 | [0\].hosts\[0\] |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"cockpi        |                 | ui.ingress.tls\ | string          |
-| t.example.com"` |                 | [0\].secretName |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"ap            |                 | ui.name         | string          |
-| i-custom-cert"` |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"ui"`          |                 | ui.replicaCount | int             |
-+-----------------+-----------------+-----------------+-----------------+
-| `1`             |                 | ui.resou        | string          |
-|                 |                 | rces.limits.cpu |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"100m"`        |                 | ui.resource     | string          |
-|                 |                 | s.limits.memory |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"128Mi"`       |                 | ui.resourc      | string          |
-|                 |                 | es.requests.cpu |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"50m"`         |                 | ui.resources.   | string          |
-|                 |                 | requests.memory |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"64Mi"`        |                 | ui.securityCon  | int             |
-|                 |                 | text.runAsGroup |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `101`           |                 | u               | bool            |
-|                 |                 | i.securityConte |                 |
-|                 |                 | xt.runAsNonRoot |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `true`          |                 | ui.securityCo   | int             |
-|                 |                 | ntext.runAsUser |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `101`           |                 | ui.servi        | int             |
-|                 |                 | ce.externalPort |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `8002`          |                 | ui.servi        | int             |
-|                 |                 | ce.internalPort |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `8080`          |                 | ui.service.i    | string          |
-|                 |                 | nternalPortName |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| `"http"`        |                 | ui.service.name | string          |
-+-----------------+-----------------+-----------------+-----------------+
-| `"nginx"`       |                 | ui.service.type | string          |
-+-----------------+-----------------+-----------------+-----------------+
-
-## Run unit tests
-
-Install `unittest` helm plugin
-
-```shell
-helm plugin install https://github.com/quintush/helm-unittest
+```
+$ helm install cockpit-1.0.0.tgz
 ```
 
-Inside `cockpit` directory, run:
+## Values
 
-```shell
-helm unittest -3 -f 'tests/**/*.yaml' .
-```
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| api.autoscaling.enabled | bool | `true` |  |
+| api.autoscaling.maxReplicas | int | `3` |  |
+| api.autoscaling.minReplicas | int | `1` |  |
+| api.autoscaling.targetAverageUtilization | int | `50` |  |
+| api.autoscaling.targetMemoryAverageUtilization | int | `80` |  |
+| api.controller.ws.enabled | bool | `true` |  |
+| api.controller.ws.ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
+| api.controller.ws.ingress.annotations."nginx.ingress.kubernetes.io/ssl-passthrough" | string | `"true"` |  |
+| api.controller.ws.ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" | string | `"true"` |  |
+| api.controller.ws.ingress.enabled | bool | `true` |  |
+| api.controller.ws.ingress.hosts[0] | string | `"cockpit-controller.example.com"` |  |
+| api.controller.ws.ingress.path | string | `"/"` |  |
+| api.controller.ws.ingress.tls[0].hosts[0] | string | `"cockpit.example.com"` |  |
+| api.controller.ws.ingress.tls[0].secretName | string | `"api-custom-cert"` |  |
+| api.controller.ws.port | int | `8062` |  |
+| api.controller.ws.service.enabled | bool | `true` |  |
+| api.controller.ws.service.externalPort | int | `8062` |  |
+| api.controller.ws.service.type | string | `"ClusterIP"` |  |
+| api.email.notifications | string | `nil` |  |
+| api.enabled | bool | `true` |  |
+| api.http.services.core.http.authentication.password | string | `"adminadmin"` |  |
+| api.http.services.core.http.host | string | `"localhost"` |  |
+| api.http.services.core.http.port | int | `18063` |  |
+| api.http.services.core.ingress.enabled | bool | `false` |  |
+| api.http.services.core.service.enabled | bool | `false` |  |
+| api.image.pullPolicy | string | `"Always"` |  |
+| api.image.repository | string | `"graviteeio/cockpit-management-api"` |  |
+| api.ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
+| api.ingress.annotations."nginx.ingress.kubernetes.io/configuration-snippet" | string | `"etag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"` |  |
+| api.ingress.enabled | bool | `true` |  |
+| api.ingress.hosts[0] | string | `"cockpit.example.com"` |  |
+| api.ingress.path | string | `"/management"` |  |
+| api.ingress.tls[0].hosts[0] | string | `"cockpit.example.com"` |  |
+| api.ingress.tls[0].secretName | string | `"api-custom-cert"` |  |
+| api.initialPlans.large.healthCheckRetentionDuration | int | `182` |  |
+| api.initialPlans.large.maxEnvs | int | `-1` |  |
+| api.initialPlans.large.name | string | `"Large"` |  |
+| api.initialPlans.medium.healthCheckRetentionDuration | int | `30` |  |
+| api.initialPlans.medium.maxEnvs | int | `4` |  |
+| api.initialPlans.medium.name | string | `"Medium"` |  |
+| api.initialPlans.small.healthCheckRetentionDuration | int | `1` |  |
+| api.initialPlans.small.isDefault | string | `"true"` |  |
+| api.initialPlans.small.maxEnvs | int | `2` |  |
+| api.initialPlans.small.name | string | `"Small"` |  |
+| api.jwt.secret | string | `"ybbrZDZmjnzWhstP8xv2SQL28AdHuNah"` |  |
+| api.logging.debug | bool | `false` |  |
+| api.logging.file.enabled | bool | `true` |  |
+| api.logging.file.encoderPattern | string | `"%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%n"` |  |
+| api.logging.file.rollingPolicy | string | `"<rollingPolicy class=\"ch.qos.logback.core.rolling.TimeBasedRollingPolicy\">\n    <!-- daily rollover -->\n    <fileNamePattern>${gravitee.management.log.dir}/gravitee_%d{yyyy-MM-dd}.log</fileNamePattern>\n    <!-- keep 30 days' worth of history -->\n    <maxHistory>30</maxHistory>\n</rollingPolicy>\n"` |  |
+| api.logging.graviteeLevel | string | `"DEBUG"` |  |
+| api.logging.jettyLevel | string | `"INFO"` |  |
+| api.logging.stdout.json | boolean | `false` |  |
+| api.logging.stdout.encoderPattern | string | `"%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%mdc] - %msg%n"` |  |
+| api.name | string | `"api"` |  |
+| api.platform.admin.password | string | `"$2a$10$YCR.gYLmG8TzKSg5TYxdzeJOpMGpEavOCni5sbHukD2qwwZxhuXvO"` |  |
+| api.reCaptcha.enabled | bool | `false` |  |
+| api.reloadOnConfigChange | bool | `true` |  |
+| api.replicaCount | int | `1` |  |
+| api.resources.limits.cpu | string | `"500m"` |  |
+| api.resources.limits.memory | string | `"1024Mi"` |  |
+| api.resources.requests.cpu | string | `"200m"` |  |
+| api.resources.requests.memory | string | `"512Mi"` |  |
+| api.restartPolicy | string | `"OnFailure"` |  |
+| api.securityContext.runAsNonRoot | bool | `true` |  |
+| api.securityContext.runAsUser | int | `1001` |  |
+| api.service.externalPort | int | `8063` |  |
+| api.service.internalPort | int | `8063` |  |
+| api.service.internalPortName | string | `"http"` |  |
+| api.service.type | string | `"ClusterIP"` |  |
+| api.services.healthCheckPurge.cron | string | `"0 0 0 */1 * *"` |  |
+| api.services.healthCheckPurge.onPremise.healthCheckRetentionDuration | int | `-1` |  |
+| api.ssl.enabled | bool | `false` |  |
+| api.updateStrategy.rollingUpdate.maxUnavailable | int | `1` |  |
+| api.updateStrategy.type | string | `"RollingUpdate"` |  |
+| onboarding.incomplete.timeBeforeNotifying | string | PT30M | Time before notifying user about his cockpit onboarding defined with the [java Duration format](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html#parse(java.lang.CharSequence)) |
+| confluent.api.credentials.api-key | string |  | API Key need to call Confluent API when setup a trial demo with Kafka |
+| confluent.api.credentials.api-secret-key | string |  | API Secret Key need to call Confluent API when setup a trial demo with Kafka |
+| confluent.api.topic.prefix | string |  | Optional prefix to set when setup a trial demo with Kafka |
+| confluent.api.topic.uri | string |  | The URI of you Kafka cluster in Confluent - it is use to create topic from the Confluent API |
+| authentication.github.clientId | string | `nil` |  |
+| authentication.github.clientSecret | string | `nil` |  |
+| authentication.google.clientId | string | `nil` |  |
+| authentication.google.clientSecret | string | `nil` |  |
+| authentication.oidc.clientId | string | `nil` |  |
+| authentication.oidc.clientSecret | string | `nil` |  |
+| authentication.oidc.accessTokenUri | string | `nil` |  |
+| authentication.oidc.userAuthorizationUri | string | `nil` |  |
+| authentication.oidc.userProfileUri | string | `nil` |  |
+| authentication.oidc.wellKnownUri | string | `nil` |  |
+| chaos.enabled | bool | `false` |  |
+| mongo.auth.enabled | bool | `false` |  |
+| mongo.auth.password | string | `nil` |  |
+| mongo.auth.source | string | `"admin"` |  |
+| mongo.auth.username | string | `nil` |  |
+| mongo.connectTimeoutMS | int | `30000` |  |
+| mongo.dbhost | string | `"graviteeio-apim-mongodb-replicaset"` |  |
+| mongo.dbname | string | `"gravitee"` |  |
+| mongo.dbport | int | `27017` |  |
+| mongo.rs | string | `"rs0"` |  |
+| mongo.rsEnabled | bool | `true` |  |
+| mongo.socketKeepAlive | bool | `false` |  |
+| mongo.sslEnabled | bool | `false` |  |
+| mongodb-replicaset.auth.adminPassword | string | `"password"` |  |
+| mongodb-replicaset.auth.adminUser | string | `"username"` |  |
+| mongodb-replicaset.auth.enabled | bool | `false` |  |
+| mongodb-replicaset.auth.key | string | `"keycontent"` |  |
+| mongodb-replicaset.auth.metricsPassword | string | `"password"` |  |
+| mongodb-replicaset.auth.metricsUser | string | `"metrics"` |  |
+| mongodb-replicaset.configmap | object | `{}` |  |
+| mongodb-replicaset.enabled | bool | `false` |  |
+| mongodb-replicaset.image.repository | string | `"mongo"` |  |
+| mongodb-replicaset.image.tag | float | `3.6` |  |
+| mongodb-replicaset.persistentVolume.accessModes[0] | string | `"ReadWriteOnce"` |  |
+| mongodb-replicaset.persistentVolume.enabled | bool | `true` |  |
+| mongodb-replicaset.persistentVolume.size | string | `"1Gi"` |  |
+| mongodb-replicaset.replicaSetName | string | `"rs0"` |  |
+| mongodb-replicaset.replicas | int | `3` |  |
+| mongodb-replicaset.resources.limits.cpu | string | `"500m"` |  |
+| mongodb-replicaset.resources.limits.memory | string | `"512Mi"` |  |
+| mongodb-replicaset.resources.requests.cpu | string | `"100m"` |  |
+| mongodb-replicaset.resources.requests.memory | string | `"256Mi"` |  |
+| smtp.enabled | bool | `true` |  |
+| smtp.from | string | `"info@example.com"` |  |
+| smtp.host | string | `"smtp.example.com"` |  |
+| smtp.password | string | `"example.com"` |  |
+| smtp.port | int | `25` |  |
+| smtp.properties."starttls.enable" | bool | `false` |  |
+| smtp.properties.auth | bool | `true` |  |
+| smtp.subject | string | `"[gravitee] %s"` |  |
+| smtp.username | string | `"info@example.com"` |  |
+| ui.autoscaling.enabled | bool | `true` |  |
+| ui.autoscaling.maxReplicas | int | `3` |  |
+| ui.autoscaling.minReplicas | int | `1` |  |
+| ui.autoscaling.targetAverageUtilization | int | `50` |  |
+| ui.autoscaling.targetMemoryAverageUtilization | int | `80` |  |
+| ui.enabled | bool | `true` |  |
+| ui.image.pullPolicy | string | `"Always"` |  |
+| ui.image.repository | string | `"graviteeio/cockpit-webui"` |  |
+| ui.ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
+| ui.ingress.annotations."nginx.ingress.kubernetes.io/configuration-snippet" | string | `"etag on;\nproxy_pass_header ETag;\n"` |  |
+| ui.ingress.enabled | bool | `true` |  |
+| ui.ingress.hosts[0] | string | `"cockpit.example.com"` |  |
+| ui.ingress.path | string | `"/"` |  |
+| ui.ingress.tls[0].hosts[0] | string | `"cockpit.example.com"` |  |
+| ui.ingress.tls[0].secretName | string | `"api-custom-cert"` |  |
+| ui.name | string | `"ui"` |  |
+| ui.replicaCount | int | `1` |  |
+| ui.resources.limits.cpu | string | `"100m"` |  |
+| ui.resources.limits.memory | string | `"128Mi"` |  |
+| ui.resources.requests.cpu | string | `"50m"` |  |
+| ui.resources.requests.memory | string | `"64Mi"` |  |
+| ui.securityContext.runAsGroup | int | `101` |  |
+| ui.securityContext.runAsNonRoot | bool | `true` |  |
+| ui.securityContext.runAsUser | int | `101` |  |
+| ui.service.externalPort | int | `8002` |  |
+| ui.service.internalPort | int | `8080` |  |
+| ui.service.internalPortName | string | `"http"` |  |
+| ui.service.name | string | `"nginx"` |  |
+| ui.service.type | string | `"ClusterIP"` |  |
