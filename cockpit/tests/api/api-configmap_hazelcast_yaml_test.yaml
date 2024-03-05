@@ -55,28 +55,25 @@ tests:
             <hazelcast xmlns="http://www.hazelcast.com/schema/config"
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                        xsi:schemaLocation="http://www.hazelcast.com/schema/config
-                       http://www.hazelcast.com/schema/config/hazelcast-config-4.2.xsd">
+                       http://www.hazelcast.com/schema/config/hazelcast-config-5.3.xsd">
                 <cluster-name>graviteeio-cockpit</cluster-name>
                 <properties>
                     <property name="hazelcast.discovery.enabled">true</property>
                     <property name="hazelcast.max.wait.seconds.before.join">3</property>
                     <property name="hazelcast.member.list.publish.interval.seconds">5</property>
                     <property name="hazelcast.socket.client.bind.any">false</property>
+                    <property name="hazelcast.logging.type">slf4j</property>
                 </properties>
 
-                <queue name="commands-*">
+                <queue name="exchange-cluster-command-*">
                     <backup-count>0</backup-count>
                     <async-backup-count>1</async-backup-count>
                 </queue>
 
-                <map name="cockpit.channels.*">
+                <map name="exchange-controller-primary-channel-candidate">
                     <backup-count>0</backup-count>
                     <async-backup-count>1</async-backup-count>
                 </map>
-
-                <reliable-topic name="cockpit.primaryChannels">
-                    <read-batch-size>10</read-batch-size>
-                </reliable-topic>
 
                 <cp-subsystem>
                     <cp-member-count>0</cp-member-count>
@@ -93,167 +90,3 @@ tests:
                     </join>
                 </network>
             </hazelcast>
-
-  - it: should apply default hazelcast.yml configuration on the 1st revision
-    template: api/api-configmap.yaml
-    release:
-      name: my-cockpit
-      namespace: unittest
-      revision: 1
-    chart:
-      version: 1.0.0-chart
-      appVersion: 1.0.0-app
-    asserts:
-      - hasDocuments:
-          count: 1
-      - equal:
-          path: data.[hazelcast.yml]
-          value: |
-            hazelcast:
-              cluster-name: my-cockpit_52359412
-              network:
-                join:
-                  multicast:
-                    enabled: false
-                  tcp-ip:
-                    enabled: false
-                  kubernetes:
-                    enabled: true
-                    namespace: unittest
-                    service-name: my-cockpit-api
-
-              properties:
-                hazelcast.logging.type: slf4j
-                hazelcast.max.wait.seconds.before.join: 3
-                hazelcast.member.list.publish.interval.seconds: 5
-                hazelcast.socket.client.bind.any: false
-
-              cp-subsystem:
-                cp-member-count: 0
-              map:
-                cockpit.channels.*:
-                  backup-count: 0
-                  async-backup-count: 1
-              queue:
-                commands-*:
-                  backup-count: 0
-                  async-backup-count: 1
-              reliable-topic:
-                cockpit.primaryChannels:
-                  read-batch-size: 10
-
-  - it: should apply default hazelcast.yml configuration on a 2nd revision
-    template: api/api-configmap.yaml
-    release:
-      name: my-cockpit
-      namespace: unittest
-      revision: 2
-    chart:
-      version: 1.0.0-chart
-      appVersion: 1.0.0-app
-    asserts:
-      - hasDocuments:
-          count: 1
-      - equal:
-          path: data.[hazelcast.yml]
-          value: |
-            hazelcast:
-              cluster-name: my-cockpit_2
-              network:
-                join:
-                  multicast:
-                    enabled: false
-                  tcp-ip:
-                    enabled: false
-                  kubernetes:
-                    enabled: true
-                    namespace: unittest
-                    service-name: my-cockpit-api
-
-              properties:
-                hazelcast.logging.type: slf4j
-                hazelcast.max.wait.seconds.before.join: 3
-                hazelcast.member.list.publish.interval.seconds: 5
-                hazelcast.socket.client.bind.any: false
-
-              cp-subsystem:
-                cp-member-count: 0
-              map:
-                cockpit.channels.*:
-                  backup-count: 0
-                  async-backup-count: 1
-              queue:
-                commands-*:
-                  backup-count: 0
-                  async-backup-count: 1
-              reliable-topic:
-                cockpit.primaryChannels:
-                  read-batch-size: 10
-
-  - it: should apply additional properties in hazelcast.yml configuration
-    template: api/api-configmap.yaml
-    set:
-      hazelcast:
-        properties:
-          hazelcast.diagnostics.enabled: true
-        advancedNetwork:
-          enabled: true
-          rest-server-socket-endpoint-config:
-            endpoint-groups:
-              CLUSTER_READ:
-                enabled: true
-              HEALTH_CHECK:
-                enabled: true
-    release:
-      name: my-cockpit
-      namespace: unittest
-    chart:
-      version: 1.0.0-chart
-      appVersion: 1.0.0-app
-    asserts:
-      - hasDocuments:
-          count: 1
-      - equal:
-          path: data.[hazelcast.yml]
-          value: |
-            hazelcast:
-              cluster-name: my-cockpit_0
-              network:
-                join:
-                  multicast:
-                    enabled: false
-                  tcp-ip:
-                    enabled: false
-                  kubernetes:
-                    enabled: true
-                    namespace: unittest
-                    service-name: my-cockpit-api
-              advanced-network:
-                enabled: true
-                rest-server-socket-endpoint-config:
-                  endpoint-groups:
-                    CLUSTER_READ:
-                      enabled: true
-                    HEALTH_CHECK:
-                      enabled: true
-
-              properties:
-                hazelcast.logging.type: slf4j
-                hazelcast.max.wait.seconds.before.join: 3
-                hazelcast.member.list.publish.interval.seconds: 5
-                hazelcast.socket.client.bind.any: false
-                hazelcast.diagnostics.enabled: true
-
-              cp-subsystem:
-                cp-member-count: 0
-              map:
-                cockpit.channels.*:
-                  backup-count: 0
-                  async-backup-count: 1
-              queue:
-                commands-*:
-                  backup-count: 0
-                  async-backup-count: 1
-              reliable-topic:
-                cockpit.primaryChannels:
-                  read-batch-size: 10
