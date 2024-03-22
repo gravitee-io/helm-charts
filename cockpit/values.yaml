@@ -143,6 +143,10 @@ mongodb-replicaset:
       - ReadWriteOnce
     size: 1Gi
 
+hazelcast: {}
+#  advancedNetwork: {}
+#  properties: {}
+
 api:
   enabled: true
   upgrader: false
@@ -316,6 +320,10 @@ api:
 #        uri: https://great-cluster.westeurope.azure.confluent.cloud/kafka/v3/clusters/id-cluster/topics
 
   controller:
+    compatibleVersions:
+      apim: "3.6.2"
+      am: "3.7.0"
+      connector: "1.2.0"
     ws:
       enabled: true
       port: 8062
