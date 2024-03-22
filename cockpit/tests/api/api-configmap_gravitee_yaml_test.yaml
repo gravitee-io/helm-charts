@@ -60,33 +60,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -108,6 +81,12 @@ tests:
             
             reCaptcha:
               enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
             
             email:
               enabled: true
@@ -248,33 +227,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -296,6 +248,12 @@ tests:
 
             reCaptcha:
               enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
             
             email:
               enabled: true
@@ -415,33 +373,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -463,6 +394,12 @@ tests:
             
             reCaptcha:
               enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
             
             email:
               enabled: true
@@ -589,33 +526,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -637,6 +547,12 @@ tests:
             
             reCaptcha:
               enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
             
             email:
               enabled: true
@@ -757,33 +673,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -808,6 +697,12 @@ tests:
             
             reCaptcha:
               enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
             
             email:
               enabled: true
@@ -931,33 +826,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -983,8 +851,14 @@ tests:
               secretKey: my_secret_key
               serviceUrl: https://siteverify
               siteKey: my_site_key
-
-
+            
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
+            
             email:
               enabled: true
               host: smtp.example.com
@@ -1114,33 +988,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -1165,6 +1012,12 @@ tests:
             
             reCaptcha:
               enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
             
             email:
               enabled: true
@@ -1310,33 +1163,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -1361,6 +1187,12 @@ tests:
             
             reCaptcha:
               enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
             
             email:
               enabled: true
@@ -1506,33 +1338,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -1557,6 +1362,12 @@ tests:
             
             reCaptcha:
               enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
             
             email:
               enabled: true
@@ -1690,33 +1501,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -1738,6 +1522,12 @@ tests:
             
             reCaptcha:
               enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
             
             email:
               enabled: true
@@ -1866,33 +1656,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -1914,6 +1677,12 @@ tests:
             
             reCaptcha:
               enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
             
             email:
               enabled: true
@@ -2046,33 +1815,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -2094,6 +1836,12 @@ tests:
             
             reCaptcha:
               enabled: false
+            
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
             
             email:
               enabled: true
@@ -2221,33 +1969,6 @@ tests:
                 sslEnabled: false
                 socketKeepAlive: false
                 uri: mongodb://graviteeio-cockpit-mongodb-replicaset-headless:27017/gravitee?&replicaSet=rs0&connectTimeoutMS=30000
-            
-            cluster:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            cache:
-              type: hazelcast
-              hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
-            
-            exchange:
-              controller:
-                ws:
-                  port: 8062
-                  secured: true
-                  ssl:
-                    clientAuth: REQUIRED
-                    keystore:
-                      type: ${ssl.keystore.type}
-                      path: ${ssl.keystore.path}
-                      password: ${ssl.keystore.password}
-                    truststore:
-                      type: ${truststore.type}
-                      path: ${truststore.path}
-                      password: ${truststore.password}
-            
             swaggerGenerator:
               url: http://my-cockpit-swagger-generator:84
               apiKey: api_key_value
@@ -2269,6 +1990,12 @@ tests:
 
             reCaptcha:
               enabled: false
+
+            controller:
+              compatible-versions:
+                am: 3.7.0
+                apim: 3.6.2
+                connector: 1.2.0
 
             email:
               enabled: true
