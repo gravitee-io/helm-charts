@@ -59,33 +59,7 @@ data:
         uri: mongodb://{{- if (eq .Values.mongo.auth.enabled true) }}{{ .Values.mongo.auth.username }}:{{ .Values.mongo.auth.password }}@{{- end }}{{ .Values.mongo.dbhost }}:{{ .Values.mongo.dbport }}/{{ .Values.mongo.dbname }}?{{- if .Values.mongo.rsEnabled }}&replicaSet={{ .Values.mongo.rs }}{{- end }}{{- if (eq .Values.mongo.auth.enabled true) }}&authSource={{ .Values.mongo.auth.source }}{{- end }}{{- if .Values.mongo.connectTimeoutMS }}&connectTimeoutMS={{ .Values.mongo.connectTimeoutMS }}{{- end }}
         {{- end }}
 
-    cluster:
-      type: hazelcast
-      hazelcast:
-        config-path: ${gravitee.home}/config/hazelcast.xml
-
-    cache:
-      type: hazelcast
-      hazelcast:
-        config-path: ${gravitee.home}/config/hazelcast.xml
-
-    exchange:
-      controller:
-        ws:
-          port: 8062
-          secured: true
-          ssl:
-            clientAuth: REQUIRED
-            keystore:
-              type: ${ssl.keystore.type}
-              path: ${ssl.keystore.path}
-              password: ${ssl.keystore.password}
-            truststore:
-              type: ${truststore.type}
-              path: ${truststore.path}
-              password: ${truststore.password}
-
-    {{ if .Values.generator.enabled -}}
+    {{- if .Values.generator.enabled }}
     swaggerGenerator:
       url: http://{{ template "gravitee.generator.fullname" . }}:{{ .Values.generator.service.externalPort }}
       apiKey: {{ .Values.generator.apiKey }}
@@ -154,6 +128,12 @@ data:
     {{ else }}
       enabled: false
     {{- end }}
+
+    controller:
+      {{- if .Values.api.controller.compatibleVersions }}
+      compatible-versions:
+{{ toYaml .Values.api.controller.compatibleVersions | indent 8 }}
+      {{- end }}
 
     email:
       enabled: {{ .Values.smtp.enabled }}
@@ -284,30 +264,33 @@ data:
 {{ toYaml .Values.authentication.oidc | indent 8 }}
       {{- end }}
 
-  hazelcast.xml: |-
+  hazelcast.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
     <hazelcast xmlns="http://www.hazelcast.com/schema/config"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://www.hazelcast.com/schema/config
-               http://www.hazelcast.com/schema/config/hazelcast-config-5.3.xsd">
+               http://www.hazelcast.com/schema/config/hazelcast-config-4.2.xsd">
         <cluster-name>graviteeio-cockpit</cluster-name>
         <properties>
             <property name="hazelcast.discovery.enabled">true</property>
             <property name="hazelcast.max.wait.seconds.before.join">3</property>
             <property name="hazelcast.member.list.publish.interval.seconds">5</property>
             <property name="hazelcast.socket.client.bind.any">false</property>
-            <property name="hazelcast.logging.type">slf4j</property>
         </properties>
 
-        <queue name="exchange-cluster-command-*">
+        <queue name="commands-*">
             <backup-count>0</backup-count>
             <async-backup-count>1</async-backup-count>
         </queue>
 
-        <map name="exchange-controller-primary-channel-candidate">
+        <map name="cockpit.channels.*">
             <backup-count>0</backup-count>
             <async-backup-count>1</async-backup-count>
         </map>
+
+        <reliable-topic name="cockpit.primaryChannels">
+            <read-batch-size>10</read-batch-size>
+        </reliable-topic>
 
         <cp-subsystem>
             <cp-member-count>0</cp-member-count>
@@ -324,6 +307,48 @@ data:
             </join>
         </network>
     </hazelcast>
+
+  hazelcast.yml: |
+    hazelcast:
+      cluster-name: {{ .Release.Name }}_{{ $clusterversion }}
+      network:
+        join:
+          multicast:
+            enabled: false
+          tcp-ip:
+            enabled: false
+          kubernetes:
+            enabled: true
+            namespace: {{ .Release.Namespace }}
+            service-name: {{ template "gravitee.api.fullname" . }}
+
+{{- if .Values.hazelcast.advancedNetwork }}
+      advanced-network:
+        {{- toYaml .Values.hazelcast.advancedNetwork | nindent 8 }}
+{{- end }}
+
+      properties:
+        hazelcast.logging.type: slf4j
+        hazelcast.max.wait.seconds.before.join: 3
+        hazelcast.member.list.publish.interval.seconds: 5
+        hazelcast.socket.client.bind.any: false
+{{- if .Values.hazelcast.properties }}
+        {{- toYaml .Values.hazelcast.properties | nindent 8 }}
+{{- end }}
+
+      cp-subsystem:
+        cp-member-count: 0
+      map:
+        cockpit.channels.*:
+          backup-count: 0
+          async-backup-count: 1
+      queue:
+        commands-*:
+          backup-count: 0
+          async-backup-count: 1
+      reliable-topic:
+        cockpit.primaryChannels:
+          read-batch-size: 10
 
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
