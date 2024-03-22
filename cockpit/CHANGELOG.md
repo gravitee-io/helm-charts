@@ -2,6 +2,12 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 2.0.0
+
+- [X] Add new configuration for controller
+- [X] Adapt hazelcast configuration for latest cockpit
+- [X] remove compatible-versions values
+- [X] Update appVersion requirement as this chart is only for 4.43.0 and higher.
 
 ### 1.9.7
 
