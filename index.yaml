@@ -7753,43 +7753,6 @@ entries:
     - https://helm.gravitee.io/helm/apim3/apim-4.0.0-alpha.3.tgz
     version: 4.0.0-alpha.3
   - annotations:
-      artifacthub.io/changes: "- Change the version 4.0.0-alpha.2\n- Remove duplicate
-        annotation in ui deployment\n- Add support for managed Service Account for
-        each product\n- Remove old and unused `cache.type` from gateway config map\n-
-        Fix resources missing in ui-deployment.yaml\n- Change readinessProbe for the
-        gateway to sync-process\n- Update Elasticsearch version\n- Allow plugin override
-        via {api|gatewaye}.additionalPlugins property\n- Add auto generate Authorization
-        header on gateway probes when authentication basic is set. \n"
-    apiVersion: v1
-    appVersion: 4.0.0-alpha.3
-    created: "2024-06-21T16:39:34.821895898Z"
-    dependencies:
-    - condition: elasticsearch.enabled
-      name: elasticsearch
-      repository: https://charts.bitnami.com/bitnami
-      version: 19.10.3
-    - condition: mongodb.enabled
-      name: mongodb
-      repository: https://charts.bitnami.com/bitnami
-      version: 13.15.4
-    description: Official Gravitee.io Helm chart for API Management
-    digest: 04e3f08ab4674a9b6d174d2047e7f6dc48c83fe05a5b0983a04ee7a8b38d057f
-    home: https://gravitee.io
-    icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
-    keywords:
-    - gravitee.io
-    - gravitee
-    - graviteeio
-    - API
-    - API Management
-    kubeVersion: '>=1.14.0-0'
-    name: apim
-    sources:
-    - https://github.com/gravitee-io
-    urls:
-    - https://helm.gravitee.io/helm/apim/apim-4.0.0-alpha.3.tgz
-    version: 4.0.0-alpha.3
-  - annotations:
       artifacthub.io/changes: |
         - Change the version: 4.0.0-alpha.1
         - Remove duplicate annotation in ui deployment
@@ -7826,44 +7789,6 @@ entries:
     - https://github.com/gravitee-io
     urls:
     - https://helm.gravitee.io/helm/apim/apim-4.0.0-alpha.2.tgz
-    version: 4.0.0-alpha.2
-  - annotations:
-      artifacthub.io/changes: |
-        - Change the version: 4.0.0-alpha.1
-        - Remove duplicate annotation in ui deployment
-        - Add support for managed Service Account for each product
-        - Remove old and unused `cache.type` from gateway config map
-        - Fix resources missing in ui-deployment.yaml
-        - Change readinessProbe for the gateway to sync-process
-        - Update Elasticsearch version: 4.0.0-alpha.1
-    apiVersion: v1
-    appVersion: 4.0.0-alpha.2
-    created: "2024-06-21T16:39:36.530140721Z"
-    dependencies:
-    - condition: elasticsearch.enabled
-      name: elasticsearch
-      repository: https://charts.bitnami.com/bitnami
-      version: 19.10.3
-    - condition: mongodb.enabled
-      name: mongodb
-      repository: https://charts.bitnami.com/bitnami
-      version: 13.15.4
-    description: Official Gravitee.io Helm chart for API Management
-    digest: 28007a0104ced851a48c24a7dd085c176fa60d25348e03f4d91ea90eb46d733f
-    home: https://gravitee.io
-    icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
-    keywords:
-    - gravitee.io
-    - gravitee
-    - graviteeio
-    - API
-    - API Management
-    kubeVersion: '>=1.14.0-0'
-    name: apim
-    sources:
-    - https://github.com/gravitee-io
-    urls:
-    - https://helm.gravitee.io/helm/apim3/apim-4.0.0-alpha.2.tgz
     version: 4.0.0-alpha.2
   - annotations:
       artifacthub.io/changes: ""
@@ -8054,40 +7979,6 @@ entries:
     - https://github.com/gravitee-io
     urls:
     - https://helm.gravitee.io/helm/apim3/apim3-3.20.27.tgz
-    version: 3.20.27
-  - annotations:
-      artifacthub.io/changes: |
-        - 'Added gateway.services.core.http.ssl.keystore.password'
-        - 'fix helm backward compatibility during helm upgrade without `common` field'
-        - 'Added default preStop command on ui and portal'
-    apiVersion: v1
-    appVersion: 3.20.27
-    created: "2024-06-21T16:39:34.666755728Z"
-    dependencies:
-    - condition: elasticsearch.enabled
-      name: elasticsearch
-      repository: https://charts.bitnami.com/bitnami
-      version: ^19.10.3
-    - condition: mongodb.enabled
-      name: mongodb
-      repository: https://charts.bitnami.com/bitnami
-      version: ^13.15.4
-    description: Official Gravitee.io Helm chart for API Management
-    digest: b6022a8d060bd45456df698947f9a61cf486b573a6dbe9c1374cc4ab7873770f
-    home: https://gravitee.io
-    icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
-    keywords:
-    - gravitee.io
-    - gravitee
-    - graviteeio
-    - API
-    - API Management
-    kubeVersion: '>=1.14.0-0'
-    name: apim
-    sources:
-    - https://github.com/gravitee-io
-    urls:
-    - https://helm.gravitee.io/helm/apim/apim-3.20.27.tgz
     version: 3.20.27
   - annotations:
       artifacthub.io/changes: |
@@ -19950,8 +19841,28 @@ entries:
     version: 1.0.0
   gko:
   - apiVersion: v2
+    appVersion: 4.4.0
+    created: "2024-06-24T07:54:46.051704217Z"
+    description: The Gravitee Kubernetes Operator Helm Chart
+    digest: fbec61b0ae2e1824cbabe922ecc468f3597747e938c337665448f84cc3ffb3ee
+    home: https://gravitee.io
+    icon: https://avatars2.githubusercontent.com/u/12655666?s=200&v=4
+    keywords:
+    - gravitee.io
+    - kubernetes
+    - operator
+    - API management
+    kubeVersion: '>=1.14.0-0'
+    name: gko
+    sources:
+    - https://github.com/gravitee-io/gravitee-kubernetes-operator
+    type: application
+    urls:
+    - https://helm.gravitee.io/helm/gko/gko-4.4.0.tgz
+    version: 4.4.0
+  - apiVersion: v2
     appVersion: 0.13.1
-    created: "2024-06-21T16:39:40.422578507Z"
+    created: "2024-06-24T07:54:46.044829964Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: dbf1beb9637784129dd1ed61db8e124a30966dc8c2268c4eca1662b6c8b22383
     home: https://gravitee.io
@@ -19971,7 +19882,7 @@ entries:
     version: 0.13.1
   - apiVersion: v2
     appVersion: 0.13.0
-    created: "2024-06-21T16:39:40.421586743Z"
+    created: "2024-06-24T07:54:46.043892312Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 7c54a021d404edbd9981d027582e36a79791c02ca9c12741ddc3b6a8fa0f63bd
     home: https://gravitee.io
@@ -19991,7 +19902,7 @@ entries:
     version: 0.13.0
   - apiVersion: v2
     appVersion: 0.12.1
-    created: "2024-06-21T16:39:40.420582304Z"
+    created: "2024-06-24T07:54:46.042272252Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 36428d123d26309c02ae3bb103afd755fd9512d800a24386c924847ee5efca34
     home: https://gravitee.io
@@ -20011,7 +19922,7 @@ entries:
     version: 0.12.1
   - apiVersion: v2
     appVersion: 0.12.0
-    created: "2024-06-21T16:39:40.419705495Z"
+    created: "2024-06-24T07:54:46.041484006Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 675005bc054a5873ff45049a4a40e00933dbc73da690be9bf52c45f26440230d
     home: https://gravitee.io
@@ -20031,7 +19942,7 @@ entries:
     version: 0.12.0
   - apiVersion: v2
     appVersion: 0.11.0
-    created: "2024-06-21T16:39:40.418809606Z"
+    created: "2024-06-24T07:54:46.040686496Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 57d63925c2853d0a88991b6bc001e8293636f55dfcff26586cb1a95ef4090616
     home: https://gravitee.io
@@ -20051,7 +19962,7 @@ entries:
     version: 0.11.0
   - apiVersion: v2
     appVersion: 0.10.0
-    created: "2024-06-21T16:39:40.417812645Z"
+    created: "2024-06-24T07:54:46.039948166Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 84da2c807b35787a7de6fd10199fadd47a9fe72de9ba3ef30fa02148ec33834a
     home: https://gravitee.io
@@ -20071,7 +19982,7 @@ entries:
     version: 0.10.0
   - apiVersion: v2
     appVersion: 0.9.0
-    created: "2024-06-21T16:39:40.43202393Z"
+    created: "2024-06-24T07:54:46.050678568Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 3ca7d469b2b085562205e463b817cb7ca747dbc699b0b9cec0baa538ef376a6a
     home: https://gravitee.io
@@ -20091,7 +20002,7 @@ entries:
     version: 0.9.0
   - apiVersion: v2
     appVersion: 0.8.4
-    created: "2024-06-21T16:39:40.430757916Z"
+    created: "2024-06-24T07:54:46.050033903Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 664263690174c4a1e337832fd25fa3e04ece22d454220dad0c91341f29c93fd9
     home: https://gravitee.io
@@ -20111,7 +20022,7 @@ entries:
     version: 0.8.4
   - apiVersion: v2
     appVersion: 0.8.3
-    created: "2024-06-21T16:39:40.429869923Z"
+    created: "2024-06-24T07:54:46.049405026Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: ce7a8d7c7a2fe6b94f3ac219f883a9dd48fc885072639d13affba24613ce70c3
     home: https://gravitee.io
@@ -20131,7 +20042,7 @@ entries:
     version: 0.8.3
   - apiVersion: v2
     appVersion: 0.8.2
-    created: "2024-06-21T16:39:40.42899562Z"
+    created: "2024-06-24T07:54:46.048082979Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: c9a803e60034224e1a919ed78d63d130c5bac2e3b037312ab34e8a3017ad663f
     home: https://gravitee.io
@@ -20151,7 +20062,7 @@ entries:
     version: 0.8.2
   - apiVersion: v2
     appVersion: 0.8.1
-    created: "2024-06-21T16:39:40.42812315Z"
+    created: "2024-06-24T07:54:46.047556748Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 5ec0c457f49935120e802ab53f9bf918cdc90a18a6468103628f70e402f18734
     home: https://gravitee.io
@@ -20171,7 +20082,7 @@ entries:
     version: 0.8.1
   - apiVersion: v2
     appVersion: 0.8.0
-    created: "2024-06-21T16:39:40.427246332Z"
+    created: "2024-06-24T07:54:46.047033559Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: dd028c6fe04e86d8f98f533d557977e252c7451f2d81f115c72de328945cffab
     home: https://gravitee.io
@@ -20191,7 +20102,7 @@ entries:
     version: 0.8.0
   - apiVersion: v2
     appVersion: 0.7.0
-    created: "2024-06-21T16:39:40.426369253Z"
+    created: "2024-06-24T07:54:46.046545682Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 385e31de1797942328ec9fbef4ab5a60fa030e7b90d43ffed5687b7cbc1aea1a
     home: https://gravitee.io
@@ -20211,7 +20122,7 @@ entries:
     version: 0.7.0
   - apiVersion: v2
     appVersion: 0.6.0
-    created: "2024-06-21T16:39:40.425474612Z"
+    created: "2024-06-24T07:54:46.046095719Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 6b0d66865fac855a4fa3d9444b8b2275f262c5f98f89695164b67193db36783b
     home: https://gravitee.io
@@ -20231,7 +20142,7 @@ entries:
     version: 0.6.0
   - apiVersion: v2
     appVersion: 0.5.1
-    created: "2024-06-21T16:39:40.424577177Z"
+    created: "2024-06-24T07:54:46.045637758Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 6c68cf1ae22fa0055ae56831ba2f272fcf82001c0517b704ff8024a8f68c202b
     home: https://gravitee.io
@@ -20251,7 +20162,7 @@ entries:
     version: 0.5.1
   - apiVersion: v2
     appVersion: 0.5.0
-    created: "2024-06-21T16:39:40.423780931Z"
+    created: "2024-06-24T07:54:46.045235413Z"
     description: The Gravitee Kubernetes Operator Helm Chart
     digest: 0abe9d920aaa0bc0d6710a9b8dffd822a6dc31c1857d635a880dc2ba6776394a
     home: https://gravitee.io
@@ -20269,4 +20180,4 @@ entries:
     urls:
     - https://helm.gravitee.io/helm/gko/gko-0.5.0.tgz
     version: 0.5.0
-generated: "2024-06-21T16:39:31.714515333Z"
+generated: "2024-06-24T07:54:46.039054503Z"
