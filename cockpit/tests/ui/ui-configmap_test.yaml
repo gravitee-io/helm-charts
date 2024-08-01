@@ -58,8 +58,8 @@ tests:
           path: data.gzip-types
           value: "*"
       - matchRegex:
-          path: data.[config.json]
+          path: data["config.json"]
           pattern: "\"baseURL\": \"https://cockpit.example.com/management\""
       - matchRegex:
-          path: data.[config.json]
+          path: data["config.json"]
           pattern: "\"loaderURL\": \"assets/images/gravitee-loader.gif\""
