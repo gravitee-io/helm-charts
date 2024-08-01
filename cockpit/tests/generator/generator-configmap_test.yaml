@@ -49,17 +49,17 @@ tests:
       - hasDocuments:
           count: 1
       - matchRegex:
-          path: data.[env.props]
+          path: data["env.props"]
           pattern: "HOST=0.0.0.0"
       - matchRegex:
-          path: data.[env.props]
+          path: data["env.props"]
           pattern: "PORT=3003"
       - matchRegex:
-          path: data.[env.props]
+          path: data["env.props"]
           pattern: "APIZR_API_KEY_VALUE=api_key_value"
       - matchRegex:
-          path: data.[env.props]
+          path: data["env.props"]
           pattern: "LICENSE_KEY=license_value"
       - matchRegex:
-          path: data.[env.props]
+          path: data["env.props"]
           pattern: "LICENSE_EXPIRATION=license_expiration_date"

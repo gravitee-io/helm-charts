@@ -49,7 +49,7 @@ tests:
       - hasDocuments:
           count: 1
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -64,12 +64,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -226,7 +226,7 @@ tests:
       - hasDocuments:
           count: 1
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -252,12 +252,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -404,7 +404,7 @@ tests:
       - hasDocuments:
           count: 1
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -419,12 +419,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -578,7 +578,7 @@ tests:
       - hasDocuments:
           count: 1
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -593,12 +593,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -746,7 +746,7 @@ tests:
       - hasDocuments:
           count: 1
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -761,12 +761,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -920,7 +920,7 @@ tests:
       - hasDocuments:
           count: 1
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -935,12 +935,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -1103,7 +1103,7 @@ tests:
       - isKind:
           of: ConfigMap
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -1118,12 +1118,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -1299,7 +1299,7 @@ tests:
       - isKind:
           of: ConfigMap
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -1314,12 +1314,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -1495,7 +1495,7 @@ tests:
       - isKind:
           of: ConfigMap
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -1510,12 +1510,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -1679,7 +1679,7 @@ tests:
       - isKind:
           of: ConfigMap
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -1694,12 +1694,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -1855,7 +1855,7 @@ tests:
       - isKind:
           of: ConfigMap
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -1870,12 +1870,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -2035,8 +2035,8 @@ tests:
       - isKind:
           of: ConfigMap
       - equal:
-          path: data.[gravitee.yml]
-          value: | 
+          path: data["gravitee.yml"]
+          value: |
             jetty:
               port: 8063
             
@@ -2050,12 +2050,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:
@@ -2210,7 +2210,7 @@ tests:
       - isKind:
           of: ConfigMap
       - equal:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           value: |
             jetty:
               port: 8063
@@ -2225,12 +2225,12 @@ tests:
             cluster:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cluster.xml
             
             cache:
               type: hazelcast
               hazelcast:
-                config-path: ${gravitee.home}/config/hazelcast.xml
+                config-path: ${gravitee.home}/config/hazelcast-cache.xml
             
             exchange:
               controller:

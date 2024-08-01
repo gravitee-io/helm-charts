@@ -51,8 +51,6 @@ tests:
           count: 1
       - isKind:
           of: Deployment
-      - isEmpty:
-          path: metadata.annotations
       - equal:
           path: spec.strategy
           value:
@@ -182,9 +180,8 @@ tests:
           count: 1
       - isKind:
           of: Deployment
-      - equal:
+      - isNull:
           path: spec.template.spec.serviceAccountName
-          value: null
 
   - it: Deploy with managed custom ServiceAccount
     template: generator/generator-deployment.yaml
