@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 2.0.1
+
+- [X] Split hazecast configuration for cache and cluster
+
 ### 2.0.0
 
 - [X] Add new configuration for controller

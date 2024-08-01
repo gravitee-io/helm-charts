@@ -145,8 +145,8 @@ spec:
               mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast-cluster.xml
               subPath: hazelcast-cluster.xml
             - name: config
-              mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast-cache.yml
-              subPath: hazelcast-cache.yml
+              mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast-cache.xml
+              subPath: hazelcast-cache.xml
             - name: config
               mountPath: /opt/gravitee-cockpit-management-api/config/logback.xml
               subPath: logback.xml
