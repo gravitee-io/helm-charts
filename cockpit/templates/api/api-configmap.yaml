@@ -62,12 +62,12 @@ data:
     cluster:
       type: hazelcast
       hazelcast:
-        config-path: ${gravitee.home}/config/hazelcast.xml
+        config-path: ${gravitee.home}/config/hazelcast-cluster.xml
 
     cache:
       type: hazelcast
       hazelcast:
-        config-path: ${gravitee.home}/config/hazelcast.xml
+        config-path: ${gravitee.home}/config/hazelcast-cache.xml
 
     exchange:
       controller:
@@ -284,13 +284,13 @@ data:
 {{ toYaml .Values.authentication.oidc | indent 8 }}
       {{- end }}
 
-  hazelcast.xml: |-
+  hazelcast-cluster.xml: |-
     <?xml version="1.0" encoding="UTF-8"?>
     <hazelcast xmlns="http://www.hazelcast.com/schema/config"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://www.hazelcast.com/schema/config
                http://www.hazelcast.com/schema/config/hazelcast-config-5.3.xsd">
-        <cluster-name>graviteeio-cockpit</cluster-name>
+        <cluster-name>graviteeio-cockpit-cluster</cluster-name>
         <properties>
             <property name="hazelcast.discovery.enabled">true</property>
             <property name="hazelcast.max.wait.seconds.before.join">3</property>
@@ -299,12 +299,45 @@ data:
             <property name="hazelcast.logging.type">slf4j</property>
         </properties>
 
-        <queue name="exchange-cluster-command-*">
+        <queue name="exchange-*">
             <backup-count>0</backup-count>
             <async-backup-count>1</async-backup-count>
+            <empty-queue-ttl>300</empty-queue-ttl>
         </queue>
 
-        <map name="exchange-controller-primary-channel-candidate">
+        <cp-subsystem>
+            <cp-member-count>0</cp-member-count>
+        </cp-subsystem>
+
+        <network>
+            <port>5701</port>
+            <join>
+                <multicast enabled="false"/>
+                <tcp-ip enabled="false"/>
+                <kubernetes enabled="true">
+                    <namespace>{{ .Release.Namespace }}</namespace>
+                    <service-name>{{ template "gravitee.api.fullname" . }}-hz</service-name>
+                    <service-port>5701</service-port>
+                </kubernetes>
+            </join>
+        </network>
+    </hazelcast>
+  hazelcast-cache.xml: |-
+    <?xml version="1.0" encoding="UTF-8"?>
+    <hazelcast xmlns="http://www.hazelcast.com/schema/config"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.hazelcast.com/schema/config
+               http://www.hazelcast.com/schema/config/hazelcast-config-5.3.xsd">
+        <cluster-name>graviteeio-cockpit-cache</cluster-name>
+        <properties>
+            <property name="hazelcast.discovery.enabled">true</property>
+            <property name="hazelcast.max.wait.seconds.before.join">3</property>
+            <property name="hazelcast.member.list.publish.interval.seconds">5</property>
+            <property name="hazelcast.socket.client.bind.any">false</property>
+            <property name="hazelcast.logging.type">slf4j</property>
+        </properties>
+
+        <map name="exchange-*">
             <backup-count>0</backup-count>
             <async-backup-count>1</async-backup-count>
         </map>
@@ -314,12 +347,14 @@ data:
         </cp-subsystem>
 
         <network>
+            <port>5702</port>
             <join>
                 <multicast enabled="false"/>
                 <tcp-ip enabled="false"/>
                 <kubernetes enabled="true">
                     <namespace>{{ .Release.Namespace }}</namespace>
-                    <service-name>{{ template "gravitee.api.fullname" . }}</service-name>
+                    <service-name>{{ template "gravitee.api.fullname" . }}-hz</service-name>
+                    <service-port>5702</service-port>
                 </kubernetes>
             </join>
         </network>

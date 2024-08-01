@@ -51,8 +51,6 @@ tests:
           count: 1
       - isKind:
           of: Deployment
-      - isEmpty:
-          path: metadata.annotations
       - equal:
           path: spec.strategy
           value:
@@ -71,7 +69,7 @@ tests:
           value:
             annotations:
               chaos.alpha.kubernetes.io/enabled: "false"
-              checksum/config: 66720a55c0a46f60e4d7f7523a2673d931f895ae222fcadf80a75a18654fbe37
+              checksum/config: ac8adec57d109ab1c3903bb19c5df4227cda3f9828bf4edae4947b4efcaf36eb
             labels:
               app.kubernetes.io/component: api
               app.kubernetes.io/instance: my-cockpit
@@ -135,12 +133,12 @@ tests:
               - mountPath: /opt/gravitee-cockpit-management-api/config/gravitee.yml
                 name: config
                 subPath: gravitee.yml
-              - mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast.xml
+              - mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast-cluster.xml
                 name: config
-                subPath: hazelcast.xml
-              - mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast.yml
+                subPath: hazelcast-cluster.xml
+              - mountPath: /opt/gravitee-cockpit-management-api/config/hazelcast-cache.yml
                 name: config
-                subPath: hazelcast.yml
+                subPath: hazelcast-cache.yml
               - mountPath: /opt/gravitee-cockpit-management-api/config/logback.xml
                 name: config
                 subPath: logback.xml
@@ -238,9 +236,8 @@ tests:
           count: 1
       - isKind:
           of: Deployment
-      - equal:
+      - isNull:
           path: spec.template.spec.serviceAccountName
-          value: null
 
   - it: Deploy with managed custom ServiceAccount
     template: api/api-deployment.yaml
