@@ -69,7 +69,7 @@ tests:
           value:
             annotations:
               chaos.alpha.kubernetes.io/enabled: "false"
-              checksum/config: ac8adec57d109ab1c3903bb19c5df4227cda3f9828bf4edae4947b4efcaf36eb
+              checksum/config: dd76a47453ecaee810476a0c5e3a3641ff223f2f5d029550bb169df5f80be960
             labels:
               app.kubernetes.io/component: api
               app.kubernetes.io/instance: my-cockpit
