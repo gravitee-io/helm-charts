@@ -246,6 +246,7 @@ data:
   {{- else }}
       ui: "https://{{ index .Values.ui.ingress.hosts 0 }}{{ .Values.ui.ingress.path }}"
       ws: "https://{{ index .Values.api.controller.ws.ingress.hosts 0 }}{{ .Values.api.controller.ws.ingress.path }}"
+      api: "https://{{ index .Values.api.ingress.hosts 0 }}{{ .Values.api.ingress.path }}"
   {{- end }}
 
     {{- if .Values.api.initialPlans }}
@@ -283,6 +284,12 @@ data:
         {{- end }}
 {{ toYaml .Values.authentication.oidc | indent 8 }}
       {{- end }}
+    {{- if .Values.spec_gen }}
+    
+    spec-gen: {{ toYaml .Values.spec_gen | nindent 6 }}
+    {{- end}}
+
+
 
   hazelcast-cluster.xml: |-
     <?xml version="1.0" encoding="UTF-8"?>
