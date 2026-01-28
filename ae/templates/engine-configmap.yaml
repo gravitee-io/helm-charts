@@ -41,6 +41,23 @@ data:
           {{- else }}
           type: none
           {{- end }}
+      
+      kafka:
+        enabled: {{ .Values.engine.kafka.enabled }}
+  
+        {{- if .Values.engine.kafka.enabled }}
+        bootstrapServers: {{ .Values.engine.kafka.bootstrapServers }}
+        topicsPattern: {{ .Values.engine.kafka.topicsPattern }}
+        consumer:
+          groupId: {{ .Values.engine.kafka.consumer.groupId }}
+          autoOffsetReset: {{ .Values.engine.kafka.consumer.autoOffsetReset }}
+        security:
+          # protocol: only SASL_SSL is supported at the moment
+          sasl:
+            # mechanism: only PLAIN is supported at the moment
+            username: {{ .Values.engine.kafka.security.sasl.username }}
+            password: {{ .Values.engine.kafka.security.sasl.password }}
+        {{- end}}
 
     services:
       core:
