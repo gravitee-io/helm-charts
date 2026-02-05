@@ -12,10 +12,10 @@ tests:
       - isKind:
           of: ConfigMap
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           pattern: "[ ]{5}value: 30"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           pattern: "[ ]{5}unit: \"SECONDS\""
 
   - it: should set the default cluster sync values
@@ -25,10 +25,10 @@ tests:
       - isKind:
           of: ConfigMap
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           pattern: "[ ]{5}value: 30"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           pattern: "[ ]{5}unit: \"SECONDS\""
 
   - it: should set the provided cluster sync values
@@ -42,9 +42,61 @@ tests:
       - isKind:
           of: ConfigMap
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           pattern: "[ ]{5}value: 100"
       - matchRegex:
-          path: data.[gravitee.yml]
+          path: data["gravitee.yml"]
           pattern: "[ ]{5}unit: \"DAYS\""
+
+  - it: should not set kafka configuration by default
+    asserts:
+      - matchRegex:
+          path: data["gravitee.yml"]
+          pattern: "kafka:\\s+enabled:"
+      - notMatchRegex:
+          path: data["gravitee.yml"]
+          pattern: "bootstrapServers:"
+
+  - it: should not set kafka configuration when explicitly disabled
+    set:
+      engine.kafka:
+        enabled: false
+    asserts:
+      - matchRegex:
+          path: data["gravitee.yml"]
+          pattern: "kafka:\\s+enabled: false"
+      - notMatchRegex:
+          path: data["gravitee.yml"]
+          pattern: "bootstrapServers:"
+
+  - it: should set kafka configuration when enabled
+    set:
+      engine.kafka:
+        enabled: true
+        bootstrapServers: "localhost:9092"
+        topicsPattern: "gravitee-.*"
+        consumer:
+          groupId: "gravitee-ae"
+          autoOffsetReset: "earliest"
+        security:
+          sasl:
+            username: "my-user"
+            password: "my-password"
+    asserts:
+      - matchRegex:
+          path: data["gravitee.yml"]
+          pattern: |
+            (?s)kafka:
+                enabled: true
+                bootstrapServers: localhost:9092
+                topicsPattern: gravitee-.*
+                consumer:
+                  groupId: gravitee-ae
+                  autoOffsetReset: earliest
+                security:
+                  # protocol: only SASL_SSL is supported at the moment
+                  sasl:
+                    # mechanism: only PLAIN is supported at the moment
+                    username: my-user
+                    password: my-password
 

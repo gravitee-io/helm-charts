@@ -147,7 +147,19 @@ engine:
   #       configMapKeyRef:
   #         name: special-config
   #         key: SPECIAL_LEVEL
-  
+
+  kafka:
+    enabled: false
+#    bootstrapServers: ""
+#    topicsPattern: ""
+#    consumer:
+#      groupId: ""
+#      autoOffsetReset: "latest"
+#    security:
+#      sasl:
+#        username: ""
+#        password: ""
+
   service:
     type: ClusterIP
     # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"
