@@ -83,9 +83,6 @@ workflows:
             - test-cockpit-charts:
                 name: Cockpit - Lint & Test
             - lint-charts:
-                name: AE - Lint
-                folder: ae
-            - lint-charts:
                 name: Cockpit - Lint
                 folder: cockpit
             - lint-charts:
