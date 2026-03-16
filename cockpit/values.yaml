@@ -305,16 +305,6 @@ api:
     incomplete:
       timeBeforeNotifying: PT30M
 
-# Optional values related to Confluent API call to create kafka topic for APIM v4 Demo
-#  confluent:
-#    api:
-#      credentials:
-#        api-key: YOUR_CONFLUENT_API_KEY
-#        api-secret-key: YOUR_CONFLUENT_API_SECRET_KEY
-#      topic:
-#        prefix: dev-
-#        uri: https://great-cluster.westeurope.azure.confluent.cloud/kafka/v3/clusters/id-cluster/topics
-
   controller:
     ws:
       enabled: true
