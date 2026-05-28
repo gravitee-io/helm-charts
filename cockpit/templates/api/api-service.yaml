@@ -61,6 +61,19 @@ spec:
       {{ end }}
       {{- end }}
     {{- end }}
+    {{- if and .Values.api.customerManagement.enabled .Values.api.customerManagement.service.enabled }}
+    - name: {{ printf "%s-%s" (.Values.api.name | trunc 54 | trimSuffix "-") "customer" }}
+      port: {{ .Values.api.customerManagement.service.externalPort }}
+      targetPort: {{ .Values.api.customerManagement.service.internalPortName }}
+      protocol: TCP
+      {{- if (include "common.service.supportsAppProtocol" .) }}
+      {{ if .Values.api.customerManagement.service.appProtocol }}
+      appProtocol: {{ .Values.api.customerManagement.service.appProtocol }}
+      {{ else }}
+      appProtocol: http
+      {{ end }}
+      {{- end }}
+    {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "gravitee.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
