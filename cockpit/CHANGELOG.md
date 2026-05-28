@@ -2,6 +2,10 @@
 
 This file documents all notable changes to [Gravitee.io Cockpit](https://github.com/gravitee-io/helm-charts/tree/master/cockpit) Helm Chart. The release numbering uses [semantic versioning](http://semver.org).
 
+### 2.2.0
+
+- [X] Expose optional customer-management API on port 8065 (opt-in via `api.customerManagement.enabled`)
+
 ### 2.1.0
 
 - [X] Add spec-gen configuration with endpoint api

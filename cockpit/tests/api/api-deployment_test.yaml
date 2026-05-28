@@ -269,3 +269,57 @@ tests:
       - equal:
           path: spec.template.spec.securityContext.fsGroup
           value: 1001
+
+  - it: should not expose customer-management port by default
+    template: api/api-deployment.yaml
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - notContains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: api-customer
+
+  - it: should expose customer-management port when enabled
+    template: api/api-deployment.yaml
+    set:
+      api:
+        customerManagement:
+          enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: api-customer
+            containerPort: 8065
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: gravitee_customer-api_enabled
+            value: "true"
+
+  - it: should expose customer-management on custom port when overridden
+    template: api/api-deployment.yaml
+    set:
+      api:
+        customerManagement:
+          enabled: true
+          port: 9999
+          service:
+            internalPortName: custom-name
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: custom-name
+            containerPort: 9999

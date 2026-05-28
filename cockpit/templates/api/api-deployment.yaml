@@ -110,12 +110,20 @@ spec:
               containerPort: {{ .Values.api.controller.ws.port }}
             - name: {{ .Values.api.http.services.core.service.internalPortName }}
               containerPort: {{ .Values.api.http.services.core.http.port }}
+            {{- if .Values.api.customerManagement.enabled }}
+            - name: {{ .Values.api.customerManagement.service.internalPortName }}
+              containerPort: {{ .Values.api.customerManagement.port }}
+            {{- end }}
           env:
             {{- if or $plugins $extPlugins }}
             - name: GRAVITEE_PLUGINS_PATH_0
               value: '${gravitee.home}/plugins'
             - name: GRAVITEE_PLUGINS_PATH_1
               value: '${gravitee.home}/plugins-ext'
+            {{- end }}
+            {{- if .Values.api.customerManagement.enabled }}
+            - name: gravitee_customer-api_enabled
+              value: "true"
             {{- end }}
 {{- if .Values.api.env | default .Values.api.deployment.extraEnvs }}
 {{ toYaml ( .Values.api.env | default .Values.api.deployment.extraEnvs ) | indent 12 }}

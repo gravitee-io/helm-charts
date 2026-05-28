@@ -238,3 +238,80 @@ tests:
       - equal:
           path: spec.externalTrafficPolicy
           value: Local
+
+  - it: should not expose customer-management port by default
+    template: api/api-service.yaml
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - notContains:
+          path: spec.ports
+          content:
+            name: api-customer
+            any: true
+
+  - it: should expose customer-management port when enabled
+    template: api/api-service.yaml
+    set:
+      api:
+        customerManagement:
+          enabled: true
+    release:
+      name: my-cockpit
+      namespace: unittest
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - contains:
+          path: spec.ports
+          content:
+            name: api-customer
+            port: 8065
+            targetPort: api-customer
+            protocol: TCP
+            appProtocol: http
+
+  - it: should expose customer-management port with custom appProtocol
+    template: api/api-service.yaml
+    set:
+      api:
+        customerManagement:
+          enabled: true
+          service:
+            appProtocol: http-test
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - contains:
+          path: spec.ports
+          content:
+            name: api-customer
+            port: 8065
+            targetPort: api-customer
+            protocol: TCP
+            appProtocol: http-test
+
+  - it: should not expose customer-management port when service is disabled
+    template: api/api-service.yaml
+    set:
+      api:
+        customerManagement:
+          enabled: true
+          service:
+            enabled: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Service
+      - notContains:
+          path: spec.ports
+          content:
+            name: api-customer
+            any: true
