@@ -1,0 +1,51 @@
+{{- if .Values.api.enabled -}}
+{{- if .Values.api.customerManagement.enabled -}}
+{{- if .Values.api.customerManagement.ingress.enabled -}}
+{{- $serviceAPIName := include "gravitee.api.fullname" . -}}
+{{- $serviceAPIPort := .Values.api.customerManagement.service.externalPort -}}
+{{- $ingressPath   := .Values.api.customerManagement.ingress.path -}}
+{{- $apiVersion := include "common.capabilities.ingress.apiVersion" . -}}
+apiVersion: {{ $apiVersion }}
+kind: Ingress
+metadata:
+  name: {{ template "gravitee.api.fullname" . }}-customer
+  labels:
+    app.kubernetes.io/name: {{ template "gravitee.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.api.image.tag | default .Chart.AppVersion | quote }}
+    app.kubernetes.io/component: "{{ .Values.api.name }}"
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    {{- if .Values.api.customerManagement.ingress.annotations }}
+    {{- include "common.ingress.annotations.render" (dict "annotations" .Values.api.customerManagement.ingress.annotations "ingressClassName" .Values.api.customerManagement.ingress.ingressClassName "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if and .Values.api.customerManagement.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.api.customerManagement.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+  {{- range $host := .Values.api.customerManagement.ingress.hosts }}
+  - host: {{ $host | quote }}
+    http:
+      paths:
+      - pathType: Prefix
+        path: {{ $ingressPath }}
+        backend:
+          {{- if (eq $apiVersion "networking.k8s.io/v1") }}
+          service:
+            name: {{ $serviceAPIName }}
+            port:
+              number: {{ $serviceAPIPort }}
+          {{ else }}
+          serviceName: {{ $serviceAPIName }}
+          servicePort: {{ $serviceAPIPort }}
+          {{- end -}}
+  {{- end -}}
+  {{- if .Values.api.customerManagement.ingress.tls }}
+  tls:
+{{ toYaml .Values.api.customerManagement.ingress.tls | indent 4 }}
+  {{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
