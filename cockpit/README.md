@@ -177,6 +177,66 @@ Values {#_values}
 | api.controller. | string          | `"ClusterIP"`   |                 |
 | ws.service.type |                 |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | bool            | `false`         |                 |
+| agement.enabled |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | string          | `"/"`           |                 |
+| agement.entrypo |                 |                 |                 |
+| int             |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | string          | `"nginx"`       |                 |
+| agement.ingress |                 |                 |                 |
+| .annotations."k |                 |                 |                 |
+| ubernetes.io/in |                 |                 |                 |
+| gress.class"    |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | string          | `"10"`          |                 |
+| agement.ingress |                 |                 |                 |
+| .annotations."n |                 |                 |                 |
+| ginx.ingress.ku |                 |                 |                 |
+| bernetes.io/lim |                 |                 |                 |
+| it-connections" |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | string          | `"20"`          |                 |
+| agement.ingress |                 |                 |                 |
+| .annotations."n |                 |                 |                 |
+| ginx.ingress.ku |                 |                 |                 |
+| bernetes.io/lim |                 |                 |                 |
+| it-rps"         |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | bool            | `true`          |                 |
+| agement.ingress |                 |                 |                 |
+| .enabled        |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | string          | `"cockpit.examp |                 |
+| agement.ingress |                 | le.com"`        |                 |
+| .hosts\[0\]     |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | string          | `"/customers"`  |                 |
+| agement.ingress |                 |                 |                 |
+| .path           |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | string          | `"cockpit.examp |                 |
+| agement.ingress |                 | le.com"`        |                 |
+| .tls\[0\].hosts |                 |                 |                 |
+| \[0\]           |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | string          | `"api-custom-ce |                 |
+| agement.ingress |                 | rt"`            |                 |
+| .tls\[0\].secre |                 |                 |                 |
+| tName           |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | int             | `8065`          |                 |
+| agement.port    |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | bool            | `true`          |                 |
+| agement.service |                 |                 |                 |
+| .enabled        |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| api.customerMan | int             | `8065`          |                 |
+| agement.service |                 |                 |                 |
+| .externalPort   |                 |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
 | api.emai        | string          | `nil`           |                 |
 | l.notifications |                 |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
