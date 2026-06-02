@@ -345,6 +345,29 @@ api:
         internalPortName: api-ws
 #        appProtocol: ""
 
+  customerManagement:
+    enabled: false
+    port: 8065
+    entrypoint: /
+    service:
+      enabled: true
+      externalPort: 8065
+      internalPortName: api-customer
+    ingress:
+      enabled: true
+      ingressClassName: ""
+      path: /customers
+      hosts:
+        - cockpit.example.com
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/limit-rps: "20"
+        nginx.ingress.kubernetes.io/limit-connections: "10"
+      tls:
+        - hosts:
+            - cockpit.example.com
+          secretName: api-custom-cert
+
   service:
     type: ClusterIP
     # externalTrafficPolicy is used only when configuring type "NodePort" or "LoadBalancer"

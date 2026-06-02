@@ -2558,3 +2558,39 @@ tests:
                 value: 1000
               url: https://spec.gen.agent.gravitee.io/
               username: user
+
+  - it: should render consolidated customer-api listener when customerManagement is enabled
+    template: api/api-configmap.yaml
+    set:
+      api:
+        customerManagement:
+          enabled: true
+          port: 9065
+          entrypoint: /custom
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - matchRegex:
+          path: data["gravitee.yml"]
+          pattern: 'customer-api:\s+http:\s+port: 9065\s+entrypoint: /custom'
+
+  - it: should not render customer-api listener when customerManagement is disabled
+    template: api/api-configmap.yaml
+    release:
+      name: my-cockpit
+      namespace: unittest
+    chart:
+      version: 1.0.0-chart
+      appVersion: 1.0.0-app
+    asserts:
+      - hasDocuments:
+          count: 1
+      - notMatchRegex:
+          path: data["gravitee.yml"]
+          pattern: 'customer-api:'

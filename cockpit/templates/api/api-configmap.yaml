@@ -148,6 +148,13 @@ data:
         entrypoint: {{ .Values.api.http.api.entrypoint }}
     {{- end }}
 
+    {{- if .Values.api.customerManagement.enabled }}
+    customer-api:
+      http:
+        port: {{ .Values.api.customerManagement.port | default 8065 }}
+        entrypoint: {{ .Values.api.customerManagement.entrypoint | default "/" }}
+    {{- end }}
+
     reCaptcha:
     {{- if .Values.api.reCaptcha.enabled }}
 {{ toYaml .Values.api.reCaptcha | indent 6 }}
